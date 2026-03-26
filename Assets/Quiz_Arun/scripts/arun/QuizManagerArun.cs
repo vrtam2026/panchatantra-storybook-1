@@ -1,0 +1,426 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using UnityEngine.Video;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// QuizManagerArun.cs  —  Attach to Quiz_Panel.
+// ─────────────────────────────────────────────────────────────────────────────
+
+public class QuizManagerArun : MonoBehaviour
+{
+    [Header("Questions")]
+    [SerializeField] private List<QuizQuestionArun> questions;
+
+    [Header("UI")]
+    [Tooltip("Drag StartPanel here.")]
+    [SerializeField] private GameObject startPanel;
+
+    [Tooltip("Element 0=Option1_Button  1=Option2_Button  2=Option3_Button  3=Option4_Button")]
+    [SerializeField] private GameObject[] options;
+    public GameObject[] Options => options;
+
+    [SerializeField] private TextMeshProUGUI questionText;
+    [SerializeField] private Sprite optionDefaultSprite;
+
+    [Header("Multi Answer")]
+    [SerializeField] private MultiAnswerArun multiAnswerArun;
+    public bool IsMultiAnswer => currentQuestion != null && currentQuestion.IsMultiAnswer;
+
+    [Header("Reveal")]
+    [SerializeField] private QuizTextRevealArun quizTextRevealArun;
+
+    [Header("Panels")]
+    [SerializeField] private GameObject finishPanel;
+
+    [Header("Correct Reaction Pairs")]
+    [SerializeField] private List<ReactionPairArun> correctPairs;
+
+    [Header("Wrong Reaction Pairs")]
+    [SerializeField] private List<ReactionPairArun> wrongPairs;
+
+    [Header("Audio Sources")]
+    [SerializeField] private AudioSource questionAudioSource;
+    [SerializeField] private AudioSource reactionAudioSource;
+
+    [Header("Video")]
+    [SerializeField] private VideoPlayer sageVideoPlayer;
+
+    [Header("Timer")]
+    [SerializeField] private TimerArun timerArun;
+
+    [Header("Timing")]
+    [SerializeField] private float cooldownDuration = 2f;
+
+    [Header("State — Read Only")]
+    [SerializeField] private int currentQuestionIndex = 0;
+    [SerializeField] private int currentAttempt = 0;
+
+    private QuizQuestionArun currentQuestion;
+    private bool isPaused = false;
+
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
+
+    private void Awake()
+    {
+        if (sageVideoPlayer != null)
+        {
+            sageVideoPlayer.playOnAwake = false;
+            sageVideoPlayer.isLooping = false;
+        }
+    }
+
+    private void Start()
+    {
+        if (startPanel != null) startPanel.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        // Only stop audio/video/timer on disable.
+        // Do NOT stop coroutines or cancel reveal here —
+        // image tracker briefly deactivates canvas which fires OnDisable
+        // and was killing the reveal coroutine on Q1.
+        StopAllAudio();
+        StopVideo();
+        if (timerArun != null) timerArun.StopTimer();
+    }
+
+    // ── StartButton ───────────────────────────────────────────────────────────
+
+    public void StartQuiz()
+    {
+        if (startPanel != null) startPanel.SetActive(false);
+
+        currentQuestionIndex = 0;
+        currentAttempt = 0;
+
+        // Activate this GameObject — Quiz_Panel may be inactive
+        // because QuizObserverArun hides the canvas at start.
+        // Coroutines cannot run on inactive GameObjects.
+        gameObject.SetActive(true);
+
+        if (quizTextRevealArun != null) quizTextRevealArun.CancelReveal();
+        StopAllCoroutines();
+        StopAllAudio();
+        StopVideo();
+        if (timerArun != null) timerArun.StopTimer();
+
+        LoadQuestion();
+    }
+
+    // ── PauseQuiz — called by QuizObserverArun ────────────────────────────────
+
+    public void PauseQuiz(bool pause)
+    {
+        if (isPaused == pause) return;
+        isPaused = pause;
+
+        if (timerArun != null) timerArun.PauseTimer(pause);
+
+        if (pause)
+        {
+            if (questionAudioSource != null) questionAudioSource.Pause();
+            if (reactionAudioSource != null) reactionAudioSource.Pause();
+            if (sageVideoPlayer != null) sageVideoPlayer.Pause();
+        }
+        else
+        {
+            if (questionAudioSource != null) questionAudioSource.UnPause();
+            if (reactionAudioSource != null) reactionAudioSource.UnPause();
+            if (sageVideoPlayer != null) sageVideoPlayer.Play();
+        }
+    }
+
+    // ── Load Question ─────────────────────────────────────────────────────────
+
+    private void LoadQuestion()
+    {
+        if (questions == null || questions.Count == 0) return;
+
+        if (currentQuestionIndex >= questions.Count)
+        {
+            FinishQuiz();
+            return;
+        }
+
+        currentAttempt = 0;
+        currentQuestion = questions[currentQuestionIndex];
+        if (currentQuestion == null) return;
+
+        string[] opts = {
+            currentQuestion.option1, currentQuestion.option2,
+            currentQuestion.option3, currentQuestion.option4
+        };
+
+        for (int i = 0; i < options.Length; i++)
+        {
+            if (options[i] == null) continue;
+            TextMeshProUGUI tmp = options[i].GetComponentInChildren<TextMeshProUGUI>();
+            if (tmp != null) tmp.text = opts[i];
+            AnswerScriptArun ans = options[i].GetComponent<AnswerScriptArun>();
+            if (ans != null) ans.SetCorrect(currentQuestion.SingleCorrectIndex == i + 1);
+        }
+
+        ResetButtonColors();
+        DisableAllButtons();
+        StopAllAudio();
+        StopVideo();
+
+        if (multiAnswerArun != null)
+            multiAnswerArun.SetupQuestion(currentQuestion, options);
+
+        if (timerArun != null) timerArun.ResetDisplay();
+
+        PlayVideoAndAudio(currentQuestion.questionVideo, currentQuestion.questionAudio);
+
+        if (quizTextRevealArun != null)
+            quizTextRevealArun.StartReveal(currentQuestion, currentQuestion.questionAudio, OnRevealComplete, this);
+        else
+        {
+            EnableAllButtons();
+            if (timerArun != null) timerArun.StartTimer();
+        }
+
+        if (EventSystem.current != null)
+            EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    private void OnRevealComplete()
+    {
+        EnableAllButtons();
+        if (timerArun != null) timerArun.StartTimer();
+        Debug.Log("[QuizManager] OnRevealComplete — buttons enabled.");
+    }
+
+    // ── Answer Selected ───────────────────────────────────────────────────────
+
+    public void OnAnswerSelected(bool isCorrect)
+    {
+        if (!isActiveAndEnabled) return;
+        StopEverything();
+
+        if (isCorrect)
+        {
+            PlayReaction(GetRandomPair(correctPairs));
+            StartCoroutine(NextAfterCooldown());
+        }
+        else
+        {
+            if (currentAttempt == 0)
+            {
+                currentAttempt = 1;
+                PlayReaction(GetRandomPair(wrongPairs));
+                StartCoroutine(ReplayAfterReaction());
+            }
+            else
+            {
+                RevealCorrectAnswer();
+                PlayReaction(GetRandomPair(wrongPairs));
+                StartCoroutine(NextAfterCooldown());
+            }
+        }
+    }
+
+    // ── Timer Expired ─────────────────────────────────────────────────────────
+
+    public void OnTimerExpired()
+    {
+        if (!isActiveAndEnabled) return;
+
+        if (currentQuestion != null && currentQuestion.IsMultiAnswer && multiAnswerArun != null)
+        {
+            StopEverything();
+            multiAnswerArun.AutoSubmit();
+            return;
+        }
+
+        StopEverything();
+        if (currentAttempt == 0)
+        {
+            currentAttempt = 1;
+            DisableAllButtons();
+            PlayReaction(GetRandomPair(wrongPairs));
+            StartCoroutine(ReplayAfterReaction());
+        }
+        else
+        {
+            RevealCorrectAnswer();
+            PlayReaction(GetRandomPair(wrongPairs));
+            StartCoroutine(NextAfterCooldown());
+        }
+    }
+
+    // ── Skip ──────────────────────────────────────────────────────────────────
+
+    public void SkipQuestion()
+    {
+        StopEverything();
+        currentQuestionIndex++;
+        LoadQuestion();
+    }
+
+    // ── Coroutines ────────────────────────────────────────────────────────────
+
+    private IEnumerator ReplayAfterReaction()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        if (reactionAudioSource != null)
+            yield return new WaitWhile(() => reactionAudioSource != null && reactionAudioSource.isPlaying);
+
+        yield return new WaitForSeconds(0.3f);
+
+        if (currentQuestion == null) yield break;
+
+        // Retry: no animation — reset, show Submit, enable buttons, start timer
+        StopVideo();
+        ResetButtonColors();
+        if (multiAnswerArun != null)
+            multiAnswerArun.SetupQuestion(currentQuestion, options);
+        EnableAllButtons();
+        if (timerArun != null) timerArun.StartTimer();
+    }
+
+    private IEnumerator NextAfterCooldown()
+    {
+        yield return new WaitForSeconds(cooldownDuration);
+        if (!isActiveAndEnabled) yield break;
+        currentQuestionIndex++;
+        LoadQuestion();
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private void StopEverything()
+    {
+        if (quizTextRevealArun != null) quizTextRevealArun.CancelReveal();
+        StopAllCoroutines();
+        StopAllAudio();
+        StopVideo();
+        if (timerArun != null) timerArun.StopTimer();
+    }
+
+    public void DisableAllButtons()
+    {
+        foreach (GameObject btn in options)
+        {
+            if (btn == null) continue;
+            Button b = btn.GetComponent<Button>();
+            if (b != null) b.interactable = false;
+        }
+    }
+
+    private void EnableAllButtons()
+    {
+        foreach (GameObject btn in options)
+        {
+            if (btn == null) continue;
+            Button b = btn.GetComponent<Button>();
+            if (b != null) b.interactable = true;
+        }
+    }
+
+    private void ResetButtonColors()
+    {
+        foreach (GameObject btn in options)
+        {
+            if (btn == null) continue;
+            Button b = btn.GetComponent<Button>();
+            Image img = btn.GetComponent<Image>();
+            if (b != null)
+            {
+                ColorBlock cb = b.colors;
+                cb.fadeDuration = 0f;
+                cb.disabledColor = cb.normalColor;
+                b.colors = cb;
+            }
+            if (img != null)
+            {
+                img.color = Color.white;
+                if (optionDefaultSprite != null) img.sprite = optionDefaultSprite;
+            }
+        }
+    }
+
+    private void RevealCorrectAnswer()
+    {
+        foreach (GameObject btn in options)
+        {
+            if (btn == null) continue;
+            AnswerScriptArun ans = btn.GetComponent<AnswerScriptArun>();
+            if (ans != null && ans.isCorrect)
+            {
+                Image img = btn.GetComponent<Image>();
+                if (img != null) img.color = Color.green;
+                break;
+            }
+        }
+    }
+
+    private void FinishQuiz()
+    {
+        StopAllAudio();
+        StopVideo();
+        if (timerArun != null) timerArun.StopTimer();
+        if (finishPanel != null) finishPanel.SetActive(true);
+    }
+
+    private void PlayVideoAndAudio(VideoClip video, AudioClip audio)
+    {
+        if (sageVideoPlayer != null && video != null)
+        {
+            sageVideoPlayer.Stop();
+            sageVideoPlayer.isLooping = false;
+            sageVideoPlayer.clip = video;
+            sageVideoPlayer.Play();
+        }
+        if (questionAudioSource != null && audio != null)
+        {
+            questionAudioSource.clip = audio;
+            questionAudioSource.Play();
+        }
+    }
+
+    private void PlayReaction(ReactionPairArun pair)
+    {
+        if (pair == null) return;
+        if (reactionAudioSource != null && pair.audio != null)
+        {
+            reactionAudioSource.Stop();
+            reactionAudioSource.clip = pair.audio;
+            reactionAudioSource.Play();
+        }
+        if (sageVideoPlayer != null && pair.video != null)
+        {
+            sageVideoPlayer.Stop();
+            sageVideoPlayer.isLooping = false;
+            sageVideoPlayer.clip = pair.video;
+            sageVideoPlayer.Play();
+        }
+    }
+
+    private ReactionPairArun GetRandomPair(List<ReactionPairArun> pool)
+    {
+        if (pool == null || pool.Count == 0) return null;
+        List<ReactionPairArun> valid = new List<ReactionPairArun>();
+        foreach (ReactionPairArun p in pool)
+            if (p != null && p.audio != null && p.video != null) valid.Add(p);
+        if (valid.Count == 0) return null;
+        return valid[Random.Range(0, valid.Count)];
+    }
+
+    private void StopAllAudio()
+    {
+        if (questionAudioSource != null) questionAudioSource.Stop();
+        if (reactionAudioSource != null) reactionAudioSource.Stop();
+    }
+
+    private void StopVideo()
+    {
+        if (sageVideoPlayer != null) sageVideoPlayer.Stop();
+    }
+}
