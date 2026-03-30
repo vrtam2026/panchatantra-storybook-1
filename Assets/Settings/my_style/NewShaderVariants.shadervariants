@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!200 &20000000
+ShaderVariantCollection:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: NewShaderVariants
+  m_Shaders:
+  - first: {fileID: 10770, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 66, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 6, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: SHADOWS_DEPTH
+        passType: 8
+  - first: {fileID: 106, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: _SUNDISK_SIMPLE
+        passType: 0
+  - first: {fileID: 9000, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9001, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9002, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9003, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9004, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9007, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9100, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9101, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 16001, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: ADJUST_TO_LINEARSPACE
+        passType: 0
+  - first: {fileID: 19011, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 93446b5c5339d4f00b85c159e1159b7c, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: EVALUATE_SH_VERTEX
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ENVIRONMENTREFLECTIONS_OFF _METALLICSPECGLOSSMAP
+          _NORMALMAP _RECEIVE_SHADOWS_OFF _SPECULARHIGHLIGHTS_OFF
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ENVIRONMENTREFLECTIONS_OFF _NORMALMAP _RECEIVE_SHADOWS_OFF
+          _SPECULARHIGHLIGHTS_OFF _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ENVIRONMENTREFLECTIONS_OFF _RECEIVE_SHADOWS_OFF
+          _SPECULARHIGHLIGHTS_OFF
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ENVIRONMENTREFLECTIONS_OFF _RECEIVE_SHADOWS_OFF
+          _SPECULARHIGHLIGHTS_OFF _SPECULAR_SETUP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ENVIRONMENTREFLECTIONS_OFF _RECEIVE_SHADOWS_OFF
+          _SPECULARHIGHLIGHTS_OFF _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _METALLICSPECGLOSSMAP _NORMALMAP _RECEIVE_SHADOWS_OFF
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _RECEIVE_SHADOWS_OFF _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+  - first: {fileID: 4800000, guid: 0e7f0b9649ca06340a468379e30b78ca, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 13
+  - first: {fileID: 4800000, guid: 650dd9526735d5b46b79224bc6e94025, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: bc65170c051b0724287a7f1636d87573, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 144dfca22ac584ade9e538e24a5ddded, type: 3}
+    second:
+      variants:
+      - keywords: VUFORIA_RGB
+        passType: 0
+  - first: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: OUTLINE_ON UNDERLAY_ON
+        passType: 0
+  - first: {fileID: 4800000, guid: 96316acf0f537ae449a9a641fa00eefe, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: a0629294d6992f548933893442a790a0, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0

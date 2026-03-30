@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
 
+[DefaultExecutionOrder(1000)] // Run AFTER Vuforia and Animator
 public class ARTrackableSplineMover : MonoBehaviour
 {
     [Serializable]
@@ -43,7 +44,7 @@ public class ARTrackableSplineMover : MonoBehaviour
     private Spline _spline;
     private bool _playRequested;
 
-    // Position override — applied in onPreRender, after Animator + Vuforia
+    // Position that needs to be applied
     private bool _hasPending;
     private Vector3 _pendingWorldPos;
     private Quaternion _pendingWorldRot;
@@ -60,27 +61,20 @@ public class ARTrackableSplineMover : MonoBehaviour
         CacheSpline();
     }
 
-    private void OnEnable()
-    {
-        Camera.onPreRender += OnAnyPreRender;
-    }
-
     private void OnDisable()
     {
-        Camera.onPreRender -= OnAnyPreRender;
         _hasPending = false;
     }
 
-    // Fires right before EACH camera renders — after Animator, after Vuforia, after all LateUpdates
-    // This is the absolute last point before pixels are drawn
-    private void OnAnyPreRender(Camera cam)
+    // LateUpdate runs AFTER all Update() calls and AFTER Animator
+    // [DefaultExecutionOrder(1000)] ensures this runs AFTER Vuforia's LateUpdate
+    // So the order is: Vuforia positions the target -> Animator updates -> THIS runs last
+    private void LateUpdate()
     {
         if (!_hasPending) return;
         if (objectToMove == null) { _hasPending = false; return; }
 
         objectToMove.SetPositionAndRotation(_pendingWorldPos, _pendingWorldRot);
-
-        // Only clear after the main/first camera so multi-camera setups are fine
         _hasPending = false;
     }
 

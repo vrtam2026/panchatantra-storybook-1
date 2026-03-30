@@ -13,6 +13,9 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _ENVIRONMENTREFLECTIONS_OFF
+  - _RECEIVE_SHADOWS_OFF
+  - _SPECULARHIGHLIGHTS_OFF
   - _ZWRITE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -26,7 +29,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 8400000, guid: 3cc957421c8872a4a8ee616732a2ddf9, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -93,9 +96,9 @@ Material:
     - _BlendSrc: 5
     - _BumpScale: 1
     - _CautionThreshold: 0.25
-    - _ChromaKeyBrightnessRange: 0.5
+    - _ChromaKeyBrightnessRange: 0.738
     - _ChromaKeyHueRange: 0.1
-    - _ChromaKeySaturationRange: 0.5
+    - _ChromaKeySaturationRange: 0.607
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
@@ -105,7 +108,7 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EdgeFeather: 0.15
-    - _EnvironmentReflections: 1
+    - _EnvironmentReflections: 0
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -114,10 +117,10 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0
-    - _ReceiveShadows: 1
+    - _ReceiveShadows: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
-    - _SpecularHighlights: 1
+    - _SpecularHighlights: 0
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
@@ -127,7 +130,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _CautionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ChromaKeyColor: {r: 0.039215688, g: 0.058823533, b: 0.9921569, a: 0}
+    - _ChromaKeyColor: {r: 0.043137256, g: 0.058823533, b: 0.9921569, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _CriticalColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
