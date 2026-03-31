@@ -40,11 +40,9 @@ Shader "ChromaKeyURP/Unlit/Transparent"
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma multi_compile_fog
             #pragma target 2.0
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Fog.hlsl"
 
             struct Attributes
             {
@@ -56,18 +54,15 @@ Shader "ChromaKeyURP/Unlit/Transparent"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv          : TEXCOORD0;
-                half   fogFactor   : TEXCOORD1;
             };
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _Color;
                 float4 _MainTex_ST;
-
                 float4 _ChromaKeyColor;
                 float  _ChromaKeyHueRange;
                 float  _ChromaKeySaturationRange;
                 float  _ChromaKeyBrightnessRange;
-
                 float  _EdgeFeather;
             CBUFFER_END
 
@@ -94,19 +89,12 @@ Shader "ChromaKeyURP/Unlit/Transparent"
             {
                 float3 hsv    = RGBToHSV(rgb);
                 float3 keyHsv = RGBToHSV(_ChromaKeyColor.rgb);
-
                 float dHue = HueDistance(hsv.x, keyHsv.x) / max(_ChromaKeyHueRange, 1e-4);
                 float dSat = abs(hsv.y - keyHsv.y)      / max(_ChromaKeySaturationRange, 1e-4);
                 float dVal = abs(hsv.z - keyHsv.z)      / max(_ChromaKeyBrightnessRange, 1e-4);
-
-                // d <= 1 => close to key color
                 float d = max(dHue, max(dSat, dVal));
-
-                // Make "key area" fully transparent, then ramp to opaque near the tolerance boundary.
-                // Feather controls how soft the edge is around d ~ 1.
                 float feather = max(_EdgeFeather, 1e-4);
-                float t = saturate((d - (1.0 - feather)) / feather); // 0..1
-                // smoothstep curve
+                float t = saturate((d - (1.0 - feather)) / feather);
                 return t * t * (3.0 - 2.0 * t);
             }
 
@@ -116,18 +104,14 @@ Shader "ChromaKeyURP/Unlit/Transparent"
                 VertexPositionInputs pos = GetVertexPositionInputs(IN.positionOS.xyz);
                 OUT.positionHCS = pos.positionCS;
                 OUT.uv = TRANSFORM_TEX(IN.uv, _MainTex);
-                OUT.fogFactor = ComputeFogFactor(pos.positionCS.z);
                 return OUT;
             }
 
             half4 frag(Varyings IN) : SV_Target
             {
                 half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv) * _Color;
-
                 float alphaFactor = ComputeAlphaFactor(col.rgb);
                 col.a *= alphaFactor;
-
-                col.rgb = MixFog(col.rgb, IN.fogFactor);
                 return col;
             }
             ENDHLSL

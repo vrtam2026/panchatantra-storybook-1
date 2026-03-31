@@ -802,14 +802,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 01
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
   m_Looping: 1
@@ -1508,14 +1506,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -1695,7 +1691,11 @@ PrefabInstance:
       value: new_final_file_frame
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 65702495048144492, guid: beae075adebffb246b2149f993a06894, type: 3}
+    - {fileID: -8700617353114198275, guid: beae075adebffb246b2149f993a06894, type: 3}
+    - {fileID: 8196798520224901374, guid: beae075adebffb246b2149f993a06894, type: 3}
+    - {fileID: 5994721076960434074, guid: beae075adebffb246b2149f993a06894, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: beae075adebffb246b2149f993a06894, type: 3}
@@ -3535,6 +3535,7 @@ MonoBehaviour:
   backgroundLoopVideos: []
   animators: []
   splineMovers: []
+  splinePathMovers: []
   freezeMode: 0
   freezeFirstSeconds: 0
   freezeLastSeconds: 0
@@ -3767,14 +3768,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -4099,6 +4098,7 @@ MonoBehaviour:
   backgroundLoopVideos: []
   animators: []
   splineMovers: []
+  splinePathMovers: []
   freezeMode: 0
   freezeFirstSeconds: 0
   freezeLastSeconds: 0
@@ -5923,6 +5923,7 @@ MonoBehaviour:
   backgroundLoopVideos: []
   animators: []
   splineMovers: []
+  splinePathMovers: []
   freezeMode: 0
   freezeFirstSeconds: 0
   freezeLastSeconds: 0
@@ -6112,6 +6113,7 @@ MonoBehaviour:
   backgroundLoopVideos: []
   animators: []
   splineMovers: []
+  splinePathMovers: []
   freezeMode: 0
   freezeFirstSeconds: 0
   freezeLastSeconds: 0
@@ -6409,14 +6411,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 01
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -7113,6 +7113,7 @@ MonoBehaviour:
   - {fileID: 1989281467}
   splineMovers:
   - {fileID: 1183498636}
+  splinePathMovers: []
   freezeMode: 0
   freezeFirstSeconds: 0
   freezeLastSeconds: 0
@@ -10953,7 +10954,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1771766229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11085,6 +11086,7 @@ MonoBehaviour:
   backgroundLoopVideos: []
   animators: []
   splineMovers: []
+  splinePathMovers: []
   freezeMode: 0
   freezeFirstSeconds: 0
   freezeLastSeconds: 0
@@ -11415,14 +11417,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 01
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -12523,6 +12523,7 @@ MonoBehaviour:
   backgroundLoopVideos: []
   animators: []
   splineMovers: []
+  splinePathMovers: []
   freezeMode: 0
   freezeFirstSeconds: 0
   freezeLastSeconds: 0
@@ -12994,6 +12995,7 @@ MonoBehaviour:
   backgroundLoopVideos: []
   animators: []
   splineMovers: []
+  splinePathMovers: []
   freezeMode: 0
   freezeFirstSeconds: 0
   freezeLastSeconds: 0
@@ -13313,6 +13315,7 @@ GameObject:
   - component: {fileID: 2040524881}
   - component: {fileID: 2040524884}
   - component: {fileID: 2040524885}
+  - component: {fileID: 2040524886}
   m_Layer: 0
   m_Name: Story_1_page_20-21
   m_TagString: Untagged
@@ -13390,7 +13393,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 0}
+  mPreview: {fileID: 2040524886}
 --- !u!4 &2040524883
 Transform:
   m_ObjectHideFlags: 0
@@ -13426,6 +13429,7 @@ MonoBehaviour:
   animators:
   - {fileID: 1902115700}
   splineMovers: []
+  splinePathMovers: []
   freezeMode: 0
   freezeFirstSeconds: 0
   freezeLastSeconds: 0
@@ -13444,6 +13448,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   pageNode: {fileID: 2040524884}
+--- !u!114 &2040524886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040524879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
+  mObserverBehaviour: {fileID: 2040524882}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: 21
+  mDatasetName: Vuforia/ShyamStory1.xml
+  mCastedBehaviour: {fileID: 2040524882}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &2043316907
 GameObject:
   m_ObjectHideFlags: 0
@@ -14066,14 +14089,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
