@@ -5455,6 +5455,7 @@ GameObject:
   - component: {fileID: 610435616}
   - component: {fileID: 610435615}
   - component: {fileID: 610435620}
+  - component: {fileID: 610435621}
   m_Layer: 0
   m_Name: Story_1_page_34-35
   m_TagString: Untagged
@@ -5540,25 +5541,25 @@ MonoBehaviour:
   OnTargetFound:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1188781163}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
+      - m_Target: {fileID: 610435621}
+        m_TargetAssemblyTypeName: PopupAnimateOnTrack, Assembly-CSharp
+        m_MethodName: OnMarkerFound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
   OnTargetLost:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1188781163}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
+      - m_Target: {fileID: 610435621}
+        m_TargetAssemblyTypeName: PopupAnimateOnTrack, Assembly-CSharp
+        m_MethodName: OnMarkerLost
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5629,6 +5630,33 @@ MonoBehaviour:
   mCastedBehaviour: {fileID: 610435618}
   mMeshFilter: {fileID: 0}
   mMeshRenderer: {fileID: 0}
+--- !u!114 &610435621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610435613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65864dc75be3c0444afa7b56b46b9f22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimateOnTrack
+  models:
+  - modelRoot: {fileID: 1188781161}
+    animator: {fileID: 1188781163}
+    useCurrentModelScaleAsTarget: 1
+    targetScale: {x: 0, y: 0, z: 0}
+    finalScale: {x: 0, y: 0, z: 0}
+    initialized: 0
+  replayButton: {fileID: 1964461220}
+  playMode: 1
+  style: 2
+  duration: 1
+  startScale: {x: 0, y: 0, z: 0}
+  resetOnLost: 1
+  restartAnimationEachTrack: 1
+  disableAnimatorOnLost: 1
 --- !u!1 &619967780
 GameObject:
   m_ObjectHideFlags: 0
@@ -6449,6 +6477,7 @@ GameObject:
   - component: {fileID: 775770233}
   - component: {fileID: 775770232}
   - component: {fileID: 775770237}
+  - component: {fileID: 775770238}
   m_Layer: 0
   m_Name: Story_1_page_38-39
   m_TagString: Untagged
@@ -6534,9 +6563,9 @@ MonoBehaviour:
   OnTargetFound:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.Video.VideoPlayer, UnityEngine
-        m_MethodName: Play
+      - m_Target: {fileID: 775770238}
+        m_TargetAssemblyTypeName: PopupAnimateOnTrack, Assembly-CSharp
+        m_MethodName: OnMarkerFound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6549,9 +6578,9 @@ MonoBehaviour:
   OnTargetLost:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.Video.VideoPlayer, UnityEngine
-        m_MethodName: Pause
+      - m_Target: {fileID: 775770238}
+        m_TargetAssemblyTypeName: PopupAnimateOnTrack, Assembly-CSharp
+        m_MethodName: OnMarkerLost
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6623,6 +6652,33 @@ MonoBehaviour:
   mCastedBehaviour: {fileID: 775770235}
   mMeshFilter: {fileID: 0}
   mMeshRenderer: {fileID: 0}
+--- !u!114 &775770238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 775770230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65864dc75be3c0444afa7b56b46b9f22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimateOnTrack
+  models:
+  - modelRoot: {fileID: 50659391}
+    animator: {fileID: 50659393}
+    useCurrentModelScaleAsTarget: 1
+    targetScale: {x: 0, y: 0, z: 0}
+    finalScale: {x: 0, y: 0, z: 0}
+    initialized: 0
+  replayButton: {fileID: 1964461220}
+  playMode: 1
+  style: 3
+  duration: 1
+  startScale: {x: 0, y: 0, z: 0}
+  resetOnLost: 1
+  restartAnimationEachTrack: 1
+  disableAnimatorOnLost: 1
 --- !u!1 &785809473
 GameObject:
   m_ObjectHideFlags: 0
@@ -7205,7 +7261,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &924718330
 Transform:
   m_ObjectHideFlags: 0
@@ -8394,6 +8450,7 @@ GameObject:
   - component: {fileID: 1104173367}
   - component: {fileID: 1104173361}
   - component: {fileID: 1104173368}
+  - component: {fileID: 1104173369}
   m_Layer: 0
   m_Name: Story_1_page_26-27
   m_TagString: Untagged
@@ -8479,25 +8536,25 @@ MonoBehaviour:
   OnTargetFound:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 967616575}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
+      - m_Target: {fileID: 1104173369}
+        m_TargetAssemblyTypeName: PopupAnimateOnTrack, Assembly-CSharp
+        m_MethodName: OnMarkerFound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
   OnTargetLost:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 967616575}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
+      - m_Target: {fileID: 1104173369}
+        m_TargetAssemblyTypeName: PopupAnimateOnTrack, Assembly-CSharp
+        m_MethodName: OnMarkerLost
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -8601,6 +8658,33 @@ MonoBehaviour:
   mCastedBehaviour: {fileID: 1104173364}
   mMeshFilter: {fileID: 0}
   mMeshRenderer: {fileID: 0}
+--- !u!114 &1104173369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104173359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65864dc75be3c0444afa7b56b46b9f22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimateOnTrack
+  models:
+  - modelRoot: {fileID: 967616573}
+    animator: {fileID: 967616575}
+    useCurrentModelScaleAsTarget: 1
+    targetScale: {x: 0, y: 0, z: 0}
+    finalScale: {x: 0, y: 0, z: 0}
+    initialized: 0
+  replayButton: {fileID: 1964461220}
+  playMode: 1
+  style: 2
+  duration: 1
+  startScale: {x: 0, y: 0, z: 0}
+  resetOnLost: 1
+  restartAnimationEachTrack: 1
+  disableAnimatorOnLost: 1
 --- !u!1 &1112935294
 GameObject:
   m_ObjectHideFlags: 0
@@ -10768,6 +10852,7 @@ GameObject:
   - component: {fileID: 1338429494}
   - component: {fileID: 1338429493}
   - component: {fileID: 1338429498}
+  - component: {fileID: 1338429499}
   m_Layer: 0
   m_Name: Story_1_page_42-43
   m_TagString: Untagged
@@ -10853,52 +10938,28 @@ MonoBehaviour:
   OnTargetFound:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 930259659}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
+      - m_Target: {fileID: 1338429491}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 409546394}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  OnTargetLost:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 930259659}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 409546394}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
+  OnTargetLost:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1338429491}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -10966,6 +11027,39 @@ MonoBehaviour:
   mCastedBehaviour: {fileID: 1338429496}
   mMeshFilter: {fileID: 0}
   mMeshRenderer: {fileID: 0}
+--- !u!114 &1338429499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338429491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65864dc75be3c0444afa7b56b46b9f22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimateOnTrack
+  models:
+  - modelRoot: {fileID: 930259660}
+    animator: {fileID: 930259659}
+    useCurrentModelScaleAsTarget: 1
+    targetScale: {x: 0, y: 0, z: 0}
+    finalScale: {x: 0, y: 0, z: 0}
+    initialized: 0
+  - modelRoot: {fileID: 409546395}
+    animator: {fileID: 409546394}
+    useCurrentModelScaleAsTarget: 1
+    targetScale: {x: 0, y: 0, z: 0}
+    finalScale: {x: 0, y: 0, z: 0}
+    initialized: 0
+  replayButton: {fileID: 1964461220}
+  playMode: 1
+  style: 3
+  duration: 1
+  startScale: {x: 0, y: 0, z: 0}
+  resetOnLost: 1
+  restartAnimationEachTrack: 1
+  disableAnimatorOnLost: 1
 --- !u!1 &1346549032
 GameObject:
   m_ObjectHideFlags: 0
@@ -14415,8 +14509,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12bca8082d735d2478b2aa287ab4d35a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenSceneButton
-  sceneName: test_AR-test
-  sceneAsset: {fileID: 102900000, guid: fb12b9cad19ce084f8710b79e95214e3, type: 3}
+  sceneName: test_AR-1-test-vfx
+  sceneAsset: {fileID: 102900000, guid: d18d2e6cedad65b48990c8960b8747ea, type: 3}
 --- !u!114 &1907963240
 MonoBehaviour:
   m_ObjectHideFlags: 0

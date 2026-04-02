@@ -832,14 +832,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -1677,14 +1675,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -3293,7 +3289,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &475013038
 Transform:
   m_ObjectHideFlags: 0
@@ -3916,14 +3912,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -5437,6 +5431,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 744319971}
   m_CullTransparentMesh: 1
+--- !u!1 &786976122
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 786976124}
+  - component: {fileID: 786976123}
+  m_Layer: 0
+  m_Name: AppStartup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &786976123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786976122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fab91a2aacef02740bdd43cd6701455d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AppStartupSettings
+--- !u!4 &786976124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786976122}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -272.03647, y: 0.00001, z: 193.41835}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &793099817
 GameObject:
   m_ObjectHideFlags: 0
@@ -6604,6 +6642,7 @@ GameObject:
   - component: {fileID: 993644859}
   - component: {fileID: 993644860}
   - component: {fileID: 993644862}
+  - component: {fileID: 993644864}
   - component: {fileID: 993644863}
   m_Layer: 0
   m_Name: Story_1_page_14-15
@@ -6653,37 +6692,10 @@ MonoBehaviour:
   OnTargetFound:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 901212640}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1147570382}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  OnTargetLost:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 901212640}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
+      - m_Target: {fileID: 993644863}
+        m_TargetAssemblyTypeName: PopupAnimateOnTrack, Assembly-CSharp
+        m_MethodName: OnMarkerFound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6692,10 +6704,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1147570382}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
+  OnTargetLost:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 993644863}
+        m_TargetAssemblyTypeName: PopupAnimateOnTrack, Assembly-CSharp
+        m_MethodName: OnMarkerLost
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6730,7 +6745,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 993644863}
+  mPreview: {fileID: 993644864}
 --- !u!4 &993644858
 Transform:
   m_ObjectHideFlags: 0
@@ -6764,7 +6779,7 @@ MonoBehaviour:
   mainVideos: []
   backgroundLoopVideos: []
   animators:
-  - {fileID: 1147570382}
+  - {fileID: 0}
   splineMovers:
   - {fileID: 993644862}
   freezeMode: 0
@@ -6811,6 +6826,39 @@ MonoBehaviour:
   playAnimatorWhileMoving: 1
   freezeAnimatorOnComplete: 1
 --- !u!114 &993644863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993644854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65864dc75be3c0444afa7b56b46b9f22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimateOnTrack
+  models:
+  - modelRoot: {fileID: 1743155453}
+    animator: {fileID: 901212640}
+    useCurrentModelScaleAsTarget: 1
+    targetScale: {x: 0, y: 0, z: 0}
+    finalScale: {x: 0, y: 0, z: 0}
+    initialized: 0
+  - modelRoot: {fileID: 1147570380}
+    animator: {fileID: 1147570382}
+    useCurrentModelScaleAsTarget: 1
+    targetScale: {x: 0, y: 0, z: 0}
+    finalScale: {x: 0, y: 0, z: 0}
+    initialized: 0
+  replayButton: {fileID: 1060086107}
+  playMode: 1
+  style: 0
+  duration: 2
+  startScale: {x: 0, y: 0, z: 0}
+  resetOnLost: 1
+  restartAnimationEachTrack: 1
+  disableAnimatorOnLost: 1
+--- !u!114 &993644864
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7638,14 +7686,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 0.8
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -7949,8 +7995,8 @@ Animator:
   m_GameObject: {fileID: 1147570381}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: aebfb937211957848ac1482aed374047, type: 2}
-  m_CullingMode: 1
+  m_Controller: {fileID: 9100000, guid: 9aac8c50884095d47a38a48ecd780305, type: 2}
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -8228,10 +8274,11 @@ GameObject:
   - component: {fileID: 1183498633}
   - component: {fileID: 1183498632}
   - component: {fileID: 1183498631}
+  - component: {fileID: 1183498641}
   - component: {fileID: 1183498635}
   - component: {fileID: 1183498638}
   - component: {fileID: 1183498640}
-  - component: {fileID: 1183498641}
+  - component: {fileID: 1183498642}
   m_Layer: 0
   m_Name: Story_1_page_4-5
   m_TagString: Untagged
@@ -8280,10 +8327,10 @@ MonoBehaviour:
   OnTargetFound:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 880053514}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
+      - m_Target: {fileID: 1183498641}
+        m_TargetAssemblyTypeName: PopupAnimateOnTrack, Assembly-CSharp
+        m_MethodName: OnMarkerFound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -8295,10 +8342,10 @@ MonoBehaviour:
   OnTargetLost:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 880053514}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
+      - m_Target: {fileID: 1183498641}
+        m_TargetAssemblyTypeName: PopupAnimateOnTrack, Assembly-CSharp
+        m_MethodName: OnMarkerLost
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -8333,7 +8380,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1183498641}
+  mPreview: {fileID: 1183498642}
 --- !u!4 &1183498633
 Transform:
   m_ObjectHideFlags: 0
@@ -8414,6 +8461,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   pageNode: {fileID: 1183498635}
 --- !u!114 &1183498641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183498629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65864dc75be3c0444afa7b56b46b9f22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimateOnTrack
+  models:
+  - modelRoot: {fileID: 880053513}
+    animator: {fileID: 880053514}
+    useCurrentModelScaleAsTarget: 1
+    targetScale: {x: 0, y: 0, z: 0}
+    finalScale: {x: 0, y: 0, z: 0}
+    initialized: 0
+  replayButton: {fileID: 1060086107}
+  playMode: 1
+  style: 2
+  duration: 2
+  startScale: {x: 0, y: 0, z: 0}
+  resetOnLost: 1
+  restartAnimationEachTrack: 1
+  disableAnimatorOnLost: 1
+--- !u!114 &1183498642
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -13057,7 +13131,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1786093024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13307,14 +13381,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 0.8
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -13913,7 +13985,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 783fbca08bba6ba408a5a00746521f95,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1902115700}
+      addedObject: {fileID: 1902115702}
   m_SourcePrefab: {fileID: 100100000, guid: 783fbca08bba6ba408a5a00746521f95, type: 3}
 --- !u!1 &1902115699 stripped
 GameObject:
@@ -13921,7 +13993,13 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1902115698}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1902115700
+--- !u!4 &1902115701 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 783fbca08bba6ba408a5a00746521f95,
+    type: 3}
+  m_PrefabInstance: {fileID: 1902115698}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1902115702
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -13943,12 +14021,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!4 &1902115701 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 783fbca08bba6ba408a5a00746521f95,
-    type: 3}
-  m_PrefabInstance: {fileID: 1902115698}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1947459216
 GameObject:
   m_ObjectHideFlags: 0
@@ -15112,6 +15184,7 @@ GameObject:
   - component: {fileID: 2040524884}
   - component: {fileID: 2040524885}
   - component: {fileID: 2040524886}
+  - component: {fileID: 2040524887}
   m_Layer: 0
   m_Name: Story_1_page_20-21
   m_TagString: Untagged
@@ -15160,25 +15233,25 @@ MonoBehaviour:
   OnTargetFound:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1902115700}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
+      - m_Target: {fileID: 2040524887}
+        m_TargetAssemblyTypeName: PopupAnimateOnTrack, Assembly-CSharp
+        m_MethodName: OnMarkerFound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
   OnTargetLost:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1902115700}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
+      - m_Target: {fileID: 2040524887}
+        m_TargetAssemblyTypeName: PopupAnimateOnTrack, Assembly-CSharp
+        m_MethodName: OnMarkerLost
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -15247,7 +15320,7 @@ MonoBehaviour:
   mainVideos: []
   backgroundLoopVideos: []
   animators:
-  - {fileID: 1902115700}
+  - {fileID: 0}
   splineMovers: []
   freezeMode: 0
   freezeFirstSeconds: 0
@@ -15286,6 +15359,33 @@ MonoBehaviour:
   mCastedBehaviour: {fileID: 2040524882}
   mMeshFilter: {fileID: 0}
   mMeshRenderer: {fileID: 0}
+--- !u!114 &2040524887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040524879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65864dc75be3c0444afa7b56b46b9f22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimateOnTrack
+  models:
+  - modelRoot: {fileID: 1902115701}
+    animator: {fileID: 1902115702}
+    useCurrentModelScaleAsTarget: 1
+    targetScale: {x: 0, y: 0, z: 0}
+    finalScale: {x: 0, y: 0, z: 0}
+    initialized: 0
+  replayButton: {fileID: 1060086107}
+  playMode: 1
+  style: 3
+  duration: 2
+  startScale: {x: 0, y: 0, z: 0}
+  resetOnLost: 1
+  restartAnimationEachTrack: 1
+  disableAnimatorOnLost: 1
 --- !u!1 &2043316907
 GameObject:
   m_ObjectHideFlags: 0
@@ -15814,14 +15914,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 0.9
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -16247,3 +16345,4 @@ SceneRoots:
   - {fileID: 1818636698}
   - {fileID: 1786093025}
   - {fileID: 475013038}
+  - {fileID: 786976124}

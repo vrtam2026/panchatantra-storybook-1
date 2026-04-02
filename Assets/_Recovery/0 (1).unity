@@ -399,7 +399,6 @@ GameObject:
   - component: {fileID: 73775963}
   - component: {fileID: 73775962}
   - component: {fileID: 73775961}
-  - component: {fileID: 73775965}
   m_Layer: 0
   m_Name: Story_1_page_22-quiz
   m_TagString: Untagged
@@ -493,7 +492,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 73775965}
+  mPreview: {fileID: 0}
 --- !u!4 &73775964
 Transform:
   m_ObjectHideFlags: 0
@@ -510,25 +509,6 @@ Transform:
   - {fileID: 457284603}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &73775965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 73775959}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 73775963}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 22
-  mDatasetName: Vuforia/ShyamStory1.xml
-  mCastedBehaviour: {fileID: 73775963}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &74084628
 GameObject:
   m_ObjectHideFlags: 0
@@ -832,14 +812,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -1677,14 +1655,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -3502,7 +3478,6 @@ GameObject:
   - component: {fileID: 484360993}
   - component: {fileID: 484360997}
   - component: {fileID: 484360998}
-  - component: {fileID: 484360999}
   m_Layer: 0
   m_Name: Story_1_page_8-9
   m_TagString: Untagged
@@ -3628,7 +3603,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 484360999}
+  mPreview: {fileID: 0}
 --- !u!4 &484360995
 Transform:
   m_ObjectHideFlags: 0
@@ -3683,25 +3658,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   pageNode: {fileID: 484360997}
---- !u!114 &484360999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 484360991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 484360994}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 8
-  mDatasetName: Vuforia/ShyamStory1.xml
-  mCastedBehaviour: {fileID: 484360994}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &491060342
 GameObject:
   m_ObjectHideFlags: 0
@@ -3916,14 +3872,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -4090,7 +4044,6 @@ GameObject:
   - component: {fileID: 515065630}
   - component: {fileID: 515065634}
   - component: {fileID: 515065635}
-  - component: {fileID: 515065636}
   m_Layer: 0
   m_Name: Story_1_page_10-11
   m_TagString: Untagged
@@ -4192,7 +4145,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 515065636}
+  mPreview: {fileID: 0}
 --- !u!4 &515065632
 Transform:
   m_ObjectHideFlags: 0
@@ -4247,25 +4200,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   pageNode: {fileID: 515065634}
---- !u!114 &515065636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 515065628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 515065631}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 10
-  mDatasetName: Vuforia/ShyamStory1.xml
-  mCastedBehaviour: {fileID: 515065631}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &548479190
 GameObject:
   m_ObjectHideFlags: 0
@@ -5878,7 +5812,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a2f8d7d2ad59ea24bb90fa2048287bcf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 880053516}
   m_SourcePrefab: {fileID: 100100000, guid: a2f8d7d2ad59ea24bb90fa2048287bcf, type: 3}
 --- !u!4 &880053513 stripped
 Transform:
@@ -5892,6 +5830,32 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 880053512}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &880053515 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a2f8d7d2ad59ea24bb90fa2048287bcf,
+    type: 3}
+  m_PrefabInstance: {fileID: 880053512}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &880053516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880053515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06ffa7d36e71876458b12ed675688c6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KidsPopupStyles
+  style: 0
+  delay: 0.5
+  duration: 0.6
+  loop: 0
+  loopDelay: 0.5
+  startScale: {x: 0, y: 0, z: 0}
+  animator: {fileID: 880053514}
+  playAnimatorAfterPopup: 1
 --- !u!1001 &901212637
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6604,7 +6568,6 @@ GameObject:
   - component: {fileID: 993644859}
   - component: {fileID: 993644860}
   - component: {fileID: 993644862}
-  - component: {fileID: 993644863}
   m_Layer: 0
   m_Name: Story_1_page_14-15
   m_TagString: Untagged
@@ -6730,7 +6693,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 993644863}
+  mPreview: {fileID: 0}
 --- !u!4 &993644858
 Transform:
   m_ObjectHideFlags: 0
@@ -6810,25 +6773,6 @@ MonoBehaviour:
   animatorToControl: {fileID: 1147570382}
   playAnimatorWhileMoving: 1
   freezeAnimatorOnComplete: 1
---- !u!114 &993644863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 993644854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 993644857}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 15
-  mDatasetName: Vuforia/ShyamStory1.xml
-  mCastedBehaviour: {fileID: 993644857}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1001 &1007777391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6935,7 +6879,6 @@ GameObject:
   - component: {fileID: 1025655704}
   - component: {fileID: 1025655708}
   - component: {fileID: 1025655709}
-  - component: {fileID: 1025655710}
   m_Layer: 0
   m_Name: Story_1_page_12-13
   m_TagString: Untagged
@@ -7037,7 +6980,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1025655710}
+  mPreview: {fileID: 0}
 --- !u!4 &1025655706
 Transform:
   m_ObjectHideFlags: 0
@@ -7092,25 +7035,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   pageNode: {fileID: 1025655708}
---- !u!114 &1025655710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1025655702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 1025655705}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 12
-  mDatasetName: Vuforia/ShyamStory1.xml
-  mCastedBehaviour: {fileID: 1025655705}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &1050180887
 GameObject:
   m_ObjectHideFlags: 0
@@ -7638,14 +7562,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 0.8
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -8231,7 +8153,6 @@ GameObject:
   - component: {fileID: 1183498635}
   - component: {fileID: 1183498638}
   - component: {fileID: 1183498640}
-  - component: {fileID: 1183498641}
   m_Layer: 0
   m_Name: Story_1_page_4-5
   m_TagString: Untagged
@@ -8333,7 +8254,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1183498641}
+  mPreview: {fileID: 0}
 --- !u!4 &1183498633
 Transform:
   m_ObjectHideFlags: 0
@@ -8413,25 +8334,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   pageNode: {fileID: 1183498635}
---- !u!114 &1183498641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1183498629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 1183498632}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 5
-  mDatasetName: Vuforia/ShyamStory1.xml
-  mCastedBehaviour: {fileID: 1183498632}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &1189939550
 GameObject:
   m_ObjectHideFlags: 0
@@ -10581,7 +10483,6 @@ GameObject:
   - component: {fileID: 1485571890}
   - component: {fileID: 1485571894}
   - component: {fileID: 1485571898}
-  - component: {fileID: 1485571899}
   m_Layer: 0
   m_Name: Story_1_page_intro
   m_TagString: Untagged
@@ -10683,7 +10584,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1485571899}
+  mPreview: {fileID: 0}
 --- !u!4 &1485571892
 Transform:
   m_ObjectHideFlags: 0
@@ -10737,25 +10638,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   pageNode: {fileID: 1485571894}
---- !u!114 &1485571899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1485571888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 1485571891}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 3
-  mDatasetName: Vuforia/ShyamStory1.xml
-  mCastedBehaviour: {fileID: 1485571891}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &1501743508
 GameObject:
   m_ObjectHideFlags: 0
@@ -12676,7 +12558,6 @@ GameObject:
   - component: {fileID: 1771766229}
   - component: {fileID: 1771766232}
   - component: {fileID: 1771766233}
-  - component: {fileID: 1771766234}
   m_Layer: 0
   m_Name: Story_1_page_6-7
   m_TagString: Untagged
@@ -12778,7 +12659,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1771766234}
+  mPreview: {fileID: 0}
 --- !u!4 &1771766231
 Transform:
   m_ObjectHideFlags: 0
@@ -12833,25 +12714,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   pageNode: {fileID: 1771766232}
---- !u!114 &1771766234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1771766227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 1771766230}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 7
-  mDatasetName: Vuforia/ShyamStory1.xml
-  mCastedBehaviour: {fileID: 1771766230}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1001 &1774706327
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13307,14 +13169,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 0.8
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -14346,7 +14206,6 @@ GameObject:
   - component: {fileID: 1970981153}
   - component: {fileID: 1970981157}
   - component: {fileID: 1970981158}
-  - component: {fileID: 1970981159}
   m_Layer: 0
   m_Name: Story_1_page_18-19
   m_TagString: Untagged
@@ -14448,7 +14307,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1970981159}
+  mPreview: {fileID: 0}
 --- !u!4 &1970981155
 Transform:
   m_ObjectHideFlags: 0
@@ -14503,25 +14362,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   pageNode: {fileID: 1970981157}
---- !u!114 &1970981159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1970981151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 1970981154}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 19
-  mDatasetName: Vuforia/ShyamStory1.xml
-  mCastedBehaviour: {fileID: 1970981154}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &1982838504
 GameObject:
   m_ObjectHideFlags: 0
@@ -14634,7 +14474,6 @@ GameObject:
   - component: {fileID: 1995345967}
   - component: {fileID: 1995345971}
   - component: {fileID: 1995345972}
-  - component: {fileID: 1995345973}
   m_Layer: 0
   m_Name: Story_1_page_16-17
   m_TagString: Untagged
@@ -14736,7 +14575,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1995345973}
+  mPreview: {fileID: 0}
 --- !u!4 &1995345969
 Transform:
   m_ObjectHideFlags: 0
@@ -14791,25 +14630,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   pageNode: {fileID: 1995345971}
---- !u!114 &1995345973
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1995345965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 1995345968}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 16
-  mDatasetName: Vuforia/ShyamStory1.xml
-  mCastedBehaviour: {fileID: 1995345968}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &1999942040
 GameObject:
   m_ObjectHideFlags: 0
@@ -15111,7 +14931,6 @@ GameObject:
   - component: {fileID: 2040524881}
   - component: {fileID: 2040524884}
   - component: {fileID: 2040524885}
-  - component: {fileID: 2040524886}
   m_Layer: 0
   m_Name: Story_1_page_20-21
   m_TagString: Untagged
@@ -15213,7 +15032,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 2040524886}
+  mPreview: {fileID: 0}
 --- !u!4 &2040524883
 Transform:
   m_ObjectHideFlags: 0
@@ -15267,25 +15086,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   pageNode: {fileID: 2040524884}
---- !u!114 &2040524886
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2040524879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 2040524882}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 21
-  mDatasetName: Vuforia/ShyamStory1.xml
-  mCastedBehaviour: {fileID: 2040524882}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &2043316907
 GameObject:
   m_ObjectHideFlags: 0
@@ -15814,14 +15614,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 0.9
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
