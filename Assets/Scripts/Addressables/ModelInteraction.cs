@@ -23,9 +23,9 @@ public class ModelInteraction : MonoBehaviour
     public float maxScale = 3f;
 
     Transform _model;
-    Vector3 _originalPosition;
-    Quaternion _originalRotation;
-    Vector3 _originalScale;
+    Vector3 _originalLocalPosition;
+    Quaternion _originalLocalRotation;
+    Vector3 _originalLocalScale;
 
     float _currentDragAngle = 0f;
     float _currentSliderAngle = 0f;
@@ -44,9 +44,11 @@ public class ModelInteraction : MonoBehaviour
     {
         Current = this;
         _model = spawnedModel.transform;
-        _originalPosition = _model.position;
-        _originalRotation = _model.rotation;
-        _originalScale = _model.localScale;
+
+        // store LOCAL instead of world
+        _originalLocalPosition = _model.localPosition;
+        _originalLocalRotation = _model.localRotation;
+        _originalLocalScale = _model.localScale;
 
         if (verticalSlider != null && canSliderRotate)
         {
@@ -133,6 +135,8 @@ public class ModelInteraction : MonoBehaviour
     void OnSliderChanged(float value)
     {
         if (!canSliderRotate) return;
+        if (_model == null) return;
+
         _currentSliderAngle = value;
         ApplyRotation();
     }
@@ -141,8 +145,10 @@ public class ModelInteraction : MonoBehaviour
 
     void ApplyRotation()
     {
-        _model.rotation = _originalRotation
-            * Quaternion.Euler(_currentSliderAngle, _currentDragAngle, 0f);
+        if (_model == null) return;
+
+        _model.localRotation = _originalLocalRotation
+                * Quaternion.Euler(_currentSliderAngle, _currentDragAngle, 0f);
     }
 
     // ── Pinch Scale ──────────────────────────────────────────
@@ -198,9 +204,9 @@ public class ModelInteraction : MonoBehaviour
     {
         if (_model == null) return;
 
-        _model.position = _originalPosition;
-        _model.rotation = _originalRotation;
-        _model.localScale = _originalScale;
+        _model.localPosition = _originalLocalPosition;
+        _model.localRotation = _originalLocalRotation;
+        _model.localScale = _originalLocalScale;
 
         _currentDragAngle = 0f;
         _currentSliderAngle = 0f;
@@ -211,9 +217,10 @@ public class ModelInteraction : MonoBehaviour
 
     public void Cleanup()
     {
-        if (Current == this) Current = null;
         if (verticalSlider != null)
             verticalSlider.onValueChanged.RemoveListener(OnSliderChanged);
+
+        if (Current == this) Current = null;
         _model = null;
     }
 }

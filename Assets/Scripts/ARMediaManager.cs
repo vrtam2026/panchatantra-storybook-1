@@ -234,12 +234,23 @@ public class ARMediaManager : MonoBehaviour
 
     private void PlayPageAudioFromBeginning(string pageId, bool loopBgmRequested, bool stopBgmWhenVoiceEnds)
     {
-        if (audioDatabase == null) return;
+        Debug.Log($"[AR] PlayPageAudio — pageId: '{pageId}', lang: '{ARGlobalLanguage.GetCurrentLanguage()}'");
+
+        if (audioDatabase == null)
+        {
+            Debug.LogError("[AR] audioDatabase is NULL — assign it in Inspector");
+            return;
+        }
 
         string lang = ARGlobalLanguage.GetCurrentLanguage();
 
         if (!audioDatabase.TryGetPageAudio(lang, pageId, out var pageAudio) || pageAudio == null)
+        {
+            Debug.LogError($"[AR] No audio found for lang:'{lang}' pageId:'{pageId}'");
             return;
+        }
+
+        Debug.Log($"[AR] Found pageAudio — voiceClips:{pageAudio.voiceClips.Count}, bgmClips:{pageAudio.bgmClips.Count}");
 
         // Start BGM (optional)
         StartBgm(pageAudio, loopBgmRequested);
@@ -299,8 +310,13 @@ public class ARMediaManager : MonoBehaviour
         while (_voiceIndex < pageAudio.voiceClips.Count)
         {
             var seg = pageAudio.voiceClips[_voiceIndex];
+
+            Debug.Log($"[AR] Voice Clip Index {_voiceIndex} → {seg?.clip}");
+            
             if (seg == null || seg.clip == null)
             {
+                Debug.LogWarning($"[AR] Skipping NULL audio at index {_voiceIndex}");
+
                 _voiceIndex++;
                 continue;
             }

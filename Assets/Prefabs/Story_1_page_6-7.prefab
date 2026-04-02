@@ -1540,7 +1540,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2895999685817753207}
   - component: {fileID: 817290972077293314}
-  - component: {fileID: 4148896753682942526}
   - component: {fileID: 3036940938068016920}
   m_Layer: 0
   m_Name: Story_1_page_6-7
@@ -1591,19 +1590,6 @@ MonoBehaviour:
   freezeLastSeconds: 0
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
---- !u!114 &4148896753682942526
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5026599860508214084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
-  pageNode: {fileID: 817290972077293314}
 --- !u!114 &3036940938068016920
 MonoBehaviour:
   m_ObjectHideFlags: 0

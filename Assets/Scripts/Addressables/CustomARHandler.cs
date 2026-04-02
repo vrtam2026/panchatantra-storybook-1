@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Video;
 using Vuforia;
 
 public class CustomARHandler : MonoBehaviour
@@ -15,6 +16,9 @@ public class CustomARHandler : MonoBehaviour
     public GameObject replayButton;
     public GameObject nextPageImg;
 
+    private VuforiaTrackHook _trackHook;
+    private ARTrackedPageNode _pageNode;
+
     public static CustomARHandler Current;
 
     void Start()
@@ -22,6 +26,8 @@ public class CustomARHandler : MonoBehaviour
         // hide both buttons at start
         replayButton?.SetActive(false);
         nextPageImg?.SetActive(false);
+
+        _trackHook = GetComponent<VuforiaTrackHook>();
 
         var observer = GetComponent<ObserverBehaviour>();
         if (observer != null)
@@ -83,6 +89,10 @@ public class CustomARHandler : MonoBehaviour
                 }
                 quizManager?.PauseQuiz(false);
 
+                // ADD THESE
+                _pageNode = instantiatedObject.GetComponentInChildren<ARTrackedPageNode>();
+                _trackHook?.SetPageNode(_pageNode);
+
                 contentControl?.PlayContent();
 
                 // pass completion callback to content
@@ -98,6 +108,7 @@ public class CustomARHandler : MonoBehaviour
             ToggleRenderers(true);
             modelInteraction?.Init(instantiatedObject);
             quizManager?.PauseQuiz(false);
+            _trackHook?.SetPageNode(_pageNode); // ADD
             contentControl?.PlayContent();
             replayButton?.SetActive(true);
         }
@@ -111,6 +122,8 @@ public class CustomARHandler : MonoBehaviour
         {
             contentControl?.PauseContent();
             quizManager?.PauseQuiz(true);
+            _trackHook?.ClearPageNode(); // ADD — notifies node before destroy
+
             ToggleRenderers(false);
 
             // destroy instead of hide
@@ -119,6 +132,7 @@ public class CustomARHandler : MonoBehaviour
             contentControl = null;
             modelInteraction = null;
             quizManager = null;
+            _pageNode = null;
 
             // hide buttons when target lost
             replayButton?.SetActive(false);
@@ -154,5 +168,17 @@ public class CustomARHandler : MonoBehaviour
         foreach (var r in renderers) r.enabled = visible;
         var canvas = instantiatedObject.GetComponentsInChildren<Canvas>();
         foreach (var c in canvas) c.enabled = visible;
+
+        // video player
+        var videos = instantiatedObject.GetComponentsInChildren<VideoPlayer>(true);
+        foreach (var v in videos) v.enabled = visible;
+
+        // particles
+        var particles = instantiatedObject.GetComponentsInChildren<ParticleSystem>(true);
+        foreach (var p in particles)
+        {
+            if (visible) p.Play();
+            else p.Stop();
+        }
     }
 }

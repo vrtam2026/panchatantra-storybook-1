@@ -486,7 +486,7 @@ MonoBehaviour:
   animators:
   - {fileID: 3107923249549785184}
   splineMovers:
-  - {fileID: 0}
+  - {fileID: 1654439061649008010}
   splinePathMovers: []
   freezeMode: 0
   freezeFirstSeconds: 0
@@ -508,13 +508,13 @@ MonoBehaviour:
   splineContainer: {fileID: 5038621897640368116}
   splineIndex: 0
   objectToMove: {fileID: 5529039914623009430}
-  faceAlongSpline: 0
+  faceAlongSpline: 1
   upAxis: {x: 0, y: 1, z: 0}
   segments:
   - startT: 0
-    endT: 0.908
-    moveSeconds: 15
-    waitAfterSeconds: 20
+    endT: 1
+    moveSeconds: 5
+    waitAfterSeconds: 10
   animatorToControl: {fileID: 3107923249549785184}
   playAnimatorWhileMoving: 1
   freezeAnimatorOnComplete: 1

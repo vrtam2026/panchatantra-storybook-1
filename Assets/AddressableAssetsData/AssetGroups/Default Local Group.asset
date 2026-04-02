@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 3ff0e6d6f0282384bbdee10c0c729b78
   m_SerializeEntries:
+  - m_GUID: 117f657d95cc55641970a01cc17c8ff0
+    m_Address: Story_1_page_32-33
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 15b413b09edf33f40b813035dadd961d
     m_Address: Story_1_page_intro
     m_ReadOnly: 0
@@ -28,6 +33,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 353262a6140565a40b3fe64877c0b0c3
     m_Address: Story_1_page_22-quiz
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 408105acad00a3f4c9f77c83f69b0128
+    m_Address: Story_1_page_30-31
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4825ba1c68784764b8d3faef8771ffb3
+    m_Address: Story_1_page_24-25
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -47,8 +62,33 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b094361d180ccab499b59efdd0a939b4
+    m_Address: Story_1_page_42-43
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf6d141edd7ed494b9e2b635550ef4a0
+    m_Address: Story_1_page_28-29
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d3cd8d5f23b855645bad0be4662c460b
+    m_Address: Story_1_page_40-41
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dfd01a107afe02641bbc449ad4ec538e
     m_Address: Story_1_page_12-13
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0b3a806d0a49cb478a666d0513b8447
+    m_Address: Story_1_page_36-37
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7e7576e7081afd48bbfdc37c4b70e23
+    m_Address: Story_1_page_26-27
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -70,6 +110,21 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f10cd1ed1f0370b4e8727f27d5638495
     m_Address: Story_1_page_10-11
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f68e81ef999146e478bd4974eb5c2684
+    m_Address: Story_1_page_34-35
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fad85e0e6cd01804ca2bc16e2514fee3
+    m_Address: Story_1_page_38-39
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fdfe3cc36c0fdca4eb944550e7a92acf
+    m_Address: Story_1_page_44-45
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

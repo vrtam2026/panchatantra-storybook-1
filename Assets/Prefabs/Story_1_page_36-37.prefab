@@ -409,7 +409,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5055127332443291521}
   - component: {fileID: 20752212504988522}
-  - component: {fileID: 229670810461592049}
   - component: {fileID: 7891114034789923366}
   m_Layer: 0
   m_Name: Story_1_page_36-37
@@ -426,7 +425,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5150693811678228378}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -460,19 +459,6 @@ MonoBehaviour:
   freezeLastSeconds: 0
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
---- !u!114 &229670810461592049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5150693811678228378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
-  pageNode: {fileID: 20752212504988522}
 --- !u!114 &7891114034789923366
 MonoBehaviour:
   m_ObjectHideFlags: 0

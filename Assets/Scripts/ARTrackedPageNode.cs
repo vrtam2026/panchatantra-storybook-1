@@ -121,6 +121,7 @@ public class ARTrackedPageNode : MonoBehaviour
     public void NotifyFound()
     {
         _isTracked = true;
+        Debug.Log($"[AR] NotifyFound — pageId: '{pageId}'");
         if (mediaManager != null)
             mediaManager.NotifyTrackingFound(this);
         else
