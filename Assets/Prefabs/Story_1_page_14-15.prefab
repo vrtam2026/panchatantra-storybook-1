@@ -11659,7 +11659,7 @@ Transform:
   m_GameObject: {fileID: 5045411147388349518}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.6657882, z: -0, w: 0.7461409}
-  m_LocalPosition: {x: 191.0025, y: 0, z: 2.3999996}
+  m_LocalPosition: {x: 186, y: 0, z: 2}
   m_LocalScale: {x: 90, y: 90, z: 90}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -11678,7 +11678,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 9aac8c50884095d47a38a48ecd780305, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -18357,7 +18357,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 3a839022e0b9a354c8ab03b0b7efc55e, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -19759,6 +19759,7 @@ GameObject:
   - component: {fileID: 7404337761025088735}
   - component: {fileID: 1540770600136701327}
   - component: {fileID: 6935691879828627575}
+  - component: {fileID: 9154059493207366351}
   m_Layer: 0
   m_Name: Story_1_page_14-15
   m_TagString: Untagged
@@ -19796,7 +19797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2e007fa2c4b4d948ac0bd92f2e640c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ARTrackedPageNode
-  pageId: S1_P-4-5
+  pageId: S1_P-14-15
   mediaManager: {fileID: 0}
   mainVideos: []
   backgroundLoopVideos: []
@@ -19825,11 +19826,11 @@ MonoBehaviour:
   splineContainer: {fileID: 7877534830864408451}
   splineIndex: 0
   objectToMove: {fileID: 669780064905233222}
-  faceAlongSpline: 0
+  faceAlongSpline: 1
   upAxis: {x: 0, y: 1, z: 0}
   segments:
   - startT: 0
-    endT: 0.908
+    endT: 0.973
     moveSeconds: 15
     waitAfterSeconds: 20
   animatorToControl: {fileID: 9187597770502239836}
@@ -19847,6 +19848,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f88054253ad3c4facfa36ca1ca3dea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ContentController
+--- !u!114 &9154059493207366351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8291387036808087992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
 --- !u!1 &8330956907628427184
 GameObject:
   m_ObjectHideFlags: 0

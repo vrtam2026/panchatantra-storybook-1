@@ -9,6 +9,5 @@ EditorBuildSettings:
     path: Assets/Scenes/Panchatantra_AR.unity
     guid: d4cac512f25ae714ca1d92eb05d89135
   m_configObjects:
-    com.unity.addressableassets: {fileID: 11400000, guid: eddf79fe3f002fe419ae58d24758fc38,
-      type: 2}
+    com.unity.addressableassets: {fileID: 11400000, guid: eddf79fe3f002fe419ae58d24758fc38, type: 2}
   m_UseUCBPForAssetBundles: 0

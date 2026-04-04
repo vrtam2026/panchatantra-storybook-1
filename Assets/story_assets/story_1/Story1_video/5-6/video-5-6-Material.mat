@@ -96,9 +96,9 @@ Material:
     - _BlendSrc: 5
     - _BumpScale: 1
     - _CautionThreshold: 0.25
-    - _ChromaKeyBrightnessRange: 0.738
-    - _ChromaKeyHueRange: 0.1
-    - _ChromaKeySaturationRange: 0.607
+    - _ChromaKeyBrightnessRange: 0.93
+    - _ChromaKeyHueRange: 0.185
+    - _ChromaKeySaturationRange: 0.877
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
@@ -130,7 +130,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _CautionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ChromaKeyColor: {r: 0.043137256, g: 0.058823533, b: 0.9921569, a: 0}
+    - _ChromaKeyColor: {r: 0.043137256, g: 0.058823533, b: 0.9960785, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _CriticalColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

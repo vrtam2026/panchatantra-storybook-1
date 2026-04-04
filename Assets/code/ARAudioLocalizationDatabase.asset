@@ -21,129 +21,114 @@ MonoBehaviour:
       - clip: {fileID: 8300000, guid: 6030da7e9b23f9f41afc2df7696bc96d, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.382
+        volume: 2
         loop: 0
       bgmClips: []
     - pageId: S1_P-4-5
       voiceClips:
-      - clip: {fileID: 8300000, guid: 50ad58bb32154da43a286a35d8780969, type: 3}
+      - clip: {fileID: 8300000, guid: 1e1da6219681d644ab348632a6605dbe, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.366
+        volume: 2
         loop: 0
-      bgmClips: []
+      bgmClips:
+      - clip: {fileID: 8300000, guid: c80fdea9e899d6c4cb97d558d3b7ac7e, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.55
+        loop: 1
     - pageId: S1_P-6-7
       voiceClips:
-      - clip: {fileID: 8300000, guid: f00c1a93ceab0304898953942665c3db, type: 3}
+      - clip: {fileID: 8300000, guid: 18f71631acb51424dad75feae8f71c30, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      bgmClips: []
+      bgmClips:
+      - clip: {fileID: 8300000, guid: c425a812a8a3e04479174e49a1165be9, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.3
+        loop: 1
     - pageId: S1_P-8-9
       voiceClips:
-      - clip: {fileID: 8300000, guid: 9797fd295269b3f449b7ba2cc5ad3cbc, type: 3}
+      - clip: {fileID: 8300000, guid: b503a79b302388d48912fa47332b784b, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      - clip: {fileID: 8300000, guid: d597161c28c82334cb2f05ead4c0fc46, type: 3}
+      bgmClips:
+      - clip: {fileID: 8300000, guid: c425a812a8a3e04479174e49a1165be9, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
-        loop: 0
-      - clip: {fileID: 8300000, guid: 4c32b440f998ba14a9ff67652d1e9fe0, type: 3}
-        delayBefore: 0
-        delayAfter: 0
-        volume: 1.168
-        loop: 0
-      bgmClips: []
+        volume: 0.33
+        loop: 1
     - pageId: S1_P-10-11
       voiceClips:
-      - clip: {fileID: 8300000, guid: 3218417f9d9b15047bb6481198354b54, type: 3}
+      - clip: {fileID: 8300000, guid: b2ec8378a24156a45bd99d365e28c0a7, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      - clip: {fileID: 8300000, guid: 22260b9a772fa504d984a392a966df03, type: 3}
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 92bea49d5f42113478a83b4a81526b19, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
-        loop: 0
-      - clip: {fileID: 8300000, guid: 47226d97f67c82e4e8774be0b742b63e, type: 3}
-        delayBefore: 0
-        delayAfter: 0
-        volume: 1.168
-        loop: 0
-      bgmClips: []
+        volume: 0.3
+        loop: 1
     - pageId: S1_P-12-13
       voiceClips:
-      - clip: {fileID: 8300000, guid: 258abc8f22e38cc4281f14cbd2967078, type: 3}
+      - clip: {fileID: 8300000, guid: 891b94032ee1e10419d199e965fc9611, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      - clip: {fileID: 8300000, guid: a275902eba8be7a4c8bc5bcd2fdb6b83, type: 3}
+      bgmClips:
+      - clip: {fileID: 8300000, guid: eabbfebd5c1ff5e47ad17d2650808e53, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
-        loop: 0
-      bgmClips: []
+        volume: 0.3
+        loop: 1
     - pageId: S1_P-14-15
       voiceClips:
-      - clip: {fileID: 8300000, guid: ce4b5a15ba989c14185de1c76d4e5bef, type: 3}
+      - clip: {fileID: 8300000, guid: 689e74789a08ded418292245a346d449, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      - clip: {fileID: 8300000, guid: bb4e1c5fbf19a624599d2704366f98f4, type: 3}
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 63d28221e9670b644b7cd8e007c21ba6, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
-        loop: 0
-      - clip: {fileID: 8300000, guid: 6d234e97c9702e94198550e139dd8925, type: 3}
-        delayBefore: 0
-        delayAfter: 0
-        volume: 1.168
-        loop: 0
-      - clip: {fileID: 8300000, guid: 82447846ec0fb4c43b833452da0b7dad, type: 3}
-        delayBefore: 0
-        delayAfter: 0
-        volume: 1.168
-        loop: 0
-      bgmClips: []
+        volume: 0.3
+        loop: 1
     - pageId: S1_P-16-17
       voiceClips:
-      - clip: {fileID: 8300000, guid: da3fc324b0b9a77448520987e59ff7b9, type: 3}
+      - clip: {fileID: 8300000, guid: 2f2fdeb36e2ea2d45a71b5ef39849130, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      - clip: {fileID: 8300000, guid: ba8e67b1b02ec7c49891ce55322e38fe, type: 3}
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 2f2fdeb36e2ea2d45a71b5ef39849130, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
-        loop: 0
-      bgmClips: []
+        volume: 0.3
+        loop: 1
     - pageId: S1_P-18-19
       voiceClips:
-      - clip: {fileID: 8300000, guid: 70fc73dbb9b4c614e914f4b7f282b198, type: 3}
+      - clip: {fileID: 8300000, guid: e584b9f35f5ee3542a5c4675a663c857, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
       bgmClips: []
     - pageId: S1_P-20-21
       voiceClips:
-      - clip: {fileID: 8300000, guid: 0c6550c35bd53a546b76030d6b45a0ac, type: 3}
+      - clip: {fileID: 8300000, guid: be82a1b2d6b96fb4db4c59162ef00cd4, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
-        loop: 0
-      - clip: {fileID: 8300000, guid: 0393c44923268b1438fd74d593eb4d4c, type: 3}
-        delayBefore: 0
-        delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
       bgmClips: []
     - pageId: S2_P24-25
@@ -151,91 +136,146 @@ MonoBehaviour:
       - clip: {fileID: 8300000, guid: 4a8fef8ca737f1540bcd821e325101b9, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      bgmClips: []
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 6c5ec79cab1144c40a894092b1110f62, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.3
+        loop: 1
     - pageId: S2_P26-27
       voiceClips:
       - clip: {fileID: 8300000, guid: 9ae360a23b88db14daa7cd79f23073a6, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
       - clip: {fileID: 8300000, guid: 7de5283aa7c4e1c46be07104fc0a9cb3, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      bgmClips: []
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 563c54ff551783e4bb9ead111a686662, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.3
+        loop: 1
     - pageId: S2_P28-29
       voiceClips:
       - clip: {fileID: 8300000, guid: a45b4c3da6dcd034195ca5e1683a4546, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      bgmClips: []
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 07a7ef6174190c74b86e07cb594e6277, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.3
+        loop: 1
     - pageId: S2_P30-31
       voiceClips:
       - clip: {fileID: 8300000, guid: 1c4b1e8ff07bbab4fb143853cc593064, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      bgmClips: []
+      bgmClips:
+      - clip: {fileID: 8300000, guid: df248aa497402a041a8d89bb40066bed, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
     - pageId: S2_P32-33
       voiceClips:
       - clip: {fileID: 8300000, guid: f9a3647d80b39e346a21c7c57de4b651, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      bgmClips: []
+      bgmClips:
+      - clip: {fileID: 8300000, guid: b190b1e5087e46144b6981b6613789bc, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
     - pageId: S2_P34-35
       voiceClips:
       - clip: {fileID: 8300000, guid: 8fac3b2138173b44c82b9f3c0d142ec5, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      bgmClips: []
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 80a9ef83f404d494284e44a2b8facc20, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
     - pageId: S2_P36-37
       voiceClips:
       - clip: {fileID: 8300000, guid: 1ba1ed6f1345dce4dab18c63d12cde8e, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      bgmClips: []
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 171c2a6af60abb64b8cf7632c741c79b, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
     - pageId: S2_P38-39
       voiceClips:
       - clip: {fileID: 8300000, guid: 101badd657ed06047a5e05b45e3dde94, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      bgmClips: []
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 44ef5fa55a1693242a3d4e520386d39c, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
     - pageId: S2_P40-41
       voiceClips:
       - clip: {fileID: 8300000, guid: f5463891b3411c8429f4177c5329b823, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      bgmClips: []
+      bgmClips:
+      - clip: {fileID: 8300000, guid: e25b485d4f933114782610e9c28f15e5, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
     - pageId: S2_P42-43
       voiceClips:
       - clip: {fileID: 8300000, guid: 72bc1350d1528364d9cb797e0f151aa1, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 2
         loop: 0
-      bgmClips: []
-    - pageId: S2_P44-45
-      voiceClips:
-      - clip: {fileID: 8300000, guid: 0c6550c35bd53a546b76030d6b45a0ac, type: 3}
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 01b04d1898a3a9342aca51010d888249, type: 3}
         delayBefore: 0
         delayAfter: 0
-        volume: 1.168
+        volume: 0.33
+        loop: 1
+    - pageId: S2_P44-45
+      voiceClips:
+      - clip: {fileID: 8300000, guid: ac1a7a9e059b8324eb5fc29c9f01b93e, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
         loop: 0
-      bgmClips: []
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 18860e684c6d15445b0811349dcbf89f, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1

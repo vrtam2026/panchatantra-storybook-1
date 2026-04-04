@@ -102,9 +102,9 @@ Material:
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
-    - _ChromaKeyBrightnessRange: 0.5
+    - _ChromaKeyBrightnessRange: 0.951
     - _ChromaKeyHueRange: 0.1
-    - _ChromaKeySaturationRange: 0.5
+    - _ChromaKeySaturationRange: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2

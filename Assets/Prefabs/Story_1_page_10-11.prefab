@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 11798402273686614}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: -102, y: 26, z: 0}
+  m_LocalPosition: {x: -102, y: 38, z: 0}
   m_LocalScale: {x: 40, y: 20, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -112,7 +112,7 @@ VideoPlayer:
   m_DataSource: 0
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
-  m_AudioOutputMode: 2
+  m_AudioOutputMode: 0
   m_TargetAudioSources: []
   m_DirectAudioVolumes: []
   m_Url: 
@@ -306,7 +306,7 @@ MonoBehaviour:
   - {fileID: 3959440757002046896}
   - {fileID: 2980860596495083242}
   gapAxis: 0
-  gap: 6
+  gap: 10
   hardLockGapAxis: 1
   applyGapInEditMode: 1
   invertTranslation: 1
@@ -771,7 +771,7 @@ Transform:
   m_GameObject: {fileID: 2965638052012390302}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: -100, y: 20, z: 0}
+  m_LocalPosition: {x: -100, y: 28, z: 0}
   m_LocalScale: {x: 40, y: 20, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2603,7 +2603,7 @@ Transform:
   m_GameObject: {fileID: 8602129999058284675}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: -100, y: 14, z: 0}
+  m_LocalPosition: {x: -100, y: 18, z: 0}
   m_LocalScale: {x: 40, y: 20, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []

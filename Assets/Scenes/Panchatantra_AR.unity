@@ -148,13 +148,13 @@ Light:
   serializedVersion: 12
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.7
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -267,7 +267,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &73775963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -585,8 +585,8 @@ GameObject:
   - component: {fileID: 205577098}
   - component: {fileID: 205577097}
   - component: {fileID: 205577096}
-  - component: {fileID: 205577100}
   - component: {fileID: 205577099}
+  - component: {fileID: 205577100}
   m_Layer: 0
   m_Name: Story_1_page_28-29
   m_TagString: Untagged
@@ -727,8 +727,8 @@ GameObject:
   - component: {fileID: 370939669}
   - component: {fileID: 370939668}
   - component: {fileID: 370939667}
-  - component: {fileID: 370939671}
   - component: {fileID: 370939670}
+  - component: {fileID: 370939671}
   m_Layer: 0
   m_Name: Story_1_page_36-37
   m_TagString: Untagged
@@ -1135,8 +1135,8 @@ GameObject:
   - component: {fileID: 484360997}
   - component: {fileID: 484360999}
   - component: {fileID: 484361000}
-  - component: {fileID: 484361002}
   - component: {fileID: 484361001}
+  - component: {fileID: 484361002}
   m_Layer: 0
   m_Name: Story_1_page_8-9
   m_TagString: Untagged
@@ -1277,8 +1277,8 @@ GameObject:
   - component: {fileID: 515065634}
   - component: {fileID: 515065636}
   - component: {fileID: 515065637}
-  - component: {fileID: 515065639}
   - component: {fileID: 515065638}
+  - component: {fileID: 515065639}
   m_Layer: 0
   m_Name: Story_1_page_10-11
   m_TagString: Untagged
@@ -1419,8 +1419,8 @@ GameObject:
   - component: {fileID: 606472930}
   - component: {fileID: 606472929}
   - component: {fileID: 606472928}
-  - component: {fileID: 606472932}
   - component: {fileID: 606472931}
+  - component: {fileID: 606472932}
   m_Layer: 0
   m_Name: Story_1_page_30-31
   m_TagString: Untagged
@@ -1561,8 +1561,8 @@ GameObject:
   - component: {fileID: 610435623}
   - component: {fileID: 610435622}
   - component: {fileID: 610435621}
-  - component: {fileID: 610435625}
   - component: {fileID: 610435624}
+  - component: {fileID: 610435625}
   m_Layer: 0
   m_Name: Story_1_page_34-35
   m_TagString: Untagged
@@ -1703,8 +1703,8 @@ GameObject:
   - component: {fileID: 713923705}
   - component: {fileID: 713923704}
   - component: {fileID: 713923703}
-  - component: {fileID: 713923707}
   - component: {fileID: 713923706}
+  - component: {fileID: 713923707}
   m_Layer: 0
   m_Name: Story_1_page_32-33
   m_TagString: Untagged
@@ -1845,8 +1845,8 @@ GameObject:
   - component: {fileID: 775770240}
   - component: {fileID: 775770239}
   - component: {fileID: 775770238}
-  - component: {fileID: 775770242}
   - component: {fileID: 775770241}
+  - component: {fileID: 775770242}
   m_Layer: 0
   m_Name: Story_1_page_38-39
   m_TagString: Untagged
@@ -1987,8 +1987,8 @@ GameObject:
   - component: {fileID: 993644863}
   - component: {fileID: 993644862}
   - component: {fileID: 993644864}
-  - component: {fileID: 993644866}
   - component: {fileID: 993644865}
+  - component: {fileID: 993644866}
   m_Layer: 0
   m_Name: Story_1_page_14-15
   m_TagString: Untagged
@@ -2129,8 +2129,8 @@ GameObject:
   - component: {fileID: 1025655708}
   - component: {fileID: 1025655710}
   - component: {fileID: 1025655711}
-  - component: {fileID: 1025655713}
   - component: {fileID: 1025655712}
+  - component: {fileID: 1025655713}
   m_Layer: 0
   m_Name: Story_1_page_12-13
   m_TagString: Untagged
@@ -2271,8 +2271,8 @@ GameObject:
   - component: {fileID: 73775966}
   - component: {fileID: 73775968}
   - component: {fileID: 73775969}
-  - component: {fileID: 1086218565}
   - component: {fileID: 1086218564}
+  - component: {fileID: 1086218565}
   m_Layer: 0
   m_Name: Story_1_page_22-quiz
   m_TagString: Untagged
@@ -2366,8 +2366,8 @@ GameObject:
   - component: {fileID: 1104173371}
   - component: {fileID: 1104173370}
   - component: {fileID: 1104173369}
-  - component: {fileID: 1104173373}
   - component: {fileID: 1104173372}
+  - component: {fileID: 1104173373}
   m_Layer: 0
   m_Name: Story_1_page_26-27
   m_TagString: Untagged
@@ -2508,8 +2508,8 @@ GameObject:
   - component: {fileID: 1183498635}
   - component: {fileID: 1183498637}
   - component: {fileID: 1183498638}
-  - component: {fileID: 1183498640}
   - component: {fileID: 1183498639}
+  - component: {fileID: 1183498640}
   m_Layer: 0
   m_Name: Story_1_page_4-5
   m_TagString: Untagged
@@ -2553,7 +2553,7 @@ Transform:
   m_GameObject: {fileID: 1183498629}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2668,7 +2668,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ARMediaManager
   replayButton: {fileID: 471114970352053958}
   audioDatabase: {fileID: 11400000, guid: e221b73632ccb244894afc1c6b13fd02, type: 2}
-  masterVolume: 1
+  masterVolume: 2
   resumeGraceSeconds: 2
   defaultLanguage: English
 --- !u!4 &1224344541
@@ -2730,8 +2730,8 @@ GameObject:
   - component: {fileID: 1338429501}
   - component: {fileID: 1338429500}
   - component: {fileID: 1338429499}
-  - component: {fileID: 1338429503}
   - component: {fileID: 1338429502}
+  - component: {fileID: 1338429503}
   m_Layer: 0
   m_Name: Story_1_page_42-43
   m_TagString: Untagged
@@ -2872,8 +2872,8 @@ GameObject:
   - component: {fileID: 1485571894}
   - component: {fileID: 1485571895}
   - component: {fileID: 1485571896}
-  - component: {fileID: 1485571898}
   - component: {fileID: 1485571897}
+  - component: {fileID: 1485571898}
   m_Layer: 0
   m_Name: Story_1_page_intro
   m_TagString: Untagged
@@ -2917,7 +2917,7 @@ Transform:
   m_GameObject: {fileID: 1485571888}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 412}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3104,8 +3104,8 @@ GameObject:
   - component: {fileID: 1771766235}
   - component: {fileID: 1771766237}
   - component: {fileID: 1771766238}
-  - component: {fileID: 1771766246}
   - component: {fileID: 1771766242}
+  - component: {fileID: 1771766246}
   m_Layer: 0
   m_Name: Story_1_page_6-7
   m_TagString: Untagged
@@ -3171,8 +3171,8 @@ GameObject:
   - component: {fileID: 1767315854}
   - component: {fileID: 1767315853}
   - component: {fileID: 1767315852}
-  - component: {fileID: 1767315856}
   - component: {fileID: 1767315855}
+  - component: {fileID: 1767315856}
   m_Layer: 0
   m_Name: Story_1_page_44-45
   m_TagString: Untagged
@@ -3313,8 +3313,8 @@ GameObject:
   - component: {fileID: 1771766243}
   - component: {fileID: 1771766239}
   - component: {fileID: 1771766236}
-  - component: {fileID: 1771766245}
   - component: {fileID: 1771766244}
+  - component: {fileID: 1771766245}
   m_Layer: 0
   m_Name: Story_1_page_24-25
   m_TagString: Untagged
@@ -3479,7 +3479,7 @@ Transform:
   m_GameObject: {fileID: 1606099064}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3575,8 +3575,8 @@ GameObject:
   - component: {fileID: 1880130340}
   - component: {fileID: 1880130339}
   - component: {fileID: 1880130338}
-  - component: {fileID: 1880130342}
   - component: {fileID: 1880130341}
+  - component: {fileID: 1880130342}
   m_Layer: 0
   m_Name: Story_1_page_40-41
   m_TagString: Untagged
@@ -3717,8 +3717,8 @@ GameObject:
   - component: {fileID: 1970981157}
   - component: {fileID: 1970981159}
   - component: {fileID: 1970981160}
-  - component: {fileID: 1970981162}
   - component: {fileID: 1970981161}
+  - component: {fileID: 1970981162}
   m_Layer: 0
   m_Name: Story_1_page_18-19
   m_TagString: Untagged
@@ -3859,8 +3859,8 @@ GameObject:
   - component: {fileID: 1995345971}
   - component: {fileID: 1995345973}
   - component: {fileID: 1995345974}
-  - component: {fileID: 1995345976}
   - component: {fileID: 1995345975}
+  - component: {fileID: 1995345976}
   m_Layer: 0
   m_Name: Story_1_page_16-17
   m_TagString: Untagged
@@ -4001,8 +4001,8 @@ GameObject:
   - component: {fileID: 2040524887}
   - component: {fileID: 2040524889}
   - component: {fileID: 2040524890}
-  - component: {fileID: 2040524892}
   - component: {fileID: 2040524891}
+  - component: {fileID: 2040524892}
   m_Layer: 0
   m_Name: Story_1_page_20-21
   m_TagString: Untagged
