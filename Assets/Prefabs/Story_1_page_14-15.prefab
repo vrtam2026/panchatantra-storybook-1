@@ -19831,8 +19831,8 @@ MonoBehaviour:
   segments:
   - startT: 0
     endT: 0.973
-    moveSeconds: 15
-    waitAfterSeconds: 20
+    moveSeconds: 10
+    waitAfterSeconds: 28
   animatorToControl: {fileID: 9187597770502239836}
   playAnimatorWhileMoving: 1
   freezeAnimatorOnComplete: 1

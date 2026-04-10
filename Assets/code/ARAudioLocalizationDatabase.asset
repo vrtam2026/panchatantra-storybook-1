@@ -279,3 +279,359 @@ MonoBehaviour:
         delayAfter: 0
         volume: 0.33
         loop: 1
+    - pageId: S3_P48-49
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 990a80015f1f1264b99c0c5164a25083, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: c47039d8f5045b34488c9d9a35cb3fba, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S3_P50-51
+      voiceClips:
+      - clip: {fileID: 8300000, guid: d1ddbc720d77ba44db01be175dd1b645, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 0a4a55c287217244b90e126a025f4405, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S3_P52-53
+      voiceClips:
+      - clip: {fileID: 8300000, guid: d1c0bc109b2669a45bfc94504c29edb9, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 759b6c1796ed54e43bd6a5e56a711394, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S3_P54-55
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 30ced99a92ade1a44aa0cc0ad1ef96e1, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 5382ca46e925b4946ad406f9feb0e52d, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S3_P56-57
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 8d1d55bbb9417704e95beef49a555999, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 46139e5ecf5b13e46adabefd3b742c25, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S3_P58-59
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 6731bc17f1847bf468ad27c4a93f272e, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 40b2d81fe7ebe274d81ae340464c6896, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S3_P60-61
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 235ecf02a509cef418d637e3b10a7070, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: cbc92f660fc52164a9165317a1b94855, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S3_P62-63
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 51aad6c39c5476746a217791a92a0fc0, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: f2982283f1c4fbd4b8692e332fe35974, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S4_P66-67
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 646787b9dc90966438328cdee675e206, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 5a97ed9042abb374292ea9a1df663e59, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S4_P68-69
+      voiceClips:
+      - clip: {fileID: 8300000, guid: e0c7c44a9258ed241afc25d7863ccc5a, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 8663e34f6c6097a4e8696a8864dde42f, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S4_P72-73
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 92989210b83e2a046ae27e08ca9b55a2, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: a9ff2af7b137dd5429ae1179b3f9f2ea, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S4_P74-75
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 0589a3f6aa53e46478eca3492a4c7073, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 7ca832f4a5d503044bf406aef717972b, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S4_P76-77
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 9b24bcd6c11dc4748b872ebe8e0cbe4e, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 834abc8369387154a96c835bb61df64a, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S4_P78-79
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 28765524a3cfa1243898d196b030ed26, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 33fd75e8ca493074897d8c74c2091e8f, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S4_P80-81
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 2108d86a3a97e2844ae8903d1d0c53ee, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: 9743dbceeccbbb148bc5f27fc60f43b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S4_P82-83
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 8ee40cd6b76dbd246beda9148002bebe, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: dd60fcd524bd3fd44926b4f0329966b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S5_P86-87
+      voiceClips:
+      - clip: {fileID: 8300000, guid: db438226e018b58449a918107ee5ee90, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: dd60fcd524bd3fd44926b4f0329966b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S5_P88-89
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 9549001488b853c428b7b86d3323977e, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: dd60fcd524bd3fd44926b4f0329966b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S5_P90-91
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 907da10e56f8d1747a91b08c75e1d9e8, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      - clip: {fileID: 8300000, guid: f23dc049be3f12e45aef462d3bef9c0e, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: dd60fcd524bd3fd44926b4f0329966b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S5_P92-93
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 3f7ed46f0d845e642bd83de4b372e20d, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: dd60fcd524bd3fd44926b4f0329966b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S5_P94-95
+      voiceClips:
+      - clip: {fileID: 8300000, guid: b5a705d30f9c2764595f2410ebb6c711, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: dd60fcd524bd3fd44926b4f0329966b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S5_P96-97
+      voiceClips:
+      - clip: {fileID: 8300000, guid: e156af550bf3f42458e336687cf8fe5b, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: dd60fcd524bd3fd44926b4f0329966b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S5_P98-99
+      voiceClips:
+      - clip: {fileID: 8300000, guid: fba5f8c92ee068f4aa9b60333fe41712, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: dd60fcd524bd3fd44926b4f0329966b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S5_P100-101
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 70f40dc3f1beae9408ecf13983435586, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: dd60fcd524bd3fd44926b4f0329966b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S5_P102-103
+      voiceClips:
+      - clip: {fileID: 8300000, guid: e87b73f83b1407d4faf16f5ff10a75bf, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: dd60fcd524bd3fd44926b4f0329966b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S5_P104-105
+      voiceClips:
+      - clip: {fileID: 8300000, guid: 2761d62694799e54f8d3908fc7a89486, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: dd60fcd524bd3fd44926b4f0329966b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1
+    - pageId: S5_P106-107
+      voiceClips:
+      - clip: {fileID: 8300000, guid: d35f5e2bcddd38c4c901f5e3b0ef01c6, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      bgmClips:
+      - clip: {fileID: 8300000, guid: dd60fcd524bd3fd44926b4f0329966b4, type: 3}
+        delayBefore: 0
+        delayAfter: 0
+        volume: 0.33
+        loop: 1

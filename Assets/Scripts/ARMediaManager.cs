@@ -11,32 +11,53 @@ public class ARMediaManager : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private ARAudioLocalizationDatabase audioDatabase;
 
-    [Tooltip("Master volume multiplier for ALL audio (Voice + BGM). Range 0 to 2. Default 1.")]
-    [Range(0f, 2f)]
-    [SerializeField] private float masterVolume = 1f;
+    [Tooltip("Real amplification multiplier. 1 = original, 5 = 5x louder.")]
+    [Range(1f, 10f)]
+    [SerializeField] private float amplifyMultiplier = 5f;
+
+    [Header("Post-Voice BGM")]
+    [Tooltip("This BGM plays on ALL pages after voice ends. Loops until next page is scanned. Leave empty to skip.")]
+    [SerializeField] private AudioClip postVoiceBgm;
+
+    [Tooltip("Volume of the post-voice BGM. 0 to 1.")]
+    [Range(0f, 1f)]
+    [SerializeField] private float postVoiceBgmVolume = 0.5f;
 
     [Header("Behavior")]
     [SerializeField, Min(0f)] private float resumeGraceSeconds = 2f;
     [SerializeField] private string defaultLanguage = "English";
 
+    // Audio sources
     private AudioSource _voiceSource;
-    private AudioSource _bgmSource;
+    private AudioSource _bgmSource;      // BGM1 — plays with voice
+    private AudioSource _bgm2Source;     // BGM2 — plays after voice ends, global
+
+    private AudioAmplifier _voiceAmplifier;
+    private AudioAmplifier _bgmAmplifier;
+    private AudioAmplifier _bgm2Amplifier;
 
     private readonly HashSet<ARTrackedPageNode> _nodes = new HashSet<ARTrackedPageNode>();
     private ARTrackedPageNode _activeNode;
 
     private Coroutine _voiceRoutine;
     private bool _paused;
-
     private int _voiceIndex;
     private float _delayTimer;
 
     private enum VoiceStage { None, DelayBefore, Playing, DelayAfter }
     private VoiceStage _stage = VoiceStage.None;
 
+    // Fires when voice audio fully completes — carries pageId
+    public static event System.Action<string> OnVoiceCompleted;
+
+    // ----------------------------------------------------------------------
+    // Unity lifecycle
+    // ----------------------------------------------------------------------
+
     private void Awake()
     {
         EnsureAudioSources();
+        AudioListener.volume = 1f;
 
         if (!PlayerPrefs.HasKey(ARGlobalLanguage.PlayerPrefsKey))
         {
@@ -48,8 +69,6 @@ public class ARMediaManager : MonoBehaviour
         {
             replayButton.onClick.RemoveListener(OnReplayPressed);
             replayButton.onClick.AddListener(OnReplayPressed);
-
-            // Hide by default
             replayButton.gameObject.SetActive(false);
         }
     }
@@ -62,33 +81,101 @@ public class ARMediaManager : MonoBehaviour
     private void OnDisable()
     {
         ARGlobalLanguage.OnLanguageChanged -= OnLanguageChanged;
-
         if (replayButton != null)
             replayButton.onClick.RemoveListener(OnReplayPressed);
     }
 
+    // ----------------------------------------------------------------------
+    // Audio source setup
+    // ----------------------------------------------------------------------
+
     private void EnsureAudioSources()
     {
         var sources = GetComponents<AudioSource>();
+
+        // Need exactly 3 sources: voice, bgm1, bgm2
         if (sources.Length == 0)
         {
             _voiceSource = gameObject.AddComponent<AudioSource>();
             _bgmSource = gameObject.AddComponent<AudioSource>();
+            _bgm2Source = gameObject.AddComponent<AudioSource>();
         }
         else if (sources.Length == 1)
         {
             _voiceSource = sources[0];
             _bgmSource = gameObject.AddComponent<AudioSource>();
+            _bgm2Source = gameObject.AddComponent<AudioSource>();
+        }
+        else if (sources.Length == 2)
+        {
+            _voiceSource = sources[0];
+            _bgmSource = sources[1];
+            _bgm2Source = gameObject.AddComponent<AudioSource>();
         }
         else
         {
             _voiceSource = sources[0];
             _bgmSource = sources[1];
+            _bgm2Source = sources[2];
         }
 
         _voiceSource.playOnAwake = false;
         _bgmSource.playOnAwake = false;
+        _bgm2Source.playOnAwake = false;
+
+        _voiceSource.volume = 1f;
+        _bgmSource.volume = 1f;
+        _bgm2Source.volume = postVoiceBgmVolume;
+
+        _bgm2Source.loop = true;
+
+        _voiceAmplifier = GetOrAddAmplifier(_voiceSource);
+        _bgmAmplifier = GetOrAddAmplifier(_bgmSource);
+        _bgm2Amplifier = GetOrAddAmplifier(_bgm2Source);
+
+        ApplyAmplifier(_voiceAmplifier);
+        ApplyAmplifier(_bgmAmplifier);
+        ApplyAmplifier(_bgm2Amplifier);
     }
+
+    private AudioAmplifier GetOrAddAmplifier(AudioSource src)
+    {
+        var existing = src.GetComponent<AudioAmplifier>();
+        if (existing != null) return existing;
+        return src.gameObject.AddComponent<AudioAmplifier>();
+    }
+
+    private void ApplyAmplifier(AudioAmplifier amp)
+    {
+        if (amp == null) return;
+        amp.multiplier = amplifyMultiplier;
+    }
+
+    // ----------------------------------------------------------------------
+    // BGM2 helpers
+    // ----------------------------------------------------------------------
+
+    private void StartPostVoiceBgm()
+    {
+        if (_bgm2Source == null) return;
+        if (postVoiceBgm == null) return;
+
+        _bgm2Source.clip = postVoiceBgm;
+        _bgm2Source.loop = true;
+        _bgm2Source.volume = postVoiceBgmVolume;
+        _bgm2Source.Play();
+    }
+
+    private void StopPostVoiceBgm()
+    {
+        if (_bgm2Source == null) return;
+        _bgm2Source.Stop();
+        _bgm2Source.clip = null;
+    }
+
+    // ----------------------------------------------------------------------
+    // Node registration
+    // ----------------------------------------------------------------------
 
     public float ResumeGraceSeconds => resumeGraceSeconds;
 
@@ -111,11 +198,14 @@ public class ARMediaManager : MonoBehaviour
         }
     }
 
+    // ----------------------------------------------------------------------
+    // Tracking events
+    // ----------------------------------------------------------------------
+
     public void NotifyTrackingFound(ARTrackedPageNode node)
     {
         if (node == null) return;
 
-        // If switching pages, stop old one
         if (_activeNode != null && _activeNode != node)
         {
             _activeNode.OnBecameInactiveByManager();
@@ -124,7 +214,6 @@ public class ARMediaManager : MonoBehaviour
         }
 
         _activeNode = node;
-
         bool canResume = node.CanResume(resumeGraceSeconds);
 
         if (!canResume)
@@ -148,31 +237,33 @@ public class ARMediaManager : MonoBehaviour
 
         PauseAll();
         node.PauseVisuals();
-
-        // Do NOT show replay on lost; it should show only after voice completes while page is active/tracked
     }
+
+    // ----------------------------------------------------------------------
+    // Replay and language
+    // ----------------------------------------------------------------------
 
     private void OnReplayPressed()
     {
         if (_activeNode == null) return;
-
         HideReplay();
         StopAllAudio();
-
         _activeNode.StartFromBeginning();
         PlayPageAudioFromBeginning(_activeNode.PageId, _activeNode.LoopBgmUntilVoiceEnds, _activeNode.StopBgmWhenVoiceEnds);
     }
 
     private void OnLanguageChanged(string newLanguage)
     {
-        // If language changes while tracked, restart only audio from beginning
         if (_activeNode == null) return;
         if (!_activeNode.IsTracked) return;
-
         HideReplay();
         StopAllAudio();
         PlayPageAudioFromBeginning(_activeNode.PageId, _activeNode.LoopBgmUntilVoiceEnds, _activeNode.StopBgmWhenVoiceEnds);
     }
+
+    // ----------------------------------------------------------------------
+    // Replay button UI
+    // ----------------------------------------------------------------------
 
     private void HideReplay()
     {
@@ -185,52 +276,49 @@ public class ARMediaManager : MonoBehaviour
         if (replayButton == null) return;
         if (_activeNode == null) return;
         if (!_activeNode.IsTracked) return;
-
         replayButton.gameObject.SetActive(true);
     }
+
+    // ----------------------------------------------------------------------
+    // Pause / Resume / Stop
+    // ----------------------------------------------------------------------
 
     private void PauseAll()
     {
         _paused = true;
-
         if (_voiceSource != null && _voiceSource.isPlaying) _voiceSource.Pause();
         if (_bgmSource != null && _bgmSource.isPlaying) _bgmSource.Pause();
+        if (_bgm2Source != null && _bgm2Source.isPlaying) _bgm2Source.Pause();
     }
 
     private void ResumeAll()
     {
         _paused = false;
-
         if (_voiceSource != null && _voiceSource.clip != null) _voiceSource.UnPause();
         if (_bgmSource != null && _bgmSource.clip != null) _bgmSource.UnPause();
+        if (_bgm2Source != null && _bgm2Source.clip != null) _bgm2Source.UnPause();
     }
 
     private void StopAllAudio()
     {
         _paused = false;
 
-        if (_voiceRoutine != null)
-        {
-            StopCoroutine(_voiceRoutine);
-            _voiceRoutine = null;
-        }
+        if (_voiceRoutine != null) { StopCoroutine(_voiceRoutine); _voiceRoutine = null; }
 
         _stage = VoiceStage.None;
         _voiceIndex = 0;
         _delayTimer = 0f;
 
-        if (_voiceSource != null)
-        {
-            _voiceSource.Stop();
-            _voiceSource.clip = null;
-        }
+        if (_voiceSource != null) { _voiceSource.Stop(); _voiceSource.clip = null; }
+        if (_bgmSource != null) { _bgmSource.Stop(); _bgmSource.clip = null; }
 
-        if (_bgmSource != null)
-        {
-            _bgmSource.Stop();
-            _bgmSource.clip = null;
-        }
+        // Stop BGM2 when new page starts or tracking lost
+        StopPostVoiceBgm();
     }
+
+    // ----------------------------------------------------------------------
+    // Audio playback
+    // ----------------------------------------------------------------------
 
     private void PlayPageAudioFromBeginning(string pageId, bool loopBgmRequested, bool stopBgmWhenVoiceEnds)
     {
@@ -252,10 +340,9 @@ public class ARMediaManager : MonoBehaviour
 
         Debug.Log($"[AR] Found pageAudio — voiceClips:{pageAudio.voiceClips.Count}, bgmClips:{pageAudio.bgmClips.Count}");
 
-        // Start BGM (optional)
+        // BGM1 starts with voice
         StartBgm(pageAudio, loopBgmRequested);
 
-        // Start voice sequence
         _voiceIndex = 0;
         _stage = VoiceStage.DelayBefore;
         _delayTimer = 0f;
@@ -273,13 +360,8 @@ public class ARMediaManager : MonoBehaviour
         if (seg == null || seg.clip == null) return;
 
         _bgmSource.clip = seg.clip;
-
-        // If either requested OR segment itself says loop, loop it.
         _bgmSource.loop = loopBgmRequested || seg.loop;
-
-        // Apply master volume (0..2)
-        float v = Mathf.Clamp(seg.volume * masterVolume, 0f, 2f);
-        _bgmSource.volume = v;
+        _bgmSource.volume = 1f;
 
         if (seg.delayBefore > 0f)
             StartCoroutine(DelayedPlay(_bgmSource, seg.delayBefore));
@@ -290,38 +372,35 @@ public class ARMediaManager : MonoBehaviour
     private IEnumerator DelayedPlay(AudioSource src, float delay)
     {
         if (src == null) yield break;
-
         float t = delay;
-        while (t > 0f)
-        {
-            t -= Time.deltaTime;
-            yield return null;
-        }
-
-        if (src != null && src.clip != null)
-            src.Play();
+        while (t > 0f) { t -= Time.deltaTime; yield return null; }
+        if (src != null && src.clip != null) src.Play();
     }
+
+    // ----------------------------------------------------------------------
+    // Voice sequence
+    // ----------------------------------------------------------------------
 
     private IEnumerator VoiceSequenceRoutine(ARAudioLocalizationDatabase.PageAudio pageAudio, bool stopBgmWhenVoiceEnds)
     {
         if (_voiceSource == null) yield break;
         if (pageAudio == null || pageAudio.voiceClips == null) yield break;
 
+        bool anyClipPlayed = false;
+
         while (_voiceIndex < pageAudio.voiceClips.Count)
         {
             var seg = pageAudio.voiceClips[_voiceIndex];
 
             Debug.Log($"[AR] Voice Clip Index {_voiceIndex} → {seg?.clip}");
-            
+
             if (seg == null || seg.clip == null)
             {
                 Debug.LogWarning($"[AR] Skipping NULL audio at index {_voiceIndex}");
-
                 _voiceIndex++;
                 continue;
             }
 
-            // Delay before
             _stage = VoiceStage.DelayBefore;
             _delayTimer = seg.delayBefore;
             while (_delayTimer > 0f)
@@ -330,33 +409,21 @@ public class ARMediaManager : MonoBehaviour
                 yield return null;
             }
 
-            // Play voice
             _stage = VoiceStage.Playing;
             _voiceSource.clip = seg.clip;
             _voiceSource.loop = seg.loop;
-
-            // Apply master volume (0..2)
-            float v = Mathf.Clamp(seg.volume * masterVolume, 0f, 2f);
-            _voiceSource.volume = v;
-
+            _voiceSource.volume = 1f;
             _voiceSource.Play();
 
-            // Wait until clip finishes (if loop, it never ends until stopped)
+            anyClipPlayed = true;
+
             while (_voiceSource != null && _voiceSource.clip != null)
             {
-                if (_paused)
-                {
-                    yield return null;
-                    continue;
-                }
-
-                if (!seg.loop && !_voiceSource.isPlaying)
-                    break;
-
+                if (_paused) { yield return null; continue; }
+                if (!seg.loop && !_voiceSource.isPlaying) break;
                 yield return null;
             }
 
-            // Delay after
             _stage = VoiceStage.DelayAfter;
             _delayTimer = seg.delayAfter;
             while (_delayTimer > 0f)
@@ -368,18 +435,26 @@ public class ARMediaManager : MonoBehaviour
             _voiceIndex++;
         }
 
-        // Voice finished بالكامل
         _stage = VoiceStage.None;
         _voiceRoutine = null;
 
-        // Stop BGM only if requested
+        // Stop BGM1 when voice ends (set StopBgmWhenVoiceEnds = true on all ARTrackedPageNode)
         if (stopBgmWhenVoiceEnds && _bgmSource != null)
         {
             _bgmSource.Stop();
             _bgmSource.clip = null;
         }
 
-        // Show Replay ONLY when voice is completed
+        // Start BGM2 immediately after voice ends
+        StartPostVoiceBgm();
+
         ShowReplayIfActiveAndTracked();
+
+        // Fire completion event
+        if (anyClipPlayed && _activeNode != null)
+        {
+            Debug.Log($"[AR] Voice completed for page: '{_activeNode.PageId}'");
+            OnVoiceCompleted?.Invoke(_activeNode.PageId);
+        }
     }
 }

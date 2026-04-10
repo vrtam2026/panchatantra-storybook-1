@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
+using UnityEngine.Rendering;
 
 public class ARTrackableSplineMover : MonoBehaviour
 {
@@ -43,7 +44,7 @@ public class ARTrackableSplineMover : MonoBehaviour
     private Spline _spline;
     private bool _playRequested;
 
-    // Position override — applied in onPreRender, after Animator + Vuforia
+    // Position applied via LateUpdate — works in both URP and Built-in RP
     private bool _hasPending;
     private Vector3 _pendingWorldPos;
     private Quaternion _pendingWorldRot;
@@ -53,34 +54,17 @@ public class ARTrackableSplineMover : MonoBehaviour
     private void Awake()
     {
         if (objectToMove == null) objectToMove = transform;
-
         if (animatorToControl == null && objectToMove != null)
             animatorToControl = objectToMove.GetComponentInChildren<Animator>(true);
-
         CacheSpline();
     }
 
-    private void OnEnable()
-    {
-        Camera.onPreRender += OnAnyPreRender;
-    }
-
-    private void OnDisable()
-    {
-        Camera.onPreRender -= OnAnyPreRender;
-        _hasPending = false;
-    }
-
-    // Fires right before EACH camera renders — after Animator, after Vuforia, after all LateUpdates
-    // This is the absolute last point before pixels are drawn
-    private void OnAnyPreRender(Camera cam)
+    // LateUpdate runs after Animator, after physics — reliable in both URP and Built-in
+    private void LateUpdate()
     {
         if (!_hasPending) return;
         if (objectToMove == null) { _hasPending = false; return; }
-
         objectToMove.SetPositionAndRotation(_pendingWorldPos, _pendingWorldRot);
-
-        // Only clear after the main/first camera so multi-camera setups are fine
         _hasPending = false;
     }
 
@@ -96,7 +80,6 @@ public class ARTrackableSplineMover : MonoBehaviour
         _playRequested = true;
         IsFinished = false;
         IsPaused = false;
-
         if (_planRoutine == null)
             _planRoutine = StartCoroutine(PlayPlanRoutine());
     }
@@ -144,15 +127,14 @@ public class ARTrackableSplineMover : MonoBehaviour
         }
 
         SetAtT(segments[0].startT);
-
         IsPlaying = true;
+
         if (animatorToControl != null && playAnimatorWhileMoving)
             animatorToControl.speed = 1f;
 
         foreach (var seg in segments)
         {
             yield return MoveAlongSpline(seg.startT, seg.endT, seg.moveSeconds);
-
             if (seg.waitAfterSeconds > 0f)
                 yield return WaitPausable(seg.waitAfterSeconds);
         }
@@ -178,14 +160,11 @@ public class ARTrackableSplineMover : MonoBehaviour
         while (elapsed < seconds)
         {
             if (IsPaused) { yield return null; continue; }
-
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / seconds);
             t = t * t * (3f - 2f * t); // smoothstep
-
             float along = Mathf.Lerp(startT, endT, t);
             SetAtT(along);
-
             yield return null;
         }
 
@@ -205,13 +184,12 @@ public class ARTrackableSplineMover : MonoBehaviour
     private void SetAtT(float t)
     {
         if (_spline == null || splineContainer == null || objectToMove == null) return;
-
         t = Mathf.Clamp01(t);
 
         Vector3 localPos = ToV3(SplineUtility.EvaluatePosition(_spline, t));
         Vector3 worldPos = splineContainer.transform.TransformPoint(localPos);
-
         Quaternion worldRot = objectToMove.rotation;
+
         if (faceAlongSpline)
         {
             Vector3 localTan = ToV3(SplineUtility.EvaluateTangent(_spline, t));
