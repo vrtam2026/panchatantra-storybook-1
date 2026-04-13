@@ -91,33 +91,9 @@ public class ARMediaManager : MonoBehaviour
 
     private void EnsureAudioSources()
     {
-        var sources = GetComponents<AudioSource>();
-
-        // Need exactly 3 sources: voice, bgm1, bgm2
-        if (sources.Length == 0)
-        {
-            _voiceSource = gameObject.AddComponent<AudioSource>();
-            _bgmSource = gameObject.AddComponent<AudioSource>();
-            _bgm2Source = gameObject.AddComponent<AudioSource>();
-        }
-        else if (sources.Length == 1)
-        {
-            _voiceSource = sources[0];
-            _bgmSource = gameObject.AddComponent<AudioSource>();
-            _bgm2Source = gameObject.AddComponent<AudioSource>();
-        }
-        else if (sources.Length == 2)
-        {
-            _voiceSource = sources[0];
-            _bgmSource = sources[1];
-            _bgm2Source = gameObject.AddComponent<AudioSource>();
-        }
-        else
-        {
-            _voiceSource = sources[0];
-            _bgmSource = sources[1];
-            _bgm2Source = sources[2];
-        }
+        _voiceSource = GetOrCreateChannelSource("VoiceChannel");
+        _bgmSource = GetOrCreateChannelSource("BGMChannel");
+        _bgm2Source = GetOrCreateChannelSource("BGM2Channel");
 
         _voiceSource.playOnAwake = false;
         _bgmSource.playOnAwake = false;
@@ -136,6 +112,19 @@ public class ARMediaManager : MonoBehaviour
         ApplyAmplifier(_voiceAmplifier);
         ApplyAmplifier(_bgmAmplifier);
         ApplyAmplifier(_bgm2Amplifier);
+    }
+
+    private AudioSource GetOrCreateChannelSource(string childName)
+    {
+        Transform existing = transform.Find(childName);
+        if (existing != null)
+        {
+            var s = existing.GetComponent<AudioSource>();
+            if (s != null) return s;
+        }
+        var go = new GameObject(childName);
+        go.transform.SetParent(transform);
+        return go.AddComponent<AudioSource>();
     }
 
     private AudioAmplifier GetOrAddAmplifier(AudioSource src)
@@ -312,7 +301,6 @@ public class ARMediaManager : MonoBehaviour
         if (_voiceSource != null) { _voiceSource.Stop(); _voiceSource.clip = null; }
         if (_bgmSource != null) { _bgmSource.Stop(); _bgmSource.clip = null; }
 
-        // Stop BGM2 when new page starts or tracking lost
         StopPostVoiceBgm();
     }
 
@@ -340,7 +328,6 @@ public class ARMediaManager : MonoBehaviour
 
         Debug.Log($"[AR] Found pageAudio — voiceClips:{pageAudio.voiceClips.Count}, bgmClips:{pageAudio.bgmClips.Count}");
 
-        // BGM1 starts with voice
         StartBgm(pageAudio, loopBgmRequested);
 
         _voiceIndex = 0;
@@ -438,19 +425,16 @@ public class ARMediaManager : MonoBehaviour
         _stage = VoiceStage.None;
         _voiceRoutine = null;
 
-        // Stop BGM1 when voice ends (set StopBgmWhenVoiceEnds = true on all ARTrackedPageNode)
         if (stopBgmWhenVoiceEnds && _bgmSource != null)
         {
             _bgmSource.Stop();
             _bgmSource.clip = null;
         }
 
-        // Start BGM2 immediately after voice ends
         StartPostVoiceBgm();
 
         ShowReplayIfActiveAndTracked();
 
-        // Fire completion event
         if (anyClipPlayed && _activeNode != null)
         {
             Debug.Log($"[AR] Voice completed for page: '{_activeNode.PageId}'");
