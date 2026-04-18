@@ -7,6 +7,7 @@ public class ARMediaManager : MonoBehaviour
 {
     [Header("Global UI")]
     [SerializeField] private Button replayButton;
+    // Lost Tracking panel is handled by OverlayManager -- no drag needed here
 
     [Header("Audio")]
     [SerializeField] private ARAudioLocalizationDatabase audioDatabase;
@@ -144,7 +145,7 @@ public class ARMediaManager : MonoBehaviour
     // BGM2 helpers
     // ----------------------------------------------------------------------
 
-    private void StartPostVoiceBgm()
+    public void StartPostVoiceBgm()
     {
         if (_bgm2Source == null) return;
         if (postVoiceBgm == null) return;
@@ -195,6 +196,9 @@ public class ARMediaManager : MonoBehaviour
     {
         if (node == null) return;
 
+        // Hide point camera overlay immediately
+        ShowPointCamera(false);
+
         if (_activeNode != null && _activeNode != node)
         {
             _activeNode.OnBecameInactiveByManager();
@@ -226,6 +230,9 @@ public class ARMediaManager : MonoBehaviour
 
         PauseAll();
         node.PauseVisuals();
+
+        // Show point camera overlay instantly
+        ShowPointCamera(true);
     }
 
     // ----------------------------------------------------------------------
@@ -271,6 +278,16 @@ public class ARMediaManager : MonoBehaviour
     // ----------------------------------------------------------------------
     // Pause / Resume / Stop
     // ----------------------------------------------------------------------
+
+    private void ShowPointCamera(bool show)
+    {
+        // Handled by OverlayManager -- set up ONCE in scene, works for all pages
+        if (OverlayManager.Instance != null)
+        {
+            if (show) OverlayManager.Instance.ShowLostTrackingPanel();
+            else OverlayManager.Instance.HideLostTrackingPanel();
+        }
+    }
 
     private void PauseAll()
     {
@@ -430,8 +447,6 @@ public class ARMediaManager : MonoBehaviour
             _bgmSource.Stop();
             _bgmSource.clip = null;
         }
-
-        StartPostVoiceBgm();
 
         ShowReplayIfActiveAndTracked();
 

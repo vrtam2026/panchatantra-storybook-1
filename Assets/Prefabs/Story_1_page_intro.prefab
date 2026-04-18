@@ -784,13 +784,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3155119342168728655}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -97.9, y: 14.399996, z: 5.5}
-  m_LocalScale: {x: 40, y: 1, z: 20}
-  m_ConstrainProportionsScale: 0
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -0.554, y: 0.05, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7073843119507186697}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &6331230135628318443
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1806,6 +1806,13 @@ MonoBehaviour:
   freezeLastSeconds: 0
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
+  fadePlane: {fileID: 0}
+  imagePlane: {fileID: 0}
+  delayBeforeFade: 0.5
+  fadeDuration: 1.5
+  holdDuration: 0.3
+  imageFadeDuration: 1
+  pageTurnSound: {fileID: 0}
 --- !u!1 &7811434763844490272
 GameObject:
   m_ObjectHideFlags: 0
@@ -2226,9 +2233,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8321790460493126504}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: -97.9, y: 28.2, z: 8.1}
-  m_LocalScale: {x: 827.8618, y: 827.862, z: 827.862}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: -0.5, y: 0.206, z: -0.009}
+  m_LocalScale: {x: 4.15, y: 4.15, z: 4.15}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7149291710769793722}

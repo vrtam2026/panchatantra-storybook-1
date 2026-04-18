@@ -2,13 +2,13 @@
 using UnityEngine;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// QuizFeedbackArun.cs  —  Attach to Quiz_Panel.
+// QuizFeedback.cs  —  Attach to Quiz_Panel.
 //
 // Designed for age 5-12. Animations are fluid, natural, and minimal.
 // Uses sine waves and spring easing — no robotic back-and-forth.
 // ─────────────────────────────────────────────────────────────────────────────
 
-public class QuizFeedbackArun : MonoBehaviour
+public class QuizFeedback : MonoBehaviour
 {
     // ── Wrong Feedback ────────────────────────────────────────────────────────
 

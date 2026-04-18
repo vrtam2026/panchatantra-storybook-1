@@ -2,14 +2,14 @@
 using UnityEngine.Video;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ReactionPairArun.cs
+// ReactionPair.cs
 // One matched pair: a VO audio clip + its corresponding sage video.
-// Used in QuizManagerArun's correctPairs and wrongPairs lists.
+// Used in QuizManager's correctPairs and wrongPairs lists.
 // NOT a MonoBehaviour — never add as a component.
 // ─────────────────────────────────────────────────────────────────────────────
 
 [System.Serializable]
-public class ReactionPairArun
+public class ReactionPair
 {
     [Tooltip("The voice over audio clip for this reaction.")]
     public AudioClip audio;

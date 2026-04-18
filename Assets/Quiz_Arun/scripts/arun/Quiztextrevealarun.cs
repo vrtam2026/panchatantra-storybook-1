@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// QuizTextRevealArun.cs  —  Attach to Quiz_Panel.
+// QuizTextReveal.cs  —  Attach to Quiz_Panel.
 //
 // CORE RULE: Options are NEVER SetActive(false).
 // They are hidden using CanvasGroup.alpha = 0 only.
@@ -14,7 +14,7 @@ using UnityEngine.UI;
 // Panel expand: localScale.x (0 → original). Text hidden during expand.
 // ─────────────────────────────────────────────────────────────────────────────
 
-public class QuizTextRevealArun : MonoBehaviour
+public class QuizTextReveal : MonoBehaviour
 {
     [Header("REFERENCES")]
     [Tooltip("Drag the 'Question' GameObject (yellow background panel).")]
@@ -96,11 +96,11 @@ public class QuizTextRevealArun : MonoBehaviour
 
     // ── Public API ────────────────────────────────────────────────────────────
 
-    // coroutineHost: runs on QuizManagerArun (stable inside Canvas)
+    // coroutineHost: runs on QuizManager (stable inside Canvas)
     // If host is null or inactive, falls back to this object
     private MonoBehaviour coroutineHost;
 
-    public void StartReveal(QuizQuestionArun question, AudioClip audio, Action onComplete, MonoBehaviour host = null)
+    public void StartReveal(QuizQuestion question, AudioClip audio, Action onComplete, MonoBehaviour host = null)
     {
         // Pick active host — prefer the passed host, fall back to self
         coroutineHost = (host != null && host.gameObject.activeInHierarchy) ? host : this;
@@ -142,7 +142,7 @@ public class QuizTextRevealArun : MonoBehaviour
 
     // ── Reveal ────────────────────────────────────────────────────────────────
 
-    private IEnumerator RevealSequence(QuizQuestionArun question, AudioClip audio, Vector3 originalScale, Action onComplete)
+    private IEnumerator RevealSequence(QuizQuestion question, AudioClip audio, Vector3 originalScale, Action onComplete)
     {
         // Scale was already read in StartReveal() before this coroutine started.
         // Wait one frame for any pending UI events to settle.
@@ -391,7 +391,7 @@ public class QuizTextRevealArun : MonoBehaviour
             sfxSource.PlayOneShot(clip, vol);
     }
 
-    private int GetWordCount(QuizQuestionArun q)
+    private int GetWordCount(QuizQuestion q)
     {
         if (q == null || string.IsNullOrEmpty(q.questionText)) return 1;
         return q.questionText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;

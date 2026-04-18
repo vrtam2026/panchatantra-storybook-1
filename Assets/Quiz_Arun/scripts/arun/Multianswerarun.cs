@@ -3,18 +3,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MultiAnswerArun.cs  —  Attach to Quiz_Panel.
+// MultiAnswer.cs  —  Attach to Quiz_Panel.
 // QuizManager reference found automatically — no manual wiring needed.
 // ─────────────────────────────────────────────────────────────────────────────
 
-public class MultiAnswerArun : MonoBehaviour
+public class MultiAnswer : MonoBehaviour
 {
     [Header("References")]
     [Tooltip("Drag SubmitBtn GameObject here.")]
     [SerializeField] private GameObject submitButton;
 
-    [Tooltip("Drag Quiz_Panel (the one with QuizFeedbackArun) here.")]
-    [SerializeField] private QuizFeedbackArun quizFeedbackArun;
+    [Tooltip("Drag Quiz_Panel (the one with QuizFeedback) here.")]
+    [SerializeField] private QuizFeedback quizFeedback;
 
     [Header("Colors")]
     public Color selectedColor = new Color(1f, 0.85f, 0f);
@@ -22,20 +22,20 @@ public class MultiAnswerArun : MonoBehaviour
     public Color wrongColor = Color.red;
     public Color defaultColor = Color.white;
 
-    private QuizManagerArun quizManager;
+    private QuizManager quizManager;
     private List<int> selectedIndices = new List<int>();
-    private QuizQuestionArun currentQuestion;
+    private QuizQuestion currentQuestion;
     private GameObject[] optionButtons;
 
     private void Awake()
     {
-        quizManager = GetComponentInParent<QuizManagerArun>();
-        Debug.Log($"[MultiAnswer] Awake — quizManager={quizManager != null}  submitButton={submitButton != null}  feedback={quizFeedbackArun != null}");
+        quizManager = GetComponentInParent<QuizManager>();
+        Debug.Log($"[MultiAnswer] Awake — quizManager={quizManager != null}  submitButton={submitButton != null}  feedback={quizFeedback != null}");
     }
 
-    // ── Called by QuizManagerArun every question ──────────────────────────────
+    // ── Called by QuizManager every question ──────────────────────────────
 
-    public void SetupQuestion(QuizQuestionArun question, GameObject[] buttons)
+    public void SetupQuestion(QuizQuestion question, GameObject[] buttons)
     {
         currentQuestion = question;
         optionButtons = buttons;
@@ -54,7 +54,7 @@ public class MultiAnswerArun : MonoBehaviour
         if (submitButton != null) submitButton.SetActive(isMulti);
     }
 
-    // ── Called by AnswerScriptArun ────────────────────────────────────────────
+    // ── Called by AnswerScript ────────────────────────────────────────────
 
     public void OnOptionTapped(int index, GameObject button)
     {
@@ -128,14 +128,14 @@ public class MultiAnswerArun : MonoBehaviour
                 if (wasSelected && isCorrectBtn)
                 {
                     img.color = correctColor;
-                    if (quizFeedbackArun != null)
-                        quizFeedbackArun.PlayCorrect(optionButtons[i]); // animate this button
+                    if (quizFeedback != null)
+                        quizFeedback.PlayCorrect(optionButtons[i]); // animate this button
                 }
                 else if (wasSelected)
                 {
                     img.color = wrongColor;
-                    if (quizFeedbackArun != null)
-                        quizFeedbackArun.PlayWrong(optionButtons[i]);   // animate this button
+                    if (quizFeedback != null)
+                        quizFeedback.PlayWrong(optionButtons[i]);   // animate this button
                 }
                 // not selected = leave white, no animation
             }

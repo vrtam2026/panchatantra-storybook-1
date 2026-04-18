@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.Events;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TimerArun.cs  —  Attach to Timer GameObject.
+// QuizTimer.cs  —  Attach to Timer GameObject.
 // ─────────────────────────────────────────────────────────────────────────────
 
-public class TimerArun : MonoBehaviour
+public class QuizTimer : MonoBehaviour
 {
     [Header("SETTINGS")]
     public float timerDuration = 15f;
@@ -15,7 +15,7 @@ public class TimerArun : MonoBehaviour
     [Header("DISPLAY")]
     public TextMeshProUGUI timerText;
 
-    [Header("EVENT — wire QuizManagerArun.OnTimerExpired() here")]
+    [Header("EVENT — wire QuizManager.OnTimerExpired() here")]
     public UnityEvent OnTimerEnd;
 
     [Header("HEARTBEAT")]

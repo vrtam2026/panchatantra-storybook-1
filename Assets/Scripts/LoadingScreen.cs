@@ -7,23 +7,35 @@ public class LoadingScreen : MonoBehaviour
 {
     public static LoadingScreen Instance { get; private set; }
 
-    [Header("Sprites")]
-    [Tooltip("Drag all your loading sprites here. A random one is picked each time.")]
-    public List<Sprite> sprites = new();
+    [System.Serializable]
+    public class CharacterGroup
+    {
+        [Tooltip("Drag 2-3 sprites for this character in order.")]
+        public List<Sprite> frames = new();
+    }
+
+    [Header("Character Groups")]
+    [Tooltip("Add one character per slot. Each has 2-3 frames in order.")]
+    public List<CharacterGroup> characterGroups = new();
+
+    [Header("Animation")]
+    [Tooltip("ON = frames keep looping. OFF = plays once and stops.")]
+    public bool loopAnimation = true;
+
+    [Tooltip("ON = shows one random frame only. OFF = plays all frames in sequence.")]
+    public bool randomFrame = false;
 
     [Header("Timing")]
-    public float frameDuration = 1.5f;
+    public float frameSpeed = 1.5f;
     public float fadeInDuration = 0.4f;
     public float fadeOutDuration = 0.4f;
 
     [Header("SFX (Optional)")]
     public AudioClip appearSfx;
 
-    // Found automatically at runtime — no need to assign in Inspector
     private Image _characterImage;
     private CanvasGroup _canvasGroup;
     private AudioSource _audioSource;
-
     private Coroutine _fadeRoutine;
     private Coroutine _cycleRoutine;
     private bool _isShowing = false;
@@ -33,7 +45,6 @@ public class LoadingScreen : MonoBehaviour
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
 
-        // Auto-find components on this GameObject
         _characterImage = GetComponentInChildren<Image>();
         _canvasGroup = GetComponent<CanvasGroup>();
         if (_canvasGroup == null)
@@ -64,16 +75,12 @@ public class LoadingScreen : MonoBehaviour
     {
         if (_isShowing) return;
         _isShowing = true;
-
         StopAll();
         gameObject.SetActive(true);
         _canvasGroup.blocksRaycasts = true;
-
-        if (appearSfx != null)
-            _audioSource.PlayOneShot(appearSfx);
-
+        if (appearSfx != null) _audioSource.PlayOneShot(appearSfx);
         _fadeRoutine = StartCoroutine(FadeIn());
-        _cycleRoutine = StartCoroutine(CycleSprites());
+        _cycleRoutine = StartCoroutine(CycleFrames());
     }
 
     private void HideInternal()
@@ -118,19 +125,39 @@ public class LoadingScreen : MonoBehaviour
         _isShowing = false;
     }
 
-    private IEnumerator CycleSprites()
+    private IEnumerator CycleFrames()
     {
-        if (_characterImage == null || sprites == null || sprites.Count == 0) yield break;
+        if (_characterImage == null) yield break;
+        if (characterGroups == null || characterGroups.Count == 0) yield break;
 
-        int index = Random.Range(0, sprites.Count);
+        int groupIndex = Random.Range(0, characterGroups.Count);
+        CharacterGroup group = characterGroups[groupIndex];
+        if (group == null || group.frames == null || group.frames.Count == 0) yield break;
 
+        // Pick one random frame only -- no cycling
+        if (randomFrame)
+        {
+            int randFrame = Random.Range(0, group.frames.Count);
+            if (group.frames[randFrame] != null)
+                _characterImage.sprite = group.frames[randFrame];
+            yield break;
+        }
+
+        // Cycle frames in sequence
+        int frameIndex = 0;
         while (true)
         {
-            if (sprites[index] != null)
-                _characterImage.sprite = sprites[index];
+            if (group.frames[frameIndex] != null)
+                _characterImage.sprite = group.frames[frameIndex];
 
-            yield return new WaitForSeconds(frameDuration);
-            index = (index + 1) % sprites.Count;
+            yield return new WaitForSeconds(frameSpeed);
+            frameIndex++;
+
+            if (frameIndex >= group.frames.Count)
+            {
+                if (!loopAnimation) yield break;
+                frameIndex = 0;
+            }
         }
     }
 }

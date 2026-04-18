@@ -4330,6 +4330,13 @@ MonoBehaviour:
   freezeLastSeconds: 0
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
+  fadePlane: {fileID: 0}
+  imagePlane: {fileID: 0}
+  delayBeforeFade: 0.5
+  fadeDuration: 1.5
+  holdDuration: 0.3
+  imageFadeDuration: 1
+  pageTurnSound: {fileID: 0}
 --- !u!114 &1100401719454676455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5317,8 +5324,8 @@ Transform:
   m_GameObject: {fileID: 3621407480745783102}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.81188047, z: -0, w: 0.58382374}
-  m_LocalPosition: {x: -198.82675, y: 0, z: 6.004697}
-  m_LocalScale: {x: 110, y: 110, z: 110}
+  m_LocalPosition: {x: -1.148, y: 0, z: -0.097}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2215783967983638169}
@@ -11595,8 +11602,8 @@ Transform:
   m_GameObject: {fileID: 6672110560611656525}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.909401, z: -0, w: -0.41592062}
-  m_LocalPosition: {x: -22.882362, y: 0, z: 0.9904733}
-  m_LocalScale: {x: 70, y: 70, z: 70}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6787425618466469067}

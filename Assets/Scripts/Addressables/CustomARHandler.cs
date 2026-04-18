@@ -14,7 +14,7 @@ public class CustomARHandler : MonoBehaviour
     private GameObject instantiatedObject;
     private IARContent contentControl;
     private ModelInteraction modelInteraction;
-    private QuizManagerArun quizManager;
+    private QuizManager quizManager;
 
     private bool _isLoading = false;
     private bool _loadCancelled = false;
@@ -333,7 +333,7 @@ public class CustomARHandler : MonoBehaviour
                 modelInteraction = GetComponent<ModelInteraction>();
                 modelInteraction?.Init(instantiatedObject);
 
-                var components = instantiatedObject.GetComponentsInChildren<QuizManagerArun>(true);
+                var components = instantiatedObject.GetComponentsInChildren<QuizManager>(true);
                 if (components.Length > 0)
                     quizManager = components[0];
 

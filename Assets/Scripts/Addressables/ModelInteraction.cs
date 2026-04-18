@@ -38,6 +38,8 @@ public class ModelInteraction : MonoBehaviour
     bool _isPinching = false;
     float _lastPinchDistance = 0f;
 
+    public static float GlobalSliderAngle = 0f;
+
     public static ModelInteraction Current;
 
     public void Init(GameObject spawnedModel)
@@ -50,13 +52,21 @@ public class ModelInteraction : MonoBehaviour
         _originalLocalRotation = _model.localRotation;
         _originalLocalScale = _model.localScale;
 
+        _currentSliderAngle = GlobalSliderAngle;
         if (verticalSlider != null && canSliderRotate)
         {
             verticalSlider.minValue = sliderMinAngle;
             verticalSlider.maxValue = sliderMaxAngle;
-            verticalSlider.value = 0f;
+
+            verticalSlider.onValueChanged.RemoveListener(OnSliderChanged);
+
+            verticalSlider.SetValueWithoutNotify(GlobalSliderAngle);
+
             verticalSlider.onValueChanged.AddListener(OnSliderChanged);
         }
+        // APPLY ROTATION IMMEDIATELY ON SPAWN
+        _currentSliderAngle = GlobalSliderAngle;
+        ApplyRotation();
     }
 
     void Update()
@@ -138,6 +148,10 @@ public class ModelInteraction : MonoBehaviour
         if (_model == null) return;
 
         _currentSliderAngle = value;
+
+        // SAVE GLOBALLY
+        GlobalSliderAngle = value;
+
         ApplyRotation();
     }
 
@@ -209,10 +223,11 @@ public class ModelInteraction : MonoBehaviour
         _model.localScale = _originalLocalScale;
 
         _currentDragAngle = 0f;
-        _currentSliderAngle = 0f;
+
+        /*_currentSliderAngle = 0f;*/
 
         if (verticalSlider != null)
-            verticalSlider.value = 0f;
+            verticalSlider.value = GlobalSliderAngle;
     }
 
     public void Cleanup()

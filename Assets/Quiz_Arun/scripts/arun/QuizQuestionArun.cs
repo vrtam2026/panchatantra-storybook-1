@@ -2,12 +2,12 @@ using UnityEngine;
 using UnityEngine.Video;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// QuizQuestionArun.cs
+// QuizQuestion.cs
 // Data class only — NOT a MonoBehaviour, never add as a component.
 // ─────────────────────────────────────────────────────────────────────────────
 
 [System.Serializable]
-public class QuizQuestionArun
+public class QuizQuestion
 {
     [Header("Question")]
     public string questionText;

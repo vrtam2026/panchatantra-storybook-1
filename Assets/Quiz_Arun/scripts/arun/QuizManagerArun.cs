@@ -7,13 +7,13 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// QuizManagerArun.cs  —  Attach to Quiz_Panel.
+// QuizManager.cs  —  Attach to Quiz_Panel.
 // ─────────────────────────────────────────────────────────────────────────────
 
-public class QuizManagerArun : MonoBehaviour
+public class QuizManager : MonoBehaviour
 {
     [Header("Questions")]
-    [SerializeField] private List<QuizQuestionArun> questions;
+    [SerializeField] private List<QuizQuestion> questions;
 
     [Header("UI")]
     [Tooltip("Drag StartPanel here.")]
@@ -27,20 +27,20 @@ public class QuizManagerArun : MonoBehaviour
     [SerializeField] private Sprite optionDefaultSprite;
 
     [Header("Multi Answer")]
-    [SerializeField] private MultiAnswerArun multiAnswerArun;
+    [SerializeField] private MultiAnswer multiAnswer;
     public bool IsMultiAnswer => currentQuestion != null && currentQuestion.IsMultiAnswer;
 
     [Header("Reveal")]
-    [SerializeField] private QuizTextRevealArun quizTextRevealArun;
+    [SerializeField] private QuizTextReveal quizTextReveal;
 
     [Header("Panels")]
     [SerializeField] private GameObject finishPanel;
 
     [Header("Correct Reaction Pairs")]
-    [SerializeField] private List<ReactionPairArun> correctPairs;
+    [SerializeField] private List<ReactionPair> correctPairs;
 
     [Header("Wrong Reaction Pairs")]
-    [SerializeField] private List<ReactionPairArun> wrongPairs;
+    [SerializeField] private List<ReactionPair> wrongPairs;
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource questionAudioSource;
@@ -50,7 +50,7 @@ public class QuizManagerArun : MonoBehaviour
     [SerializeField] private VideoPlayer sageVideoPlayer;
 
     [Header("Timer")]
-    [SerializeField] private TimerArun timerArun;
+    [SerializeField] private QuizTimer quizTimer;
 
     [Header("Timing")]
     [SerializeField] private float cooldownDuration = 2f;
@@ -59,7 +59,7 @@ public class QuizManagerArun : MonoBehaviour
     [SerializeField] private int currentQuestionIndex = 0;
     [SerializeField] private int currentAttempt = 0;
 
-    private QuizQuestionArun currentQuestion;
+    private QuizQuestion currentQuestion;
     private bool isPaused = false;
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
@@ -86,7 +86,7 @@ public class QuizManagerArun : MonoBehaviour
         // and was killing the reveal coroutine on Q1.
         StopAllAudio();
         StopVideo();
-        if (timerArun != null) timerArun.StopTimer();
+        if (quizTimer != null) quizTimer.StopTimer();
     }
 
     // ── StartButton ───────────────────────────────────────────────────────────
@@ -99,27 +99,27 @@ public class QuizManagerArun : MonoBehaviour
         currentAttempt = 0;
 
         // Activate this GameObject — Quiz_Panel may be inactive
-        // because QuizObserverArun hides the canvas at start.
+        // because QuizObserver hides the canvas at start.
         // Coroutines cannot run on inactive GameObjects.
         gameObject.SetActive(true);
 
-        if (quizTextRevealArun != null) quizTextRevealArun.CancelReveal();
+        if (quizTextReveal != null) quizTextReveal.CancelReveal();
         StopAllCoroutines();
         StopAllAudio();
         StopVideo();
-        if (timerArun != null) timerArun.StopTimer();
+        if (quizTimer != null) quizTimer.StopTimer();
 
         LoadQuestion();
     }
 
-    // ── PauseQuiz — called by QuizObserverArun ────────────────────────────────
+    // ── PauseQuiz — called by QuizObserver ────────────────────────────────
 
     public void PauseQuiz(bool pause)
     {
         if (isPaused == pause) return;
         isPaused = pause;
 
-        if (timerArun != null) timerArun.PauseTimer(pause);
+        if (quizTimer != null) quizTimer.PauseTimer(pause);
 
         if (pause)
         {
@@ -161,7 +161,7 @@ public class QuizManagerArun : MonoBehaviour
             if (options[i] == null) continue;
             TextMeshProUGUI tmp = options[i].GetComponentInChildren<TextMeshProUGUI>();
             if (tmp != null) tmp.text = opts[i];
-            AnswerScriptArun ans = options[i].GetComponent<AnswerScriptArun>();
+            AnswerScript ans = options[i].GetComponent<AnswerScript>();
             if (ans != null) ans.SetCorrect(currentQuestion.SingleCorrectIndex == i + 1);
         }
 
@@ -170,19 +170,19 @@ public class QuizManagerArun : MonoBehaviour
         StopAllAudio();
         StopVideo();
 
-        if (multiAnswerArun != null)
-            multiAnswerArun.SetupQuestion(currentQuestion, options);
+        if (multiAnswer != null)
+            multiAnswer.SetupQuestion(currentQuestion, options);
 
-        if (timerArun != null) timerArun.ResetDisplay();
+        if (quizTimer != null) quizTimer.ResetDisplay();
 
         PlayVideoAndAudio(currentQuestion.questionVideo, currentQuestion.questionAudio);
 
-        if (quizTextRevealArun != null)
-            quizTextRevealArun.StartReveal(currentQuestion, currentQuestion.questionAudio, OnRevealComplete, this);
+        if (quizTextReveal != null)
+            quizTextReveal.StartReveal(currentQuestion, currentQuestion.questionAudio, OnRevealComplete, this);
         else
         {
             EnableAllButtons();
-            if (timerArun != null) timerArun.StartTimer();
+            if (quizTimer != null) quizTimer.StartTimer();
         }
 
         if (EventSystem.current != null)
@@ -192,7 +192,7 @@ public class QuizManagerArun : MonoBehaviour
     private void OnRevealComplete()
     {
         EnableAllButtons();
-        if (timerArun != null) timerArun.StartTimer();
+        if (quizTimer != null) quizTimer.StartTimer();
         Debug.Log("[QuizManager] OnRevealComplete — buttons enabled.");
     }
 
@@ -231,10 +231,10 @@ public class QuizManagerArun : MonoBehaviour
     {
         if (!isActiveAndEnabled) return;
 
-        if (currentQuestion != null && currentQuestion.IsMultiAnswer && multiAnswerArun != null)
+        if (currentQuestion != null && currentQuestion.IsMultiAnswer && multiAnswer != null)
         {
             StopEverything();
-            multiAnswerArun.AutoSubmit();
+            multiAnswer.AutoSubmit();
             return;
         }
 
@@ -279,10 +279,10 @@ public class QuizManagerArun : MonoBehaviour
         // Retry: no animation — reset, show Submit, enable buttons, start timer
         StopVideo();
         ResetButtonColors();
-        if (multiAnswerArun != null)
-            multiAnswerArun.SetupQuestion(currentQuestion, options);
+        if (multiAnswer != null)
+            multiAnswer.SetupQuestion(currentQuestion, options);
         EnableAllButtons();
-        if (timerArun != null) timerArun.StartTimer();
+        if (quizTimer != null) quizTimer.StartTimer();
     }
 
     private IEnumerator NextAfterCooldown()
@@ -297,11 +297,11 @@ public class QuizManagerArun : MonoBehaviour
 
     private void StopEverything()
     {
-        if (quizTextRevealArun != null) quizTextRevealArun.CancelReveal();
+        if (quizTextReveal != null) quizTextReveal.CancelReveal();
         StopAllCoroutines();
         StopAllAudio();
         StopVideo();
-        if (timerArun != null) timerArun.StopTimer();
+        if (quizTimer != null) quizTimer.StopTimer();
     }
 
     public void DisableAllButtons()
@@ -351,7 +351,7 @@ public class QuizManagerArun : MonoBehaviour
         foreach (GameObject btn in options)
         {
             if (btn == null) continue;
-            AnswerScriptArun ans = btn.GetComponent<AnswerScriptArun>();
+            AnswerScript ans = btn.GetComponent<AnswerScript>();
             if (ans != null && ans.isCorrect)
             {
                 Image img = btn.GetComponent<Image>();
@@ -365,7 +365,7 @@ public class QuizManagerArun : MonoBehaviour
     {
         StopAllAudio();
         StopVideo();
-        if (timerArun != null) timerArun.StopTimer();
+        if (quizTimer != null) quizTimer.StopTimer();
         if (finishPanel != null) finishPanel.SetActive(true);
     }
 
@@ -385,7 +385,7 @@ public class QuizManagerArun : MonoBehaviour
         }
     }
 
-    private void PlayReaction(ReactionPairArun pair)
+    private void PlayReaction(ReactionPair pair)
     {
         if (pair == null) return;
         if (reactionAudioSource != null && pair.audio != null)
@@ -403,11 +403,11 @@ public class QuizManagerArun : MonoBehaviour
         }
     }
 
-    private ReactionPairArun GetRandomPair(List<ReactionPairArun> pool)
+    private ReactionPair GetRandomPair(List<ReactionPair> pool)
     {
         if (pool == null || pool.Count == 0) return null;
-        List<ReactionPairArun> valid = new List<ReactionPairArun>();
-        foreach (ReactionPairArun p in pool)
+        List<ReactionPair> valid = new List<ReactionPair>();
+        foreach (ReactionPair p in pool)
             if (p != null && p.audio != null && p.video != null) valid.Add(p);
         if (valid.Count == 0) return null;
         return valid[Random.Range(0, valid.Count)];

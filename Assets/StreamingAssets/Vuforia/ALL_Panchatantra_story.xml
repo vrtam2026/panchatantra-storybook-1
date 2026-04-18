@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+  <Tracking>
+    <ImageTarget name="108" size="1.000000 1.023237" />
+    <ImageTarget name="107" size="1.000000 1.023237" />
+    <ImageTarget name="105" size="1.000000 1.023237" />
+    <ImageTarget name="102" size="1.000000 1.023237" />
+    <ImageTarget name="101" size="1.000000 1.023237" />
+    <ImageTarget name="98" size="1.000000 1.023237" />
+    <ImageTarget name="96" size="1.000000 1.023237" />
+    <ImageTarget name="94" size="1.000000 1.023237" />
+    <ImageTarget name="93" size="1.000000 1.023237" />
+    <ImageTarget name="90" size="1.000000 1.023237" />
+    <ImageTarget name="89" size="1.000000 1.023237" />
+    <ImageTarget name="87" size="1.000000 1.023237" />
+    <ImageTarget name="84" size="1.000000 1.023237" />
+    <ImageTarget name="83" size="1.000000 1.023237" />
+    <ImageTarget name="81" size="1.000000 1.023237" />
+    <ImageTarget name="79" size="1.000000 1.023237" />
+    <ImageTarget name="76" size="1.000000 1.023237" />
+    <ImageTarget name="74" size="1.000000 1.023237" />
+    <ImageTarget name="73" size="1.000000 1.023237" />
+    <ImageTarget name="70" size="1.000000 1.023237" />
+    <ImageTarget name="69" size="1.000000 1.023237" />
+    <ImageTarget name="66" size="1.000000 1.023237" />
+    <ImageTarget name="64" size="1.000000 1.023237" />
+    <ImageTarget name="63" size="1.000000 1.023237" />
+    <ImageTarget name="62" size="1.000000 1.023237" />
+    <ImageTarget name="61" size="1.000000 1.000000" />
+    <ImageTarget name="59" size="1.000000 1.000000" />
+    <ImageTarget name="56" size="1.000000 1.000000" />
+    <ImageTarget name="54" size="1.000000 1.000000" />
+    <ImageTarget name="52" size="1.000000 1.000000" />
+    <ImageTarget name="51a" size="1.000000 1.000000" />
+    <ImageTarget name="51" size="1.000000 1.000000" />
+    <ImageTarget name="48" size="1.000000 1.000000" />
+    <ImageTarget name="46" size="1.000000 1.000000" />
+    <ImageTarget name="44" size="1.000000 1.000000" />
+    <ImageTarget name="43" size="1.000000 1.000000" />
+    <ImageTarget name="42" size="1.000000 1.000000" />
+    <ImageTarget name="41" size="1.000000 1.000000" />
+    <ImageTarget name="39" size="1.000000 1.000000" />
+    <ImageTarget name="37" size="1.000000 1.000000" />
+    <ImageTarget name="35" size="1.000000 1.000000" />
+    <ImageTarget name="33" size="1.000000 1.000000" />
+    <ImageTarget name="31" size="1.000000 1.000000" />
+    <ImageTarget name="28" size="1.000000 1.000000" />
+    <ImageTarget name="26" size="1.000000 1.000000" />
+    <ImageTarget name="25" size="1.000000 1.000000" />
+    <ImageTarget name="24" size="1.000000 1.000000" />
+    <ImageTarget name="22" size="1.000000 1.000000" />
+    <ImageTarget name="21" size="1.000000 1.000000" />
+    <ImageTarget name="19" size="1.000000 1.000000" />
+    <ImageTarget name="16" size="1.000000 1.000000" />
+    <ImageTarget name="15" size="1.000000 1.000000" />
+    <ImageTarget name="14" size="1.000000 1.000000" />
+    <ImageTarget name="12" size="1.000000 1.000000" />
+    <ImageTarget name="11" size="1.000000 1.000000" />
+    <ImageTarget name="10" size="1.000000 1.000000" />
+    <ImageTarget name="9" size="1.000000 1.000000" />
+    <ImageTarget name="8" size="1.000000 1.000000" />
+    <ImageTarget name="7" size="1.000000 1.000000" />
+    <ImageTarget name="5" size="1.000000 1.000000" />
+    <ImageTarget name="3" size="1.000000 0.996624" />
+  </Tracking>
+</QCARConfig>

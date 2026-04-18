@@ -2,19 +2,19 @@
 using Vuforia;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// QuizObserverArun.cs
+// QuizObserver.cs
 // Attach to quiz_story_1 (the ImageTarget GameObject).
 // Fully replaces DefaultObserverEventHandler with all its functionality PLUS
 // pause/resume quiz logic.
 //
 // INSPECTOR SETUP:
 //   Quiz Canvas              → drag "Canvas" (child of quiz_story_1)
-//   Quiz Manager             → drag "Quiz_Panel" (has QuizManagerArun)
+//   Quiz Manager             → drag "Quiz_Panel" (has QuizManager)
 //   Visible When             → choose tracking status threshold (default: Tracked)
 //   Use Smooth Transition    → matches DefaultObserverEventHandler's option
 // ─────────────────────────────────────────────────────────────────────────────
 
-public class QuizObserverArun : MonoBehaviour
+public class QuizObserver : MonoBehaviour
 {
     // ── Inspector ─────────────────────────────────────────────────────────────
 
@@ -22,8 +22,8 @@ public class QuizObserverArun : MonoBehaviour
     [Tooltip("The Canvas that contains the entire quiz UI. Child of quiz_story_1.")]
     [SerializeField] private GameObject quizCanvas;
 
-    [Tooltip("Quiz_Panel GameObject — the one with QuizManagerArun attached.")]
-    [SerializeField] private QuizManagerArun quizManager;
+    [Tooltip("Quiz_Panel GameObject — the one with QuizManager attached.")]
+    [SerializeField] private QuizManager quizManager;
 
     [Header("Tracking Settings")]
     [Tooltip("Tracked = image fully in view only.\nExtended Tracked = stays visible when image partially/not in view.\nLimited = includes low-confidence tracking.")]
@@ -47,7 +47,7 @@ public class QuizObserverArun : MonoBehaviour
     private bool quizStarted = false;
     private bool isVisible = false;
 
-    // ── Coroutine Runner — used by QuizManagerArun ────────────────────────────
+    // ── Coroutine Runner — used by QuizManager ────────────────────────────
     // quiz_story_1 is NEVER deactivated by Vuforia — safe to run coroutines here
 
     public Coroutine RunCoroutine(System.Collections.IEnumerator routine)
@@ -65,9 +65,9 @@ public class QuizObserverArun : MonoBehaviour
     private void Start()
     {
         if (quizCanvas == null)
-            Debug.LogError("[QuizObserverArun] Quiz Canvas not assigned.");
+            Debug.LogError("[QuizObserver] Quiz Canvas not assigned.");
         if (quizManager == null)
-            Debug.LogError("[QuizObserverArun] Quiz Manager not assigned.");
+            Debug.LogError("[QuizObserver] Quiz Manager not assigned.");
 
         // Hide canvas at start — shown only when target detected
         SetCanvasVisible(false);
@@ -76,7 +76,7 @@ public class QuizObserverArun : MonoBehaviour
         if (observer != null)
             observer.OnTargetStatusChanged += OnTargetStatusChanged;
         else
-            Debug.LogError("[QuizObserverArun] No ObserverBehaviour on this GameObject.");
+            Debug.LogError("[QuizObserver] No ObserverBehaviour on this GameObject.");
     }
 
     private void OnDestroy()
@@ -104,7 +104,7 @@ public class QuizObserverArun : MonoBehaviour
 
         // Smooth transition — logged only, no API call needed
         if (useSmoothTransition)
-            Debug.Log("[QuizObserverArun] Smooth transition enabled.");
+            Debug.Log("[QuizObserver] Smooth transition enabled.");
     }
 
     // ── Visibility Check — mirrors DefaultObserverEventHandler exactly ─────────
@@ -142,7 +142,7 @@ public class QuizObserverArun : MonoBehaviour
             // First detection — show canvas only.
             // StartPanel is visible. User must click StartButton to begin quiz.
             // StartButton calls quizManager.StartQuiz() directly.
-            // quizStarted is set to true by MarkQuizStarted() called from QuizManagerArun.
+            // quizStarted is set to true by MarkQuizStarted() called from QuizManager.
         }
         else
         {
@@ -152,7 +152,7 @@ public class QuizObserverArun : MonoBehaviour
         }
     }
 
-    // ── Called by QuizManagerArun.StartQuiz() ─────────────────────────────────
+    // ── Called by QuizManager.StartQuiz() ─────────────────────────────────
 
     public void MarkQuizStarted()
     {
