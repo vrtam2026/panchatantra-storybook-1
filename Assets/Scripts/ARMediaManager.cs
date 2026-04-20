@@ -44,12 +44,16 @@ public class ARMediaManager : MonoBehaviour
     private bool _paused;
     private int _voiceIndex;
     private float _delayTimer;
+    private float _lastLostTime = -999f;
 
     private enum VoiceStage { None, DelayBefore, Playing, DelayAfter }
     private VoiceStage _stage = VoiceStage.None;
 
     // Fires when voice audio fully completes — carries pageId
     public static event System.Action<string> OnVoiceCompleted;
+
+    // Current active page id -- used by OverlayManager to verify page before showing turn page
+    public static string ActivePageId { get; private set; }
 
     // ----------------------------------------------------------------------
     // Unity lifecycle
@@ -196,27 +200,39 @@ public class ARMediaManager : MonoBehaviour
     {
         if (node == null) return;
 
-        // Hide point camera overlay immediately
-        ShowPointCamera(false);
+        bool isSamePage = ActivePageId != null && node.PageId == ActivePageId;
+        bool isSameNode = _activeNode == node;
 
-        if (_activeNode != null && _activeNode != node)
+        if (!isSamePage && _activeNode != null)
         {
+            // Genuinely different page -- stop everything cleanly
             _activeNode.OnBecameInactiveByManager();
             StopAllAudio();
             HideReplay();
+            _lastLostTime = -999f;
         }
 
         _activeNode = node;
-        bool canResume = node.CanResume(resumeGraceSeconds);
+        ActivePageId = node.PageId;
+
+        // Grace time: same page found again within grace period
+        bool canResume = isSamePage &&
+                         _lastLostTime > 0f &&
+                         (Time.time - _lastLostTime) <= resumeGraceSeconds;
+
+        Debug.Log($"[AR] TrackingFound pageId:'{node.PageId}' isSamePage:{isSamePage} canResume:{canResume} timeSinceLost:{Time.time - _lastLostTime:F1}s");
 
         if (!canResume)
         {
+            _lastLostTime = -999f;
             HideReplay();
+            StopAllAudio(); // always stop old audio before restarting
             node.StartFromBeginning();
             PlayPageAudioFromBeginning(node.PageId, node.LoopBgmUntilVoiceEnds, node.StopBgmWhenVoiceEnds);
         }
         else
         {
+            _lastLostTime = -999f;
             HideReplay();
             ResumeAll();
             node.ResumeVisuals();
@@ -228,11 +244,22 @@ public class ARMediaManager : MonoBehaviour
         if (node == null) return;
         if (_activeNode != node) return;
 
+        // Record lost time -- survives Addressables node recreation
+        _lastLostTime = Time.time;
+
         PauseAll();
         node.PauseVisuals();
+        // Note: Lost tracking overlay is now shown by CustomARHandler directly
+        // This avoids double-showing the overlay
+    }
 
-        // Show point camera overlay instantly
-        ShowPointCamera(true);
+    // Called by CustomARHandler after grace time expires and content is released
+    // Resets grace timer so next scan of same page starts fresh, not resume
+    public void NotifyContentReleased()
+    {
+        _lastLostTime = -999f;
+        // Keep ActivePageId so isSamePage check still works correctly
+        // but canResume will be false because _lastLostTime is reset
     }
 
     // ----------------------------------------------------------------------
@@ -284,8 +311,8 @@ public class ARMediaManager : MonoBehaviour
         // Handled by OverlayManager -- set up ONCE in scene, works for all pages
         if (OverlayManager.Instance != null)
         {
-            if (show) OverlayManager.Instance.ShowLostTrackingPanel();
-            else OverlayManager.Instance.HideLostTrackingPanel();
+            if (show) OverlayManager.Instance.ShowLostTracking();
+            else OverlayManager.Instance.HideLostTracking();
         }
     }
 
@@ -327,6 +354,10 @@ public class ARMediaManager : MonoBehaviour
 
     private void PlayPageAudioFromBeginning(string pageId, bool loopBgmRequested, bool stopBgmWhenVoiceEnds)
     {
+        // CRITICAL: reset paused state before starting new audio
+        // Without this, _paused=true from previous tracking lost causes audio to never play
+        _paused = false;
+
         Debug.Log($"[AR] PlayPageAudio — pageId: '{pageId}', lang: '{ARGlobalLanguage.GetCurrentLanguage()}'");
 
         if (audioDatabase == null)

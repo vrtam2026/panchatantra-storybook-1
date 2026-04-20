@@ -1426,9 +1426,9 @@ MonoBehaviour:
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
   blackOverlay: {fileID: 4634111235593149647}
+  contentRoot: {fileID: 1342432277311258046}
   delayBeforeFade: 0.5
   fadeDuration: 1.5
-  holdDuration: 0.3
   pageTurnSound: {fileID: 0}
 --- !u!1 &5908378239871410629
 GameObject:
@@ -2496,7 +2496,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2469698960253760623
 Transform:
   m_ObjectHideFlags: 0

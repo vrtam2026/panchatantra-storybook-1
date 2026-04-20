@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Panchatantra_AR-v2-with prefab -build.unity
-    guid: 682a88556856d9e4c9c29f5bb717e810
+    path: Assets/Scenes/Panchatantra_AR-v2-for-build-april-18.unity
+    guid: 381ca784845aa47448540bd407efc1f8
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: eddf79fe3f002fe419ae58d24758fc38, type: 2}
   m_UseUCBPForAssetBundles: 0

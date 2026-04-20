@@ -3110,6 +3110,11 @@ MonoBehaviour:
   freezeLastSeconds: 0
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
+  blackOverlay: {fileID: 0}
+  delayBeforeFade: 0.5
+  fadeDuration: 1.5
+  holdDuration: 0.3
+  pageTurnSound: {fileID: 0}
 --- !u!114 &413807863801817086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3874,7 +3879,7 @@ Transform:
   m_GameObject: {fileID: 4731856555292945408}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.9591601, z: -0, w: -0.28286391}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.429, y: 0, z: 0.098}
   m_LocalScale: {x: 0.45000002, y: 0.45000002, z: 0.45000002}
   m_ConstrainProportionsScale: 1
   m_Children:

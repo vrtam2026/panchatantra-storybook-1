@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4888776004818968642
 Transform:
   m_ObjectHideFlags: 0
@@ -381,7 +381,7 @@ VideoPlayer:
   m_AspectRatio: 2
   m_DataSource: 0
   m_TimeUpdateMode: 2
-  m_PlaybackSpeed: 0.8
+  m_PlaybackSpeed: 1
   m_AudioOutputMode: 0
   m_TargetAudioSources: []
   m_DirectAudioVolumes: []
@@ -1841,10 +1841,10 @@ MonoBehaviour:
   freezeLastSeconds: 0
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
-  blackOverlay: {fileID: 0}
+  blackOverlay: {fileID: 5259517667495200375}
+  contentRoot: {fileID: 4070918261148600561}
   delayBeforeFade: 0.5
   fadeDuration: 1.5
-  holdDuration: 0.3
   pageTurnSound: {fileID: 0}
 --- !u!1 &5584371627785775795
 GameObject:

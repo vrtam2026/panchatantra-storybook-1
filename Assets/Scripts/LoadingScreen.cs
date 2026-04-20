@@ -30,6 +30,9 @@ public class LoadingScreen : MonoBehaviour
     public float fadeInDuration = 0.4f;
     public float fadeOutDuration = 0.4f;
 
+    [Tooltip("Only show loading screen if download takes longer than this (seconds). Prevents flash on fast downloads. Recommended: 0.5")]
+    public float showThresholdSeconds = 0.5f;
+
     [Header("SFX (Optional)")]
     public AudioClip appearSfx;
 
@@ -38,7 +41,10 @@ public class LoadingScreen : MonoBehaviour
     private AudioSource _audioSource;
     private Coroutine _fadeRoutine;
     private Coroutine _cycleRoutine;
+    private Coroutine _showDelayCoroutine;
+
     private bool _isShowing = false;
+    public bool IsShowing => _isShowing;
 
     private void Awake()
     {
@@ -54,15 +60,21 @@ public class LoadingScreen : MonoBehaviour
         if (_audioSource == null)
             _audioSource = gameObject.AddComponent<AudioSource>();
 
+        // --- KEY FIX ---
+        // Keep GameObject ALWAYS active -- SetActive(false) prevents coroutines from starting.
+        // Visibility is controlled by CanvasGroup alpha + blocksRaycasts only.
         _canvasGroup.alpha = 0f;
         _canvasGroup.blocksRaycasts = false;
-        gameObject.SetActive(false);
     }
+
+    // ---------------------------------------------------------------
+    // Public API
+    // ---------------------------------------------------------------
 
     public static void Show()
     {
         if (Instance == null) return;
-        Instance.ShowInternal();
+        Instance.ShowDelayed();
     }
 
     public static void Hide()
@@ -71,23 +83,54 @@ public class LoadingScreen : MonoBehaviour
         Instance.HideInternal();
     }
 
+    // ---------------------------------------------------------------
+    // Show path
+    // ---------------------------------------------------------------
+
+    private void ShowDelayed()
+    {
+        // Cancel any pending show
+        if (_showDelayCoroutine != null) { StopCoroutine(_showDelayCoroutine); _showDelayCoroutine = null; }
+        // GameObject always active -- coroutine starts safely
+        _showDelayCoroutine = StartCoroutine(ShowAfterThreshold());
+    }
+
+    private IEnumerator ShowAfterThreshold()
+    {
+        yield return new WaitForSecondsRealtime(showThresholdSeconds);
+        _showDelayCoroutine = null;
+        ShowInternal();
+    }
+
     private void ShowInternal()
     {
         if (_isShowing) return;
         _isShowing = true;
         StopAll();
-        gameObject.SetActive(true);
+        _canvasGroup.alpha = 1f;
         _canvasGroup.blocksRaycasts = true;
         if (appearSfx != null) _audioSource.PlayOneShot(appearSfx);
         _fadeRoutine = StartCoroutine(FadeIn());
         _cycleRoutine = StartCoroutine(CycleFrames());
     }
 
+    // ---------------------------------------------------------------
+    // Hide path
+    // ---------------------------------------------------------------
+
     private void HideInternal()
     {
-        if (!_isShowing) return;
+        // Cancel pending delayed show -- if download was fast, never show at all
+        if (_showDelayCoroutine != null) { StopCoroutine(_showDelayCoroutine); _showDelayCoroutine = null; }
+        if (!_isShowing)
+        {
+            // Wasn't showing -- make sure alpha is clean
+            _canvasGroup.alpha = 0f;
+            _canvasGroup.blocksRaycasts = false;
+            return;
+        }
         StopAll();
-        _fadeRoutine = StartCoroutine(FadeOutAndDisable());
+        _fadeRoutine = StartCoroutine(FadeOutAndHide());
     }
 
     private void StopAll()
@@ -95,6 +138,10 @@ public class LoadingScreen : MonoBehaviour
         if (_fadeRoutine != null) { StopCoroutine(_fadeRoutine); _fadeRoutine = null; }
         if (_cycleRoutine != null) { StopCoroutine(_cycleRoutine); _cycleRoutine = null; }
     }
+
+    // ---------------------------------------------------------------
+    // Fade coroutines -- no SetActive calls, CanvasGroup only
+    // ---------------------------------------------------------------
 
     private IEnumerator FadeIn()
     {
@@ -109,7 +156,7 @@ public class LoadingScreen : MonoBehaviour
         _canvasGroup.alpha = 1f;
     }
 
-    private IEnumerator FadeOutAndDisable()
+    private IEnumerator FadeOutAndHide()
     {
         float elapsed = 0f;
         float startAlpha = _canvasGroup.alpha;
@@ -121,9 +168,13 @@ public class LoadingScreen : MonoBehaviour
         }
         _canvasGroup.alpha = 0f;
         _canvasGroup.blocksRaycasts = false;
-        gameObject.SetActive(false);
         _isShowing = false;
+        // NOTE: gameObject stays active -- never call SetActive(false) here
     }
+
+    // ---------------------------------------------------------------
+    // Frame cycling
+    // ---------------------------------------------------------------
 
     private IEnumerator CycleFrames()
     {
@@ -134,7 +185,6 @@ public class LoadingScreen : MonoBehaviour
         CharacterGroup group = characterGroups[groupIndex];
         if (group == null || group.frames == null || group.frames.Count == 0) yield break;
 
-        // Pick one random frame only -- no cycling
         if (randomFrame)
         {
             int randFrame = Random.Range(0, group.frames.Count);
@@ -143,7 +193,6 @@ public class LoadingScreen : MonoBehaviour
             yield break;
         }
 
-        // Cycle frames in sequence
         int frameIndex = 0;
         while (true)
         {

@@ -1,11 +1,12 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.Video;
-using UnityEngine.InputSystem;
-using UnityEngine.EventSystems;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.UI;
+using UnityEngine.Video;
 using Vuforia;
 
 public class CustomARHandler : MonoBehaviour
@@ -20,26 +21,42 @@ public class CustomARHandler : MonoBehaviour
     private bool _loadCancelled = false;
     private bool _contentCompleted = false;
 
+    private Coroutine _releaseCoroutine;
+    private string _activePageId;
+
+    // Cached -- avoids FindFirstObjectByType on every tracking event
+    private ARMediaManager _arMediaManager;
+
     [Header("UI Elements")]
     public GameObject replayButton;
     public GameObject nextPageImg;
     public GameObject backBtn;
     public GameObject sliderV;
+    [Tooltip("Resets slider value and 3D model position/rotation only. Does not reload content.")]
+    public GameObject resetButton;
 
     [Header("Auto Hide Settings")]
-    [Tooltip("Seconds before UI auto hides after last tap on empty space.")]
-    public float autoHideSeconds = 3f;
+    [Tooltip("Seconds before UI auto hides after last interaction.")]
+    public float autoHideSeconds = 5f;
 
     [Tooltip("How fast UI fades in and out in seconds.")]
     public float fadeDuration = 0.3f;
 
     private bool _uiVisible = false;
     private float _autoHideTimer = 0f;
-    private Coroutine _fadeRoutine;
+    private float _uiShownAt = 0f;
+    private const float MinUiToggleOffDelay = 0.8f;
+
+    // Tracks whether the current touch/drag started on a UI element.
+    // While touch is held on UI, auto-hide timer is frozen.
+    // Prevents slider from stopping mid-drag when timer expires.
+    private bool _touchHeldOnUI = false;
 
     private CanvasGroup _replayCG;
     private CanvasGroup _backBtnCG;
     private CanvasGroup _sliderCG;
+    private CanvasGroup _resetCG;
+    private Coroutine _fadeRoutine;
 
     private Coroutine _nextPageAnimRoutine;
     private Vector2 _nextPageImgOriginalPos;
@@ -47,7 +64,6 @@ public class CustomARHandler : MonoBehaviour
     private VuforiaTrackHook _trackHook;
     private ARTrackedPageNode _pageNode;
 
-    // Reusable raycast list — avoids GC allocation every frame
     private readonly List<RaycastResult> _raycastResults = new List<RaycastResult>();
 
     public static CustomARHandler Current;
@@ -64,6 +80,17 @@ public class CustomARHandler : MonoBehaviour
         _replayCG = GetOrAddCanvasGroup(replayButton);
         _backBtnCG = GetOrAddCanvasGroup(backBtn);
         _sliderCG = GetOrAddCanvasGroup(sliderV);
+        _resetCG = GetOrAddCanvasGroup(resetButton);
+
+        if (resetButton != null)
+        {
+            var btn = resetButton.GetComponent<Button>();
+            if (btn != null) btn.onClick.AddListener(OnResetButtonPressed);
+        }
+
+        // Cache on this GO immediately -- never null this out in release paths.
+        // FadeUI reads canSliderRotate from this at any time.
+        modelInteraction = GetComponent<ModelInteraction>();
 
         SetUIAlpha(0f);
         SetUIInteractable(false);
@@ -74,20 +101,16 @@ public class CustomARHandler : MonoBehaviour
         HideAllUI();
         _trackHook = GetComponent<VuforiaTrackHook>();
 
+        // Cache ARMediaManager once -- avoid FindFirstObjectByType on every event
+        _arMediaManager = Object.FindFirstObjectByType<ARMediaManager>();
+
         var observer = GetComponent<ObserverBehaviour>();
         if (observer != null)
             observer.OnTargetStatusChanged += OnTargetStatusChanged;
     }
 
-    private void OnEnable()
-    {
-        ARMediaManager.OnVoiceCompleted += OnVoiceCompleted;
-    }
-
-    private void OnDisable()
-    {
-        ARMediaManager.OnVoiceCompleted -= OnVoiceCompleted;
-    }
+    private void OnEnable() { ARMediaManager.OnVoiceCompleted += OnVoiceCompleted; }
+    private void OnDisable() { ARMediaManager.OnVoiceCompleted -= OnVoiceCompleted; }
 
     void OnDestroy()
     {
@@ -96,46 +119,79 @@ public class CustomARHandler : MonoBehaviour
             observer.OnTargetStatusChanged -= OnTargetStatusChanged;
     }
 
+    // ----------------------------------------------------------------------
+    // Update -- tap detection and auto-hide
+    // ----------------------------------------------------------------------
+
     void Update()
     {
         bool tapped = false;
+        bool touchHeld = false;
         Vector2 tapPosition = Vector2.zero;
 
-        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+        if (Touchscreen.current != null)
         {
-            tapped = true;
-            tapPosition = Touchscreen.current.primaryTouch.position.ReadValue();
+            var touch = Touchscreen.current.primaryTouch;
+            if (touch.press.wasPressedThisFrame)
+            {
+                tapped = true;
+                tapPosition = touch.position.ReadValue();
+            }
+            if (touch.press.isPressed)
+                touchHeld = true;
         }
 
-        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        if (Mouse.current != null)
         {
-            tapped = true;
-            tapPosition = Mouse.current.position.ReadValue();
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                tapped = true;
+                tapPosition = Mouse.current.position.ReadValue();
+            }
+            if (Mouse.current.leftButton.isPressed)
+                touchHeld = true;
         }
 
+        // On new press: check if it landed on a UI element (called ONCE per tap, not per frame)
         if (tapped)
         {
             bool onUI = IsTapOnUIElement(tapPosition);
+            _touchHeldOnUI = onUI; // remember for duration of this drag
 
             if (onUI)
             {
-                // Tapped a UI element (slider, button etc) — reset timer, keep UI visible
-                // The UI element handles its own interaction normally
+                // Tapped a UI element -- reset timer
                 if (_uiVisible)
                     _autoHideTimer = autoHideSeconds;
             }
             else
             {
-                // Tapped empty space — toggle UI
-                if (_uiVisible)
-                    FadeUI(false);
-                else
+                // Tapped empty space
+                if (!_uiVisible)
                 {
                     FadeUI(true);
+                    _uiShownAt = Time.time;
                     _autoHideTimer = autoHideSeconds;
+                }
+                else if (Time.time - _uiShownAt > MinUiToggleOffDelay)
+                {
+                    FadeUI(false); // intentional toggle-off
+                }
+                else
+                {
+                    _autoHideTimer = autoHideSeconds; // too soon -- reset instead
                 }
             }
         }
+
+        // Touch released -- clear held flag
+        if (!touchHeld)
+            _touchHeldOnUI = false;
+
+        // While finger is held on a UI element, freeze the timer.
+        // This prevents FadeUI(false) from firing mid-slider-drag.
+        if (_uiVisible && _touchHeldOnUI)
+            _autoHideTimer = autoHideSeconds;
 
         // Auto hide countdown
         if (_uiVisible)
@@ -147,9 +203,7 @@ public class CustomARHandler : MonoBehaviour
     }
 
     // ----------------------------------------------------------------------
-    // Touch on UI detection
-    // Checks if the tap position landed on any UI element
-    // If yes, slider/buttons handle their own input normally
+    // UI raycast check -- called ONCE per tap, not per frame
     // ----------------------------------------------------------------------
 
     private bool IsTapOnUIElement(Vector2 screenPosition)
@@ -157,10 +211,7 @@ public class CustomARHandler : MonoBehaviour
         var eventSystem = EventSystem.current;
         if (eventSystem == null) return false;
 
-        var pointerData = new PointerEventData(eventSystem)
-        {
-            position = screenPosition
-        };
+        var pointerData = new PointerEventData(eventSystem) { position = screenPosition };
 
         _raycastResults.Clear();
         eventSystem.RaycastAll(pointerData, _raycastResults);
@@ -169,12 +220,11 @@ public class CustomARHandler : MonoBehaviour
     }
 
     // ----------------------------------------------------------------------
-    // Voice completed — fired by ARMediaManager with the pageId that finished
+    // Voice completed
     // ----------------------------------------------------------------------
 
     private void OnVoiceCompleted(string completedPageId)
     {
-        // Only react if the completed page matches this handler's page
         if (_pageNode == null) return;
         if (completedPageId != _pageNode.PageId) return;
 
@@ -202,6 +252,7 @@ public class CustomARHandler : MonoBehaviour
         if (_replayCG != null) _replayCG.alpha = alpha;
         if (_backBtnCG != null) _backBtnCG.alpha = alpha;
         if (_sliderCG != null) _sliderCG.alpha = alpha;
+        if (_resetCG != null) _resetCG.alpha = alpha;
     }
 
     private void SetUIInteractable(bool state)
@@ -209,6 +260,7 @@ public class CustomARHandler : MonoBehaviour
         if (_replayCG != null) { _replayCG.interactable = state; _replayCG.blocksRaycasts = state; }
         if (_backBtnCG != null) { _backBtnCG.interactable = state; _backBtnCG.blocksRaycasts = state; }
         if (_sliderCG != null) { _sliderCG.interactable = state; _sliderCG.blocksRaycasts = state; }
+        if (_resetCG != null) { _resetCG.interactable = state; _resetCG.blocksRaycasts = state; }
     }
 
     private void FadeUI(bool show)
@@ -218,9 +270,12 @@ public class CustomARHandler : MonoBehaviour
         if (show)
         {
             backBtn?.SetActive(true);
-            sliderV?.SetActive(true);
-            if (_contentCompleted)
-                replayButton?.SetActive(true);
+            // Slider visibility controlled by canSliderRotate on this page's ModelInteraction.
+            // modelInteraction cached in Awake -- always valid, never nulled.
+            bool showSlider = modelInteraction != null && modelInteraction.canSliderRotate;
+            sliderV?.SetActive(showSlider);
+            replayButton?.SetActive(true);
+            resetButton?.SetActive(true);
             SetUIInteractable(true);
         }
         else
@@ -232,7 +287,7 @@ public class CustomARHandler : MonoBehaviour
         _fadeRoutine = StartCoroutine(FadeRoutine(show ? 1f : 0f));
     }
 
-    private System.Collections.IEnumerator FadeRoutine(float targetAlpha)
+    private IEnumerator FadeRoutine(float targetAlpha)
     {
         float startAlpha = _backBtnCG != null ? _backBtnCG.alpha : (targetAlpha == 1f ? 0f : 1f);
         float elapsed = 0f;
@@ -241,7 +296,7 @@ public class CustomARHandler : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / fadeDuration);
-            t = t * t * (3f - 2f * t);
+            t = t * t * (3f - 2f * t); // smoothstep
             SetUIAlpha(Mathf.Lerp(startAlpha, targetAlpha, t));
             yield return null;
         }
@@ -251,8 +306,10 @@ public class CustomARHandler : MonoBehaviour
         if (targetAlpha == 0f)
         {
             replayButton?.SetActive(false);
+            resetButton?.SetActive(false);
             backBtn?.SetActive(false);
             sliderV?.SetActive(false);
+            // nextPageImg excluded -- has its own lifecycle via OnVoiceCompleted
         }
 
         _fadeRoutine = null;
@@ -267,6 +324,7 @@ public class CustomARHandler : MonoBehaviour
         if (_fadeRoutine != null) { StopCoroutine(_fadeRoutine); _fadeRoutine = null; }
 
         replayButton?.SetActive(false);
+        resetButton?.SetActive(false);
         nextPageImg?.SetActive(false);
         backBtn?.SetActive(false);
         sliderV?.SetActive(false);
@@ -276,6 +334,8 @@ public class CustomARHandler : MonoBehaviour
 
         _uiVisible = false;
         _autoHideTimer = 0f;
+        _touchHeldOnUI = false;
+        _contentCompleted = false;
     }
 
     // ----------------------------------------------------------------------
@@ -284,6 +344,9 @@ public class CustomARHandler : MonoBehaviour
 
     private void OnTargetStatusChanged(ObserverBehaviour behaviour, TargetStatus status)
     {
+        // Guard: Vuforia may fire after GameObject is destroyed
+        if (this == null || !gameObject) return;
+
         if (status.Status == Status.TRACKED ||
             status.Status == Status.EXTENDED_TRACKED ||
             status.Status == Status.LIMITED)
@@ -298,6 +361,12 @@ public class CustomARHandler : MonoBehaviour
 
         if (string.IsNullOrEmpty(addressableKey)) return;
 
+        if (_releaseCoroutine != null)
+        {
+            StopCoroutine(_releaseCoroutine);
+            _releaseCoroutine = null;
+        }
+
         if (instantiatedObject == null && !_isLoading)
         {
             _isLoading = true;
@@ -307,16 +376,18 @@ public class CustomARHandler : MonoBehaviour
             StopNextPageAnim();
             nextPageImg?.SetActive(false);
 
+            OverlayManager.Instance?.HideAll();
             LoadingScreen.Show();
 
             Addressables.InstantiateAsync(addressableKey, transform).Completed += handle =>
             {
                 _isLoading = false;
                 LoadingScreen.Hide();
+                OverlayManager.Instance?.HideAll();
 
                 if (_loadCancelled)
                 {
-                    Debug.Log($"[AR] Load cancelled for '{addressableKey}' — releasing.");
+                    Debug.Log($"[AR] Load cancelled for '{addressableKey}' -- releasing.");
                     Addressables.ReleaseInstance(handle.Result);
                     return;
                 }
@@ -330,7 +401,9 @@ public class CustomARHandler : MonoBehaviour
                 instantiatedObject = handle.Result;
                 instantiatedObject.transform.localPosition = Vector3.zero;
                 contentControl = instantiatedObject.GetComponent<IARContent>();
-                modelInteraction = GetComponent<ModelInteraction>();
+
+                // modelInteraction cached in Awake -- do NOT reassign here.
+                // Only call Init to set up the model transform and slider values.
                 modelInteraction?.Init(instantiatedObject);
 
                 var components = instantiatedObject.GetComponentsInChildren<QuizManager>(true);
@@ -340,25 +413,22 @@ public class CustomARHandler : MonoBehaviour
                 quizManager?.PauseQuiz(false);
 
                 _pageNode = instantiatedObject.GetComponentInChildren<ARTrackedPageNode>();
+                _activePageId = _pageNode != null ? _pageNode.PageId : addressableKey;
                 _trackHook?.SetPageNode(_pageNode);
 
                 contentControl?.PlayContent();
-
-                // NOTE: ContentController completion callback removed intentionally
-                // NextPageImg is triggered ONLY by voice audio completion via ARMediaManager.OnVoiceCompleted
-                // This prevents early triggers when video ends before voice finishes
             };
         }
         else if (instantiatedObject != null)
         {
+            // Grace time resume -- content still alive
+            OverlayManager.Instance?.HideLostTracking();
+
             ToggleRenderers(true);
-            modelInteraction?.Init(instantiatedObject);
+            modelInteraction?.Resume();
             quizManager?.PauseQuiz(false);
             _trackHook?.SetPageNode(_pageNode);
             contentControl?.PlayContent();
-
-            if (_contentCompleted)
-                nextPageImg?.SetActive(true);
         }
     }
 
@@ -370,6 +440,7 @@ public class CustomARHandler : MonoBehaviour
         {
             _loadCancelled = true;
             LoadingScreen.Hide();
+            OverlayManager.Instance?.HideAll();
             HideAllUI();
             return;
         }
@@ -378,19 +449,66 @@ public class CustomARHandler : MonoBehaviour
         {
             contentControl?.PauseContent();
             quizManager?.PauseQuiz(true);
-            _trackHook?.ClearPageNode();
 
+            if (_contentCompleted)
+            {
+                // Content done -- release immediately, no grace time
+                if (_releaseCoroutine != null) { StopCoroutine(_releaseCoroutine); _releaseCoroutine = null; }
+
+                StopNextPageAnim();
+                nextPageImg?.SetActive(false);
+                OverlayManager.Instance?.HideAll();
+
+                _trackHook?.ClearPageNode();
+                Addressables.ReleaseInstance(instantiatedObject);
+
+                // Clear content objects only -- NOT modelInteraction (it's this GO's component)
+                instantiatedObject = null;
+                contentControl = null;
+                quizManager = null;
+                _pageNode = null;
+                _activePageId = null;
+                _contentCompleted = false;
+
+                _arMediaManager?.NotifyContentReleased();
+
+                HideAllUI();
+                OverlayManager.Instance?.ShowLostTracking();
+                return;
+            }
+
+            // Content still playing -- grace period
             ToggleRenderers(false);
+            OverlayManager.Instance?.ShowLostTracking();
 
+            if (_releaseCoroutine != null) { StopCoroutine(_releaseCoroutine); _releaseCoroutine = null; }
+
+            float grace = _arMediaManager != null ? _arMediaManager.ResumeGraceSeconds : 4f;
+            _releaseCoroutine = StartCoroutine(ReleaseAfterGrace(grace));
+        }
+    }
+
+    private IEnumerator ReleaseAfterGrace(float grace)
+    {
+        yield return new WaitForSeconds(grace);
+
+        if (instantiatedObject != null)
+        {
+            _trackHook?.ClearPageNode();
             Addressables.ReleaseInstance(instantiatedObject);
+
+            // Clear content objects only -- NOT modelInteraction
             instantiatedObject = null;
             contentControl = null;
-            modelInteraction = null;
             quizManager = null;
             _pageNode = null;
-
-            HideAllUI();
+            _activePageId = null;
         }
+
+        _arMediaManager?.NotifyContentReleased();
+
+        HideAllUI();
+        _releaseCoroutine = null;
     }
 
     // ----------------------------------------------------------------------
@@ -413,14 +531,13 @@ public class CustomARHandler : MonoBehaviour
         }
     }
 
-    private System.Collections.IEnumerator NextPageAnimRoutine()
+    private IEnumerator NextPageAnimRoutine()
     {
         if (nextPageImg == null) yield break;
 
         RectTransform rt = nextPageImg.GetComponent<RectTransform>();
         if (rt == null) yield break;
 
-        // Pop in: scale 0 to 1.2
         nextPageImg.transform.localScale = Vector3.zero;
         float elapsed = 0f;
 
@@ -432,7 +549,6 @@ public class CustomARHandler : MonoBehaviour
             yield return null;
         }
 
-        // Settle: scale 1.2 to 1
         elapsed = 0f;
         while (elapsed < 0.1f)
         {
@@ -444,7 +560,6 @@ public class CustomARHandler : MonoBehaviour
 
         nextPageImg.transform.localScale = Vector3.one;
 
-        // Loop bounce left
         Vector2 startPos = _nextPageImgOriginalPos;
         Vector2 leftPos = startPos + new Vector2(-25f, 0f);
 
@@ -475,13 +590,10 @@ public class CustomARHandler : MonoBehaviour
     }
 
     // ----------------------------------------------------------------------
-    // Replay
+    // Replay / Reset
     // ----------------------------------------------------------------------
 
-    public static void ReplayCurrent()
-    {
-        Current?.OnReplayButtonPressed();
-    }
+    public static void ReplayCurrent() { Current?.OnReplayButtonPressed(); }
 
     public void OnReplayButtonPressed()
     {
@@ -494,8 +606,13 @@ public class CustomARHandler : MonoBehaviour
         contentControl.ReplayContent();
     }
 
+    public void OnResetButtonPressed()
+    {
+        ModelInteraction.ResetCurrent();
+    }
+
     // ----------------------------------------------------------------------
-    // Renderer toggle
+    // Renderer toggle (grace time hide/show)
     // ----------------------------------------------------------------------
 
     private void ToggleRenderers(bool visible)
@@ -504,11 +621,16 @@ public class CustomARHandler : MonoBehaviour
 
         var renderers = instantiatedObject.GetComponentsInChildren<Renderer>();
         foreach (var r in renderers) r.enabled = visible;
+
         var canvas = instantiatedObject.GetComponentsInChildren<Canvas>();
         foreach (var c in canvas) c.enabled = visible;
 
         var videos = instantiatedObject.GetComponentsInChildren<VideoPlayer>(true);
-        foreach (var v in videos) v.enabled = visible;
+        foreach (var v in videos)
+        {
+            if (v.targetMaterialRenderer != null)
+                v.targetMaterialRenderer.enabled = visible;
+        }
 
         var particles = instantiatedObject.GetComponentsInChildren<ParticleSystem>(true);
         foreach (var p in particles)

@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 112922899130404728}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0.554, y: 0.05, z: 0}
+  m_LocalPosition: {x: -0.554, y: 0.045, z: 0}
   m_LocalScale: {x: 0.2, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -387,7 +387,7 @@ Transform:
   m_GameObject: {fileID: 1021518222732237588}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0.554, y: 0.15, z: 0}
+  m_LocalPosition: {x: -0.554, y: 0.135, z: 0}
   m_LocalScale: {x: 0.2, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1018,7 +1018,7 @@ Transform:
   m_GameObject: {fileID: 2915256632671810991}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: -0.50100005, y: 0.23200001, z: -0.012}
+  m_LocalPosition: {x: -0.50100005, y: 0.231, z: -0.012}
   m_LocalScale: {x: 0.2, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1705,9 +1705,9 @@ MonoBehaviour:
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
   blackOverlay: {fileID: 3181417750789157834}
+  contentRoot: {fileID: 6397505380765872163}
   delayBeforeFade: 0.5
   fadeDuration: 1.5
-  holdDuration: 0.3
   pageTurnSound: {fileID: 0}
 --- !u!114 &3036940938068016920
 MonoBehaviour:
@@ -1870,7 +1870,7 @@ Transform:
   m_GameObject: {fileID: 5615339826598410109}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0.554, y: 0.1, z: 0}
+  m_LocalPosition: {x: -0.554, y: 0.09, z: 0}
   m_LocalScale: {x: 0.2, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1950,7 +1950,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &478291401470277638
 Transform:
   m_ObjectHideFlags: 0
@@ -2085,7 +2085,7 @@ Transform:
   m_GameObject: {fileID: 6397505380765872163}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.053, y: 0.032, z: -0.012}
+  m_LocalPosition: {x: 0.053, y: 0.011, z: -0.012}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -2116,7 +2116,7 @@ MonoBehaviour:
   - {fileID: 434472545271286496}
   - {fileID: 3564484960152535862}
   gapAxis: 0
-  gap: 0.05
+  gap: 0.045
   hardLockGapAxis: 1
   applyGapInEditMode: 1
   invertTranslation: 1
@@ -2780,7 +2780,7 @@ Transform:
   m_GameObject: {fileID: 8830683353526581534}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0.554, y: 0.2, z: 0}
+  m_LocalPosition: {x: -0.554, y: 0.18, z: 0}
   m_LocalScale: {x: 0.2, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []

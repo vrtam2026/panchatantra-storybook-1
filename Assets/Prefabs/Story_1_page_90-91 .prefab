@@ -1226,15 +1226,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 332922093728066669}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.9375399, z: -0, w: -0.34787807}
-  m_LocalPosition: {x: 1.483, y: 0, z: 0.446}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalRotation: {x: -0, y: 0.9179998, z: -0, w: -0.39658093}
+  m_LocalPosition: {x: 1.0377, y: 0.1766, z: -0.073797}
+  m_LocalScale: {x: 0.31360304, y: 0.31360304, z: 0.31360304}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6187759918808454935}
   - {fileID: 3915242820629769533}
   m_Father: {fileID: 5656271594522815928}
-  m_LocalEulerAnglesHint: {x: 0, y: 220.715, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 226.729, z: 0}
 --- !u!95 &6532473764931495035
 Animator:
   serializedVersion: 7
@@ -12875,8 +12875,8 @@ Transform:
   m_GameObject: {fileID: 4634621135913578217}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.94146556, z: -0, w: 0.33710927}
-  m_LocalPosition: {x: -0.041, y: 0.011, z: -0.298}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalPosition: {x: -0.041, y: 0.004, z: 0.025}
+  m_LocalScale: {x: 1.3343209, y: 1.3343209, z: 1.3343209}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6107836183882151770}
@@ -25972,12 +25972,10 @@ MonoBehaviour:
   freezeLastSeconds: 0
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
-  fadePlane: {fileID: 0}
-  imagePlane: {fileID: 0}
+  blackOverlay: {fileID: 0}
   delayBeforeFade: 0.5
   fadeDuration: 1.5
   holdDuration: 0.3
-  imageFadeDuration: 1
   pageTurnSound: {fileID: 0}
 --- !u!114 &3495123247291659070
 MonoBehaviour:

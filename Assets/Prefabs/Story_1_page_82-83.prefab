@@ -1215,7 +1215,7 @@ Transform:
   m_GameObject: {fileID: 2905588924971704578}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.491, y: 0.098, z: 0}
+  m_LocalPosition: {x: 0.491, y: 0.021, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1243,6 +1243,7 @@ MonoBehaviour:
   - {fileID: 4295752847325597248}
   - {fileID: 5469651120481197047}
   - {fileID: 4163510437985039050}
+  - {fileID: 2879792973278202074}
   gapAxis: 0
   gap: 0.05
   hardLockGapAxis: 1
@@ -1599,12 +1600,10 @@ MonoBehaviour:
   freezeLastSeconds: 0
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
-  fadePlane: {fileID: 7609599124751847655}
-  imagePlane: {fileID: 0}
+  blackOverlay: {fileID: 7609599124751847655}
+  contentRoot: {fileID: 2905588924971704578}
   delayBeforeFade: 0.5
   fadeDuration: 1.5
-  holdDuration: 0.3
-  imageFadeDuration: 1
   pageTurnSound: {fileID: 0}
 --- !u!114 &5877317404290775620
 MonoBehaviour:
@@ -1772,7 +1771,7 @@ Transform:
   m_GameObject: {fileID: 4481787535424011101}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0.487, y: 0.265, z: -0.012}
+  m_LocalPosition: {x: 0.487, y: 0.2, z: -0.012}
   m_LocalScale: {x: 0.19999999, y: 0.099999994, z: 0.099999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2594,7 +2593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4404888482571421712
 Transform:
   m_ObjectHideFlags: 0
@@ -2782,7 +2781,7 @@ Transform:
   m_GameObject: {fileID: 9179789032194430612}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0.491, y: 0.243, z: -0}
+  m_LocalPosition: {x: 0.491, y: 0.205, z: -0}
   m_LocalScale: {x: 4.15, y: 4.15, z: 4.15}
   m_ConstrainProportionsScale: 1
   m_Children:

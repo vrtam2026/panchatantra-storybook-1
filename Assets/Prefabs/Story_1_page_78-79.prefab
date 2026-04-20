@@ -2700,12 +2700,10 @@ MonoBehaviour:
   freezeLastSeconds: 0
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
-  fadePlane: {fileID: 0}
-  imagePlane: {fileID: 0}
+  blackOverlay: {fileID: 0}
+  contentRoot: {fileID: 0}
   delayBeforeFade: 0.5
   fadeDuration: 1.5
-  holdDuration: 0.3
-  imageFadeDuration: 1
   pageTurnSound: {fileID: 0}
 --- !u!114 &888936985423327976
 MonoBehaviour:

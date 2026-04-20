@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
@@ -45,10 +45,13 @@ public class ARTrackedPageNode : MonoBehaviour
 
     [Header("Page End Effect")]
 
-    [Tooltip("Black plane child of this page node. Name it 'BlackOverlay'. Auto-found if left empty.")]
+    [Tooltip("Black plane child of this page node. Name it 'Black Screen'. Auto-found if left empty.")]
     [SerializeField] private Renderer blackOverlay;
 
-    [Tooltip("Seconds to wait after video ends before black fades in.")]
+    [Tooltip("Drag All_GameObjects here (2D pages). Auto-found if left empty. 3D pages leave empty.")]
+    [SerializeField] private GameObject contentRoot;
+
+    [Tooltip("Seconds to wait after audio ends before black fades in.")]
     [Min(0f)]
     [SerializeField] private float delayBeforeFade = 0.5f;
 
@@ -56,21 +59,21 @@ public class ARTrackedPageNode : MonoBehaviour
     [Min(0f)]
     [SerializeField] private float fadeDuration = 1.5f;
 
-    [Tooltip("How long to hold fully black before page end panel appears (seconds).")]
+    [Tooltip("Seconds to hold black before turn page overlay appears.")]
     [Min(0f)]
-    [SerializeField] private float holdDuration = 0.3f;
+    [SerializeField] private float postFadeDelay = 0.5f;
 
     [Tooltip("Optional sound played when the page end panel appears.")]
     [SerializeField] private AudioClip pageTurnSound;
 
-    // Auto-found at runtime from OverlayManager -- no drag needed
-    private CanvasGroup _pageEndPanel;
-    private UnityEngine.UI.Image _pageEndImage;
-
     // private state
     private Coroutine _revealCoroutine;
-    private Coroutine _pageEndFrameCoroutine;
     private AudioSource _revealAudioSource;
+
+    // Names kept visible after fade (frame stays, black screen removed separately)
+    private static readonly string[] _keepVisible = {
+        "frame_new_bendender", "frame", "Black Screen", "BlackOverlay", "black page"
+    };
     // ---------------------------------------------------------------
 
     private bool _isTracked;
@@ -109,8 +112,10 @@ public class ARTrackedPageNode : MonoBehaviour
 
         if (animators.Count == 0)
         {
-            var anim = GetComponentInChildren<Animator>(true);
-            if (anim != null) animators.Add(anim);
+            // Auto-find ALL animators in children -- not just the first one
+            var found = GetComponentsInChildren<Animator>(true);
+            foreach (var anim in found)
+                if (anim != null) animators.Add(anim);
         }
 
         RebuildVideoRuntimeCache();
@@ -142,20 +147,16 @@ public class ARTrackedPageNode : MonoBehaviour
 
     private void SetupReveal()
     {
-        // Auto-find black overlay in children if not assigned
+        // Auto-find black overlay by name
         if (blackOverlay == null)
         {
-            var r = GetComponentInChildren<Renderer>(true);
-            if (r != null && r.gameObject.name == "BlackOverlay")
-                blackOverlay = r;
-        }
-
-        // Auto-find OverlayManager panels -- set ONCE in scene, used by all pages
-        var overlayManager = OverlayManager.Instance;
-        if (overlayManager != null)
-        {
-            _pageEndPanel = overlayManager.PageEndPanel;
-            _pageEndImage = overlayManager.PageEndImage;
+            foreach (var r in GetComponentsInChildren<Renderer>(true))
+            {
+                if (r.gameObject.name == "Black Screen" ||
+                    r.gameObject.name == "BlackOverlay" ||
+                    r.gameObject.name == "black page")
+                { blackOverlay = r; break; }
+            }
         }
 
         // Setup audio source for page turn sound
@@ -167,34 +168,83 @@ public class ARTrackedPageNode : MonoBehaviour
             _revealAudioSource.loop = false;
         }
 
-        // Black plane: force render queue above video (ChromaKey = 3000), start invisible
+        // Black plane: force render queue above video, start invisible
         if (blackOverlay != null)
         {
             blackOverlay.material.renderQueue = 3500;
             Color c = blackOverlay.material.GetColor("_BaseColor");
             c.a = 0f;
             blackOverlay.material.SetColor("_BaseColor", c);
+            blackOverlay.gameObject.SetActive(true);
         }
     }
 
-    // Called from StartFromBeginning - starts watching the video
+    // Lazy-find All_GameObjects -- runs after Addressables clone is ready
+    private GameObject GetContentRoot()
+    {
+        if (contentRoot != null) return contentRoot;
+
+        // Search direct children for All_GameObjects (2D page)
+        foreach (Transform child in transform)
+        {
+            if (child.name == "All_GameObjects" || child.name == "All_GameObject")
+            {
+                contentRoot = child.gameObject;
+                return contentRoot;
+            }
+        }
+
+        // Search one level deeper
+        foreach (Transform child in transform)
+        {
+            var deep = child.Find("All_GameObjects") ?? child.Find("All_GameObject");
+            if (deep != null) { contentRoot = deep.gameObject; return contentRoot; }
+        }
+
+        return null; // 3D page -- use HideAllChildren instead
+    }
+
+    // For 3D pages -- hide all direct children except frame and black screen
+    private void HideAllChildren(bool hide)
+    {
+        foreach (Transform child in transform)
+        {
+            bool keep = false;
+            foreach (var n in _keepVisible)
+                if (child.name.Contains(n)) { keep = true; break; }
+            if (!keep) child.gameObject.SetActive(!hide);
+        }
+    }
+
+    // Called from StartFromBeginning -- auto detects content type and watches accordingly
     private void StartWatchingVideo()
     {
-        if (blackOverlay == null && _pageEndPanel == null) return;
-        if (mainVideos == null || mainVideos.Count == 0 || mainVideos[0] == null) return;
+        if (!gameObject.activeInHierarchy) return;
+        if (blackOverlay == null && OverlayManager.Instance == null) return;
 
-        if (_revealCoroutine != null)
+        if (_revealCoroutine != null) { StopCoroutine(_revealCoroutine); _revealCoroutine = null; }
+
+        bool hasVideo = mainVideos != null && mainVideos.Count > 0 && mainVideos[0] != null;
+        bool hasAnimators = animators != null && animators.Count > 0;
+        bool hasSplines = (splineMovers != null && splineMovers.Count > 0) ||
+                          (splinePathMovers != null && splinePathMovers.Count > 0);
+
+        if (hasVideo)
         {
-            StopCoroutine(_revealCoroutine);
-            _revealCoroutine = null;
+            // 2D page -- watch the main video
+            _revealCoroutine = StartCoroutine(WatchVideoThenFade(mainVideos[0]));
         }
-
-        _revealCoroutine = StartCoroutine(WatchVideoThenFade(mainVideos[0]));
+        // 3D pages are handled automatically via ARMediaManager.OnVoiceCompleted
+        // OverlayManager listens to that event and shows turn page after audio ends
+        // If neither -- nothing to watch, no page end triggered
     }
 
+    // ---------------------------------------------------------------
+    // 2D PAGE WATCHER -- polls video until it truly ends
+    // ---------------------------------------------------------------
     private IEnumerator WatchVideoThenFade(VideoPlayer vp)
     {
-        // PHASE 1: Wait for video to start playing at all
+        // PHASE 1: Wait for video to start playing
         float startTimeout = Time.time + 10f;
         while (!vp.isPlaying && Time.time < startTimeout)
             yield return null;
@@ -205,9 +255,7 @@ public class ARTrackedPageNode : MonoBehaviour
             yield break;
         }
 
-        // PHASE 2: Wait for time to move past freeze
-        // FreezeFirstFrame pauses on frame 0 -- vp.isPlaying can be false or time stays near 0
-        // Wait until time moves clearly past 0.1s AND video is playing again
+        // PHASE 2: Wait past freeze first frame (time stays near 0 during freeze)
         float phaseTimeout = Time.time + 15f;
         while (Time.time < phaseTimeout)
         {
@@ -218,7 +266,7 @@ public class ARTrackedPageNode : MonoBehaviour
 
         Debug.Log($"[AR] Reveal: past freeze. time={vp.time:F2}");
 
-        // PHASE 3: Wait for video to stop (true end, not freeze)
+        // PHASE 3: Wait for video to stop (true end)
         while (true)
         {
             if (!_isTracked) { yield return new WaitUntil(() => _isTracked); }
@@ -234,22 +282,24 @@ public class ARTrackedPageNode : MonoBehaviour
         _revealCoroutine = StartCoroutine(FadeAndReveal());
     }
 
+    // Called from animation event on 3D pages if manual trigger is preferred
+    public void TriggerPageEnd()
+    {
+        // Manual trigger from animation event -- OverlayManager handles BGM via OnVoiceCompleted
+        if (OverlayManager.Instance != null)
+            OverlayManager.Instance.ShowPageEnd();
+    }
+
     private IEnumerator FadeAndReveal()
     {
-        // Refresh panel references from OverlayManager in case they changed
-        if (OverlayManager.Instance != null)
-        {
-            _pageEndPanel = OverlayManager.Instance.PageEndPanel;
-            _pageEndImage = OverlayManager.Instance.PageEndImage;
-        }
-
-        // Step 1: short delay after video ends
+        // Step 1: delay after audio ends
         if (delayBeforeFade > 0f)
             yield return new WaitForSeconds(delayBeforeFade);
 
-        // Step 2: fade world space black plane from transparent to solid
+        // Step 2: ensure Black Screen is active and fade it in
         if (blackOverlay != null)
         {
+            blackOverlay.gameObject.SetActive(true);
             Color c = blackOverlay.material.GetColor("_BaseColor");
             c.a = 0f;
             blackOverlay.material.SetColor("_BaseColor", c);
@@ -266,64 +316,64 @@ public class ARTrackedPageNode : MonoBehaviour
             blackOverlay.material.SetColor("_BaseColor", c);
         }
 
-        // Step 3: hold fully black
-        if (holdDuration > 0f)
-            yield return new WaitForSeconds(holdDuration);
+        // Step 3: once fully black -- hide all content
+        var root = GetContentRoot();
+        if (root != null)
+            root.SetActive(false);   // 2D: turn off All_GameObjects
+        else
+            HideAllChildren(true);   // 3D: turn off all children except frame
 
-        // Step 4: show page end panel and fade it in
-        if (_pageEndPanel != null)
-        {
-            _pageEndPanel.gameObject.SetActive(true);
-            _pageEndPanel.alpha = 0f;
+        // Step 4: turn off Black Screen -- clean frame visible
+        if (blackOverlay != null)
+            blackOverlay.gameObject.SetActive(false);
 
-            // Start character frame cycling via OverlayManager
-            if (OverlayManager.Instance != null)
-                OverlayManager.Instance.StartPageEndCycle();
+        // Step 5: hold for postFadeDelay before showing overlay
+        if (postFadeDelay > 0f)
+            yield return new WaitForSeconds(postFadeDelay);
 
-            float elapsed = 0f;
-            float duration = OverlayManager.Instance != null ? OverlayManager.Instance.ImageFadeDuration : 1f;
-            while (elapsed < duration)
-            {
-                elapsed += Time.deltaTime;
-                _pageEndPanel.alpha = Mathf.Clamp01(elapsed / duration);
-                yield return null;
-            }
-            _pageEndPanel.alpha = 1f;
-        }
+        // Step 6: show turn page overlay
+        if (OverlayManager.Instance != null)
+            OverlayManager.Instance.ShowPageEnd();
 
-        // Step 5: start BGM and sound when panel is visible
-        if (mediaManager != null)
-            mediaManager.StartPostVoiceBgm();
-
+        // Step 6: play page turn sound
         if (_revealAudioSource != null && pageTurnSound != null)
             _revealAudioSource.Play();
 
         _revealCoroutine = null;
     }
 
+
+
+
     private void ResetReveal()
     {
-        // Stop coroutines
         if (_revealCoroutine != null) { StopCoroutine(_revealCoroutine); _revealCoroutine = null; }
-        if (_pageEndFrameCoroutine != null) { StopCoroutine(_pageEndFrameCoroutine); _pageEndFrameCoroutine = null; }
 
-        // Reset black plane to invisible
+        // Restore content visibility for next scan
+        var root = GetContentRoot();
+        if (root != null)
+            root.SetActive(true);
+        else
+            HideAllChildren(false);
+
+        // Restore Black Screen -- active but fully transparent
         if (blackOverlay != null)
         {
+            blackOverlay.gameObject.SetActive(true);
             Color c = blackOverlay.material.GetColor("_BaseColor");
             c.a = 0f;
             blackOverlay.material.SetColor("_BaseColor", c);
         }
 
-        // Hide page end panel via OverlayManager
         if (OverlayManager.Instance != null)
-            OverlayManager.Instance.HidePageEndPanel();
-        else if (_pageEndPanel != null)
         {
-            _pageEndPanel.alpha = 0f;
-            _pageEndPanel.gameObject.SetActive(false);
+            OverlayManager.Instance.StopWatching();
+            OverlayManager.Instance.HideAll();
         }
     }
+
+
+
 
     // ---------------------------------------------------------------
 
@@ -349,7 +399,7 @@ public class ARTrackedPageNode : MonoBehaviour
     public void NotifyFound()
     {
         _isTracked = true;
-        Debug.Log($"[AR] NotifyFound — pageId: '{pageId}'");
+        Debug.Log($"[AR] NotifyFound ï¿½ pageId: '{pageId}'");
         if (mediaManager != null)
             mediaManager.NotifyTrackingFound(this);
         else
@@ -447,6 +497,21 @@ public class ARTrackedPageNode : MonoBehaviour
 
     public void ResumeVisuals()
     {
+        // Reset black overlay to transparent -- critical for grace time resume
+        // Without this, black plane stays opaque if fade was in progress when lost
+        if (blackOverlay != null)
+        {
+            blackOverlay.gameObject.SetActive(true);
+            Color c = blackOverlay.material.GetColor("_BaseColor");
+            c.a = 0f;
+            blackOverlay.material.SetColor("_BaseColor", c);
+        }
+
+        // Restore content root if it was hidden
+        var root = GetContentRoot();
+        if (root != null && !root.activeSelf)
+            root.SetActive(true);
+
         ResumeVideos(mainVideos);
         ResumeVideos(backgroundLoopVideos);
 
@@ -508,8 +573,9 @@ public class ARTrackedPageNode : MonoBehaviour
         for (int i = 0; i < list.Count; i++)
         {
             var vp = list[i];
-            if (vp == null) continue;
+            if (vp == null) return;
             if (!vp.gameObject.activeInHierarchy) continue;
+            if (!vp.enabled) continue;  // disabled VideoPlayer cannot be paused
             if (_videoRuntime.TryGetValue(vp, out var rt)) rt.Pause();
             else if (vp.isPlaying) vp.Pause();
         }
@@ -576,6 +642,7 @@ public class ARTrackedPageNode : MonoBehaviour
         {
             StopRoutinesInternal();
             if (_vp == null) return;
+            if (!_vp.enabled) return;  // disabled VideoPlayer cannot be paused
             _vp.Pause();
         }
 

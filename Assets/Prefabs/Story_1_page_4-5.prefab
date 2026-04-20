@@ -495,9 +495,9 @@ MonoBehaviour:
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
   blackOverlay: {fileID: 0}
+  contentRoot: {fileID: 0}
   delayBeforeFade: 0.5
   fadeDuration: 1.5
-  holdDuration: 0.3
   pageTurnSound: {fileID: 0}
 --- !u!114 &1654439061649008010
 MonoBehaviour:

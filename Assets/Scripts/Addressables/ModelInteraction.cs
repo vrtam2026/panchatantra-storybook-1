@@ -4,14 +4,22 @@ using UnityEngine.UI;
 
 public class ModelInteraction : MonoBehaviour
 {
+    // ------------------------------------------------------------------
+    // Page type -- controls which global bucket this page reads/writes.
+    // TwoD pages share one global angle + scale.
+    // ThreeD pages share a completely separate global angle + scale.
+    // Changing slider on a 2D page never affects 3D pages and vice versa.
+    // ------------------------------------------------------------------
+    public enum PageType { TwoD, ThreeD }
+
+    [Header("Page Type")]
+    [Tooltip("TwoD = uses 2D global slider and scale state.\nThreeD = uses 3D global state. Set this on every 3D ImageTarget.")]
+    public PageType pageType = PageType.TwoD;
+
     [Header("Toggles")]
+    [Tooltip("ON = slider visible and active for this page.\nOFF = slider hidden regardless of page type.")]
     public bool canSliderRotate = true;
     public bool canPinchScale = true;
-
-    /*[Header("Drag Rotation (horizontal)")]
-    public float dragSpeed = 0.3f;
-    public float dragMinAngle = -60f;
-    public float dragMaxAngle = 60f;*/
 
     [Header("Slider Rotation (vertical)")]
     public float sliderMinAngle = -45f;
@@ -30,117 +38,99 @@ public class ModelInteraction : MonoBehaviour
     float _currentDragAngle = 0f;
     float _currentSliderAngle = 0f;
 
-    // drag
-    /*bool _isDragging = false;
-    Vector2 _lastDragPos;*/
+    // ------------------------------------------------------------------
+    // Separate global state -- 2D and 3D never share values
+    // ------------------------------------------------------------------
+    public static float GlobalSliderAngle2D = 0f;
+    public static float GlobalSliderAngle3D = 0f;
+    public static float GlobalScaleMultiplier2D = 1f;
+    public static float GlobalScaleMultiplier3D = 1f;
+
+    // Routing helpers -- automatically pick the right bucket
+    private bool Is2D => pageType == PageType.TwoD;
+
+    private float ActiveSliderAngle
+    {
+        get => Is2D ? GlobalSliderAngle2D : GlobalSliderAngle3D;
+        set { if (Is2D) GlobalSliderAngle2D = value; else GlobalSliderAngle3D = value; }
+    }
+
+    private float ActiveScaleMultiplier
+    {
+        get => Is2D ? GlobalScaleMultiplier2D : GlobalScaleMultiplier3D;
+        set { if (Is2D) GlobalScaleMultiplier2D = value; else GlobalScaleMultiplier3D = value; }
+    }
 
     // pinch
     bool _isPinching = false;
     float _lastPinchDistance = 0f;
 
-    public static float GlobalSliderAngle = 0f;
-
+    public System.Action OnTapped;
     public static ModelInteraction Current;
+
+    // ------------------------------------------------------------------
+    // Init -- called by CustomARHandler after addressable spawns
+    // ------------------------------------------------------------------
 
     public void Init(GameObject spawnedModel)
     {
         Current = this;
         _model = spawnedModel.transform;
 
-        // store LOCAL instead of world
         _originalLocalPosition = _model.localPosition;
         _originalLocalRotation = _model.localRotation;
         _originalLocalScale = _model.localScale;
 
-        _currentSliderAngle = GlobalSliderAngle;
+        _currentSliderAngle = ActiveSliderAngle;
+        _model.localScale = _originalLocalScale * ActiveScaleMultiplier;
+
+        // Wire slider listener -- visibility controlled by CustomARHandler.FadeUI
         if (verticalSlider != null && canSliderRotate)
         {
             verticalSlider.minValue = sliderMinAngle;
             verticalSlider.maxValue = sliderMaxAngle;
 
             verticalSlider.onValueChanged.RemoveListener(OnSliderChanged);
-
-            verticalSlider.SetValueWithoutNotify(GlobalSliderAngle);
-
+            verticalSlider.SetValueWithoutNotify(ActiveSliderAngle);
             verticalSlider.onValueChanged.AddListener(OnSliderChanged);
         }
-        // APPLY ROTATION IMMEDIATELY ON SPAWN
-        _currentSliderAngle = GlobalSliderAngle;
+
         ApplyRotation();
     }
+
+    // ------------------------------------------------------------------
+    // Resume -- grace-time tracking restore.
+    // Rewires slider only. Never re-captures original values.
+    // ------------------------------------------------------------------
+
+    public void Resume()
+    {
+        if (_model == null) return;
+        Current = this;
+
+        if (verticalSlider != null && canSliderRotate)
+        {
+            verticalSlider.onValueChanged.RemoveListener(OnSliderChanged);
+            verticalSlider.SetValueWithoutNotify(_currentSliderAngle);
+            verticalSlider.onValueChanged.AddListener(OnSliderChanged);
+        }
+
+        ApplyRotation();
+    }
+
+    // ------------------------------------------------------------------
+    // Unity lifecycle
+    // ------------------------------------------------------------------
 
     void Update()
     {
         if (_model == null) return;
-
-        //HandleDragRotation();
         HandlePinchScale();
     }
 
-    // ── Drag (horizontal rotation) ──────────────────────────
-
-    /*void HandleDragRotation()
-    {
-        if (!canDragRotate) return;
-
-        var touchscreen = Touchscreen.current;
-        var mouse = Mouse.current;
-
-        // touch
-        if (touchscreen != null && touchscreen.primaryTouch.press.isPressed)
-        {
-            Vector2 touchPos = touchscreen.primaryTouch.position.ReadValue();
-
-            if (touchscreen.primaryTouch.press.wasPressedThisFrame)
-            {
-                _isDragging = true;
-                _lastDragPos = touchPos;
-            }
-            else if (_isDragging)
-            {
-                float delta = (touchPos.x - _lastDragPos.x) * dragSpeed;
-                ApplyDragRotation(delta);
-                _lastDragPos = touchPos;
-            }
-        }
-        else if (touchscreen != null && touchscreen.primaryTouch.press.wasReleasedThisFrame)
-        {
-            _isDragging = false;
-        }
-
-        // mouse (editor testing)
-        if (mouse != null)
-        {
-            if (mouse.leftButton.wasPressedThisFrame)
-            {
-                _isDragging = true;
-                _lastDragPos = mouse.position.ReadValue();
-            }
-            else if (mouse.leftButton.isPressed && _isDragging)
-            {
-                Vector2 mousePos = mouse.position.ReadValue();
-                float delta = (mousePos.x - _lastDragPos.x) * dragSpeed;
-                ApplyDragRotation(delta);
-                _lastDragPos = mousePos;
-            }
-            else if (mouse.leftButton.wasReleasedThisFrame)
-            {
-                _isDragging = false;
-            }
-        }
-    }*/
-
-    /*void ApplyDragRotation(float delta)
-    {
-        _currentDragAngle = Mathf.Clamp(
-            _currentDragAngle - delta,
-            dragMinAngle,
-            dragMaxAngle
-        );
-        ApplyRotation();
-    }*/
-
-    // ── Slider (vertical rotation) ──────────────────────────
+    // ------------------------------------------------------------------
+    // Slider rotation
+    // ------------------------------------------------------------------
 
     void OnSliderChanged(float value)
     {
@@ -148,24 +138,21 @@ public class ModelInteraction : MonoBehaviour
         if (_model == null) return;
 
         _currentSliderAngle = value;
-
-        // SAVE GLOBALLY
-        GlobalSliderAngle = value;
+        ActiveSliderAngle = value;   // writes to correct 2D or 3D global
 
         ApplyRotation();
     }
 
-    // ── Combined rotation ────────────────────────────────────
-
     void ApplyRotation()
     {
         if (_model == null) return;
-
         _model.localRotation = _originalLocalRotation
-                * Quaternion.Euler(_currentSliderAngle, _currentDragAngle, 0f);
+            * Quaternion.Euler(_currentSliderAngle, _currentDragAngle, 0f);
     }
 
-    // ── Pinch Scale ──────────────────────────────────────────
+    // ------------------------------------------------------------------
+    // Pinch scale -- separate global per page type
+    // ------------------------------------------------------------------
 
     void HandlePinchScale()
     {
@@ -174,7 +161,6 @@ public class ModelInteraction : MonoBehaviour
         var touchscreen = Touchscreen.current;
         if (touchscreen == null) return;
 
-        // need exactly 2 touches
         bool touch0Active = touchscreen.touches[0].press.isPressed;
         bool touch1Active = touchscreen.touches[1].press.isPressed;
 
@@ -198,20 +184,63 @@ public class ModelInteraction : MonoBehaviour
         float delta = currentDistance - _lastPinchDistance;
         float scaleFactor = 1f + delta * 0.002f;
 
-        Vector3 newScale = _model.localScale * scaleFactor;
-        newScale.x = Mathf.Clamp(newScale.x, minScale, maxScale);
-        newScale.y = Mathf.Clamp(newScale.y, minScale, maxScale);
-        newScale.z = Mathf.Clamp(newScale.z, minScale, maxScale);
+        ActiveScaleMultiplier = Mathf.Clamp(ActiveScaleMultiplier * scaleFactor, minScale, maxScale);
 
-        _model.localScale = newScale;
+        // Renderer-bounds center compensation for off-center pivot
+        Vector3 worldCenterBefore = GetRendererWorldCenter();
+        _model.localScale = _originalLocalScale * ActiveScaleMultiplier;
+        Vector3 worldCenterAfter = GetRendererWorldCenter();
+        _model.position -= (worldCenterAfter - worldCenterBefore);
+
         _lastPinchDistance = currentDistance;
     }
 
-    // ── Reset ────────────────────────────────────────────────
+    private Vector3 GetRendererWorldCenter()
+    {
+        var renderers = _model.GetComponentsInChildren<Renderer>();
+        if (renderers.Length == 0) return _model.position;
+
+        Bounds combined = renderers[0].bounds;
+        for (int i = 1; i < renderers.Length; i++)
+            combined.Encapsulate(renderers[i].bounds);
+
+        return combined.center;
+    }
+
+    // ------------------------------------------------------------------
+    // Tap callback
+    // ------------------------------------------------------------------
+
+    public void EnableTapCallback(System.Action callback)
+    {
+        OnTapped = callback;
+    }
+
+    // ------------------------------------------------------------------
+    // Reset -- affects only this page type's globals
+    // ------------------------------------------------------------------
 
     public static void ResetCurrent()
     {
-        Current?.ResetModel();
+        Current?.FullReset();
+    }
+
+    public void FullReset()
+    {
+        if (_model == null) return;
+
+        ActiveSliderAngle = 0f;
+        ActiveScaleMultiplier = 1f;
+
+        _currentDragAngle = 0f;
+        _currentSliderAngle = 0f;
+
+        _model.localPosition = _originalLocalPosition;
+        _model.localRotation = _originalLocalRotation;
+        _model.localScale = _originalLocalScale;
+
+        if (verticalSlider != null && canSliderRotate)
+            verticalSlider.SetValueWithoutNotify(0f);
     }
 
     public void ResetModel()
@@ -220,15 +249,17 @@ public class ModelInteraction : MonoBehaviour
 
         _model.localPosition = _originalLocalPosition;
         _model.localRotation = _originalLocalRotation;
-        _model.localScale = _originalLocalScale;
+        _model.localScale = _originalLocalScale * ActiveScaleMultiplier;
 
         _currentDragAngle = 0f;
 
-        /*_currentSliderAngle = 0f;*/
-
-        if (verticalSlider != null)
-            verticalSlider.value = GlobalSliderAngle;
+        if (verticalSlider != null && canSliderRotate)
+            verticalSlider.value = ActiveSliderAngle;
     }
+
+    // ------------------------------------------------------------------
+    // Cleanup
+    // ------------------------------------------------------------------
 
     public void Cleanup()
     {

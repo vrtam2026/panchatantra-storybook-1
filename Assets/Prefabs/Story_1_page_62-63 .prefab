@@ -3720,7 +3720,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5044146006567619510
 Transform:
   m_ObjectHideFlags: 0
@@ -3763,6 +3763,11 @@ MonoBehaviour:
   freezeLastSeconds: 0
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
+  blackOverlay: {fileID: 0}
+  delayBeforeFade: 0.5
+  fadeDuration: 1.5
+  holdDuration: 0.3
+  pageTurnSound: {fileID: 0}
 --- !u!114 &3323703656140403220
 MonoBehaviour:
   m_ObjectHideFlags: 0
