@@ -436,6 +436,12 @@ public class CustomARHandler : MonoBehaviour
     {
         if (Current == this) Current = null;
 
+        // BUGFIX: detach this instance's slider listener immediately on tracking lost.
+        // Without this, the invisible model continues receiving slider events during
+        // the grace period and corrupts its own 2D or 3D global value.
+        // Init() / Resume() on the next active page will re-attach the correct listener.
+        modelInteraction?.DetachSlider();
+
         if (_isLoading)
         {
             _loadCancelled = true;

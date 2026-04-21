@@ -1708,6 +1708,7 @@ MonoBehaviour:
   contentRoot: {fileID: 6397505380765872163}
   delayBeforeFade: 0.5
   fadeDuration: 1.5
+  postFadeDelay: 0.5
   pageTurnSound: {fileID: 0}
 --- !u!114 &3036940938068016920
 MonoBehaviour:

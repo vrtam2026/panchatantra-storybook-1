@@ -383,6 +383,154 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 141522269}
   m_CullTransparentMesh: 1
+--- !u!1 &218283069
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 218283070}
+  - component: {fileID: 218283076}
+  - component: {fileID: 218283075}
+  - component: {fileID: 218283074}
+  - component: {fileID: 218283073}
+  - component: {fileID: 218283072}
+  - component: {fileID: 218283077}
+  m_Layer: 0
+  m_Name: Story_1_page_84-quiz
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &218283070
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218283069}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 965437193038994913}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &218283072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218283069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+--- !u!114 &218283073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218283069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
+  canSliderRotate: 0
+  canPinchScale: 0
+  sliderMinAngle: -45
+  sliderMaxAngle: 45
+  verticalSlider: {fileID: 6464217316641464389}
+  minScale: 0.5
+  maxScale: 3
+--- !u!114 &218283074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218283069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PageTarget
+  pageIndex: 40
+--- !u!114 &218283075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218283069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23c704a4a4b89f24ca231b358c15572d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
+  addressableKey: Story_1_page_84-quiz
+  replayButton: {fileID: 7568430320982221046}
+  nextPageImg: {fileID: 2139261501}
+  backBtn: {fileID: 7921724763459701802}
+  sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 2256686475820094898}
+  autoHideSeconds: 5
+  fadeDuration: 0.3
+--- !u!114 &218283076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218283069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1631628248, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetBehaviour
+  PreviewVisible: 1
+  RuntimeOcclusion: 0
+  RuntimeCollider: 0
+  mTrackableName: 84
+  mInitializedInEditor: 1
+  mDataSetPath: Vuforia/ALL_Panchatantra_story.xml
+  mAspectRatio: 1.023237
+  mImageTargetType: 0
+  mWidth: 1
+  mHeight: 1.023237
+  mRuntimeTexture: {fileID: 0}
+  mMotionHint: 1
+  mTrackingOptimization: 0
+  mTrackingOptimizationNeedsUpgrade: 0
+  mPreview: {fileID: 218283077}
+--- !u!114 &218283077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218283069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
+  mObserverBehaviour: {fileID: 218283076}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: 84
+  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
+  mCastedBehaviour: {fileID: 218283076}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &296841651
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,6 +594,154 @@ MonoBehaviour:
   panelFadeInDuration: 1
   pageEndDelay: 2
   lostTrackingDelay: 2
+--- !u!1 &313246783
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 313246784}
+  - component: {fileID: 313246790}
+  - component: {fileID: 313246789}
+  - component: {fileID: 313246788}
+  - component: {fileID: 313246787}
+  - component: {fileID: 313246786}
+  - component: {fileID: 313246791}
+  m_Layer: 0
+  m_Name: Story_1_page_64-quiz
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &313246784
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313246783}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2194679880551864084}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &313246786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313246783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+--- !u!114 &313246787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313246783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
+  canSliderRotate: 0
+  canPinchScale: 0
+  sliderMinAngle: -45
+  sliderMaxAngle: 45
+  verticalSlider: {fileID: 6464217316641464389}
+  minScale: 0.5
+  maxScale: 3
+--- !u!114 &313246788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313246783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PageTarget
+  pageIndex: 31
+--- !u!114 &313246789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313246783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23c704a4a4b89f24ca231b358c15572d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
+  addressableKey: Story_1_page_64-quiz
+  replayButton: {fileID: 7568430320982221046}
+  nextPageImg: {fileID: 2139261501}
+  backBtn: {fileID: 7921724763459701802}
+  sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 2256686475820094898}
+  autoHideSeconds: 5
+  fadeDuration: 0.3
+--- !u!114 &313246790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313246783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1631628248, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetBehaviour
+  PreviewVisible: 1
+  RuntimeOcclusion: 0
+  RuntimeCollider: 0
+  mTrackableName: 64
+  mInitializedInEditor: 1
+  mDataSetPath: Vuforia/ALL_Panchatantra_story.xml
+  mAspectRatio: 1.023237
+  mImageTargetType: 0
+  mWidth: 1
+  mHeight: 1.023237
+  mRuntimeTexture: {fileID: 0}
+  mMotionHint: 1
+  mTrackingOptimization: 0
+  mTrackingOptimizationNeedsUpgrade: 0
+  mPreview: {fileID: 313246791}
+--- !u!114 &313246791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313246783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
+  mObserverBehaviour: {fileID: 313246790}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: 64
+  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
+  mCastedBehaviour: {fileID: 313246790}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &478822583
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,6 +1033,154 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
+--- !u!1 &984247710
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 984247711}
+  - component: {fileID: 984247717}
+  - component: {fileID: 984247716}
+  - component: {fileID: 984247715}
+  - component: {fileID: 984247714}
+  - component: {fileID: 984247713}
+  - component: {fileID: 984247718}
+  m_Layer: 0
+  m_Name: Story_1_page_108-quiz
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &984247711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984247710}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8730098784387477893}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &984247713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984247710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+--- !u!114 &984247714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984247710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
+  canSliderRotate: 1
+  canPinchScale: 1
+  sliderMinAngle: -45
+  sliderMaxAngle: 45
+  verticalSlider: {fileID: 6464217316641464389}
+  minScale: 0.5
+  maxScale: 3
+--- !u!114 &984247715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984247710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PageTarget
+  pageIndex: 51
+--- !u!114 &984247716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984247710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23c704a4a4b89f24ca231b358c15572d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
+  addressableKey: Story_1_page_108-quiz
+  replayButton: {fileID: 7568430320982221046}
+  nextPageImg: {fileID: 2139261501}
+  backBtn: {fileID: 7921724763459701802}
+  sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 2256686475820094898}
+  autoHideSeconds: 5
+  fadeDuration: 0.3
+--- !u!114 &984247717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984247710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1631628248, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetBehaviour
+  PreviewVisible: 1
+  RuntimeOcclusion: 0
+  RuntimeCollider: 0
+  mTrackableName: 108
+  mInitializedInEditor: 1
+  mDataSetPath: Vuforia/ALL_Panchatantra_story.xml
+  mAspectRatio: 1.023237
+  mImageTargetType: 0
+  mWidth: 1
+  mHeight: 1.023237
+  mRuntimeTexture: {fileID: 0}
+  mMotionHint: 1
+  mTrackingOptimization: 0
+  mTrackingOptimizationNeedsUpgrade: 0
+  mPreview: {fileID: 984247718}
+--- !u!114 &984247718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984247710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
+  mObserverBehaviour: {fileID: 984247717}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: 108
+  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
+  mCastedBehaviour: {fileID: 984247717}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &1124087861
 GameObject:
   m_ObjectHideFlags: 0
@@ -1704,7 +2148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
-  pageIndex: 43
+  pageIndex: 44
 --- !u!114 &203760161075506268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1876,7 +2320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
   pageType: 0
   canSliderRotate: 0
-  canPinchScale: 1
+  canPinchScale: 0
   sliderMinAngle: -45
   sliderMaxAngle: 45
   verticalSlider: {fileID: 6464217316641464389}
@@ -2482,6 +2926,7 @@ Transform:
   - {fileID: 1529675540585273822}
   - {fileID: 1149125491113243210}
   - {fileID: 8808945637060415309}
+  - {fileID: 218283070}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &977418825074554768
@@ -3181,8 +3626,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1968837412026297397}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.253, y: 0, z: 0.38448}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3222,7 +3667,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
-  pageIndex: 46
+  pageIndex: 47
 --- !u!114 &1874100564135409146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3353,7 +3798,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
-  pageIndex: 49
+  pageIndex: 50
 --- !u!1 &2136069471732389953
 GameObject:
   m_ObjectHideFlags: 0
@@ -3413,6 +3858,7 @@ Transform:
   - {fileID: 693964905057001363}
   - {fileID: 3551965475789919969}
   - {fileID: 3565643968047098765}
+  - {fileID: 313246784}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2211729158489719967
@@ -3556,7 +4002,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
-  pageIndex: 44
+  pageIndex: 45
 --- !u!114 &2338303901222283285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3857,7 +4303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
-  pageIndex: 41
+  pageIndex: 42
 --- !u!114 &2774243154066121420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4498,7 +4944,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
-  pageIndex: 40
+  pageIndex: 41
 --- !u!114 &3755131064362836201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4889,7 +5335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
-  pageIndex: 42
+  pageIndex: 43
 --- !u!114 &4296300573354609972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5012,7 +5458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c704a4a4b89f24ca231b358c15572d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
-  addressableKey: Story_1_page_22-quiz
+  addressableKey: Story_1_page_46-quiz
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -5319,7 +5765,7 @@ MonoBehaviour:
   PreviewVisible: 1
   RuntimeOcclusion: 0
   RuntimeCollider: 0
-  mTrackableName: 62
+  mTrackableName: 63
   mInitializedInEditor: 1
   mDataSetPath: Vuforia/ALL_Panchatantra_story.xml
   mAspectRatio: 1.023237
@@ -5865,7 +6311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
-  pageIndex: 47
+  pageIndex: 48
 --- !u!114 &5211202949861184502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5968,8 +6414,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6489767878755915552}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.473, y: 0, z: 0.38448}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6668,7 +7114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
-  pageIndex: 48
+  pageIndex: 49
 --- !u!114 &6278977443393037419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6793,7 +7239,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 932980881328298146}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7018,7 +7464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
-  pageIndex: 45
+  pageIndex: 46
 --- !u!114 &6526412272612969691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7812,7 +8258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
   mObserverBehaviour: {fileID: 4765388179776767828}
   mHiddenRoot: {fileID: 0}
-  mTargetName: 62
+  mTargetName: 63
   mDatasetName: Vuforia/ALL_Panchatantra_story.xml
   mCastedBehaviour: {fileID: 4765388179776767828}
   mMeshFilter: {fileID: 0}
@@ -8852,8 +9298,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 9120061114167375606}
+  m_Children: []
   m_Father: {fileID: 6503364128857239450}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8258674369021475458
@@ -9097,7 +9542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e7654ddf213804399466ae76b20d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
-  pageIndex: 50
+  pageIndex: 51
 --- !u!114 &8462318661595852086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9311,7 +9756,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1790458370488719093}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9464,6 +9909,7 @@ Transform:
   - {fileID: 1665424961567941650}
   - {fileID: 6971738768569679907}
   - {fileID: 571285029927190217}
+  - {fileID: 984247711}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8731090318867810231
@@ -9560,7 +10006,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5514075816868636451}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10138,152 +10584,6 @@ MonoBehaviour:
   mCastedBehaviour: {fileID: 892615280447237478}
   mMeshFilter: {fileID: 0}
   mMeshRenderer: {fileID: 0}
---- !u!1001 &9120061114167375605
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 8254604513270093339}
-    m_Modifications:
-    - target: {fileID: 2138158244051501542, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 478822588}
-    - target: {fileID: 4342115397391909274, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_Name
-      value: Story_1_page_22-quiz
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 2036.4677
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 1018.2338
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.495
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.013028
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6203990998232225637, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6203990998232225637, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6203990998232225637, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6203990998232225637, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6892536651809538873, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6892536651809538873, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6892536651809538873, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6892536651809538873, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7553170067656469583, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: questions.Array.data[5].option1IsCorrect
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7553170067656469583, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-      propertyPath: questions.Array.data[5].option4IsCorrect
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
---- !u!224 &9120061114167375606 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6007675180759354066, guid: 353262a6140565a40b3fe64877c0b0c3, type: 3}
-  m_PrefabInstance: {fileID: 9120061114167375605}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &9134110994455827352
 MonoBehaviour:
   m_ObjectHideFlags: 0

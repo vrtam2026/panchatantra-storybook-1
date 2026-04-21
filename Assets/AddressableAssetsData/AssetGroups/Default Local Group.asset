@@ -117,6 +117,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8379ea736b17c8a4fac6f9a70771e93a
+    m_Address: Story_1_page_84-quiz
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 84fe064fad0ddce41bc99bb2d34cb69b
     m_Address: Story_1_page_94-95
     m_ReadOnly: 0
@@ -137,6 +142,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ca78af46991b6b4eb1d980fafcd3fab
+    m_Address: Story_1_page_46-quiz
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 91db578dbc5ebeb40b531cd6a6372f91
     m_Address: Story_1_page_74-75
     m_ReadOnly: 0
@@ -149,6 +159,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9e6616bc91b0be44584ea14c1760091a
     m_Address: Story_1_page_8-9
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a2c7304e82d0653459caddc8bd40338b
+    m_Address: Story_1_page_108-quiz
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -179,6 +194,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b3af24e5cef375b439eb17627b503dae
     m_Address: Story_1_page_76-77
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5048394fd5a46f44b0d128251c5e7db
+    m_Address: Story_1_page_64-quiz
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

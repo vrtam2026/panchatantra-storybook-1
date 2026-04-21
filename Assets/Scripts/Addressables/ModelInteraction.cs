@@ -69,11 +69,38 @@ public class ModelInteraction : MonoBehaviour
     public static ModelInteraction Current;
 
     // ------------------------------------------------------------------
+    // DetachSlider -- removes ONLY this instance's listener from the slider.
+    //
+    // ROOT CAUSE FIX:
+    //   All ImageTarget pages share ONE verticalSlider UI element in the scene.
+    //   Each ModelInteraction wires itself to that slider via AddListener.
+    //   Unity's RemoveListener is INSTANCE-SPECIFIC -- calling it on instance B
+    //   does NOT remove instance A's listener. So without this, every page scan
+    //   accumulates another listener on the slider.
+    //   Result: slider fires OnSliderChanged on every previously-visited instance,
+    //   which writes its pageType's global (2D or 3D) with the current value.
+    //   The fix: before any instance takes over the slider, it calls DetachSlider
+    //   on the previous Current to surgically remove that listener.
+    // ------------------------------------------------------------------
+    public void DetachSlider()
+    {
+        if (verticalSlider != null)
+            verticalSlider.onValueChanged.RemoveListener(OnSliderChanged);
+    }
+
+    // ------------------------------------------------------------------
     // Init -- called by CustomARHandler after addressable spawns
     // ------------------------------------------------------------------
 
     public void Init(GameObject spawnedModel)
     {
+        // BUGFIX: detach the previous active instance's slider listener before
+        // this instance takes over. Without this, the old page's OnSliderChanged
+        // stays wired and continues writing to its own 2D/3D global,
+        // causing cross-contamination between page types.
+        if (Current != null && Current != this)
+            Current.DetachSlider();
+
         Current = this;
         _model = spawnedModel.transform;
 
@@ -106,6 +133,12 @@ public class ModelInteraction : MonoBehaviour
     public void Resume()
     {
         if (_model == null) return;
+
+        // BUGFIX: same guard as Init -- detach any other active instance's
+        // listener before this instance resumes control of the shared slider.
+        if (Current != null && Current != this)
+            Current.DetachSlider();
+
         Current = this;
 
         if (verticalSlider != null && canSliderRotate)
@@ -158,6 +191,14 @@ public class ModelInteraction : MonoBehaviour
     {
         if (!canPinchScale) return;
 
+        // BUGFIX: only the currently active instance processes pinch.
+        // Without this, any ModelInteraction whose _model is still alive
+        // (grace-period page) also runs HandlePinchScale every frame.
+        // They receive the same touch delta and each write to their own
+        // 2D or 3D global -- so pinching on a 3D page also mutates the
+        // 2D scale global via a still-alive grace-period 2D instance.
+        if (Current != this) return;
+
         var touchscreen = Touchscreen.current;
         if (touchscreen == null) return;
 
@@ -186,11 +227,36 @@ public class ModelInteraction : MonoBehaviour
 
         ActiveScaleMultiplier = Mathf.Clamp(ActiveScaleMultiplier * scaleFactor, minScale, maxScale);
 
-        // Renderer-bounds center compensation for off-center pivot
-        Vector3 worldCenterBefore = GetRendererWorldCenter();
+        // Zoom centered on the object's visual center.
+        //
+        // WHY parent-local space:
+        //   _model is a child of an ImageTarget (Vuforia-controlled).
+        //   The old code used _model.position (world space) for the compensation.
+        //   Unity converts world position to localPosition via parent.InverseTransformPoint.
+        //   If the parent has any rotation (Vuforia can apply this), subtracting a
+        //   world-space delta from a world position gives the wrong localPosition --
+        //   the axes are rotated, so world X != local X.
+        //   Fix: measure the center drift in PARENT-LOCAL space, then adjust localPosition
+        //   directly. This is immune to any parent rotation or Vuforia repositioning.
+        Transform parent = _model.parent;
+
+        // Step 1: center position in parent-local space BEFORE scale
+        Vector3 centerWorldBefore = GetRendererWorldCenter();
+        Vector3 centerInParentBefore = parent != null
+            ? parent.InverseTransformPoint(centerWorldBefore)
+            : centerWorldBefore;
+
+        // Step 2: apply scale
         _model.localScale = _originalLocalScale * ActiveScaleMultiplier;
-        Vector3 worldCenterAfter = GetRendererWorldCenter();
-        _model.position -= (worldCenterAfter - worldCenterBefore);
+
+        // Step 3: center position in parent-local space AFTER scale
+        Vector3 centerWorldAfter = GetRendererWorldCenter();
+        Vector3 centerInParentAfter = parent != null
+            ? parent.InverseTransformPoint(centerWorldAfter)
+            : centerWorldAfter;
+
+        // Step 4: shift localPosition to bring center back to where it was
+        _model.localPosition += centerInParentBefore - centerInParentAfter;
 
         _lastPinchDistance = currentDistance;
     }
@@ -258,7 +324,7 @@ public class ModelInteraction : MonoBehaviour
     }
 
     // ------------------------------------------------------------------
-    // Cleanup
+    // Cleanup -- full teardown, called on handler destroy
     // ------------------------------------------------------------------
 
     public void Cleanup()
