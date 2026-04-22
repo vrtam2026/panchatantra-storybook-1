@@ -2116,7 +2116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
-  pageType: 0
+  pageType: 1
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -2213,7 +2213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
-  pageType: 0
+  pageType: 1
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -3984,7 +3984,7 @@ Transform:
   m_GameObject: {fileID: 2826888045975194124}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 3.05, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4477,7 +4477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
-  pageType: 0
+  pageType: 1
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -6249,7 +6249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
-  pageType: 0
+  pageType: 1
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -6608,7 +6608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
-  pageType: 0
+  pageType: 1
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -6643,7 +6643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
-  pageType: 0
+  pageType: 1
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -7197,7 +7197,7 @@ Transform:
   m_GameObject: {fileID: 1644568809541270623}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 2.644}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7545,7 +7545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
-  pageType: 0
+  pageType: 1
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -7960,7 +7960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
-  pageType: 0
+  pageType: 1
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -8275,7 +8275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
-  pageType: 0
+  pageType: 1
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -10119,7 +10119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
-  pageType: 0
+  pageType: 1
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -10596,7 +10596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
-  pageType: 0
+  pageType: 1
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -10742,7 +10742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
-  pageType: 0
+  pageType: 1
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
