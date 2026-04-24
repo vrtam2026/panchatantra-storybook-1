@@ -42,6 +42,18 @@ public class CustomARHandler : MonoBehaviour
     [Tooltip("How fast UI fades in and out in seconds.")]
     public float fadeDuration = 0.3f;
 
+    [Header("UI Visibility Per Page")]
+    [Tooltip("Uncheck to hide Replay button on this page.")]
+    public bool showReplayButton = true;
+    [Tooltip("Uncheck to hide Back button on this page.")]
+    public bool showBackButton = true;
+    [Tooltip("Uncheck to hide Slider on this page.")]
+    public bool showSlider = true;
+    [Tooltip("Uncheck to hide Reset button on this page.")]
+    public bool showResetButton = true;
+    [Tooltip("Uncheck to hide Next Page image on this page.")]
+    public bool showNextPageImg = true;
+
     private bool _uiVisible = false;
     private float _autoHideTimer = 0f;
     private float _uiShownAt = 0f;
@@ -63,10 +75,16 @@ public class CustomARHandler : MonoBehaviour
 
     private VuforiaTrackHook _trackHook;
     private ARTrackedPageNode _pageNode;
+    private GameObject _arCamera;
 
     private readonly List<RaycastResult> _raycastResults = new List<RaycastResult>();
 
     public static CustomARHandler Current;
+
+    // True when this image target's addressable key contains "quiz"
+    // Used to route to quiz flow instead of normal AR flow
+    private bool IsQuizPage => !string.IsNullOrEmpty(addressableKey) &&
+        addressableKey.IndexOf("quiz", System.StringComparison.OrdinalIgnoreCase) >= 0;
 
     // ----------------------------------------------------------------------
     // Unity lifecycle
@@ -230,9 +248,13 @@ public class CustomARHandler : MonoBehaviour
 
         _contentCompleted = true;
 
-        nextPageImg?.SetActive(true);
-        StopNextPageAnim();
-        _nextPageAnimRoutine = StartCoroutine(NextPageAnimRoutine());
+        // Only show next page image if enabled for this page
+        if (showNextPageImg)
+        {
+            nextPageImg?.SetActive(true);
+            StopNextPageAnim();
+            _nextPageAnimRoutine = StartCoroutine(NextPageAnimRoutine());
+        }
     }
 
     // ----------------------------------------------------------------------
@@ -269,13 +291,12 @@ public class CustomARHandler : MonoBehaviour
 
         if (show)
         {
-            backBtn?.SetActive(true);
-            // Slider visibility controlled by canSliderRotate on this page's ModelInteraction.
-            // modelInteraction cached in Awake -- always valid, never nulled.
-            bool showSlider = modelInteraction != null && modelInteraction.canSliderRotate;
-            sliderV?.SetActive(showSlider);
-            replayButton?.SetActive(true);
-            resetButton?.SetActive(true);
+            if (showBackButton) backBtn?.SetActive(true);
+            // Slider: respect both page checkbox AND canSliderRotate setting
+            bool sliderAllowed = showSlider && modelInteraction != null && modelInteraction.canSliderRotate;
+            sliderV?.SetActive(sliderAllowed);
+            if (showReplayButton) replayButton?.SetActive(true);
+            if (showResetButton) resetButton?.SetActive(true);
             SetUIInteractable(true);
         }
         else
@@ -377,12 +398,29 @@ public class CustomARHandler : MonoBehaviour
             nextPageImg?.SetActive(false);
 
             OverlayManager.Instance?.HideAll();
-            LoadingScreen.Show();
 
-            Addressables.InstantiateAsync(addressableKey, transform).Completed += handle =>
+            // Quiz pages: show QuizLoadingScreen -- user can put phone down during download
+            // Story pages: show regular LoadingScreen
+            if (IsQuizPage)
+                QuizLoadingScreen.Show();
+            else
+                LoadingScreen.Show();
+
+            // Quiz: no parent -- content placed on screen, not in AR world space
+            // Story: parented to image target -- lives in AR world space
+            var loadOp = IsQuizPage
+                ? Addressables.InstantiateAsync(addressableKey)
+                : Addressables.InstantiateAsync(addressableKey, transform);
+
+            loadOp.Completed += handle =>
             {
                 _isLoading = false;
-                LoadingScreen.Hide();
+
+                if (IsQuizPage)
+                    QuizLoadingScreen.Hide();
+                else
+                    LoadingScreen.Hide();
+
                 OverlayManager.Instance?.HideAll();
 
                 if (_loadCancelled)
@@ -410,13 +448,21 @@ public class CustomARHandler : MonoBehaviour
                 if (components.Length > 0)
                     quizManager = components[0];
 
-                quizManager?.PauseQuiz(false);
-
-                _pageNode = instantiatedObject.GetComponentInChildren<ARTrackedPageNode>();
-                _activePageId = _pageNode != null ? _pageNode.PageId : addressableKey;
-                _trackHook?.SetPageNode(_pageNode);
-
-                contentControl?.PlayContent();
+                if (quizManager != null)
+                {
+                    // QUIZ FLOW: switch canvas to device screen.
+                    // Quiz is hidden until loading screen finishes -- prevents overlap.
+                    SetupQuizOnScreen(instantiatedObject);
+                    StartCoroutine(ShowQuizAfterLoading(instantiatedObject));
+                }
+                else
+                {
+                    // NORMAL AR FLOW: play content in world space as usual
+                    _pageNode = instantiatedObject.GetComponentInChildren<ARTrackedPageNode>();
+                    _activePageId = _pageNode != null ? _pageNode.PageId : addressableKey;
+                    _trackHook?.SetPageNode(_pageNode);
+                    contentControl?.PlayContent();
+                }
             };
         }
         else if (instantiatedObject != null)
@@ -434,12 +480,16 @@ public class CustomARHandler : MonoBehaviour
 
     private void OnTrackingLost()
     {
+        // QUIZ PAGE -- do not null Current, do not cancel anything.
+        // Quiz runs on device screen. Camera not needed. Current must stay set for ExitQuiz.
+        if (IsQuizPage)
+        {
+            modelInteraction?.DetachSlider();
+            return;
+        }
+
         if (Current == this) Current = null;
 
-        // BUGFIX: detach this instance's slider listener immediately on tracking lost.
-        // Without this, the invisible model continues receiving slider events during
-        // the grace period and corrupts its own 2D or 3D global value.
-        // Init() / Resume() on the next active page will re-attach the correct listener.
         modelInteraction?.DetachSlider();
 
         if (_isLoading)
@@ -598,6 +648,129 @@ public class CustomARHandler : MonoBehaviour
     // ----------------------------------------------------------------------
     // Replay / Reset
     // ----------------------------------------------------------------------
+
+    // ----------------------------------------------------------------------
+    // Quiz -- SetupQuizOnScreen and ExitQuiz
+    // ----------------------------------------------------------------------
+
+    private void SetupQuizOnScreen(GameObject quizRoot)
+    {
+        // Find the Canvas inside the downloaded quiz prefab
+        Canvas canvas = quizRoot.GetComponent<Canvas>();
+        if (canvas == null)
+            canvas = quizRoot.GetComponentInChildren<Canvas>(true);
+
+        if (canvas != null)
+        {
+            // Switch from world space to fullscreen device screen
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            // Sort Order 15 -- below QuizLoadingScreen (20) so loading screen
+            // always renders on top during download. Quiz visible once loading hides.
+            canvas.sortingOrder = 15;
+
+            // Ensure correct screen scaling
+            CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
+            if (scaler == null)
+                scaler = canvas.gameObject.AddComponent<CanvasScaler>();
+
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1080, 1920);
+            scaler.matchWidthOrHeight = 0.5f;
+        }
+        else
+        {
+            Debug.LogWarning("[AR] SetupQuizOnScreen: No Canvas found in quiz prefab.");
+        }
+
+        // Disable AR camera -- quiz runs on device screen, camera not needed
+        SetARCameraActive(false);
+
+        quizRoot.SetActive(true);
+    }
+
+    private IEnumerator ShowQuizAfterLoading(GameObject quizRoot)
+    {
+        // Hide quiz completely while loading screen is visible
+        CanvasGroup quizCG = quizRoot.GetComponent<CanvasGroup>();
+        if (quizCG == null) quizCG = quizRoot.AddComponent<CanvasGroup>();
+
+        quizCG.alpha = 0f;
+        quizCG.blocksRaycasts = false;
+        quizCG.interactable = false;
+
+        // Wait until QuizLoadingScreen finishes hiding
+        yield return new WaitWhile(() =>
+            QuizLoadingScreen.Instance != null && QuizLoadingScreen.Instance.IsShowing);
+
+        // Small buffer to ensure fade out completes cleanly
+        yield return new WaitForSeconds(0.1f);
+
+        // Reveal quiz
+        quizCG.alpha = 1f;
+        quizCG.blocksRaycasts = true;
+        quizCG.interactable = true;
+    }
+
+    // Called by ExitQuizButton inside the quiz prefab
+    public void ExitQuiz()
+    {
+        quizManager = null;
+
+        if (instantiatedObject != null)
+        {
+            Addressables.ReleaseInstance(instantiatedObject);
+            instantiatedObject = null;
+        }
+
+        contentControl = null;
+        _pageNode = null;
+        _activePageId = null;
+        _contentCompleted = false;
+        _isLoading = false;
+        _loadCancelled = false;
+
+        HideAllUI();
+
+        // Re-enable AR camera so user can scan story pages again
+        SetARCameraActive(true);
+
+        Debug.Log("[AR] Quiz exited. AR camera resumed.");
+    }
+
+    private void SetARCameraActive(bool active)
+    {
+        // Find ARCamera in scene -- cached after first find
+        if (_arCamera == null)
+        {
+#if UNITY_2023_1_OR_NEWER
+            var cam = Object.FindFirstObjectByType<Vuforia.VuforiaBehaviour>();
+#else
+            var cam = Object.FindObjectOfType<Vuforia.VuforiaBehaviour>();
+#endif
+            if (cam != null) _arCamera = cam.gameObject;
+        }
+
+        if (_arCamera == null)
+        {
+            Debug.LogWarning("[AR] SetARCameraActive: ARCamera not found in scene.");
+            return;
+        }
+
+        if (!active)
+        {
+            // Disable ONLY VuforiaBehaviour -- stops AR camera feed and tracking.
+            // Camera component stays ON -- prevents "No cameras rendering" message
+            // and keeps AudioListener working for quiz audio.
+            var vuforia = _arCamera.GetComponent<Vuforia.VuforiaBehaviour>();
+            if (vuforia != null) vuforia.enabled = false;
+        }
+        else
+        {
+            // Re-enable Vuforia when returning to AR
+            var vuforia = _arCamera.GetComponent<Vuforia.VuforiaBehaviour>();
+            if (vuforia != null) vuforia.enabled = true;
+        }
+    }
 
     public static void ReplayCurrent() { Current?.OnReplayButtonPressed(); }
 

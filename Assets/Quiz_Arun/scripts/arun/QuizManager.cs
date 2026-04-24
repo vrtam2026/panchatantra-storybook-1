@@ -75,6 +75,7 @@ public class QuizManager : MonoBehaviour
 
     private void Start()
     {
+        // Show StartPanel -- user must tap Start Quiz button to begin.
         if (startPanel != null) startPanel.SetActive(true);
     }
 
