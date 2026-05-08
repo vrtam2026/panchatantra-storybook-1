@@ -399,7 +399,7 @@ public class ARTrackedPageNode : MonoBehaviour
     public void NotifyFound()
     {
         _isTracked = true;
-        Debug.Log($"[AR] NotifyFound � pageId: '{pageId}'");
+        Debug.Log($"[AR] NotifyFound   pageId: '{pageId}'");
         if (mediaManager != null)
             mediaManager.NotifyTrackingFound(this);
         else
@@ -439,11 +439,7 @@ public class ARTrackedPageNode : MonoBehaviour
 
         for (int i = 0; i < animators.Count; i++)
         {
-            var a = animators[i];
-            if (a == null) continue;
-            a.speed = 1f;
-            a.Rebind();
-            a.Update(0f);
+            ResetAnimatorToStart(animators[i], true);
         }
 
         for (int i = 0; i < splineMovers.Count; i++)
@@ -463,6 +459,10 @@ public class ARTrackedPageNode : MonoBehaviour
             m.ResetToStart();
             m.PlayOnce();
         }
+
+        // Trigger 2D background fade sequence (EnvLayer2D)
+        // Fires on first scan AND every replay -- covers both cases
+        GetComponentInChildren<EnvLayer2D>(true)?.TriggerFadeIn();
 
         // Start watching for video end to trigger reveal
         StartWatchingVideo();
@@ -475,9 +475,7 @@ public class ARTrackedPageNode : MonoBehaviour
 
         for (int i = 0; i < animators.Count; i++)
         {
-            var a = animators[i];
-            if (a == null) continue;
-            a.speed = 0f;
+            SetAnimatorSpeedSafe(animators[i], 0f);
         }
 
         for (int i = 0; i < splineMovers.Count; i++)
@@ -493,6 +491,42 @@ public class ARTrackedPageNode : MonoBehaviour
             if (m == null) continue;
             m.Pause();
         }
+    }
+
+    // Called by CustomARHandler.OnVFXReplayStarting() before replay sequence starts.
+    // Stops everything and resets to start positions — model shows frame 0, splines at pos 0.
+    // Does NOT start playback. StartFromBeginning() called via NotifyFound after VFX reveal.
+    public void PrepareForReplay()
+    {
+        // Stop and reset all splines to position 0 (NOT playing)
+        for (int i = 0; i < splineMovers.Count; i++)
+        {
+            var m = splineMovers[i];
+            if (m == null) continue;
+            m.Stop();
+            m.ResetToStart();
+        }
+        for (int i = 0; i < splinePathMovers.Count; i++)
+        {
+            var m = splinePathMovers[i];
+            if (m == null) continue;
+            m.Stop();
+            m.ResetToStart();
+        }
+
+        // Reset animators to frame 0, paused
+        // speed=0 + Rebind + Update(0) = frozen at first frame, mesh visible correctly
+        for (int i = 0; i < animators.Count; i++)
+        {
+            ResetAnimatorToStart(animators[i], false);
+        }
+
+        // Pause videos
+        PauseVideos(mainVideos);
+        PauseVideos(backgroundLoopVideos);
+
+        // Reset page end reveal state
+        ResetReveal();
     }
 
     public void ResumeVisuals()
@@ -517,9 +551,7 @@ public class ARTrackedPageNode : MonoBehaviour
 
         for (int i = 0; i < animators.Count; i++)
         {
-            var a = animators[i];
-            if (a == null) continue;
-            a.speed = 1f;
+            SetAnimatorSpeedSafe(animators[i], 1f);
         }
 
         for (int i = 0; i < splineMovers.Count; i++)
@@ -535,6 +567,27 @@ public class ARTrackedPageNode : MonoBehaviour
             if (m == null) continue;
             m.Resume();
         }
+    }
+
+    private static bool CanUseAnimator(Animator animator)
+    {
+        return animator != null && animator.gameObject != null && animator.gameObject.activeInHierarchy;
+    }
+
+    private static void SetAnimatorSpeedSafe(Animator animator, float speed)
+    {
+        if (!CanUseAnimator(animator)) return;
+        animator.speed = speed;
+    }
+
+    private static void ResetAnimatorToStart(Animator animator, bool playAfterReset)
+    {
+        if (!CanUseAnimator(animator)) return;
+
+        animator.enabled = true;
+        animator.speed = playAfterReset ? 1f : 0f;
+        animator.Rebind();
+        animator.Update(0f);
     }
 
     private void RestartVideosWithFreeze(

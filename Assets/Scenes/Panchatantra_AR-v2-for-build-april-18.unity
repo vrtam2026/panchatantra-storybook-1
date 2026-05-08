@@ -432,6 +432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &218283073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490,6 +491,9 @@ MonoBehaviour:
   showSlider: 0
   showResetButton: 0
   showNextPageImg: 0
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &218283076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -648,6 +652,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &313246787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -706,6 +711,9 @@ MonoBehaviour:
   showSlider: 0
   showResetButton: 0
   showNextPageImg: 0
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &313246790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1092,6 +1100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &984247714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1150,6 +1159,9 @@ MonoBehaviour:
   showSlider: 0
   showResetButton: 0
   showNextPageImg: 0
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &984247717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2298,6 +2310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &78067461117669952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2343,6 +2356,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &117334640399089507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2375,6 +2391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &129619450552217862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2440,6 +2457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &285983179755594835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2720,7 +2738,7 @@ Transform:
   m_GameObject: {fileID: 5376020689011973087}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -4.21, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2738,6 +2756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &643143329316042393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2820,6 +2839,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!4 &754226769539528382
 Transform:
   m_ObjectHideFlags: 0
@@ -2903,6 +2923,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &812956063784460030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2928,6 +2949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &819180517874318120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2940,6 +2962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &839278980586631205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3014,6 +3037,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!4 &887344349489908023
 Transform:
   m_ObjectHideFlags: 0
@@ -3081,6 +3107,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &895770956194292417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3129,6 +3158,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!222 &927890268935031871
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3286,6 +3318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &1121340222702165545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3311,6 +3344,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &1140591824539802050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3365,6 +3401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &1267063744279429417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3417,6 +3454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!1 &1317280052370988384
 GameObject:
   m_ObjectHideFlags: 0
@@ -3521,6 +3559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &1465449711790193976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3546,6 +3585,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &1489257088906323005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3606,6 +3648,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!1 &1540069911403395653
 GameObject:
   m_ObjectHideFlags: 0
@@ -3640,6 +3685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &1628820106143691066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3823,6 +3869,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!1 &1790458370488719093
 GameObject:
   m_ObjectHideFlags: 0
@@ -3949,6 +3996,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!4 &1885565632044300417
 Transform:
   m_ObjectHideFlags: 0
@@ -4038,6 +4086,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!1 &2112988483954708298
 GameObject:
   m_ObjectHideFlags: 0
@@ -4116,6 +4167,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!4 &2194679880551864084
 Transform:
   m_ObjectHideFlags: 0
@@ -4179,6 +4233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!4 &2226989568620072053
 Transform:
   m_ObjectHideFlags: 0
@@ -4206,6 +4261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &2255556960986290714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4263,7 +4319,7 @@ Transform:
   m_GameObject: {fileID: 2826888045975194124}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.05, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4334,6 +4390,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!1 &2344647468064356849
 GameObject:
   m_ObjectHideFlags: 0
@@ -4368,6 +4427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &2355024026455955883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4393,6 +4453,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &2358775623111242878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4405,6 +4468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &2439081406225841266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4475,6 +4539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!4 &2648356363988636037
 Transform:
   m_ObjectHideFlags: 0
@@ -4530,6 +4595,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!1 &2685592139301262426
 GameObject:
   m_ObjectHideFlags: 0
@@ -4623,6 +4691,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!1 &2826888045975194124
 GameObject:
   m_ObjectHideFlags: 0
@@ -5002,6 +5073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!4 &3475104726839616898
 Transform:
   m_ObjectHideFlags: 0
@@ -5167,6 +5239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &3630146285260422948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5192,6 +5265,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!224 &3659756608898525539
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5223,6 +5299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &3727652274449649248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5314,6 +5391,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &3887406845559501593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5326,6 +5406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &3890759360978190447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5364,6 +5445,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &3921016712494295437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5417,6 +5501,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &4003523585791038297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5429,6 +5516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &4027529103228536015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5474,6 +5562,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &4110579998220826579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5506,6 +5597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &4147025466640304721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5531,6 +5623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &4183718414658279988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5600,6 +5693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &4233890079261099067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5742,6 +5836,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &4427087814181948229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5780,6 +5877,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &4451379298266817571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5805,6 +5905,9 @@ MonoBehaviour:
   showSlider: 0
   showResetButton: 0
   showNextPageImg: 0
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &4480402615359583687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5995,6 +6098,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!224 &4662321037278370315
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6060,6 +6166,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &4756740781759608403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6072,6 +6181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &4764498855174970566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6228,6 +6338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &4887865916907072863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6307,6 +6418,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!1 &4949850171039506655
 GameObject:
   m_ObjectHideFlags: 0
@@ -6424,6 +6538,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &4990018696943243601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6449,6 +6566,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &5006083395730791288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6547,6 +6667,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &5088728634796874154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6559,6 +6680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &5096396408647793424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6588,6 +6710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &5156287404944170448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6668,6 +6791,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &5207248228434902636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6733,6 +6859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!1 &5265974391584759891
 GameObject:
   m_ObjectHideFlags: 0
@@ -6775,6 +6902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!4 &5342567666861376613
 Transform:
   m_ObjectHideFlags: 0
@@ -6832,6 +6960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!1 &5376020689011973087
 GameObject:
   m_ObjectHideFlags: 0
@@ -6901,6 +7030,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &5445832403944180785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7063,6 +7195,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!1 &5641377965247836751
 GameObject:
   m_ObjectHideFlags: 0
@@ -7201,6 +7336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &5954344818012558658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7301,6 +7437,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &6091384507368179074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7326,6 +7465,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &6109840842815794434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7351,6 +7493,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &6118064562058327577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7426,6 +7571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &6199063175817810699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7451,6 +7597,9 @@ MonoBehaviour:
   showSlider: 0
   showResetButton: 0
   showNextPageImg: 0
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!1 &6229825861452666954
 GameObject:
   m_ObjectHideFlags: 0
@@ -7479,6 +7628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!1 &6274724589330388179
 GameObject:
   m_ObjectHideFlags: 0
@@ -7572,6 +7722,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &6326677357944301873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7597,6 +7750,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!4 &6334693536038095718
 Transform:
   m_ObjectHideFlags: 0
@@ -7606,7 +7762,7 @@ Transform:
   m_GameObject: {fileID: 1644568809541270623}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.644}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7861,6 +8017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &6516923084532928490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7974,6 +8131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &6661141168799595081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7986,6 +8144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &6661141168799595082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8017,6 +8176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!224 &6732952133895396706
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8057,6 +8217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &6828021459210957227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8101,6 +8262,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!4 &6847596677717768804
 Transform:
   m_ObjectHideFlags: 0
@@ -8169,6 +8333,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!1 &6928425368764717517
 GameObject:
   m_ObjectHideFlags: 0
@@ -8272,6 +8439,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &6985260257680931882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8464,6 +8634,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &7281754084645999673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8476,6 +8649,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!1 &7283981948933368620
 GameObject:
   m_ObjectHideFlags: 0
@@ -8610,6 +8784,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!4 &7335855823223901336
 Transform:
   m_ObjectHideFlags: 0
@@ -8678,6 +8855,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &7393955567977406387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9098,6 +9276,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &7733800387941544033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9421,6 +9602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &7935453857452412309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9446,6 +9628,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &7935453857452412310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9510,6 +9695,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!1 &7953760029046851093
 GameObject:
   m_ObjectHideFlags: 0
@@ -9544,6 +9732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &7985119060926203956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9660,6 +9849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &8110144189683900266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9802,6 +9992,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &8278789482553564894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9874,6 +10067,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &8342466436587163747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9989,6 +10185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  treatLimitedAsTracked: 1
 --- !u!114 &8457463435790930584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10047,6 +10244,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &8574182309368663195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10159,6 +10359,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &8629653976556289502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10203,6 +10406,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &8631525144622387828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10477,6 +10683,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!4 &8764808736107754615
 Transform:
   m_ObjectHideFlags: 0
@@ -10486,7 +10695,7 @@ Transform:
   m_GameObject: {fileID: 5514075816868636451}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.816, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10969,6 +11178,9 @@ MonoBehaviour:
   showSlider: 1
   showResetButton: 1
   showNextPageImg: 1
+  treatLimitedAsTracked: 1
+  foundConfirmSeconds: 0
+  lostConfirmSeconds: 0.25
 --- !u!114 &9069944171279210161
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -266,9 +266,20 @@ public class ARMediaManager : MonoBehaviour
     // Replay and language
     // ----------------------------------------------------------------------
 
+    public void StopAudioForVFXReplay()
+    {
+        HideReplay();
+        StopAllAudio();
+    }
+
     private void OnReplayPressed()
     {
         if (_activeNode == null) return;
+
+        var vfxCtrl = _activeNode.GetComponentInParent<ARVFXPopupController>(true);
+        if (vfxCtrl != null)
+            return;
+
         HideReplay();
         StopAllAudio();
         _activeNode.StartFromBeginning();
