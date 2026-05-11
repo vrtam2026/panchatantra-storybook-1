@@ -1,27 +1,22 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Vuforia;
 
 public class VuforiaTrackHook : MonoBehaviour
 {
-    [Header("Tracking Rules")]
-    [SerializeField] private bool treatLimitedAsTracked = true;
-
-    private ARTrackedPageNode _pageNode;
+    private ARTrackedPageNode pageNode;
     private ObserverBehaviour _observer;
-
-    private bool _isTracked;
-    private bool _isDestroying;
+    private bool _pendingFound = false; // target found before node was ready
 
     private void Awake()
     {
+        Debug.Log($"[AR] Observer = {_observer}");
+
+        /*        if (pageNode == null) pageNode = GetComponent<ARTrackedPageNode>();*/
         _observer = GetComponent<ObserverBehaviour>();
     }
 
     private void OnEnable()
     {
-        if (_observer == null)
-            _observer = GetComponent<ObserverBehaviour>();
-
         if (_observer != null)
             _observer.OnTargetStatusChanged += OnTargetStatusChanged;
     }
@@ -32,79 +27,56 @@ public class VuforiaTrackHook : MonoBehaviour
             _observer.OnTargetStatusChanged -= OnTargetStatusChanged;
     }
 
-    private void OnDestroy()
-    {
-        _isDestroying = true;
-
-        if (_observer != null)
-            _observer.OnTargetStatusChanged -= OnTargetStatusChanged;
-    }
-
+    // called from CustomARHandler after model spawns
     public void SetPageNode(ARTrackedPageNode node)
     {
-        if (_isDestroying || !this) return;
+        Debug.Log($"[AR] SetPageNode called. Pending = {_pendingFound}");
 
-        _pageNode = node;
+        pageNode = node;
 
-        if (_isTracked && _pageNode != null)
-            _pageNode.NotifyFound();
+        // if target was already found before model finished downloading
+        if (_pendingFound)
+        {
+            _pendingFound = false;
+            pageNode.NotifyFound();
+        }
     }
 
+    // called from CustomARHandler when model is destroyed
     public void ClearPageNode()
     {
-        if (_isDestroying || !this) return;
-
-        if (_pageNode != null && _isTracked)
-            _pageNode.NotifyLost();
-
-        _pageNode = null;
-    }
-
-    public void ClearForReplay()
-    {
-        if (_isDestroying || !this) return;
-
-        _pageNode = null;
+        if (pageNode != null)
+            pageNode.NotifyLost();
+        pageNode = null;
+        _pendingFound = false;
     }
 
     private void OnTargetStatusChanged(ObserverBehaviour behaviour, TargetStatus targetStatus)
     {
-        if (_isDestroying || !this) return;
+        Debug.Log($"[AR] Status Changed: {targetStatus.Status}");
 
-        try
+        bool trackedNow =
+     targetStatus.Status == Status.TRACKED ||
+     targetStatus.Status == Status.EXTENDED_TRACKED;
+
+        if (trackedNow)
         {
-            bool newTrackedState = IsTrackedStatus(targetStatus);
-
-            if (newTrackedState == _isTracked)
-                return;
-
-            _isTracked = newTrackedState;
-
-            if (_pageNode == null)
-                return;
-
-            if (_isTracked)
-                _pageNode.NotifyFound();
+            if (pageNode == null)
+            {
+                Debug.Log("[AR] Target found but pageNode not ready - pending");
+                _pendingFound = true;
+            }
             else
-                _pageNode.NotifyLost();
+            {
+                Debug.Log("[AR] Target found - NotifyFound()");
+                pageNode.NotifyFound();
+            }
         }
-        catch (MissingReferenceException)
+        else
         {
-            // Vuforia can send one late callback while the object is being disabled.
+            Debug.Log("[AR] Target lost");
+            _pendingFound = false;
+            pageNode?.NotifyLost();
         }
-    }
-
-    private bool IsTrackedStatus(TargetStatus targetStatus)
-    {
-        if (targetStatus.Status == Status.TRACKED)
-            return true;
-
-        if (targetStatus.Status == Status.EXTENDED_TRACKED)
-            return true;
-
-        if (treatLimitedAsTracked && targetStatus.Status == Status.LIMITED)
-            return true;
-
-        return false;
     }
 }

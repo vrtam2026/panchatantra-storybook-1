@@ -271,13 +271,41 @@ public class CustomARHandler : MonoBehaviour
 
         _contentCompleted = true;
 
-        if (showNextPageImg)
+        /*nextPageImg?.SetActive(true);
+ StopNextPageAnim();
+ _nextPageAnimRoutine = StartCoroutine(NextPageAnimRoutine());*/
+
+        // NEW: run interaction flow first
+        if (contentControl != null)
         {
-            nextPageImg?.SetActive(true);
-            StopNextPageAnim();
-            _nextPageAnimRoutine = StartCoroutine(NextPageAnimRoutine());
+            contentControl.SetCompletionCallback(OnInteractionCompleted);
+            contentControl.PlayContent();
         }
+        else
+        {
+            // fallback if no interaction system
+            ShowNextPage();
+
+        }
+        }
+
+    void OnInteractionCompleted()
+    {
+        ShowNextPage();
     }
+
+    void ShowNextPage()
+    {
+        nextPageImg?.SetActive(true);
+        StopNextPageAnim();
+        _nextPageAnimRoutine = StartCoroutine(NextPageAnimRoutine());
+    }
+
+
+    // ----------------------------------------------------------------------
+    // CanvasGroup helpers
+    // ----------------------------------------------------------------------
+
 
     private CanvasGroup GetOrAddCanvasGroup(GameObject go)
     {
@@ -330,13 +358,14 @@ public class CustomARHandler : MonoBehaviour
 
         if (show)
         {
-            if (showBackButton) backBtn?.SetActive(true);
+            backBtn?.SetActive(true);
+            // Slider visibility controlled by canSliderRotate on this page's ModelInteraction.
+            // modelInteraction cached in Awake -- always valid, never nulled.
+            bool showSlider = modelInteraction != null && modelInteraction.canSliderRotate;
+            sliderV?.SetActive(showSlider);
+            replayButton?.SetActive(true);
+            resetButton?.SetActive(true);
 
-            bool sliderAllowed = showSlider && modelInteraction != null && modelInteraction.canSliderRotate;
-            sliderV?.SetActive(sliderAllowed);
-
-            if (showReplayButton) replayButton?.SetActive(true);
-            if (showResetButton) resetButton?.SetActive(true);
 
             SetUIInteractable(true);
         }
@@ -415,7 +444,10 @@ public class CustomARHandler : MonoBehaviour
                 _rawTracked = tracked;
                 _stableTracked = tracked;
 
-                if (tracked)
+                if (status.Status == Status.TRACKED ||
+     status.Status == Status.EXTENDED_TRACKED ||
+     status.Status == Status.LIMITED)
+
                     OnTrackingFound();
                 else
                     OnTrackingLost();
@@ -1005,8 +1037,8 @@ public class CustomARHandler : MonoBehaviour
         if (_arMediaManager != null)
             _arMediaManager.StopAudioForVFXReplay();
 
-        _pageNode?.PrepareForReplay();
-        _trackHook?.ClearForReplay();
+      //  _pageNode?.PrepareForReplay();
+      //  _trackHook?.ClearForReplay();
 
         SubscribeReveal();
 
