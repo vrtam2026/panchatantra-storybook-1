@@ -66,8 +66,7 @@ public class ModelInteraction : MonoBehaviour
     float _lastPinchDistance = 0f;
 
     public System.Action<InteractionData> OnInteraction;
-
-
+    
     public static ModelInteraction Current;
 
     // ------------------------------------------------------------------
@@ -276,14 +275,18 @@ public class ModelInteraction : MonoBehaviour
     }
 
     // ------------------------------------------------------------------
-    // Tap callback
+    // Interaction callback
     // ------------------------------------------------------------------
 
     public void EnableInteractionCallback(System.Action<InteractionData> callback)
     {
-
         Debug.Log("EnableInteractionCallback");
         OnInteraction = callback;
+    }
+
+    public void ClearInteraction()
+    {
+        OnInteraction = null;
     }
 
     // ------------------------------------------------------------------
@@ -356,4 +359,3 @@ public struct InteractionData
     public GameObject hitObject;
     public Vector2 screenPosition;
 }
-

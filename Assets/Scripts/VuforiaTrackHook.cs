@@ -1,17 +1,27 @@
+using System.Collections;
 using UnityEngine;
 using Vuforia;
 
 public class VuforiaTrackHook : MonoBehaviour
 {
+    [Header("Tracking Stability")]
+    [Tooltip("ON = if tracking is lost for a very short moment, the page will not be told to stop immediately. This reduces fast lost/found flicker for kids holding the book.")]
+    public bool keepContentVisibleOnShortTrackingLoss = true;
+
+    [Tooltip("How long to wait before treating tracking as really lost. Recommended: 0.4 to 0.8 seconds.")]
+    [Min(0f)] public float lostTrackingGraceSeconds = 0.6f;
+
     private ARTrackedPageNode pageNode;
     private ObserverBehaviour _observer;
-    private bool _pendingFound = false; // target found before node was ready
+    private Coroutine _lostTrackingRoutine;
+
+    private bool _pendingFound = false;
+    private bool _isCurrentlyTracked = false;
+    private bool _notifiedCurrentNode = false;
+    private bool _isQuitting = false;
 
     private void Awake()
     {
-        Debug.Log($"[AR] Observer = {_observer}");
-
-        /*        if (pageNode == null) pageNode = GetComponent<ARTrackedPageNode>();*/
         _observer = GetComponent<ObserverBehaviour>();
     }
 
@@ -25,58 +35,177 @@ public class VuforiaTrackHook : MonoBehaviour
     {
         if (_observer != null)
             _observer.OnTargetStatusChanged -= OnTargetStatusChanged;
+
+        StopPendingLostRoutine();
     }
 
-    // called from CustomARHandler after model spawns
+    private void OnApplicationQuit()
+    {
+        _isQuitting = true;
+        StopPendingLostRoutine();
+    }
+
+    // Called from CustomARHandler after the addressable page prefab spawns.
     public void SetPageNode(ARTrackedPageNode node)
     {
-        Debug.Log($"[AR] SetPageNode called. Pending = {_pendingFound}");
-
-        pageNode = node;
-
-        // if target was already found before model finished downloading
-        if (_pendingFound)
+        if (pageNode != node)
         {
+            pageNode = node;
+            _notifiedCurrentNode = false;
+        }
+
+        if (pageNode == null) return;
+
+        if ((_pendingFound || _isCurrentlyTracked) && !_notifiedCurrentNode)
+        {
+            StopPendingLostRoutine();
             _pendingFound = false;
+            _notifiedCurrentNode = true;
             pageNode.NotifyFound();
         }
     }
 
-    // called from CustomARHandler when model is destroyed
+    // Called from CustomARHandler when the spawned content is released.
     public void ClearPageNode()
     {
-        if (pageNode != null)
-            pageNode.NotifyLost();
+        StopPendingLostRoutine();
+
+        if (pageNode != null && _notifiedCurrentNode)
+            SafeNotifyLost();
+
         pageNode = null;
         _pendingFound = false;
+        _notifiedCurrentNode = false;
     }
 
     private void OnTargetStatusChanged(ObserverBehaviour behaviour, TargetStatus targetStatus)
     {
-        Debug.Log($"[AR] Status Changed: {targetStatus.Status}");
+        if (_isQuitting)
+            return;
 
-        bool trackedNow =
-     targetStatus.Status == Status.TRACKED ||
-     targetStatus.Status == Status.EXTENDED_TRACKED;
+        bool trackedNow = IsTrackedStatus(targetStatus.Status);
 
         if (trackedNow)
         {
+            StopPendingLostRoutine();
+            _isCurrentlyTracked = true;
+
             if (pageNode == null)
             {
-                Debug.Log("[AR] Target found but pageNode not ready - pending");
                 _pendingFound = true;
+                return;
             }
-            else
-            {
-                Debug.Log("[AR] Target found - NotifyFound()");
-                pageNode.NotifyFound();
-            }
+
+            if (_notifiedCurrentNode)
+                return;
+
+            _pendingFound = false;
+            _notifiedCurrentNode = true;
+            pageNode.NotifyFound();
         }
         else
         {
-            Debug.Log("[AR] Target lost");
+            _isCurrentlyTracked = false;
             _pendingFound = false;
-            pageNode?.NotifyLost();
+
+            if (!_notifiedCurrentNode)
+                return;
+
+            if (keepContentVisibleOnShortTrackingLoss && lostTrackingGraceSeconds > 0f)
+            {
+                if (_lostTrackingRoutine == null)
+                    _lostTrackingRoutine = VuforiaTrackHookDelayRunner.Run(NotifyLostAfterGrace());
+                return;
+            }
+
+            NotifyLostNow();
         }
+    }
+
+    private IEnumerator NotifyLostAfterGrace()
+    {
+        yield return new WaitForSeconds(lostTrackingGraceSeconds);
+        _lostTrackingRoutine = null;
+
+        if (_isQuitting || _isCurrentlyTracked)
+            yield break;
+
+        NotifyLostNow();
+    }
+
+    private void NotifyLostNow()
+    {
+        if (!_notifiedCurrentNode) return;
+
+        _notifiedCurrentNode = false;
+        SafeNotifyLost();
+    }
+
+    private void SafeNotifyLost()
+    {
+        if (pageNode == null)
+            return;
+
+        // Do not start work on a page object that is already inactive or being destroyed.
+        if (!pageNode.gameObject.activeInHierarchy)
+            return;
+
+        pageNode.NotifyLost();
+    }
+
+    private void StopPendingLostRoutine()
+    {
+        if (_lostTrackingRoutine == null) return;
+
+        VuforiaTrackHookDelayRunner.Stop(_lostTrackingRoutine);
+        _lostTrackingRoutine = null;
+    }
+
+    private static bool IsTrackedStatus(Status status)
+    {
+        return status == Status.TRACKED ||
+               status == Status.EXTENDED_TRACKED ||
+               status == Status.LIMITED;
+    }
+}
+
+internal sealed class VuforiaTrackHookDelayRunner : MonoBehaviour
+{
+    private static VuforiaTrackHookDelayRunner _instance;
+
+    private static VuforiaTrackHookDelayRunner Instance
+    {
+        get
+        {
+            if (_instance != null)
+                return _instance;
+
+            GameObject go = new GameObject("Vuforia Track Hook Delay Runner");
+            DontDestroyOnLoad(go);
+            _instance = go.AddComponent<VuforiaTrackHookDelayRunner>();
+            return _instance;
+        }
+    }
+
+    public static Coroutine Run(IEnumerator routine)
+    {
+        if (routine == null)
+            return null;
+
+        return Instance.StartCoroutine(routine);
+    }
+
+    public static void Stop(Coroutine routine)
+    {
+        if (routine == null || _instance == null)
+            return;
+
+        _instance.StopCoroutine(routine);
+    }
+
+    private void OnDestroy()
+    {
+        if (_instance == this)
+            _instance = null;
     }
 }

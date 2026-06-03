@@ -2948,6 +2948,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f88054253ad3c4facfa36ca1ca3dea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ContentController
+  activities: []
+  activityTemplateSchemaVersion: 20
+  activityPanel: {fileID: 0}
+  defaultRaycastCamera: {fileID: 0}
+  defaultAudioSource: {fileID: 0}
+  completeImmediatelyWhenNoActivities: 1
+  restartImmediatelyOnReplay: 0
+  onActivitiesStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onActivitiesCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  onActivitiesReset:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4142679318891561470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2960,7 +2976,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
-  treatLimitedAsTracked: 1
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &6775611772882681959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3006,6 +3023,7 @@ MonoBehaviour:
     popupSound: {fileID: 8300000, guid: 584d3470482353046b5ada50ee5a4611, type: 3}
     popupVolume: 0.85
     spatialBlend: 0
+  playAutomaticallyOnStart: 0
 --- !u!1 &1224728209652663157
 GameObject:
   m_ObjectHideFlags: 0

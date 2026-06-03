@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,6 +45,8 @@ public class ARMediaManager : MonoBehaviour
     private int _voiceIndex;
     private float _delayTimer;
     private float _lastLostTime = -999f;
+    private int _startRequestId = 0;
+    private int _lastReplayFrame = -1;
 
     private enum VoiceStage { None, DelayBefore, Playing, DelayAfter }
     private VoiceStage _stage = VoiceStage.None;
@@ -52,8 +54,13 @@ public class ARMediaManager : MonoBehaviour
     // Fires when voice audio fully completes — carries pageId
     public static event System.Action<string> OnVoiceCompleted;
 
+    // Fires before a page replay starts so page-specific activity/UI state can reset.
+    public static event System.Action<string> OnPageRestarted;
+
     // Current active page id -- used by OverlayManager to verify page before showing turn page
     public static string ActivePageId { get; private set; }
+
+    public bool IsVoiceSequenceActive => _stage != VoiceStage.None;
 
     // ----------------------------------------------------------------------
     // Unity lifecycle
@@ -227,8 +234,7 @@ public class ARMediaManager : MonoBehaviour
             _lastLostTime = -999f;
             HideReplay();
             StopAllAudio(); // always stop old audio before restarting
-            node.StartFromBeginning();
-            PlayPageAudioFromBeginning(node.PageId, node.LoopBgmUntilVoiceEnds, node.StopBgmWhenVoiceEnds);
+            StartNodeFromBeginningThenAudio(node);
         }
         else
         {
@@ -258,6 +264,7 @@ public class ARMediaManager : MonoBehaviour
     public void NotifyContentReleased()
     {
         _lastLostTime = -999f;
+        _startRequestId++;
         // Keep ActivePageId so isSamePage check still works correctly
         // but canResume will be false because _lastLostTime is reset
     }
@@ -266,30 +273,58 @@ public class ARMediaManager : MonoBehaviour
     // Replay and language
     // ----------------------------------------------------------------------
 
-    public void StopAudioForVFXReplay()
+    private void OnReplayPressed()
     {
-        HideReplay();
-        StopAllAudio();
+        ReplayActivePage();
     }
 
-    private void OnReplayPressed()
+    public void ReplayActivePage()
     {
         if (_activeNode == null) return;
 
-        var vfxCtrl = _activeNode.GetComponentInParent<ARVFXPopupController>(true);
-        if (vfxCtrl != null)
-            return;
+        // Protect against the same Unity button being wired to both ARMediaManager
+        // and CustomARHandler. Without this guard, one click can start two replays.
+        if (_lastReplayFrame == Time.frameCount) return;
+        _lastReplayFrame = Time.frameCount;
+
+        ARTrackedPageNode replayNode = _activeNode;
 
         HideReplay();
         StopAllAudio();
-        _activeNode.StartFromBeginning();
-        PlayPageAudioFromBeginning(_activeNode.PageId, _activeNode.LoopBgmUntilVoiceEnds, _activeNode.StopBgmWhenVoiceEnds);
+
+        OnPageRestarted?.Invoke(replayNode.PageId);
+
+        StartNodeFromBeginningThenAudio(replayNode);
+    }
+
+    private void StartNodeFromBeginningThenAudio(ARTrackedPageNode node)
+    {
+        if (node == null) return;
+
+        int requestId = ++_startRequestId;
+        ARTrackedPageNode requestedNode = node;
+
+        requestedNode.StartFromBeginning(() =>
+        {
+            if (requestId != _startRequestId) return;
+            if (_activeNode != requestedNode) return;
+            if (!requestedNode.IsTracked) return;
+            if (!requestedNode.gameObject.activeInHierarchy) return;
+            if (requestedNode.IsStoryBlockedByActivity) return;
+
+            PlayPageAudioFromBeginning(
+                requestedNode.PageId,
+                requestedNode.LoopBgmUntilVoiceEnds,
+                requestedNode.StopBgmWhenVoiceEnds
+            );
+        });
     }
 
     private void OnLanguageChanged(string newLanguage)
     {
         if (_activeNode == null) return;
         if (!_activeNode.IsTracked) return;
+        if (!_activeNode.gameObject.activeInHierarchy) return;
         HideReplay();
         StopAllAudio();
         PlayPageAudioFromBeginning(_activeNode.PageId, _activeNode.LoopBgmUntilVoiceEnds, _activeNode.StopBgmWhenVoiceEnds);
@@ -394,6 +429,7 @@ public class ARMediaManager : MonoBehaviour
         _delayTimer = 0f;
 
         if (_voiceRoutine != null) StopCoroutine(_voiceRoutine);
+        if (!isActiveAndEnabled || !gameObject.activeInHierarchy) return;
         _voiceRoutine = StartCoroutine(VoiceSequenceRoutine(pageAudio, stopBgmWhenVoiceEnds));
     }
 

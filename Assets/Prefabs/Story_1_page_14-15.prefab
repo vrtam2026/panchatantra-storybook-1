@@ -12369,7 +12369,7 @@ Transform:
   m_GameObject: {fileID: 5174538656491232886}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.404, y: -0, z: 0}
+  m_LocalPosition: {x: -0.404, y: -0, z: -0.103}
   m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -20280,7 +20280,6 @@ GameObject:
   - component: {fileID: 4508726334725379958}
   - component: {fileID: 7404337761025088735}
   - component: {fileID: 1540770600136701327}
-  - component: {fileID: 6935691879828627575}
   - component: {fileID: 9154059493207366351}
   - component: {fileID: 7429163259295510070}
   m_Layer: 0
@@ -20368,18 +20367,6 @@ MonoBehaviour:
   animatorToControl: {fileID: 9187597770502239836}
   playAnimatorWhileMoving: 1
   freezeAnimatorOnComplete: 1
---- !u!114 &6935691879828627575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8291387036808087992}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58f88054253ad3c4facfa36ca1ca3dea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ContentController
 --- !u!114 &9154059493207366351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20392,7 +20379,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
-  treatLimitedAsTracked: 1
 --- !u!114 &7429163259295510070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20438,6 +20424,7 @@ MonoBehaviour:
     popupSound: {fileID: 8300000, guid: 584d3470482353046b5ada50ee5a4611, type: 3}
     popupVolume: 0.85
     spatialBlend: 0
+  playAutomaticallyOnStart: 0
 --- !u!1 &8330956907628427184
 GameObject:
   m_ObjectHideFlags: 0

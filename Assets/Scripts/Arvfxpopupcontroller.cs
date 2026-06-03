@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -96,7 +96,6 @@ public class ARVFXPopupController : MonoBehaviour
         public Vector3 localPosition;
         public Quaternion localRotation;
         public Vector3 localScale;
-        public Vector3 visualCenterParentLocal;
     }
 
     private class SavedVFXState
@@ -120,7 +119,6 @@ public class ARVFXPopupController : MonoBehaviour
         public Vector3 modelHomeLocalPosition;
         public Quaternion modelHomeLocalRotation;
         public Vector3 modelHomeLocalScale;
-        public Vector3 modelVisualCenterParentLocal;
 
         public Vector3 visualHomeLocalPosition;
         public Quaternion visualHomeLocalRotation;
@@ -140,6 +138,19 @@ public class ARVFXPopupController : MonoBehaviour
         public bool hasFinished;
         public bool popupPlaying;
         public bool lockToHome;
+
+        public Transform originalParent;
+        public int originalSiblingIndex;
+
+        public GameObject popupAnchorObject;
+        public Transform popupAnchor;
+        public Vector3 popupAnchorHomeLocalPosition;
+        public Quaternion popupAnchorHomeLocalRotation;
+        public Vector3 popupAnchorHomeLocalScale;
+
+        public Vector3 anchoredModelLocalPosition;
+        public Quaternion anchoredModelLocalRotation;
+        public Vector3 anchoredModelLocalScale;
     }
 
     private struct PopupPose
@@ -164,6 +175,10 @@ public class ARVFXPopupController : MonoBehaviour
 
     [Header("Audio")]
     public AudioSettings audioSettings = new AudioSettings();
+
+    [Header("Startup")]
+    [Tooltip("For AR story pages keep this OFF. ARTrackedPageNode starts the reveal at the correct time.")]
+    [SerializeField] private bool playAutomaticallyOnStart = false;
 
     private const float ModelJumpHeight = 0.08f;
 
@@ -196,7 +211,10 @@ public class ARVFXPopupController : MonoBehaviour
 
     private void Start()
     {
-        BeginReveal();
+        // AR story pages are started by ARTrackedPageNode so the order is deterministic:
+        // VFX/popup first, then voice + animator + spline together.
+        if (playAutomaticallyOnStart)
+            BeginReveal();
     }
 
     private void LateUpdate()
@@ -222,6 +240,7 @@ public class ARVFXPopupController : MonoBehaviour
         _isDisabled = true;
         StopRevealAudio();
         StopAllCoroutines();
+        CleanupAllPopupAnchors(true);
         ReEnablePageMovementScriptsAfterReveal();
     }
 
@@ -230,12 +249,13 @@ public class ARVFXPopupController : MonoBehaviour
         _isDisabled = true;
         StopRevealAudio();
         StopAllCoroutines();
+        CleanupAllPopupAnchors(true);
         ReEnablePageMovementScriptsAfterReveal();
     }
 
     public void TriggerReplay()
     {
-        CustomARHandler.Current?.OnVFXReplayStarting();
+        //CustomARHandler.Current?.OnVFXReplayStarting();
         BeginReveal();
     }
 
@@ -276,6 +296,7 @@ public class ARVFXPopupController : MonoBehaviour
         _sequenceRoutine = null;
 
         StopRevealAudio();
+        CleanupAllPopupAnchors(true);
 
         ReEnablePageMovementScriptsAfterReveal();
 
@@ -320,8 +341,7 @@ public class ARVFXPopupController : MonoBehaviour
         {
             localPosition = target.localPosition,
             localRotation = target.localRotation,
-            localScale = target.localScale,
-            visualCenterParentLocal = GetVisualCenterParentLocal(target, visualRoot)
+            localScale = target.localScale
         });
     }
 
@@ -380,8 +400,6 @@ public class ARVFXPopupController : MonoBehaviour
                 modelHomeLocalPosition = modelState.localPosition,
                 modelHomeLocalRotation = modelState.localRotation,
                 modelHomeLocalScale = modelState.localScale,
-                modelVisualCenterParentLocal = modelState.visualCenterParentLocal,
-
                 visualHomeLocalPosition = visualState.localPosition,
                 visualHomeLocalRotation = visualState.localRotation,
                 visualHomeLocalScale = visualState.localScale,
@@ -391,7 +409,10 @@ public class ARVFXPopupController : MonoBehaviour
 
                 hasFinished = false,
                 popupPlaying = false,
-                lockToHome = false
+                lockToHome = false,
+
+                originalParent = model.parent,
+                originalSiblingIndex = model.GetSiblingIndex()
             };
 
             if (vfx != null && _savedVfxStates.TryGetValue(vfx, out SavedVFXState vfxState))
@@ -427,6 +448,8 @@ public class ARVFXPopupController : MonoBehaviour
 
     private void RestoreEverythingToHome()
     {
+        CleanupAllPopupAnchors(true);
+
         for (int i = 0; i < _runtimeModels.Count; i++)
         {
             RuntimeModel runtime = _runtimeModels[i];
@@ -479,6 +502,11 @@ public class ARVFXPopupController : MonoBehaviour
     private void RestoreModelHome(RuntimeModel runtime)
     {
         if (runtime == null || runtime.model == null) return;
+
+        // While the popup anchor is active, the model is temporarily parented under that anchor.
+        // Do not write the original parent-local values until the model is returned to its real parent.
+        if (runtime.popupAnchor != null && runtime.model.parent == runtime.popupAnchor)
+            return;
 
         runtime.model.localPosition = runtime.modelHomeLocalPosition;
         runtime.model.localRotation = runtime.modelHomeLocalRotation;
@@ -598,7 +626,11 @@ public class ARVFXPopupController : MonoBehaviour
             RestoreVisualHome(runtime);
             SetVisualVisible(runtime, true);
 
-            if (globalSettings.enableAnimatorsAfterReveal)
+            // If a gated activity must run immediately after reveal, do not let
+            // normal story animators start here. The page node will start them
+            // after the activity completes. Activity animations can still enable
+            // their own animator when the child taps.
+            if (globalSettings.enableAnimatorsAfterReveal && !ShouldHoldStorySystemsForActivityGate())
                 EnableAnimators(runtime);
 
             RestoreModelHome(runtime);
@@ -628,7 +660,11 @@ public class ARVFXPopupController : MonoBehaviour
 
         ForceHideAllVFX();
 
-        ReEnablePageMovementScriptsAfterReveal();
+        // Movement scripts are story systems. If an activity is configured to
+        // run after reveal and block the story, keep movement disabled until
+        // ARTrackedPageNode starts the story after the activity.
+        if (!ShouldHoldStorySystemsForActivityGate())
+            ReEnablePageMovementScriptsAfterReveal();
 
         RestoreOnlyModelsToHome();
 
@@ -724,6 +760,11 @@ public class ARVFXPopupController : MonoBehaviour
         RestoreModelHome(runtime);
         RestoreVisualHome(runtime);
 
+        // Important for multi-model pages:
+        // scale/rotation must happen around this model's own VFX circle, not around
+        // the model mesh/root pivot and not around the page center.
+        CreatePopupAnchor(runtime);
+
         SetVisualVisible(runtime, false);
         ApplyPopupPose(runtime, 0f);
 
@@ -749,6 +790,7 @@ public class ARVFXPopupController : MonoBehaviour
 
         runtime.popupPlaying = false;
 
+        DestroyPopupAnchor(runtime, true);
         RestoreModelHome(runtime);
         RestoreVisualHome(runtime);
 
@@ -839,38 +881,21 @@ public class ARVFXPopupController : MonoBehaviour
     {
         if (runtime == null || runtime.model == null) return;
 
-        RestoreModelHome(runtime);
-
         t = Mathf.Clamp01(t);
 
-        PopupPose pose;
+        PopupPose pose = GetPopupPose(runtime.item.style, t);
 
-        switch (runtime.item.style)
+        if (runtime.popupAnchor != null && runtime.model.parent == runtime.popupAnchor)
         {
-            case PopupStyle.BouncyPop:
-                pose = GetBouncyPopPose(t);
-                break;
-
-            case PopupStyle.JellyPop:
-                pose = GetJellyPopPose(t);
-                break;
-
-            case PopupStyle.HeroPop:
-                pose = GetHeroPopPose(t);
-                break;
-
-            case PopupStyle.SwirlPop:
-                pose = GetSwirlPopPose(t);
-                break;
-
-            case PopupStyle.ZoomBlastPop:
-                pose = GetZoomBlastPopPose(t);
-                break;
-
-            default:
-                pose = GetHeroPopPose(t);
-                break;
+            ApplyPopupPoseFromVFXAnchor(runtime, pose);
+            return;
         }
+
+        // Fallback for pages without a valid VFX anchor.
+        // This keeps the earlier safe behavior: no renderer-bounds center calculation.
+        RestoreModelHome(runtime);
+
+        runtime.model.localPosition = runtime.modelHomeLocalPosition;
 
         runtime.model.localScale = new Vector3(
             runtime.modelHomeLocalScale.x * pose.scaleMultiplier.x,
@@ -878,61 +903,145 @@ public class ARVFXPopupController : MonoBehaviour
             runtime.modelHomeLocalScale.z * pose.scaleMultiplier.z
         );
 
-        runtime.model.localPosition = runtime.modelHomeLocalPosition + pose.positionOffset;
         runtime.model.localRotation = runtime.modelHomeLocalRotation * Quaternion.Euler(pose.rotationOffset);
-
-        KeepVisualCenterStable(runtime, pose.positionOffset);
     }
 
-    private void KeepVisualCenterStable(RuntimeModel runtime, Vector3 popupOffset)
+    private PopupPose GetPopupPose(PopupStyle style, float t)
+    {
+        switch (style)
+        {
+            case PopupStyle.BouncyPop:
+                return GetBouncyPopPose(t);
+
+            case PopupStyle.JellyPop:
+                return GetJellyPopPose(t);
+
+            case PopupStyle.HeroPop:
+                return GetHeroPopPose(t);
+
+            case PopupStyle.SwirlPop:
+                return GetSwirlPopPose(t);
+
+            case PopupStyle.ZoomBlastPop:
+                return GetZoomBlastPopPose(t);
+
+            default:
+                return GetHeroPopPose(t);
+        }
+    }
+
+    private void CreatePopupAnchor(RuntimeModel runtime)
     {
         if (runtime == null || runtime.model == null) return;
-        if (runtime.model.parent == null) return;
 
-        Vector3 desiredCenter = runtime.modelVisualCenterParentLocal + popupOffset;
-        Vector3 currentCenter = GetVisualCenterParentLocal(runtime.model, runtime.visualRoot);
+        DestroyPopupAnchor(runtime, true);
 
-        Vector3 correction = desiredCenter - currentCenter;
-        runtime.model.localPosition += correction;
-    }
+        runtime.originalParent = runtime.model.parent;
+        runtime.originalSiblingIndex = runtime.model.GetSiblingIndex();
 
-    private Vector3 GetVisualCenterParentLocal(Transform model, Transform visualRoot)
-    {
-        if (model == null) return Vector3.zero;
+        Vector3 pivotWorldPosition = runtime.vfx != null
+            ? runtime.vfx.position
+            : runtime.model.position;
 
-        Vector3 centerWorld = GetVisualCenterWorld(visualRoot != null ? visualRoot : model);
+        GameObject anchorObject = new GameObject("__PopupAnchor_" + runtime.model.name);
+        Transform anchor = anchorObject.transform;
 
-        if (model.parent != null)
-            return model.parent.InverseTransformPoint(centerWorld);
-
-        return centerWorld;
-    }
-
-    private Vector3 GetVisualCenterWorld(Transform root)
-    {
-        if (root == null) return Vector3.zero;
-
-        Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true);
-
-        bool hasBounds = false;
-        Bounds bounds = new Bounds(root.position, Vector3.zero);
-
-        foreach (Renderer renderer in renderers)
+        if (runtime.originalParent != null)
         {
-            if (renderer == null) continue;
-
-            if (!hasBounds)
-            {
-                bounds = renderer.bounds;
-                hasBounds = true;
-            }
-            else
-            {
-                bounds.Encapsulate(renderer.bounds);
-            }
+            anchor.SetParent(runtime.originalParent, false);
+            anchor.localPosition = runtime.originalParent.InverseTransformPoint(pivotWorldPosition);
+            anchor.localRotation = Quaternion.identity;
+            anchor.localScale = Vector3.one;
+        }
+        else
+        {
+            anchor.position = pivotWorldPosition;
+            anchor.rotation = Quaternion.identity;
+            anchor.localScale = Vector3.one;
         }
 
-        return hasBounds ? bounds.center : root.position;
+        runtime.popupAnchorObject = anchorObject;
+        runtime.popupAnchor = anchor;
+        runtime.popupAnchorHomeLocalPosition = anchor.localPosition;
+        runtime.popupAnchorHomeLocalRotation = anchor.localRotation;
+        runtime.popupAnchorHomeLocalScale = anchor.localScale;
+
+        // Keep the model visually where the artist placed it while changing the popup pivot.
+        runtime.model.SetParent(anchor, true);
+
+        runtime.anchoredModelLocalPosition = runtime.model.localPosition;
+        runtime.anchoredModelLocalRotation = runtime.model.localRotation;
+        runtime.anchoredModelLocalScale = runtime.model.localScale;
+    }
+
+    private void ApplyPopupPoseFromVFXAnchor(RuntimeModel runtime, PopupPose pose)
+    {
+        if (runtime == null) return;
+        if (runtime.popupAnchor == null) return;
+        if (runtime.model == null) return;
+
+        // Keep the portal/VFX position fixed.
+        // Do not move the popup anchor away from the assigned VFX circle.
+        runtime.popupAnchor.localPosition = runtime.popupAnchorHomeLocalPosition;
+        runtime.popupAnchor.localRotation = runtime.popupAnchorHomeLocalRotation * Quaternion.Euler(pose.rotationOffset);
+
+        runtime.popupAnchor.localScale = new Vector3(
+            runtime.popupAnchorHomeLocalScale.x * pose.scaleMultiplier.x,
+            runtime.popupAnchorHomeLocalScale.y * pose.scaleMultiplier.y,
+            runtime.popupAnchorHomeLocalScale.z * pose.scaleMultiplier.z
+        );
+
+        // Keep the model's offset from the VFX anchor stable.
+        // Only the anchor is animated, so the model pops from its own VFX circle.
+        runtime.model.localPosition = runtime.anchoredModelLocalPosition;
+        runtime.model.localRotation = runtime.anchoredModelLocalRotation;
+        runtime.model.localScale = runtime.anchoredModelLocalScale;
+    }
+
+    private void DestroyPopupAnchor(RuntimeModel runtime, bool restoreModelToOriginalParent)
+    {
+        if (runtime == null) return;
+
+        Transform anchor = runtime.popupAnchor;
+
+        if (restoreModelToOriginalParent && runtime.model != null && anchor != null && runtime.model.parent == anchor)
+        {
+            runtime.model.SetParent(runtime.originalParent, false);
+
+            if (runtime.originalParent != null && runtime.model.parent == runtime.originalParent)
+            {
+                int maxIndex = runtime.originalParent.childCount - 1;
+                int safeIndex = Mathf.Clamp(runtime.originalSiblingIndex, 0, maxIndex);
+                runtime.model.SetSiblingIndex(safeIndex);
+            }
+
+            runtime.model.localPosition = runtime.modelHomeLocalPosition;
+            runtime.model.localRotation = runtime.modelHomeLocalRotation;
+            runtime.model.localScale = runtime.modelHomeLocalScale;
+        }
+
+        if (runtime.popupAnchorObject != null)
+        {
+            if (Application.isPlaying)
+                Destroy(runtime.popupAnchorObject);
+            else
+                DestroyImmediate(runtime.popupAnchorObject);
+        }
+
+        runtime.popupAnchorObject = null;
+        runtime.popupAnchor = null;
+        runtime.popupAnchorHomeLocalPosition = Vector3.zero;
+        runtime.popupAnchorHomeLocalRotation = Quaternion.identity;
+        runtime.popupAnchorHomeLocalScale = Vector3.one;
+        runtime.anchoredModelLocalPosition = Vector3.zero;
+        runtime.anchoredModelLocalRotation = Quaternion.identity;
+        runtime.anchoredModelLocalScale = Vector3.one;
+    }
+
+    private void CleanupAllPopupAnchors(bool restoreModelsToOriginalParents)
+    {
+        for (int i = 0; i < _runtimeModels.Count; i++)
+            DestroyPopupAnchor(_runtimeModels[i], restoreModelsToOriginalParents);
     }
 
     private void SetVisualVisible(RuntimeModel runtime, bool visible)
@@ -1023,7 +1132,10 @@ public class ARVFXPopupController : MonoBehaviour
             behaviour.StopAllCoroutines();
 
             TryInvokeNoArgMethod(behaviour, "Stop");
-            TryInvokeNoArgMethod(behaviour, "ResetToStart");
+
+            // Do NOT call ResetToStart() from the VFX system.
+            // ResetToStart can move the model to the spline start while popup is still running.
+            // ARTrackedPageNode resets and starts spline only after popup completion.
 
             if (behaviour.enabled)
             {
@@ -1031,6 +1143,17 @@ public class ARVFXPopupController : MonoBehaviour
                 _disabledPageMovementScripts.Add(behaviour);
             }
         }
+    }
+
+
+    private bool ShouldHoldStorySystemsForActivityGate()
+    {
+        ARTrackedPageNode pageNode = GetComponentInParent<ARTrackedPageNode>(true);
+        if (pageNode != null)
+            return pageNode.HasBlockingAfterRevealActivity();
+
+        ContentController controller = GetComponentInParent<ContentController>(true);
+        return controller != null && controller.ShouldRunBeforeStoryAfterReveal();
     }
 
     private void ReEnablePageMovementScriptsAfterReveal()

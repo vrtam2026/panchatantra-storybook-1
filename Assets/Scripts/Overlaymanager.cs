@@ -84,6 +84,7 @@ public class OverlayManager : MonoBehaviour
     // ---------------------------------------------------------------
     public CanvasGroup OverlayPanel => overlayPanel;
     public float PanelFadeInDuration => panelFadeInDuration;
+        private float PageEndDelaySeconds => pageEndDelay;
 
     // ---------------------------------------------------------------
     // STATE MACHINE
@@ -115,7 +116,13 @@ public class OverlayManager : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
+    }
+
+    /*private void OnEnable()
     {
         // Listen for voice/audio completion on any page
         ARMediaManager.OnVoiceCompleted += OnAudioCompleted;
@@ -124,9 +131,9 @@ public class OverlayManager : MonoBehaviour
     private void OnDisable()
     {
         ARMediaManager.OnVoiceCompleted -= OnAudioCompleted;
-    }
+    }*/
 
-    private void OnAudioCompleted(string pageId)
+    /*private void OnAudioCompleted(string pageId)
     {
         // Only react if this matches the CURRENTLY active page
         if (ARMediaManager.ActivePageId != pageId)
@@ -178,6 +185,28 @@ public class OverlayManager : MonoBehaviour
         if (mediaManager != null) mediaManager.StartPostVoiceBgm();
 
         ShowPageEnd();
+    }*/
+
+    public void OnStoryCompleted()
+    {
+        // Don't show while loading
+        if (LoadingScreen.Instance != null &&
+            LoadingScreen.Instance.IsShowing)
+            return;
+
+        // Already lost tracking?
+        if (_currentState == OverlayState.LostTracking)
+        {
+            _stateBeforeLost = OverlayState.PageEnd;
+            return;
+        }
+
+        var mediaManager = Object.FindFirstObjectByType<ARMediaManager>();
+
+        if (mediaManager != null)
+            mediaManager.StartPostVoiceBgm();
+
+        ShowPageEnd();
     }
 
     // ---------------------------------------------------------------
@@ -210,8 +239,9 @@ public class OverlayManager : MonoBehaviour
         // Cancel any previous pending lost tracking show
         if (_lostTrackingCoroutine != null) { StopCoroutine(_lostTrackingCoroutine); _lostTrackingCoroutine = null; }
 
-        // Delay before showing -- prevents flicker when quickly turning pages
-        if (lostTrackingDelay > 0f)
+        // Delay before showing -- prevents flicker when quickly turning pages.
+        // If this object is being disabled or destroyed, do not start a coroutine.
+        if (lostTrackingDelay > 0f && isActiveAndEnabled && gameObject.activeInHierarchy)
             _lostTrackingCoroutine = StartCoroutine(DelayThenShowLostTracking());
         else
             SetState(OverlayState.LostTracking);
@@ -310,12 +340,12 @@ public class OverlayManager : MonoBehaviour
         overlayPanel.gameObject.SetActive(true);
         overlayPanel.blocksRaycasts = false;  // overlay is display only -- never intercept taps
 
-        // Start frame cycling immediately
-        if (overlayImage != null && characters != null && characters.Count > 0)
+        // Start frame cycling immediately. Guard coroutine calls during object shutdown.
+        if (isActiveAndEnabled && gameObject.activeInHierarchy && overlayImage != null && characters != null && characters.Count > 0)
             _frameCoroutine = StartCoroutine(CycleFrames(characters, loop));
 
-        // Fade in or appear instantly
-        if (fade)
+        // Fade in or appear instantly. Guard coroutine calls during object shutdown.
+        if (fade && isActiveAndEnabled && gameObject.activeInHierarchy)
             _fadeCoroutine = StartCoroutine(FadePanel(0f, 1f, panelFadeInDuration));
         else
             overlayPanel.alpha = 1f;

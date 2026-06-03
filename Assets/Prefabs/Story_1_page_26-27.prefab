@@ -548,7 +548,6 @@ GameObject:
   - component: {fileID: 5723635297237970651}
   - component: {fileID: 3077582498067393305}
   - component: {fileID: 5794330434415903604}
-  - component: {fileID: 4894496895713134100}
   - component: {fileID: 7327140790973464828}
   m_Layer: 0
   m_Name: Story_1_page_26-27
@@ -641,23 +640,6 @@ MonoBehaviour:
   animatorToControl: {fileID: 8791258214741651218}
   playAnimatorWhileMoving: 1
   freezeAnimatorOnComplete: 1
---- !u!114 &4894496895713134100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7286989864746653179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58f88054253ad3c4facfa36ca1ca3dea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ContentController
-  steps: []
-  powerDecay: 0.5
-  powerGain: 1.5
-  leftGraffiti: {fileID: 0}
-  rightGraffiti: {fileID: 0}
 --- !u!114 &7327140790973464828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,6 +676,7 @@ MonoBehaviour:
     popupSound: {fileID: 8300000, guid: 584d3470482353046b5ada50ee5a4611, type: 3}
     popupVolume: 0.85
     spatialBlend: 0
+  playAutomaticallyOnStart: 0
 --- !u!1 &8762268012408990009
 GameObject:
   m_ObjectHideFlags: 0

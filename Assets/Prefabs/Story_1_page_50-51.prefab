@@ -4717,6 +4717,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2479331330027205716}
   - component: {fileID: 4506736363689910499}
+  - component: {fileID: 8452785392090743311}
   m_Layer: 0
   m_Name: monkey_animation
   m_TagString: Untagged
@@ -4766,6 +4767,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!65 &8452785392090743311
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3967094439979098632}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4010306118960311351
 GameObject:
   m_ObjectHideFlags: 0
@@ -5660,6 +5682,7 @@ GameObject:
   - component: {fileID: 7974411296054444495}
   - component: {fileID: 2079381800705679934}
   - component: {fileID: 921457747106326355}
+  - component: {fileID: 1319105537388822517}
   m_Layer: 0
   m_Name: Story_1_page_50-51
   m_TagString: Untagged
@@ -5728,6 +5751,220 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f88054253ad3c4facfa36ca1ca3dea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ContentController
+  activities:
+  - enabled: 1
+    activityName: help monkey
+    startWhen: 1
+    waitBeforeStart: 0
+    startKey: 
+    storyWaitObjectOrAnimator: {fileID: 0}
+    storyWaitComponent: {fileID: 0}
+    storyWaitAnimator: {fileID: 0}
+    storyWaitAnimationClip: {fileID: 0}
+    storyWaitAnimationStateName: 
+    storyWaitTimeoutSeconds: 0
+    pauseStoryWhileActivity: 0
+    instructionText: Tap to help monkey!
+    activityVoiceOver: {fileID: 0}
+    waitForActivityVoiceOver: 0
+    activityDurationAudio: {fileID: 0}
+    loopActivityDurationAudio: 0
+    activityDurationAudioVolume: 0
+    fadeActivityAudioOnEnd: 0
+    activityAudioFadeSeconds: 0
+    objectsOnWhenActivityStarts: []
+    objectsOffWhenActivityStarts: []
+    objectsOnWhenActivityCompletes: []
+    objectsOffWhenActivityCompletes: []
+    childInput: 11
+    targetObject: {fileID: 3967094439979098632}
+    targetObjects: []
+    mustTapInOrder: 0
+    requiredInputCount: 1
+    waitOnlySeconds: 0
+    activeTimeSeconds: 15
+    maxTimeToFirstInput: 0
+    helpProgressGainPerTap: 10
+    helpProgressLossPerSecond: 5
+    helpAutoContinueAfterSeconds: 5
+    helpCompleteWhenProgressFull: 1
+    helpAnimator: {fileID: 4506736363689910499}
+    helpAnimationClip: {fileID: 1827226128182048838, guid: c47275d914a745d459429a74ba0df87f, type: 3}
+    helpAnimationSpeed: 1
+    helpResetAnimationWhenProgressIsEmpty: 1
+    helpWaitForAnimationBeforeContinue: 0
+    helpTapSound: {fileID: 0}
+    helpTapSoundVolume: 0
+    progressGateCompletesBy: 1
+    progressRequiredTaps: 1
+    progressRequiredTappingSeconds: 6
+    progressTapActiveWindowSeconds: 0.5
+    progressRequiredTapsPerSecond: 3
+    progressRequiredSpeedSeconds: 5
+    progressTapSpeedWindowSeconds: 1
+    progressDropsWhenNotTapping: 1
+    progressLossPerSecond: 5
+    progressAutoStartStoryAfterSeconds: 10
+    playResultWhenProgressAutoSkips: 1
+    progressTapSound: {fileID: 0}
+    progressTapSoundVolume: 0
+    progressUseCorrectTapFeedback: 0
+    progressCorrectTapFeedbackObject: {fileID: 0}
+    progressCorrectTapFeedbackStyle: 2
+    progressCorrectMoveUpHeight: 0.04
+    progressCorrectShakeAmount: 0.03
+    progressCorrectTapFeedbackSeconds: 0.16
+    progressCorrectReturnSeconds: 0.08
+    progressUseWrongTapFeedback: 1
+    progressWrongTapText: Try tapping the highlighted object
+    progressWrongTapSound: {fileID: 0}
+    progressWrongTapSoundVolume: 1
+    progressPulseCorrectObjectOnWrongTap: 1
+    progressShakeWrongTappedObject: 0
+    progressWrongShakeAmount: 0.03
+    progressWrongTapFeedbackSeconds: 0.18
+    progressWrongReturnSeconds: 0.08
+    progressUseReactionSequence: 0
+    progressReactionAnimator: {fileID: 0}
+    progressReactionAnimations: []
+    progressReactionOrder: 0
+    progressReactionPlaybackMode: 0
+    progressReactionMinimumGapSeconds: 0.15
+    progressReactionAnimationSpeed: 1
+    progressUseHelperAnimationWhileTapping: 1
+    progressHelperAnimator: {fileID: 4506736363689910499}
+    progressHelperAnimations:
+    - {fileID: 1827226128182048838, guid: 461840b0d13eb2d49b30b86b43a2e2eb, type: 3}
+    - {fileID: 1827226128182048838, guid: 76411290957b2ff4fb6e28fa56d117ed, type: 3}
+    - {fileID: 1827226128182048838, guid: 13e8cdecda34264418b19d716c096a71, type: 3}
+    progressHelperAnimationSelection: 1
+    progressHelperSelectedAnimationNumber: 1
+    progressHelperAnimationSpeed: 1
+    progressHelperLoopAnimation: 1
+    progressHelperPauseWhenNotTapping: 1
+    progressHelperResetWhenProgressEmpty: 1
+    resultAnimator: {fileID: 4506736363689910499}
+    resultAnimationClip: {fileID: 1827226128182048838, guid: c47275d914a745d459429a74ba0df87f, type: 3}
+    resultAnimationSpeed: 0.3
+    waitForResultAnimation: 0
+    resultVoiceOver: {fileID: 0}
+    resultVoiceVolume: 0
+    waitForResultVoiceOver: 0
+    resultSoundEffect: {fileID: 0}
+    resultSoundVolume: 0
+    waitForResultSound: 0
+    resultExtraWaitSeconds: 0
+    groupCompletionMode: 0
+    targetActions: []
+    groupTapObjects: []
+    groupRequiredObjects: []
+    groupRequiredObjectCount: 1
+    groupIgnoreRepeatTaps: 1
+    groupRepeatTapMessage: Already done. Tap another one.
+    groupPlayOnlyTappedObjectAction: 1
+    groupActions: []
+    groupAutoStartStoryAfterSeconds: 0
+    groupPlayActionsWhenAutoSkipped: 0
+    groupWaitSecondsBeforeStory: 0
+    groupResultVoiceOver: {fileID: 0}
+    groupResultVoiceVolume: 0
+    groupWaitForVoiceOver: 0
+    storyMomentTapObject: {fileID: 0}
+    storyMomentCompletesBy: 0
+    storyMomentRequiredTaps: 5
+    storyMomentRequiredTappingSeconds: 5
+    storyMomentTapActiveWindowSeconds: 0.35
+    storyMomentShowProgressBar: 1
+    storyMomentTotalActivitySeconds: 30
+    storyMomentShowHintAfterSeconds: 5
+    storyMomentSkipAfterHintSeconds: 10
+    storyMomentHintText: Tap the highlighted object
+    storyMomentTapSound: {fileID: 0}
+    storyMomentTapSoundVolume: 1
+    storyMomentProgressDropsIfChildStops: 0
+    storyMomentProgressDropSpeed: 15
+    storyMomentMovingObject: {fileID: 0}
+    storyMomentMoveUpHeight: 0.25
+    storyMomentMoveSmoothness: 12
+    storyMomentSlowTapShake: 0.01
+    storyMomentFastTapShake: 0.05
+    storyMomentTapShakeSeconds: 0.12
+    storyMomentFastTapSpeed: 5
+    storyMomentTapSpeedWindowSeconds: 1
+    storyMomentObjectBeforeComplete: {fileID: 0}
+    storyMomentObjectAfterComplete: {fileID: 0}
+    storyMomentBreakShakeAmount: 0.08
+    storyMomentBreakShakeSeconds: 0.45
+    storyMomentSwitchAtShakePercent: 0.5
+    storyMomentDropBackSeconds: 0.45
+    storyMomentBreakSound: {fileID: 0}
+    storyMomentBreakSoundVolume: 1
+    storyMomentExtraWaitAfterComplete: 0.2
+    storyMomentWrongTapText: Tap the highlighted object
+    storyMomentWrongTapSound: {fileID: 0}
+    storyMomentWrongTapSoundVolume: 1
+    showHintWhenWrongInput: 1
+    wrongInputHintText: Try tapping the highlighted object
+    wrongInputSound: {fileID: 0}
+    wrongInputSoundVolume: 1
+    enableNoInputHelp: 1
+    noInputHintAfterSeconds: 3
+    noInputHintText: Try the highlighted object
+    noInputActionAfterHint: 2
+    autoSkipAfterHintSeconds: 3
+    useSameHintEffectsForNoInput: 1
+    pulseTargetObject: 1
+    targetPulseScale: 1.18
+    targetPulseRepeatCount: 3
+    targetPulseSeconds: 0.45
+    tintTargetObject: 0
+    targetTintColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    targetTintRepeatCount: 3
+    targetTintSeconds: 0.45
+    showHintObject: 0
+    hintObject: {fileID: 0}
+    hintObjectSeconds: 1.5
+    nextInputRule: 0
+    nextInputDelaySeconds: 0
+    showTimerProgress: 0
+    choiceOptions: []
+    optionTexts: []
+    correctOptionIndex: 0
+    choiceCorrectBehaviour: 0
+    choiceWrongOptionBehaviour: 1
+    choiceHideUiWhileResultPlays: 1
+    choiceBlockInputWhileResultPlays: 1
+    choiceReturnQuestionAfterWrong: 1
+    reactions: []
+    finishWhen: 1
+    waitForRunningReactionsBeforeFinish: 1
+    continueAfterComplete: 1
+    retryIfFailed: 0
+    successMessage: 
+    tryAgainMessage: 
+    successMessageSeconds: 0
+    maxReactionWaitSeconds: 15
+    onActivityStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    onActivityCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  activityTemplateSchemaVersion: 20
+  activityPanel: {fileID: 0}
+  defaultRaycastCamera: {fileID: 0}
+  defaultAudioSource: {fileID: 1319105537388822517}
+  completeImmediatelyWhenNoActivities: 1
+  restartImmediatelyOnReplay: 0
+  onActivitiesStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onActivitiesCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  onActivitiesReset:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2079381800705679934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5740,7 +5977,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
-  treatLimitedAsTracked: 1
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &921457747106326355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5777,6 +6015,104 @@ MonoBehaviour:
     popupSound: {fileID: 8300000, guid: 584d3470482353046b5ada50ee5a4611, type: 3}
     popupVolume: 0.85
     spatialBlend: 0
+  playAutomaticallyOnStart: 0
+--- !u!82 &1319105537388822517
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4586934718643556723}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &4598931269773238720
 GameObject:
   m_ObjectHideFlags: 0

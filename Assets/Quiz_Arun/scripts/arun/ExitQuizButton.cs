@@ -16,6 +16,6 @@ public class ExitQuizButton : MonoBehaviour
             Debug.LogWarning("[ExitQuizButton] CustomARHandler.Current is null.");
             return;
         }
-        CustomARHandler.Current.ExitQuiz();
+       // CustomARHandler.Current.ExitQuiz();
     }
 }
