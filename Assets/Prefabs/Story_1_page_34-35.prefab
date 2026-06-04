@@ -3683,7 +3683,7 @@ MonoBehaviour:
     storyWaitAnimationStateName: 
     storyWaitTimeoutSeconds: 0
     pauseStoryWhileActivity: 0
-    instructionText: Tap to bull to animate
+    instructionText: Tap on the Bull to make him MOO
     activityVoiceOver: {fileID: 0}
     waitForActivityVoiceOver: 0
     activityDurationAudio: {fileID: 0}
@@ -3701,7 +3701,7 @@ MonoBehaviour:
     mustTapInOrder: 0
     requiredInputCount: 1
     waitOnlySeconds: 0
-    activeTimeSeconds: 25
+    activeTimeSeconds: 18
     maxTimeToFirstInput: 0
     helpProgressGainPerTap: 20
     helpProgressLossPerSecond: 25
@@ -3723,7 +3723,7 @@ MonoBehaviour:
     progressTapSpeedWindowSeconds: 1
     progressDropsWhenNotTapping: 1
     progressLossPerSecond: 25
-    progressAutoStartStoryAfterSeconds: 8
+    progressAutoStartStoryAfterSeconds: 0
     playResultWhenProgressAutoSkips: 1
     progressTapSound: {fileID: 0}
     progressTapSoundVolume: 1
@@ -3755,10 +3755,12 @@ MonoBehaviour:
     progressHelperAnimations: []
     progressHelperAnimationSelection: 1
     progressHelperSelectedAnimationNumber: 1
+    progressHelperSelectedAnimationNumbers: 1
     progressHelperAnimationSpeed: 1
     progressHelperLoopAnimation: 1
     progressHelperPauseWhenNotTapping: 1
     progressHelperResetWhenProgressEmpty: 0
+    progressAutoFinishAfterNoTapSeconds: 5
     resultAnimator: {fileID: 0}
     resultAnimationClip: {fileID: 0}
     resultAnimationSpeed: 1
@@ -3770,6 +3772,18 @@ MonoBehaviour:
     resultSoundVolume: 1
     waitForResultSound: 0
     resultExtraWaitSeconds: 0
+    resultUseActivityTransform: 0
+    resultPreviewActivityTransformInEditor: 0
+    resultObjectToMoveOrScale: {fileID: 0}
+    resultCopyTransformFrom: {fileID: 0}
+    resultActivityPosition: {x: 0, y: 0, z: 0}
+    resultActivityRotationEuler: {x: 0, y: 0, z: 0}
+    resultActivityScale: {x: 1, y: 1, z: 1}
+    resultRestoreTransformAfterAction: 1
+    resultHasSavedStoryPose: 0
+    resultStoryPosition: {x: 0, y: 0, z: 0}
+    resultStoryRotationEuler: {x: 0, y: 0, z: 0}
+    resultStoryScale: {x: 1, y: 1, z: 1}
     groupCompletionMode: 0
     targetActions: []
     groupTapObjects: []
@@ -3779,7 +3793,7 @@ MonoBehaviour:
     groupRepeatTapMessage: Already done. Tap another one.
     groupPlayOnlyTappedObjectAction: 1
     groupActions: []
-    groupAutoStartStoryAfterSeconds: 8
+    groupAutoStartStoryAfterSeconds: 0
     groupPlayActionsWhenAutoSkipped: 0
     groupWaitSecondsBeforeStory: 0
     groupResultVoiceOver: {fileID: 0}
@@ -3790,7 +3804,7 @@ MonoBehaviour:
     storyMomentRequiredTaps: 5
     storyMomentRequiredTappingSeconds: 5
     storyMomentTapActiveWindowSeconds: 0.35
-    storyMomentShowProgressBar: 1
+    storyMomentShowProgressBar: 0
     storyMomentTotalActivitySeconds: 30
     storyMomentShowHintAfterSeconds: 5
     storyMomentSkipAfterHintSeconds: 10
@@ -3820,19 +3834,19 @@ MonoBehaviour:
     storyMomentWrongTapSound: {fileID: 0}
     storyMomentWrongTapSoundVolume: 1
     showHintWhenWrongInput: 1
-    wrongInputHintText: Try tapping the highlighted object
+    wrongInputHintText: Tap on the Bull to make him MOO
     wrongInputSound: {fileID: 0}
     wrongInputSoundVolume: 1
     enableNoInputHelp: 1
     noInputHintAfterSeconds: 5
-    noInputHintText: Try the highlighted object
-    noInputActionAfterHint: 2
+    noInputHintText: Tap on the Bull to make him MOO
+    noInputActionAfterHint: 3
     autoSkipAfterHintSeconds: 5
     useSameHintEffectsForNoInput: 1
     pulseTargetObject: 1
-    targetPulseScale: 1.12
-    targetPulseRepeatCount: 2
-    targetPulseSeconds: 0.25
+    targetPulseScale: 1.56
+    targetPulseRepeatCount: 3
+    targetPulseSeconds: 0.5
     tintTargetObject: 0
     targetTintColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     targetTintRepeatCount: 2
@@ -3842,6 +3856,12 @@ MonoBehaviour:
     hintObjectSeconds: 1.5
     nextInputRule: 0
     nextInputDelaySeconds: 0
+    useProgressBar: 0
+    progressBarFillMode: 0
+    progressBarBehavior: 0
+    progressGoDownPercentPerSecond: 10
+    progressMinimumPercent: 0
+    resultPlayTiming: 1
     showTimerProgress: 0
     choiceOptions: []
     optionTexts: []
@@ -3857,6 +3877,13 @@ MonoBehaviour:
       type: 1
       playWhen: 1
       visualEffectPlayMode: 0
+      hideSourceObjectsUntilPlayed: 1
+      spawnAreaMode: 0
+      pageSpreadSize: {x: 1.2, y: 0.7}
+      rectangleSpawnArea: {fileID: 0}
+      rectangleSpawnAreaSize: {x: 1.8, y: 0.05, z: 1.2}
+      fadeOutSpawnedObjects: 1
+      fadeOutSeconds: 0.35
       startDelaySeconds: 0
       extraWaitSeconds: 0
       cooldownSeconds: 0
@@ -3879,8 +3906,33 @@ MonoBehaviour:
       objectLaunchForce: 0
       randomizeObjectRotation: 1
       keepSpawnedObjectsInWorldSpace: 0
+      make3DObjectsFall: 0
+      fallingMotion: 3
+      fallDistance: 1.2
+      fallDurationSeconds: 1.6
+      randomStartDelayMaxSeconds: 0.35
+      randomFallTimeExtraSeconds: 0.5
+      fallSpreadSideways: 0.25
+      fallSpinDegrees: 180
+      fallFlutterAmount: 0.08
+      randomScaleMin: 0.85
+      randomScaleMax: 1.15
+      useActivityTransform: 1
+      previewActivityTransformInEditor: 0
+      objectToMoveOrScale: {fileID: 0}
+      copyTransformFrom: {fileID: 0}
+      activityPosition: {x: -0.429, y: 0, z: 0.098}
+      activityRotationEuler: {x: 0, y: 212.86241, z: 0}
+      activityScale: {x: 0.45000002, y: 0.45000002, z: 0.45000002}
+      restoreTransformAfterAction: 1
+      hasSavedStoryPose: 1
+      storyPosition: {x: -0.429, y: 0, z: 0.098}
+      storyRotationEuler: {x: 0, y: 212.86241, z: 0}
+      storyScale: {x: 0.45000002, y: 0.45000002, z: 0.45000002}
       animator: {fileID: 792052787445638243}
       animationClip: {fileID: 7400000, guid: 4cd502e5f312f874bbe110a1b9028a61, type: 2}
+      animationClips: []
+      animationPlayMode: 0
       animationSpeed: 1
       doNotRestartWhilePlaying: 1
       blocksNextInput: 0
@@ -3899,7 +3951,7 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       waitUntilFinished: 1
-      showAdvancedOptions: 1
+      showAdvancedOptions: 0
     finishWhen: 1
     waitForRunningReactionsBeforeFinish: 1
     continueAfterComplete: 1
@@ -3914,7 +3966,7 @@ MonoBehaviour:
     onActivityCompleted:
       m_PersistentCalls:
         m_Calls: []
-  activityTemplateSchemaVersion: 20
+  activityTemplateSchemaVersion: 33
   activityPanel: {fileID: 0}
   defaultRaycastCamera: {fileID: 0}
   defaultAudioSource: {fileID: 9039544799659621362}
@@ -4681,7 +4733,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4731856555292945408}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.9591601, z: -0, w: -0.28286391}
+  m_LocalRotation: {x: 0, y: 0.9591601, z: 0, w: -0.2828639}
   m_LocalPosition: {x: -0.429, y: 0, z: 0.098}
   m_LocalScale: {x: 0.45000002, y: 0.45000002, z: 0.45000002}
   m_ConstrainProportionsScale: 1

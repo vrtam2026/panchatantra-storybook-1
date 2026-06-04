@@ -10,6 +10,7 @@ public class ContentControllerEditor : Editor
     {
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         AssemblyReloadEvents.beforeAssemblyReload += RestoreAllActivityTransformPreviewsStatic;
+        AssemblyReloadEvents.beforeAssemblyReload += ClearVisualEffectEditorPreview;
     }
 
     private static void OnPlayModeStateChanged(PlayModeStateChange state)
@@ -18,6 +19,7 @@ public class ContentControllerEditor : Editor
         {
             RestoreAllActivityTransformPreviewsStatic();
             RestoreSavedActivityPreviewPosesOnAllControllers();
+            ClearVisualEffectEditorPreview();
         }
     }
 
@@ -36,6 +38,7 @@ public class ContentControllerEditor : Editor
     private bool showControllerEvents;
     private bool showAdvancedTemplates;
     private bool showOldGroupSetup;
+    private bool showAdvancedActivitySetup;
 
 
     private struct ActivityTransformPreviewSnapshot
@@ -45,7 +48,30 @@ public class ContentControllerEditor : Editor
         public Vector3 localScale;
     }
 
+    private class VisualEffectEditorPreviewItem
+    {
+        public GameObject go;
+        public Vector3 startPosition;
+        public Vector3 sideDirection;
+        public Quaternion startRotation;
+        public float startedAt;
+        public bool hasStarted;
+        public float duration;
+        public float distance;
+        public float sideMovement;
+        public float flutter;
+        public float spin;
+        public FallingObjectMotion motion;
+        public float seed;
+    }
+
+    private static readonly List<VisualEffectEditorPreviewItem> visualEffectEditorPreviewItems = new List<VisualEffectEditorPreviewItem>();
+    private static bool visualEffectEditorPreviewUpdateRegistered;
     private static readonly Dictionary<int, ActivityTransformPreviewSnapshot> activityTransformPreviewSnapshots = new Dictionary<int, ActivityTransformPreviewSnapshot>();
+    private static bool hasActivityTransformClipboard;
+    private static Vector3 activityTransformClipboardPosition;
+    private static Vector3 activityTransformClipboardRotation;
+    private static Vector3 activityTransformClipboardScale = Vector3.one;
     private readonly HashSet<int> activePreviewTargetsThisDraw = new HashSet<int>();
 
     private enum BeginnerInteractionMain
@@ -284,30 +310,119 @@ public class ContentControllerEditor : Editor
 
     private static readonly ActivityNoInputAction[] NoInputActionValues =
     {
-        ActivityNoInputAction.DoNothing,
-        ActivityNoInputAction.ShowHintOnly,
-        ActivityNoInputAction.SkipActivityAndContinue
+        ActivityNoInputAction.AutoPlayResultThenContinue,
+        ActivityNoInputAction.SkipActivityAndContinue,
+        ActivityNoInputAction.DoNothing
     };
 
     private static readonly string[] NoInputActionLabels =
     {
-        "Do Nothing",
-        "Show Hint Only",
-        "Skip Activity And Continue"
+        "Auto Play Activity Result Then Continue",
+        "Skip Activity And Continue",
+        "Do Nothing"
+    };
+
+
+    private static readonly ActivityProgressBarFillMode[] ProgressBarFillValues =
+    {
+        ActivityProgressBarFillMode.FollowInputProgress,
+        ActivityProgressBarFillMode.FollowActivityTime,
+        ActivityProgressBarFillMode.FillWhenResultPlays
+    };
+
+    private static readonly string[] ProgressBarFillLabels =
+    {
+        "Child Input",
+        "Time",
+        "Result Animation"
+    };
+
+    private static readonly ActivityProgressBarBehavior[] ProgressBehaviorValues =
+    {
+        ActivityProgressBarBehavior.OnlyFillUp,
+        ActivityProgressBarBehavior.GoDownIfChildStops,
+        ActivityProgressBarBehavior.FillWithTime,
+        ActivityProgressBarBehavior.FillDuringResult,
+        ActivityProgressBarBehavior.AdvancedCustom
+    };
+
+    private static readonly string[] ProgressBehaviorLabels =
+    {
+        "Keep Filling Only",
+        "Go Down When Child Stops",
+        "Fill By Time",
+        "Fill While Result Plays",
+        "Advanced Custom"
+    };
+
+    private static readonly ActivityResultPlayTiming[] ResultPlayTimingValues =
+    {
+        ActivityResultPlayTiming.OnEveryCorrectInput,
+        ActivityResultPlayTiming.AfterRequiredInputs,
+        ActivityResultPlayTiming.WhenProgressIsFull,
+        ActivityResultPlayTiming.WhileChildIsInteracting,
+        ActivityResultPlayTiming.AfterNoInputAutoPlay
+    };
+
+    private static readonly string[] ResultPlayTimingLabels =
+    {
+        "Play Every Time Child Does It",
+        "Play After Needed Inputs",
+        "Play When Bar Is Full",
+        "Play While Child Is Doing It",
+        "Play Only After No Input"
+    };
+
+    private static readonly ActivityReactionAnimationPlayMode[] ReactionAnimationPlayModeValues =
+    {
+        ActivityReactionAnimationPlayMode.SelectedClipOnly,
+        ActivityReactionAnimationPlayMode.RandomClip,
+        ActivityReactionAnimationPlayMode.AllTogether,
+        ActivityReactionAnimationPlayMode.AllOneByOne
+    };
+
+    private static readonly string[] ReactionAnimationPlayModeLabels =
+    {
+        "Selected Clip Only",
+        "Pick One Random Clip",
+        "Play All Together",
+        "Play All One By One"
+    };
+
+    private static readonly ActivityVfxSpawnAreaMode[] VfxSpawnAreaValues =
+    {
+        ActivityVfxSpawnAreaMode.FromSourceOrSpawnPoint,
+        ActivityVfxSpawnAreaMode.SpreadAcrossPage,
+        ActivityVfxSpawnAreaMode.InsideRectangleArea
+    };
+
+    private static readonly string[] VfxSpawnAreaLabels =
+    {
+        "From One Place",
+        "Spread Across Page",
+        "Inside Rectangle Area"
     };
 
     private static readonly ProgressGatePreviewAnimationSelectionMode[] ProgressHelperSelectionValues =
     {
         ProgressGatePreviewAnimationSelectionMode.UseFirstAnimation,
         ProgressGatePreviewAnimationSelectionMode.PickRandomAnimationOnce,
-        ProgressGatePreviewAnimationSelectionMode.UseSelectedAnimationNumber
+        ProgressGatePreviewAnimationSelectionMode.UseSelectedAnimationNumber,
+        ProgressGatePreviewAnimationSelectionMode.PlaySelectedAnimationNumbers,
+        ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsInOrder,
+        ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsByProgress,
+        ProgressGatePreviewAnimationSelectionMode.PlaySelectedNumbersByProgress
     };
 
     private static readonly string[] ProgressHelperSelectionLabels =
     {
-        "Use First Helper Animation",
-        "Pick One Random Helper Animation",
-        "Use Selected Helper Animation Number"
+        "Use First Animation",
+        "Pick One Random Animation",
+        "Play One Animation Number",
+        "Play Selected Animation Numbers",
+        "Play All Animations One By One",
+        "Change Animation With Progress",
+        "Change Selected Animations With Progress"
     };
 
     private static readonly ActivityFinishRule[] FinishValues =
@@ -366,6 +481,22 @@ public class ContentControllerEditor : Editor
         "Add New Effect Each Input",
         "Restart The Same Effect",
         "Wait Until Previous Effect Finishes"
+    };
+
+    private static readonly FallingObjectMotion[] FallingObjectMotionValues =
+    {
+        FallingObjectMotion.GentleFall,
+        FallingObjectMotion.SwirlFall,
+        FallingObjectMotion.BounceFall,
+        FallingObjectMotion.FlutterFall
+    };
+
+    private static readonly string[] FallingObjectMotionLabels =
+    {
+        "Gentle Fall",
+        "Magic Swirl Fall",
+        "Bouncy Fall",
+        "Flower Shower Natural"
     };
 
     private static readonly ActivityReactionMoment[] MomentValues =
@@ -540,7 +671,7 @@ public class ContentControllerEditor : Editor
         EditorGUILayout.Space(4);
         EditorGUILayout.LabelField("Story Activity Builder", EditorStyles.boldLabel);
         EditorGUILayout.HelpBox(
-            "Phase A runtime foundation v20 active. Includes safe migration refresh, teacher-mode setup checks, auto-fix colliders, replay-safe scenario cleanup, and clearer Activity 7 scenario setup.",
+            "No-coder template mode. Choose only what this activity needs. Optional features stay hidden until enabled. Input setup and Result Actions are separate so changing input does not remove the assigned result.",
             MessageType.Info);
 
         EditorGUILayout.BeginHorizontal();
@@ -661,19 +792,21 @@ public class ContentControllerEditor : Editor
             return;
         }
 
-        DrawActivitySetupCheck(activity);
-
         DrawStepBox("1. Activity", "Name this activity clearly. Turn it off only if you want to keep the setup but not run it.");
         EditorGUILayout.PropertyField(enabled, TipContent("Use This Activity"));
         EditorGUILayout.PropertyField(name, TipContent("Activity Name"));
 
         DrawStartSection(activity);
         DrawInstructionSection(activity);
-
         DrawInputSection(activity);
         DrawHelpAndTimeoutSection(activity);
         DrawReactionSection(activity);
+        DrawProgressBarSection(activity);
+        DrawWrongFeedbackSection(activity);
         DrawFinishSection(activity);
+
+        DrawStepBox("11. Setup Check", "This tells a non-coder what is missing before testing the activity.");
+        DrawActivitySetupCheck(activity);
         DrawObjectStateSection(activity);
 
         EditorGUILayout.EndVertical();
@@ -1222,7 +1355,7 @@ public class ContentControllerEditor : Editor
             case OneObjectCompletion.ProgressReachesFull:
                 input.enumValueIndex = (int)ActivityInputKind.ProgressGate;
                 activity.FindPropertyRelative("finishWhen").enumValueIndex = (int)ActivityFinishRule.AfterActiveTimeEnds;
-                activity.FindPropertyRelative("showTimerProgress").boolValue = true;
+                activity.FindPropertyRelative("useProgressBar").boolValue = true;
                 break;
             case OneObjectCompletion.StoryPausesThenTapObject:
                 input.enumValueIndex = (int)ActivityInputKind.WaitForStoryThenTapObject;
@@ -1481,9 +1614,7 @@ public class ContentControllerEditor : Editor
 
         EditorGUILayout.Space(4);
         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-
-        EditorGUILayout.LabelField("Activity Position Optional", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(useTransform, TipContent("Move This Model During Activity", "ON = this model uses a temporary position, rotation, and scale only while this activity is active."));
+        EditorGUILayout.PropertyField(useTransform, TipContent("Move This Model Only During Activity", "Optional. OFF = never touch the story model position, rotation, or scale. ON = use a temporary activity pose only while this activity is active."));
 
         SerializedProperty preview = action.FindPropertyRelative("previewActivityTransformInEditor");
         if (!useTransform.boolValue)
@@ -1493,77 +1624,96 @@ public class ContentControllerEditor : Editor
                 preview.boolValue = false;
                 RestorePreviewForAction(action);
             }
-            EditorGUILayout.HelpBox("OFF = story, VFX, popup, and activity all use the normal model position.", MessageType.None);
+            EditorGUILayout.HelpBox("OFF = this activity must not move, rotate, or scale this model. The story position should stay unchanged.", MessageType.None);
             EditorGUILayout.EndVertical();
             return;
         }
 
         Transform previewTarget = ResolveActivityTransformTargetFromSerialized(action);
         if (previewTarget == null)
-        {
-            EditorGUILayout.HelpBox("Assign an Animator above first. The template will use that model automatically.", MessageType.Warning);
-        }
+            EditorGUILayout.HelpBox("Assign an Animator or model above first. Then this section can move that model only during the activity.", MessageType.Warning);
         else
-        {
-            EditorGUILayout.HelpBox("Target: " + previewTarget.name + ". Story/VFX use the saved Story Position. Activity Position is applied only after the activity starts.", MessageType.None);
-        }
+            EditorGUILayout.HelpBox("This affects only activity time. VFX, popup and story stay in the normal story position.", MessageType.None);
 
         EditorGUI.indentLevel++;
 
         SerializedProperty overrideObject = action.FindPropertyRelative("objectToMoveOrScale");
         Animator actionAnimator = action.FindPropertyRelative("animator") != null ? action.FindPropertyRelative("animator").objectReferenceValue as Animator : null;
         if (actionAnimator == null || overrideObject.objectReferenceValue != null)
-        {
-            EditorGUILayout.PropertyField(overrideObject, TipContent("Different Object Optional", "Usually leave empty. The assigned Animator model is used automatically."));
-        }
+            EditorGUILayout.PropertyField(overrideObject, TipContent("Model To Move Optional", "Usually leave empty. The assigned Animator model is used automatically."));
 
-        SerializedProperty copyFrom = action.FindPropertyRelative("copyTransformFrom");
-        EditorGUILayout.PropertyField(copyFrom, TipContent("Copy From Helper Optional", "Optional. Drag an empty helper Transform if you prefer placing a helper in the Scene."));
-
-        if (copyFrom.objectReferenceValue == null)
-        {
-            EditorGUILayout.PropertyField(action.FindPropertyRelative("activityPosition"), TipContent("Activity Position", "Temporary local position used only while this activity is active."));
-            EditorGUILayout.PropertyField(action.FindPropertyRelative("activityRotationEuler"), TipContent("Activity Rotation", "Temporary local rotation used only while this activity is active."));
-            EditorGUILayout.PropertyField(action.FindPropertyRelative("activityScale"), TipContent("Activity Scale", "Temporary scale used only while this activity is active."));
-        }
-
-        EditorGUILayout.PropertyField(action.FindPropertyRelative("restoreTransformAfterAction"), TipContent("Return To Story Position After Activity", "Keep ON. The model returns to its saved story position when the activity finishes, resets, or replay starts."));
+        EditorGUILayout.PropertyField(action.FindPropertyRelative("activityPosition"), TipContent("Activity Position"));
+        EditorGUILayout.PropertyField(action.FindPropertyRelative("activityRotationEuler"), TipContent("Activity Rotation"));
+        EditorGUILayout.PropertyField(action.FindPropertyRelative("activityScale"), TipContent("Activity Scale"));
+        EditorGUILayout.PropertyField(action.FindPropertyRelative("restoreTransformAfterAction"), TipContent("Return To Story Position After Activity"));
 
         if (preview != null)
         {
             EditorGUILayout.Space(4);
-            EditorGUILayout.LabelField("Easy Setup", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Easy Position Buttons", EditorStyles.boldLabel);
 
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button(TipContent("1. Save Story Position", "Use this while the model is in the normal story/VFX position. This is where the model returns after activity.")))
-                SaveStoryPoseFromCurrentScene(action);
-            if (GUILayout.Button(TipContent("2. Back To Story Position", "Restores the model to the saved story position and turns preview off.")))
+            if (GUILayout.Button(TipContent("Use Current Position", "Move the model in the Scene view, then click this. This saves the current pose as the activity pose.")))
+                CaptureActivityPoseFromCurrentScene(action);
+            if (GUILayout.Button(TipContent("Back To Story Position", "Turns preview off and returns the model to its normal story position.")))
             {
                 preview.boolValue = false;
                 RestorePreviewForAction(action);
             }
             EditorGUILayout.EndHorizontal();
 
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button(TipContent("Copy Position", "Copies the current Activity Position, Rotation and Scale so you can paste it into another action.")))
+                CopyActivityTransformToClipboard(action);
+            EditorGUI.BeginDisabledGroup(!hasActivityTransformClipboard);
+            if (GUILayout.Button(TipContent("Paste Position", "Pastes copied Activity Position, Rotation and Scale into this action.")))
+                PasteActivityTransformFromClipboard(action);
+            EditorGUI.EndDisabledGroup();
+            if (GUILayout.Button(TipContent("Clear", "Resets Activity Position to 0, Rotation to 0, and Scale to 1.")))
+                ClearActivityTransform(action);
+            EditorGUILayout.EndHorizontal();
+
             EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(preview, TipContent("Preview / Edit Activity Position In Scene", "ON = show the temporary activity pose in Scene view. Turn OFF or click Back To Story Position before checking story/VFX."));
+            EditorGUILayout.PropertyField(preview, TipContent("Preview Position", "ON = show the activity position in Scene view while setting up. OFF = go back to story position."));
             if (EditorGUI.EndChangeCheck())
             {
-                if (preview.boolValue && previewTarget != null)
-                    EnsureSavedStoryPose(action, previewTarget);
+                if (preview.boolValue)
+                    ApplyEditorPreviewForSerializedAction(action);
                 else
                     RestorePreviewForAction(action);
             }
 
-            EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button(TipContent("3. Set Activity Position From Current Scene", "Move the model in Scene view, then click this to save that pose as the activity-only pose.")))
-                CopyCurrentScenePoseIntoAction(action);
-            if (GUILayout.Button(TipContent("Reset Activity Pose", "Reset the activity pose values to zero position, zero rotation, and scale one.")))
-                ResetActivityPoseValues(action);
-            EditorGUILayout.EndHorizontal();
+            if (preview.boolValue)
+                ApplyEditorPreviewForSerializedAction(action);
         }
 
         EditorGUI.indentLevel--;
         EditorGUILayout.EndVertical();
+    }
+
+    private void CopyActivityTransformToClipboard(SerializedProperty action)
+    {
+        activityTransformClipboardPosition = action.FindPropertyRelative("activityPosition").vector3Value;
+        activityTransformClipboardRotation = action.FindPropertyRelative("activityRotationEuler").vector3Value;
+        activityTransformClipboardScale = action.FindPropertyRelative("activityScale").vector3Value;
+        hasActivityTransformClipboard = true;
+    }
+
+    private void PasteActivityTransformFromClipboard(SerializedProperty action)
+    {
+        if (!hasActivityTransformClipboard) return;
+        action.FindPropertyRelative("activityPosition").vector3Value = activityTransformClipboardPosition;
+        action.FindPropertyRelative("activityRotationEuler").vector3Value = activityTransformClipboardRotation;
+        action.FindPropertyRelative("activityScale").vector3Value = activityTransformClipboardScale;
+        ApplyEditorPreviewForSerializedAction(action);
+    }
+
+    private void ClearActivityTransform(SerializedProperty action)
+    {
+        action.FindPropertyRelative("activityPosition").vector3Value = Vector3.zero;
+        action.FindPropertyRelative("activityRotationEuler").vector3Value = Vector3.zero;
+        action.FindPropertyRelative("activityScale").vector3Value = Vector3.one;
+        ApplyEditorPreviewForSerializedAction(action);
     }
 
     private void DrawTargetActions(SerializedProperty actions)
@@ -1653,6 +1803,105 @@ public class ContentControllerEditor : Editor
         EditorGUILayout.EndVertical();
     }
 
+    private Transform ResolveResultActivityTransformTargetFromSerialized(SerializedProperty activity)
+    {
+        if (activity == null)
+            return null;
+
+        SerializedProperty overrideObject = activity.FindPropertyRelative("resultObjectToMoveOrScale");
+        if (overrideObject != null && overrideObject.objectReferenceValue is GameObject go)
+            return go.transform;
+
+        SerializedProperty animatorProp = activity.FindPropertyRelative("resultAnimator");
+        if (animatorProp != null && animatorProp.objectReferenceValue is Animator animator)
+            return animator.transform;
+
+        return null;
+    }
+
+    private void SaveResultStoryPoseFromCurrentScene(SerializedProperty activity)
+    {
+        Transform targetTransform = ResolveResultActivityTransformTargetFromSerialized(activity);
+        if (activity == null || targetTransform == null)
+            return;
+
+        activity.FindPropertyRelative("resultStoryPosition").vector3Value = targetTransform.localPosition;
+        activity.FindPropertyRelative("resultStoryRotationEuler").vector3Value = targetTransform.localEulerAngles;
+        activity.FindPropertyRelative("resultStoryScale").vector3Value = targetTransform.localScale == Vector3.zero ? Vector3.one : targetTransform.localScale;
+        activity.FindPropertyRelative("resultHasSavedStoryPose").boolValue = true;
+        SerializedProperty preview = activity.FindPropertyRelative("resultPreviewActivityTransformInEditor");
+        if (preview != null) preview.boolValue = false;
+
+        serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(target);
+        SceneView.RepaintAll();
+    }
+
+    private void EnsureResultSavedStoryPose(SerializedProperty activity, Transform targetTransform)
+    {
+        if (activity == null || targetTransform == null)
+            return;
+        SerializedProperty hasStoryPose = activity.FindPropertyRelative("resultHasSavedStoryPose");
+        if (hasStoryPose == null || hasStoryPose.boolValue)
+            return;
+        activity.FindPropertyRelative("resultStoryPosition").vector3Value = targetTransform.localPosition;
+        activity.FindPropertyRelative("resultStoryRotationEuler").vector3Value = targetTransform.localEulerAngles;
+        activity.FindPropertyRelative("resultStoryScale").vector3Value = targetTransform.localScale == Vector3.zero ? Vector3.one : targetTransform.localScale;
+        hasStoryPose.boolValue = true;
+        serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(target);
+    }
+
+    private bool RestoreSavedResultStoryPose(SerializedProperty activity, Transform targetTransform)
+    {
+        if (activity == null || targetTransform == null)
+            return false;
+        SerializedProperty hasStoryPose = activity.FindPropertyRelative("resultHasSavedStoryPose");
+        if (hasStoryPose == null || !hasStoryPose.boolValue)
+            return false;
+        targetTransform.localPosition = activity.FindPropertyRelative("resultStoryPosition").vector3Value;
+        targetTransform.localEulerAngles = activity.FindPropertyRelative("resultStoryRotationEuler").vector3Value;
+        targetTransform.localScale = SafeEditorActivityScale(activity.FindPropertyRelative("resultStoryScale").vector3Value);
+        return true;
+    }
+
+    private void RestorePreviewForResult(SerializedProperty activity)
+    {
+        Transform targetTransform = ResolveResultActivityTransformTargetFromSerialized(activity);
+        if (targetTransform == null)
+            return;
+        if (RestoreSavedResultStoryPose(activity, targetTransform))
+        {
+            activityTransformPreviewSnapshots.Remove(targetTransform.GetInstanceID());
+            SceneView.RepaintAll();
+            return;
+        }
+        RestorePreviewTarget(targetTransform.GetInstanceID(), targetTransform);
+    }
+
+    private void CopyCurrentScenePoseIntoResult(SerializedProperty activity)
+    {
+        Transform targetTransform = ResolveResultActivityTransformTargetFromSerialized(activity);
+        if (targetTransform == null)
+            return;
+        activity.FindPropertyRelative("resultActivityPosition").vector3Value = targetTransform.localPosition;
+        activity.FindPropertyRelative("resultActivityRotationEuler").vector3Value = targetTransform.localEulerAngles;
+        activity.FindPropertyRelative("resultActivityScale").vector3Value = targetTransform.localScale;
+        serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(target);
+    }
+
+    private void ResetResultActivityPoseValues(SerializedProperty activity)
+    {
+        if (activity == null) return;
+        activity.FindPropertyRelative("resultActivityPosition").vector3Value = Vector3.zero;
+        activity.FindPropertyRelative("resultActivityRotationEuler").vector3Value = Vector3.zero;
+        activity.FindPropertyRelative("resultActivityScale").vector3Value = Vector3.one;
+        serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(target);
+        SceneView.RepaintAll();
+    }
+
     private Transform ResolveActivityTransformTargetFromSerialized(SerializedProperty action)
     {
         if (action == null)
@@ -1667,6 +1916,26 @@ public class ContentControllerEditor : Editor
             return animator.transform;
 
         return null;
+    }
+
+    private void CaptureActivityPoseFromCurrentScene(SerializedProperty action)
+    {
+        Transform targetTransform = ResolveActivityTransformTargetFromSerialized(action);
+        if (action == null || targetTransform == null)
+            return;
+
+        SerializedProperty position = action.FindPropertyRelative("activityPosition");
+        SerializedProperty rotation = action.FindPropertyRelative("activityRotationEuler");
+        SerializedProperty scale = action.FindPropertyRelative("activityScale");
+        if (position == null || rotation == null || scale == null)
+            return;
+
+        position.vector3Value = targetTransform.localPosition;
+        rotation.vector3Value = targetTransform.localEulerAngles;
+        scale.vector3Value = targetTransform.localScale == Vector3.zero ? Vector3.one : targetTransform.localScale;
+        serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(target);
+        SceneView.RepaintAll();
     }
 
     private void SaveStoryPoseFromCurrentScene(SerializedProperty action)
@@ -1789,6 +2058,8 @@ public class ContentControllerEditor : Editor
             if (step == null)
                 continue;
 
+            ApplyEditorPreviewForResult(step);
+
             if (step.targetActions != null)
             {
                 foreach (ActivityTargetAction action in step.targetActions)
@@ -1811,9 +2082,46 @@ public class ContentControllerEditor : Editor
                 foreach (ActivityGroupAction action in step.groupActions)
                     ApplyEditorPreviewForAction(action);
             }
+
+            if (step.reactions != null)
+            {
+                foreach (ActivityReaction reaction in step.reactions)
+                    ApplyEditorPreviewForAction(reaction);
+            }
         }
 
         RestoreInactiveActivityTransformPreviews();
+    }
+
+    private void ApplyEditorPreviewForResult(ActivityStep step)
+    {
+        if (step == null)
+            return;
+        ApplyEditorPreview(step.resultUseActivityTransform, step.resultPreviewActivityTransformInEditor, step.resultObjectToMoveOrScale, step.resultCopyTransformFrom, step.resultActivityPosition, step.resultActivityRotationEuler, step.resultActivityScale, step.resultAnimator);
+    }
+
+    private void ApplyEditorPreviewForSerializedAction(SerializedProperty action)
+    {
+        if (action == null)
+            return;
+
+        SerializedProperty useTransform = action.FindPropertyRelative("useActivityTransform");
+        SerializedProperty preview = action.FindPropertyRelative("previewActivityTransformInEditor");
+        SerializedProperty objectToMove = action.FindPropertyRelative("objectToMoveOrScale");
+        SerializedProperty copyFrom = action.FindPropertyRelative("copyTransformFrom");
+        SerializedProperty position = action.FindPropertyRelative("activityPosition");
+        SerializedProperty rotation = action.FindPropertyRelative("activityRotationEuler");
+        SerializedProperty scale = action.FindPropertyRelative("activityScale");
+        SerializedProperty animator = action.FindPropertyRelative("animator");
+
+        if (useTransform == null || preview == null || position == null || rotation == null || scale == null)
+            return;
+
+        GameObject objectValue = objectToMove != null ? objectToMove.objectReferenceValue as GameObject : null;
+        Transform copyValue = copyFrom != null ? copyFrom.objectReferenceValue as Transform : null;
+        Animator animatorValue = animator != null ? animator.objectReferenceValue as Animator : null;
+
+        ApplyEditorPreview(useTransform.boolValue, preview.boolValue, objectValue, copyValue, position.vector3Value, rotation.vector3Value, scale.vector3Value, animatorValue);
     }
 
     private void ApplyEditorPreviewForAction(ActivityTargetAction action)
@@ -1835,6 +2143,14 @@ public class ContentControllerEditor : Editor
         if (action == null)
             return;
         ApplyEditorPreview(action.useActivityTransform, action.previewActivityTransformInEditor, action.objectToMoveOrScale, action.copyTransformFrom, action.activityPosition, action.activityRotationEuler, action.activityScale, action.animator);
+    }
+
+
+    private void ApplyEditorPreviewForAction(ActivityReaction reaction)
+    {
+        if (reaction == null)
+            return;
+        ApplyEditorPreview(reaction.useActivityTransform, reaction.previewActivityTransformInEditor, reaction.objectToMoveOrScale, reaction.copyTransformFrom, reaction.activityPosition, reaction.activityRotationEuler, reaction.activityScale, reaction.animator);
     }
 
     private void ApplyEditorPreview(bool useTransform, bool previewInEditor, GameObject objectToMoveOrScale, Transform copyTransformFrom, Vector3 activityPosition, Vector3 activityRotationEuler, Vector3 activityScale, Animator animator)
@@ -1951,6 +2267,8 @@ public class ContentControllerEditor : Editor
             {
                 if (step == null) continue;
 
+                RestoreSavedPoseForRuntimeResult(step);
+
                 if (step.targetActions != null)
                 {
                     foreach (ActivityTargetAction action in step.targetActions)
@@ -1972,12 +2290,29 @@ public class ContentControllerEditor : Editor
                     foreach (ActivityGroupAction action in step.groupActions)
                         RestoreSavedPoseForRuntimeAction(action);
                 }
+
+                if (step.reactions != null)
+                {
+                    foreach (ActivityReaction reaction in step.reactions)
+                        RestoreSavedPoseForRuntimeAction(reaction);
+                }
             }
 
             EditorUtility.SetDirty(controller);
         }
 
         SceneView.RepaintAll();
+    }
+
+    private static void RestoreSavedPoseForRuntimeResult(ActivityStep step)
+    {
+        if (step == null) return;
+        Transform targetTransform = step.resultObjectToMoveOrScale != null ? step.resultObjectToMoveOrScale.transform : (step.resultAnimator != null ? step.resultAnimator.transform : null);
+        if (targetTransform == null || !step.resultHasSavedStoryPose) return;
+        targetTransform.localPosition = step.resultStoryPosition;
+        targetTransform.localEulerAngles = step.resultStoryRotationEuler;
+        targetTransform.localScale = step.resultStoryScale == Vector3.zero ? Vector3.one : step.resultStoryScale;
+        step.resultPreviewActivityTransformInEditor = false;
     }
 
     private static void RestoreSavedPoseForRuntimeAction(ActivityTargetAction action)
@@ -2011,6 +2346,17 @@ public class ContentControllerEditor : Editor
         targetTransform.localEulerAngles = action.storyRotationEuler;
         targetTransform.localScale = action.storyScale == Vector3.zero ? Vector3.one : action.storyScale;
         action.previewActivityTransformInEditor = false;
+    }
+
+    private static void RestoreSavedPoseForRuntimeAction(ActivityReaction reaction)
+    {
+        if (reaction == null) return;
+        Transform targetTransform = reaction.objectToMoveOrScale != null ? reaction.objectToMoveOrScale.transform : (reaction.animator != null ? reaction.animator.transform : null);
+        if (targetTransform == null || !reaction.hasSavedStoryPose) return;
+        targetTransform.localPosition = reaction.storyPosition;
+        targetTransform.localEulerAngles = reaction.storyRotationEuler;
+        targetTransform.localScale = reaction.storyScale == Vector3.zero ? Vector3.one : reaction.storyScale;
+        reaction.previewActivityTransformInEditor = false;
     }
 
     private static void RestoreAllActivityTransformPreviewsStatic()
@@ -2068,7 +2414,7 @@ public class ContentControllerEditor : Editor
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentShowHintAfterSeconds"), TipContent("Show Hint After Seconds", "From activity start, show hint after this time if no correct tap happened."));
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentSkipAfterHintSeconds"), TipContent("Skip After Hint Seconds", "After the hint appears, skip if there is still no correct tap after this many seconds."));
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentHintText"), TipContent("Hint Text"));
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentShowProgressBar"), TipContent("Show Progress Bar", "ON = show progress while the child taps. Recommended for many taps or tapping time."));
+        EditorGUILayout.HelpBox("Progress bar is controlled only in Section 7: Progress Bar Optional. This keeps setup in one place.", MessageType.None);
 
         DrawMiniHeader("3. What Completes The Activity", "Choose tap count or active tapping time.");
         DrawEnumPopup(activity.FindPropertyRelative("storyMomentCompletesBy"), StoryMomentCompleteValues, StoryMomentCompleteLabels, TipContent("Complete By"));
@@ -2081,9 +2427,9 @@ public class ContentControllerEditor : Editor
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentRequiredTappingSeconds"), TipContent("Required Active Tapping Seconds"));
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentTapActiveWindowSeconds"), TipContent("Tap Stays Active For Seconds"));
         }
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentProgressDropsIfChildStops"), TipContent("Progress Drops If Child Stops"));
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentProgressDropsIfChildStops"), TipContent("Bar Goes Down If Child Stops"));
         if (activity.FindPropertyRelative("storyMomentProgressDropsIfChildStops").boolValue)
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentProgressDropSpeed"), TipContent("Progress Drop Speed"));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentProgressDropSpeed"), TipContent("How Fast It Goes Down"));
         EditorGUI.indentLevel--;
 
         DrawMiniHeader("4. Tap Feedback", "The tapped object rises and shakes while the child taps.");
@@ -2134,8 +2480,8 @@ public class ContentControllerEditor : Editor
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("targetObject"), TipContent("Object To Tap", "Drag the character or object the child should tap. It must have a Collider."));
 
         EditorGUILayout.Space(4);
-        EditorGUILayout.LabelField("Progress Bar", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressGateCompletesBy"), TipContent("Progress Completes By", "Choose whether the bar fills by a number of taps or by active tapping time."));
+        DrawMiniHeader("How This Progress Activity Completes", "Choose the simple requirement. The visible progress bar is controlled only in Progress Bar Optional.");
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressGateCompletesBy"), TipContent("Activity Completes By", "Choose whether the progress logic completes by tap count, active tapping time, or tap speed."));
         ActivityProgressGateCompletionMode mode = (ActivityProgressGateCompletionMode)activity.FindPropertyRelative("progressGateCompletesBy").enumValueIndex;
         EditorGUI.indentLevel++;
         if (mode == ActivityProgressGateCompletionMode.RequiredTapCount)
@@ -2154,15 +2500,23 @@ public class ContentControllerEditor : Editor
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressTapSpeedWindowSeconds"), TipContent("Tap Speed Window", "How many recent seconds are used to calculate tap speed."));
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressTapActiveWindowSeconds"), TipContent("Tap Stays Active For Seconds", "After each tap, this many seconds count as active tapping."));
         }
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressDropsWhenNotTapping"), TipContent("Progress Drops If Child Stops", "ON means the bar slowly goes down when the child stops tapping."));
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressDropsWhenNotTapping"), TipContent("If Child Stops", "ON = the bar goes down when the child stops. OFF = the bar stays where it is."));
         if (activity.FindPropertyRelative("progressDropsWhenNotTapping").boolValue)
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressLossPerSecond"), TipContent("Progress Drop Speed", "How fast the bar goes down each second when the child stops."));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressLossPerSecond"), TipContent("How Fast Should It Go Down", "Percent per second. Example: 10 means the bar drops 10% every second."));
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressAutoFinishAfterNoTapSeconds"), TipContent("If Child Stops, Finish After", "If the child started but stops tapping, wait this many seconds. Then play the remaining activity animations and continue story. 0 = wait forever."));
+        EditorGUILayout.HelpBox("For monkey style: child taps to fill the bar. If child stops, the current progress animation keeps looping. After this wait time, remaining activity animations play once, then story continues.", MessageType.None);
         EditorGUI.indentLevel--;
 
         EditorGUILayout.Space(4);
-        EditorGUILayout.LabelField("If Child Does Not Finish", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressAutoStartStoryAfterSeconds"), TipContent("Start Story Anyway After Seconds", "If the bar is not filled within this time, the activity ends and the story result starts. Use 0 to disable."));
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("playResultWhenProgressAutoSkips"), TipContent("Play Result Even If Skipped", "ON means the assigned result animation or voice still plays even if the child did not fill the bar."));
+        EditorGUILayout.HelpBox("No-input timeout is controlled in Section 5 Timing. Do not set a second hidden skip time here for new activities.", MessageType.None);
+        bool showLegacyProgressTimeout = EditorGUILayout.Foldout(false, "Advanced: Old Progress Timeout", true);
+        if (showLegacyProgressTimeout)
+        {
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressAutoStartStoryAfterSeconds"), TipContent("Legacy Start Story Anyway After Seconds"));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("playResultWhenProgressAutoSkips"), TipContent("Legacy Play Result Even If Skipped"));
+            EditorGUI.indentLevel--;
+        }
 
         EditorGUILayout.Space(4);
         DrawMiniHeader("Correct Tap Feedback", "Use this for the object the child is supposed to tap. Example: the drum bumps or shakes smoothly on every correct tap.");
@@ -2222,22 +2576,43 @@ public class ContentControllerEditor : Editor
         }
 
         EditorGUILayout.Space(4);
-        EditorGUILayout.LabelField("Helper Animation While Child Is Tapping", EditorStyles.boldLabel);
-        EditorGUILayout.HelpBox("Optional. Use short trying/pulling animations only during the activity. The system picks one helper animation for this activity run and loops it while the child is actively tapping. The final story animation and voice still start from the beginning after progress is complete or time is up.", MessageType.None);
+        EditorGUILayout.LabelField("Animation While Child Taps", EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox("Optional. Use this when a character should animate while the child fills the bar. For monkey/drum style activities, choose Change Animation With Progress.", MessageType.None);
         SerializedProperty useHelper = activity.FindPropertyRelative("progressUseHelperAnimationWhileTapping");
-        EditorGUILayout.PropertyField(useHelper, TipContent("Use Helper Animation While Tapping", "ON = while the child taps and fills the progress bar, one short helper animation plays in loop. OFF = progress bar works without helper animation."));
+        EditorGUILayout.PropertyField(useHelper, TipContent("Use Animation While Tapping", "ON = a helper character/object animates while the child taps. OFF = no helper animation."));
         if (useHelper.boolValue)
         {
             EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperAnimator"), TipContent("Helper Animator", "Drag the Animator of the monkey or object that should show the short helper animation. If empty, Result Animator is used."));
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperAnimations"), TipContent("Helper Animation Clips", "Drag the short trying/pulling animations here. For each activity run, only one of these clips will be selected and looped while the child taps."), true);
-            DrawEnumPopup(activity.FindPropertyRelative("progressHelperAnimationSelection"), ProgressHelperSelectionValues, ProgressHelperSelectionLabels, TipContent("Which Helper Animation Should Play", "Choose whether to use the first clip, pick one random clip once, or use a specific clip number."));
-            if ((ProgressGatePreviewAnimationSelectionMode)activity.FindPropertyRelative("progressHelperAnimationSelection").enumValueIndex == ProgressGatePreviewAnimationSelectionMode.UseSelectedAnimationNumber)
-                EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperSelectedAnimationNumber"), TipContent("Selected Helper Animation Number", "1 means the first clip in the list, 2 means the second clip, and so on."));
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperAnimationSpeed"), TipContent("Helper Animation Speed", "1 is normal speed. 0.5 is half speed. This only affects the helper animation during tapping."));
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperLoopAnimation"), TipContent("Loop Helper Animation", "ON = selected helper clip repeats while the child keeps tapping."));
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperPauseWhenNotTapping"), TipContent("Pause When Child Stops Tapping", "ON = helper animation pauses when the child stops tapping. This makes the animation feel connected to the input."));
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperResetWhenProgressEmpty"), TipContent("Reset Helper When Progress Is Empty", "ON = helper animation returns to frame zero when progress falls back to 0."));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperAnimator"), TipContent("Animated Character", "Drag the Animator of the monkey or object that should animate. If empty, Result Animator is used."));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperAnimations"), TipContent("Animation Clips", "Add clips in order. For progress mode, the bar automatically splits across these clips. Example: 5 clips = 20% each."), true);
+            SerializedProperty helperMode = activity.FindPropertyRelative("progressHelperAnimationSelection");
+            DrawEnumPopup(helperMode, ProgressHelperSelectionValues, ProgressHelperSelectionLabels, TipContent("How Should These Animations Play", "Choose one simple behaviour. Progress mode means the current progress percent decides which animation loops."));
+            ProgressGatePreviewAnimationSelectionMode helperSelection = (ProgressGatePreviewAnimationSelectionMode)helperMode.enumValueIndex;
+            if (helperSelection == ProgressGatePreviewAnimationSelectionMode.UseSelectedAnimationNumber)
+                EditorGUILayout.IntSlider(activity.FindPropertyRelative("progressHelperSelectedAnimationNumber"), 1, Mathf.Max(1, activity.FindPropertyRelative("progressHelperAnimations").arraySize), TipContent("Animation Number", "Choose one animation. 1 means the first clip."));
+            if (helperSelection == ProgressGatePreviewAnimationSelectionMode.PlaySelectedAnimationNumbers || helperSelection == ProgressGatePreviewAnimationSelectionMode.PlaySelectedNumbersByProgress)
+                EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperSelectedAnimationNumbers"), TipContent("Animation Numbers To Use", "Type numbers like 1,3,4,5. Only those clips are used, in that order."));
+            if (helperSelection == ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsInOrder)
+                EditorGUILayout.HelpBox("Plays all clips once in order: 1, 2, 3, 4, 5. Use this when the activity result should show the full sequence.", MessageType.None);
+            if (helperSelection == ProgressGatePreviewAnimationSelectionMode.PlaySelectedAnimationNumbers)
+                EditorGUILayout.HelpBox("Plays only the typed numbers once in order. Example: 1,3,5 plays clip 1, then 3, then 5.", MessageType.None);
+            if (helperSelection == ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsByProgress || helperSelection == ProgressGatePreviewAnimationSelectionMode.PlaySelectedNumbersByProgress)
+            {
+                EditorGUILayout.HelpBox("Progress mode: the bar chooses the animation. If progress goes down, the animation also goes back to the matching range. The current range animation keeps looping until progress enters another range.", MessageType.None);
+                EditorGUILayout.HelpBox("Example with 5 clips: 0-20% clip 1, 20-40% clip 2, 40-60% clip 3, 60-80% clip 4, 80-100% clip 5.", MessageType.None);
+            }
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperAnimationSpeed"), TipContent("Animation Speed", "1 is normal speed. 0.5 is half speed. 2 is double speed."));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperLoopAnimation"), TipContent("Loop Current Animation", "ON = the current progress animation keeps playing until the bar moves to another range."));
+            if (helperSelection != ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsByProgress &&
+                helperSelection != ProgressGatePreviewAnimationSelectionMode.PlaySelectedNumbersByProgress)
+            {
+                EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperPauseWhenNotTapping"), TipContent("Pause When Child Stops", "ON = helper animation pauses when the child stops. For progress mode this is ignored because animation follows the bar."));
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("In progress mode, the animation does not simply pause when the child stops. It follows the bar. If the bar drops from 45% to 10%, the matching 10% animation plays.", MessageType.None);
+            }
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperResetWhenProgressEmpty"), TipContent("Reset When Bar Is Empty", "ON = helper animation returns to the start when progress reaches 0%."));
             EditorGUI.indentLevel--;
         }
 
@@ -2269,7 +2644,93 @@ public class ContentControllerEditor : Editor
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("waitForResultSound"), TipContent("Wait For Sound"));
             EditorGUI.indentLevel--;
         }
+
+        DrawResultActivityTransformFields(activity);
+
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("resultExtraWaitSeconds"), TipContent("Extra Wait After Result", "Optional extra wait before continuing the story."));
+    }
+
+    private void DrawResultActivityTransformFields(SerializedProperty activity)
+    {
+        SerializedProperty useTransform = activity.FindPropertyRelative("resultUseActivityTransform");
+        if (useTransform == null)
+            return;
+
+        EditorGUILayout.Space(4);
+        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+        EditorGUILayout.LabelField("Activity Position Optional", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(useTransform, TipContent("Move Result Model During Activity", "ON = the result model uses a temporary position, rotation, and scale only while this activity result plays."));
+
+        SerializedProperty preview = activity.FindPropertyRelative("resultPreviewActivityTransformInEditor");
+        if (!useTransform.boolValue)
+        {
+            if (preview != null && preview.boolValue)
+            {
+                preview.boolValue = false;
+                RestorePreviewForResult(activity);
+            }
+            EditorGUILayout.HelpBox("OFF = the result model keeps its normal story position.", MessageType.None);
+            EditorGUILayout.EndVertical();
+            return;
+        }
+
+        Transform previewTarget = ResolveResultActivityTransformTargetFromSerialized(activity);
+        if (previewTarget == null)
+            EditorGUILayout.HelpBox("Assign Result Animator above first, or assign Different Object Optional below.", MessageType.Warning);
+        else
+            EditorGUILayout.HelpBox("Target: " + previewTarget.name + ". Story/VFX use Story Position. Activity Position is used only while this result plays.", MessageType.None);
+
+        EditorGUI.indentLevel++;
+        SerializedProperty overrideObject = activity.FindPropertyRelative("resultObjectToMoveOrScale");
+        Animator resultAnimatorValue = activity.FindPropertyRelative("resultAnimator") != null ? activity.FindPropertyRelative("resultAnimator").objectReferenceValue as Animator : null;
+        if (resultAnimatorValue == null || overrideObject.objectReferenceValue != null)
+            EditorGUILayout.PropertyField(overrideObject, TipContent("Different Object Optional", "Usually leave empty. The Result Animator model is used automatically."));
+
+        SerializedProperty copyFrom = activity.FindPropertyRelative("resultCopyTransformFrom");
+        EditorGUILayout.PropertyField(copyFrom, TipContent("Copy From Helper Optional", "Optional. Drag an empty helper Transform if you prefer placing a helper in the Scene."));
+
+        if (copyFrom.objectReferenceValue == null)
+        {
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("resultActivityPosition"), TipContent("Activity Position", "Temporary local position used only while this activity result plays."));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("resultActivityRotationEuler"), TipContent("Activity Rotation", "Temporary local rotation used only while this activity result plays."));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("resultActivityScale"), TipContent("Activity Scale", "Temporary local scale used only while this activity result plays."));
+        }
+
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("resultRestoreTransformAfterAction"), TipContent("Return To Story Position After Activity", "Keep ON. The model returns to its saved story position after the result finishes, resets, or replay starts."));
+
+        if (preview != null)
+        {
+            EditorGUILayout.Space(4);
+            EditorGUILayout.LabelField("Easy Setup", EditorStyles.boldLabel);
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button(TipContent("1. Save Story Position", "Use this while the model is in the normal story/VFX position.")))
+                SaveResultStoryPoseFromCurrentScene(activity);
+            if (GUILayout.Button(TipContent("2. Back To Story Position", "Restores the model to the saved story position and turns preview off.")))
+            {
+                preview.boolValue = false;
+                RestorePreviewForResult(activity);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(preview, TipContent("Preview / Edit Activity Position In Scene", "ON = show the temporary activity pose in Scene view. Turn OFF before checking story/VFX."));
+            if (EditorGUI.EndChangeCheck())
+            {
+                if (preview.boolValue && previewTarget != null)
+                    EnsureResultSavedStoryPose(activity, previewTarget);
+                else
+                    RestorePreviewForResult(activity);
+            }
+
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button(TipContent("3. Set Activity Position From Current Scene", "Move the model in Scene view, then click this to save that pose as the activity-only pose.")))
+                CopyCurrentScenePoseIntoResult(activity);
+            if (GUILayout.Button(TipContent("Reset Activity Pose", "Reset the activity pose values to zero position, zero rotation, and scale one.")))
+                ResetResultActivityPoseValues(activity);
+            EditorGUILayout.EndHorizontal();
+        }
+        EditorGUI.indentLevel--;
+        EditorGUILayout.EndVertical();
     }
 
     private void DrawGroupActionFields(SerializedProperty activity)
@@ -2307,9 +2768,15 @@ public class ContentControllerEditor : Editor
         }
 
         EditorGUILayout.Space(4);
-        EditorGUILayout.LabelField("If Child Does Not Tap", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("groupAutoStartStoryAfterSeconds"), TipContent("Start Story Anyway After Seconds", "If the child does not tap within this time, the activity ends and the story continues. Use 0 to disable."));
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("groupPlayActionsWhenAutoSkipped"), TipContent("Play Action Even If Skipped", "ON means actions still play even if the child did not tap."));
+        showAdvancedActivitySetup = EditorGUILayout.Foldout(showAdvancedActivitySetup, "Advanced Old No-Input Timer Optional - Usually Leave Closed", true);
+        if (showAdvancedActivitySetup)
+        {
+            EditorGUILayout.HelpBox("Beginner setup should use Section 5 Timing above. This old timer is kept only for existing activities.", MessageType.None);
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("groupAutoStartStoryAfterSeconds"), TipContent("Old Auto Play After Seconds", "Legacy timer. Prefer Section 5 Timing. If this runs, the action still plays before story continues."));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("groupPlayActionsWhenAutoSkipped"), TipContent("Play Action Even If No Tap", "Keep ON. If the child gives no input, the result still plays before story continues."));
+            EditorGUI.indentLevel--;
+        }
 
         EditorGUILayout.Space(4);
         EditorGUILayout.LabelField("After Target Set Action", EditorStyles.boldLabel);
@@ -2356,8 +2823,9 @@ public class ContentControllerEditor : Editor
         SerializedProperty input = activity.FindPropertyRelative("childInput");
         ActivityInputKind kind = (ActivityInputKind)input.enumValueIndex;
 
-        DrawStepBox("5. Timing", "Only three main timing values are shown here: total time, hint time, and auto skip after hint.");
+        DrawStepBox("5. Timing", "All timing controls stay here. First decide the total time. Then decide what happens if the child gives no input.");
         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+
         if (kind == ActivityInputKind.WaitForStoryThenTapObject)
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentTotalActivitySeconds"), TipContent("Total Activity Time", "Maximum time this activity can run."));
         else if (kind == ActivityInputKind.WaitOnly)
@@ -2365,20 +2833,122 @@ public class ContentControllerEditor : Editor
         else
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("activeTimeSeconds"), TipContent("Total Activity Time", "Maximum time this activity can run."));
 
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("noInputHintAfterSeconds"), TipContent("Show Hint After No Input", "If the child does nothing for this many seconds, show a hint."));
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("autoSkipAfterHintSeconds"), TipContent("Auto Skip After Hint", "This timer starts only after the hint appears."));
-        EditorGUILayout.EndVertical();
 
+        SerializedProperty useHint = activity.FindPropertyRelative("enableNoInputHelp");
+        EditorGUILayout.PropertyField(useHint, TipContent("Show Hint If No Input", "ON = if the child does nothing, show a simple hint."));
+
+        if (useHint.boolValue)
+        {
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("noInputHintAfterSeconds"), TipContent("Show Hint After", "How many seconds to wait before showing the hint."));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("noInputHintText"), TipContent("Hint Text"));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("useSameHintEffectsForNoInput"), TipContent("Use Same Object Hint", "ON = use the same highlight or pulse used for wrong input."));
+
+            SerializedProperty action = activity.FindPropertyRelative("noInputActionAfterHint");
+            bool doSomethingAfterHint = action.enumValueIndex != (int)ActivityNoInputAction.ShowHintOnly;
+            bool nextDoSomething = EditorGUILayout.Toggle(TipContent("After Hint If Still No Input", "Optional. ON = after the hint, wait again and choose what the template should do."), doSomethingAfterHint);
+            if (nextDoSomething != doSomethingAfterHint)
+                action.enumValueIndex = nextDoSomething ? (int)ActivityNoInputAction.AutoPlayResultThenContinue : (int)ActivityNoInputAction.ShowHintOnly;
+
+            if (nextDoSomething)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(activity.FindPropertyRelative("autoSkipAfterHintSeconds"), TipContent("Wait After Hint", "This timer starts only after the hint appears."));
+                DrawEnumPopup(action, NoInputActionValues, NoInputActionLabels, TipContent("What Should Happen", "Recommended: Auto Play Activity Result Then Continue. This skips only waiting for the child, not the activity result."));
+                EditorGUILayout.HelpBox("Recommended default: Auto Play Activity Result Then Continue. The child still sees the story-related activity result, then the story continues.", MessageType.None);
+                EditorGUI.indentLevel--;
+            }
+            EditorGUI.indentLevel--;
+        }
+        else
+        {
+            EditorGUILayout.HelpBox("No hint or no-input action will run. Use this only when the activity must wait for the child.", MessageType.None);
+        }
+
+        EditorGUILayout.EndVertical();
+    }
+
+    private void DrawProgressBarSection(SerializedProperty activity)
+    {
+        DrawStepBox("7. Progress Bar Optional", "Use this only when the child should see a bar. Off means no bar appears, but the activity still works.");
+
+        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+        SerializedProperty useProgressBar = activity.FindPropertyRelative("useProgressBar");
+        EditorGUILayout.PropertyField(useProgressBar, TipContent("Show Progress Bar", "OFF = no bar. ON = show a bar to the child."));
+
+        if (!useProgressBar.boolValue)
+        {
+            EditorGUILayout.HelpBox("Progress bar is Off. The activity can still complete by taps, objects, time, choices, or result animation.", MessageType.None);
+            EditorGUILayout.EndVertical();
+            return;
+        }
+
+        EditorGUI.indentLevel++;
+
+        SerializedProperty behavior = activity.FindPropertyRelative("progressBarBehavior");
+        if (behavior != null)
+        {
+            DrawEnumPopup(behavior, ProgressBehaviorValues, ProgressBehaviorLabels, TipContent("How Should The Bar Move", "Choose what should happen to the bar when the child taps or stops."));
+
+            ActivityProgressBarBehavior selected = (ActivityProgressBarBehavior)behavior.enumValueIndex;
+            if (selected == ActivityProgressBarBehavior.OnlyFillUp)
+            {
+                activity.FindPropertyRelative("progressBarFillMode").enumValueIndex = (int)ActivityProgressBarFillMode.FollowInputProgress;
+                EditorGUILayout.HelpBox("Example: tap 1 = 10%, tap 2 = 20%. If the child stops, the bar stays where it is.", MessageType.None);
+            }
+            else if (selected == ActivityProgressBarBehavior.GoDownIfChildStops)
+            {
+                activity.FindPropertyRelative("progressBarFillMode").enumValueIndex = (int)ActivityProgressBarFillMode.FollowInputProgress;
+                EditorGUILayout.HelpBox("Example: tap 3 times = 30%. If the child stops, the bar slowly goes down.", MessageType.None);
+                EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressGoDownPercentPerSecond"), TipContent("How Fast It Goes Down", "Percent per second. Example: 10 means the bar drops 10% every second."));
+                SerializedProperty min = activity.FindPropertyRelative("progressMinimumPercent");
+                EditorGUILayout.PropertyField(min, TipContent("Do Not Go Below Optional", "0 = normal. 50 = the bar never goes below halfway."));
+            }
+            else if (selected == ActivityProgressBarBehavior.FillWithTime)
+            {
+                activity.FindPropertyRelative("progressBarFillMode").enumValueIndex = (int)ActivityProgressBarFillMode.FollowActivityTime;
+                EditorGUILayout.HelpBox("The bar fills using the activity time. Example: 10 seconds total means 5 seconds = 50%.", MessageType.None);
+            }
+            else if (selected == ActivityProgressBarBehavior.FillDuringResult)
+            {
+                activity.FindPropertyRelative("progressBarFillMode").enumValueIndex = (int)ActivityProgressBarFillMode.FillWhenResultPlays;
+                EditorGUILayout.HelpBox("The bar fills when the result animation or effect plays.", MessageType.None);
+            }
+            else
+            {
+                DrawEnumPopup(activity.FindPropertyRelative("progressBarFillMode"), ProgressBarFillValues, ProgressBarFillLabels, TipContent("Advanced Fill Source"));
+                EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressGoDownPercentPerSecond"), TipContent("Go Down Speed Optional"));
+                EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressMinimumPercent"), TipContent("Minimum Percent Optional"));
+            }
+        }
+
+        SerializedProperty resultTiming = activity.FindPropertyRelative("resultPlayTiming");
+        if (resultTiming != null)
+        {
+            EditorGUILayout.Space(4);
+            DrawEnumPopup(resultTiming, ResultPlayTimingValues, ResultPlayTimingLabels, TipContent("When Should Animation Or Effect Play", "Choose whether the result plays every tap or only after the needed input is done."));
+            EditorGUILayout.HelpBox("Use 'Every Correct Input' when animation should happen on each tap. Use 'After Required Inputs' when animation should play only after the needed count is finished.", MessageType.None);
+        }
+
+        EditorGUI.indentLevel--;
+        EditorGUILayout.EndVertical();
+    }
+
+    private void DrawWrongFeedbackSection(SerializedProperty activity)
+    {
+        SerializedProperty input = activity.FindPropertyRelative("childInput");
+        ActivityInputKind kind = (ActivityInputKind)input.enumValueIndex;
         if (kind == ActivityInputKind.WaitOnly)
             return;
 
-        DrawStepBox("7. What Happens If Wrong?", "Wrong input means the child taps the wrong object, wrong place, or wrong option. Wrong input must not complete the activity.");
+        DrawStepBox("7. What Happens If Wrong?", "Wrong input means the child taps the wrong object, wrong place, wrong option, or wrong UI. Wrong input must not complete the activity.");
 
         bool objectBased = kind == ActivityInputKind.TapObject || kind == ActivityInputKind.HelpAction || kind == ActivityInputKind.ProgressGate || kind == ActivityInputKind.GroupAction || kind == ActivityInputKind.TapObjectsInOrder || kind == ActivityInputKind.WaitForStoryThenTapObject || (kind == ActivityInputKind.TapManyTimes && activity.FindPropertyRelative("targetObject").objectReferenceValue != null);
 
         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("showHintWhenWrongInput"), TipContent("Use Wrong Feedback"));
-        if (activity.FindPropertyRelative("showHintWhenWrongInput").boolValue)
+        SerializedProperty useWrong = activity.FindPropertyRelative("showHintWhenWrongInput");
+        EditorGUILayout.PropertyField(useWrong, TipContent("Use Wrong Feedback", "ON = guide the child if they tap the wrong object or wrong place."));
+        if (useWrong.boolValue)
         {
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("wrongInputHintText"), TipContent("Wrong Message Optional"));
@@ -2388,30 +2958,31 @@ public class ContentControllerEditor : Editor
 
             if (objectBased)
             {
-                EditorGUILayout.Space(4);
-                EditorGUILayout.LabelField("Show Required Object Hint", EditorStyles.boldLabel);
-                EditorGUILayout.PropertyField(activity.FindPropertyRelative("pulseTargetObject"), TipContent("Heartbeat Pulse"));
-                if (activity.FindPropertyRelative("pulseTargetObject").boolValue)
+                SerializedProperty showObjectHint = activity.FindPropertyRelative("pulseTargetObject");
+                EditorGUILayout.PropertyField(showObjectHint, TipContent("Show Required Object Hint", "ON = pulse or highlight the object the child should tap."));
+                if (showObjectHint.boolValue)
                 {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.PropertyField(activity.FindPropertyRelative("targetPulseScale"), TipContent("Pulse Size"));
-                    EditorGUILayout.PropertyField(activity.FindPropertyRelative("targetPulseRepeatCount"), TipContent("Pulse Repeat Count"));
-                    EditorGUILayout.PropertyField(activity.FindPropertyRelative("targetPulseSeconds"), TipContent("One Pulse Time"));
+                    EditorGUILayout.PropertyField(activity.FindPropertyRelative("targetPulseRepeatCount"), TipContent("Pulse Count"));
+                    EditorGUILayout.PropertyField(activity.FindPropertyRelative("targetPulseSeconds"), TipContent("Pulse Time"));
                     EditorGUI.indentLevel--;
                 }
 
-                EditorGUILayout.PropertyField(activity.FindPropertyRelative("tintTargetObject"), TipContent("Glow Highlight"));
-                if (activity.FindPropertyRelative("tintTargetObject").boolValue)
+                SerializedProperty glow = activity.FindPropertyRelative("tintTargetObject");
+                EditorGUILayout.PropertyField(glow, TipContent("Glow Highlight Optional"));
+                if (glow.boolValue)
                 {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.PropertyField(activity.FindPropertyRelative("targetTintColor"), TipContent("Glow Color"));
                     EditorGUILayout.PropertyField(activity.FindPropertyRelative("targetTintRepeatCount"), TipContent("Glow Count"));
-                    EditorGUILayout.PropertyField(activity.FindPropertyRelative("targetTintSeconds"), TipContent("One Glow Time"));
+                    EditorGUILayout.PropertyField(activity.FindPropertyRelative("targetTintSeconds"), TipContent("Glow Time"));
                     EditorGUI.indentLevel--;
                 }
 
-                EditorGUILayout.PropertyField(activity.FindPropertyRelative("showHintObject"), TipContent("Custom Hint Object Optional"));
-                if (activity.FindPropertyRelative("showHintObject").boolValue)
+                SerializedProperty customHint = activity.FindPropertyRelative("showHintObject");
+                EditorGUILayout.PropertyField(customHint, TipContent("Custom Hint Object Optional"));
+                if (customHint.boolValue)
                 {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.PropertyField(activity.FindPropertyRelative("hintObject"), TipContent("Hint Object"));
@@ -2419,18 +2990,6 @@ public class ContentControllerEditor : Editor
                     EditorGUI.indentLevel--;
                 }
             }
-            EditorGUI.indentLevel--;
-        }
-        EditorGUILayout.EndVertical();
-
-        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-        EditorGUILayout.LabelField("No Input Hint", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("enableNoInputHelp"), TipContent("Use No Input Hint"));
-        if (activity.FindPropertyRelative("enableNoInputHelp").boolValue)
-        {
-            EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("noInputHintText"), TipContent("Hint Text"));
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("useSameHintEffectsForNoInput"), TipContent("Use Same Object Hint"));
             EditorGUI.indentLevel--;
         }
         EditorGUILayout.EndVertical();
@@ -2560,26 +3119,397 @@ public class ContentControllerEditor : Editor
 
     private void DrawVisualEffectReaction(SerializedProperty reaction)
     {
-        DrawMiniHeader("Visual Effect", "Use this for celebration effects such as particles, flowers, petals, leaves, coins, sparkles, or small 3D objects.");
-        EditorGUILayout.PropertyField(reaction.FindPropertyRelative("vfxObjects"), TipContent("Visual Effect Objects"), true);
+        DrawMiniHeader("Visual Effect", "Use this for flowers, petals, leaves, coins, sparkles, particles, or small 3D objects.");
+        EditorGUILayout.PropertyField(reaction.FindPropertyRelative("vfxObjects"), TipContent("Original Petal Or Effect", "Drag the petal model here. It will be used only as a template. The visible falling petals will be new copies."), true);
+
+        SerializedProperty hideSource = reaction.FindPropertyRelative("hideSourceObjectsUntilPlayed");
+        EditorGUILayout.PropertyField(hideSource, TipContent("Hide Original Before Tap", "ON = the original petal is invisible. Only new falling copies appear when the child taps."));
+        DrawSourceVisibilityButtons(reaction);
+        DrawVisualEffectEditorTestButtons(reaction);
+
         DrawEnumPopup(reaction.FindPropertyRelative("visualEffectPlayMode"), VisualEffectPlayModeValues, VisualEffectPlayModeLabels, TipContent("If Child Taps Again"));
-        EditorGUILayout.PropertyField(reaction.FindPropertyRelative("vfxSpawnOrigin"), TipContent("Where Should It Appear From"));
-        EditorGUILayout.PropertyField(reaction.FindPropertyRelative("objectBurstCount"), TipContent("3D Copies Per Input"));
-        EditorGUILayout.PropertyField(reaction.FindPropertyRelative("objectLifeSeconds"), TipContent("3D Copy Visible Time"));
+        EditorGUILayout.PropertyField(reaction.FindPropertyRelative("vfxSpawnOrigin"), TipContent("Start From Optional", "Empty = use the petal/source position. Assign a transform if copies should start from a specific place."));
+        DrawEnumPopup(reaction.FindPropertyRelative("spawnAreaMode"), VfxSpawnAreaValues, VfxSpawnAreaLabels, TipContent("Where Should Petals Start", "For king welcome, choose Inside Rectangle Area. Petals start from random points inside that box, not from one fixed point."));
+        ActivityVfxSpawnAreaMode spawnMode = (ActivityVfxSpawnAreaMode)reaction.FindPropertyRelative("spawnAreaMode").enumValueIndex;
+        if (spawnMode == ActivityVfxSpawnAreaMode.SpreadAcrossPage)
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("pageSpreadSize"), TipContent("Cover Page Area", "X = left/right spread. Y = up/down spread. Increase this to cover more of the page."));
+        else if (spawnMode == ActivityVfxSpawnAreaMode.InsideRectangleArea)
+        {
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("rectangleSpawnArea"), TipContent("Petal Fall Area Box", "Move this box above the king. Petals start from random points inside this area."));
+            SerializedProperty areaSize = reaction.FindPropertyRelative("rectangleSpawnAreaSize");
+            Vector3 petalArea = areaSize.vector3Value;
+            petalArea.x = EditorGUILayout.FloatField(TipContent("Petal Area Width", "Left to right area covered by petals. For a 20 cm book, start around 0.18 to 0.25 if your scene units are meters, or 1.8 if your project scale is larger."), petalArea.x);
+            petalArea.y = EditorGUILayout.FloatField(TipContent("Petal Area Height", "Vertical start height range. Increase this so petals start from different heights instead of one line."), petalArea.y);
+            petalArea.z = EditorGUILayout.FloatField(TipContent("Petal Area Depth", "Front to back area covered by petals."), petalArea.z);
+            areaSize.vector3Value = petalArea;
+            EditorGUILayout.HelpBox("Width + Depth = area covered. Height = vertical range where petals start. This only controls where new copies spawn, not the original petal source.", MessageType.None);
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button(TipContent("Create Petal Fall Area", "Creates a box above the king. Scale it like the flower shower area. Bigger box = wider petal fall.")))
+                CreatePetalFallArea(reaction);
+            if (GUILayout.Button(TipContent("Select Area", "Selects the assigned petal fall area in the Hierarchy.")))
+                SelectPetalFallArea(reaction);
+            EditorGUILayout.EndHorizontal();
+        }
+        EditorGUILayout.PropertyField(reaction.FindPropertyRelative("objectBurstCount"), TipContent("Petals Per Tap", "Each tap creates this many NEW petals. Old falling petals are not touched again."));
+        EditorGUILayout.PropertyField(reaction.FindPropertyRelative("objectLifeSeconds"), TipContent("Petal Visible Time", "How long each new petal copy stays alive before it disappears."));
+        EditorGUILayout.PropertyField(reaction.FindPropertyRelative("fadeOutSpawnedObjects"), TipContent("Fade Out Before Hiding"));
+        if (reaction.FindPropertyRelative("fadeOutSpawnedObjects").boolValue)
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("fadeOutSeconds"), TipContent("Fade Time"));
+
+        SerializedProperty fall = reaction.FindPropertyRelative("make3DObjectsFall");
+        EditorGUILayout.PropertyField(fall, TipContent("Make Petals Fall", "ON = new petal copies fall or flutter down, then disappear."));
+        if (fall != null && fall.boolValue)
+        {
+            EditorGUI.indentLevel++;
+            DrawEnumPopup(reaction.FindPropertyRelative("fallingMotion"), FallingObjectMotionValues, FallingObjectMotionLabels, TipContent("Fall Style"));
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("fallDistance"), TipContent("How Far Down"));
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("fallDurationSeconds"), TipContent("Base Fall Time"));
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("randomStartDelayMaxSeconds"), TipContent("Random Start Gap", "Petals do not all start together. Example: 0.35 means each petal can start within the next 0.35 seconds."));
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("randomFallTimeExtraSeconds"), TipContent("Random Fall Speed", "Some petals fall faster and some slower. Higher number = more natural."));
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("fallSpreadSideways"), TipContent("Side Movement"));
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("fallFlutterAmount"), TipContent("Flutter Movement"));
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("fallSpinDegrees"), TipContent("Spin Amount"));
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("randomScaleMin"), TipContent("Smallest Petal Size"));
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("randomScaleMax"), TipContent("Biggest Petal Size"));
+            EditorGUI.indentLevel--;
+        }
+
         DrawCommonReactionAudio(reaction);
-        EditorGUILayout.HelpBox("For flowers, petals, leaves, coins, and confetti, choose Add New Effect Each Input. Fast taps will add more effects without deleting the old ones. Use Restart The Same Effect only for a single portal, glow, or magic circle.", MessageType.None);
+        DrawActivityTransformFields(reaction);
+        EditorGUILayout.HelpBox("For a natural flower shower: keep Hide Original ON, choose Inside Rectangle Area, set Width/Height/Depth, use 15 to 30 petals, Flutter Like Petals, and add a small Random Start Gap.", MessageType.None);
+    }
+
+    private void DrawSourceVisibilityButtons(SerializedProperty reaction)
+    {
+        SerializedProperty list = reaction.FindPropertyRelative("vfxObjects");
+        if (list == null || list.arraySize == 0) return;
+
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button(TipContent("Hide Source Now", "Hide assigned scene source objects now. Use this before testing so the original petal is not visible.")))
+            SetReactionSceneSourcesVisible(reaction, false);
+        if (GUILayout.Button(TipContent("Show Source For Editing", "Temporarily show assigned scene source objects so you can move or scale them.")))
+            SetReactionSceneSourcesVisible(reaction, true);
+        EditorGUILayout.EndHorizontal();
+    }
+
+    private void SetReactionSceneSourcesVisible(SerializedProperty reaction, bool visible)
+    {
+        SerializedProperty list = reaction.FindPropertyRelative("vfxObjects");
+        if (list == null) return;
+
+        for (int i = 0; i < list.arraySize; i++)
+        {
+            GameObject source = list.GetArrayElementAtIndex(i).objectReferenceValue as GameObject;
+            if (source == null || !source.scene.IsValid()) continue;
+            Undo.RecordObject(source, visible ? "Show Activity Effect Source" : "Hide Activity Effect Source");
+            source.SetActive(visible);
+            EditorUtility.SetDirty(source);
+        }
+        UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
+    }
+
+    private void DrawVisualEffectEditorTestButtons(SerializedProperty reaction)
+    {
+        SerializedProperty list = reaction.FindPropertyRelative("vfxObjects");
+        if (list == null || list.arraySize == 0) return;
+
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button(TipContent("Test Petal Shower In Scene", "Preview new falling petal copies in Edit Mode. This does not use Play Mode.")))
+            TestVisualEffectInEditor(reaction);
+        if (GUILayout.Button(TipContent("Clear Petal Preview", "Removes only the Edit Mode test petals.")))
+            ClearVisualEffectEditorPreview();
+        EditorGUILayout.EndHorizontal();
+    }
+
+    private void TestVisualEffectInEditor(SerializedProperty reaction)
+    {
+        serializedObject.ApplyModifiedProperties();
+        ClearVisualEffectEditorPreview();
+
+        if (reaction.FindPropertyRelative("hideSourceObjectsUntilPlayed").boolValue)
+            SetReactionSceneSourcesVisible(reaction, false);
+
+        SerializedProperty list = reaction.FindPropertyRelative("vfxObjects");
+        if (list == null || list.arraySize == 0) return;
+
+        Transform origin = reaction.FindPropertyRelative("vfxSpawnOrigin").objectReferenceValue as Transform;
+        ContentController controller = target as ContentController;
+        Transform fallback = controller != null ? controller.transform : null;
+
+        int count = Mathf.Max(1, reaction.FindPropertyRelative("objectBurstCount").intValue);
+        float life = Mathf.Max(0.1f, reaction.FindPropertyRelative("objectLifeSeconds").floatValue);
+        float duration = Mathf.Max(0.1f, reaction.FindPropertyRelative("fallDurationSeconds").floatValue);
+        float randomDelayMax = Mathf.Max(0f, reaction.FindPropertyRelative("randomStartDelayMaxSeconds").floatValue);
+        float randomFallExtra = Mathf.Max(0f, reaction.FindPropertyRelative("randomFallTimeExtraSeconds").floatValue);
+        float distance = Mathf.Max(0f, reaction.FindPropertyRelative("fallDistance").floatValue);
+        float side = Mathf.Max(0f, reaction.FindPropertyRelative("fallSpreadSideways").floatValue);
+        float flutter = Mathf.Max(0f, reaction.FindPropertyRelative("fallFlutterAmount").floatValue);
+        float spin = reaction.FindPropertyRelative("fallSpinDegrees").floatValue;
+        Vector2 pageSpread = reaction.FindPropertyRelative("pageSpreadSize").vector2Value;
+        bool randomRotation = reaction.FindPropertyRelative("randomizeObjectRotation").boolValue;
+        bool keepWorld = reaction.FindPropertyRelative("keepSpawnedObjectsInWorldSpace").boolValue;
+        ActivityVfxSpawnAreaMode editorSpawnMode = (ActivityVfxSpawnAreaMode)reaction.FindPropertyRelative("spawnAreaMode").enumValueIndex;
+        bool spreadAcrossPage = editorSpawnMode == ActivityVfxSpawnAreaMode.SpreadAcrossPage;
+        bool insideRectangleArea = editorSpawnMode == ActivityVfxSpawnAreaMode.InsideRectangleArea;
+        bool makeFall = reaction.FindPropertyRelative("make3DObjectsFall").boolValue;
+        FallingObjectMotion motion = (FallingObjectMotion)reaction.FindPropertyRelative("fallingMotion").enumValueIndex;
+        float scaleMin = Mathf.Max(0.01f, Mathf.Min(reaction.FindPropertyRelative("randomScaleMin").floatValue, reaction.FindPropertyRelative("randomScaleMax").floatValue));
+        float scaleMax = Mathf.Max(scaleMin, Mathf.Max(reaction.FindPropertyRelative("randomScaleMin").floatValue, reaction.FindPropertyRelative("randomScaleMax").floatValue));
+
+        for (int s = 0; s < list.arraySize; s++)
+        {
+            GameObject source = list.GetArrayElementAtIndex(s).objectReferenceValue as GameObject;
+            if (source == null) continue;
+
+            bool sourceIsSceneObject = source.scene.IsValid();
+            Transform sourceTransform = source.transform;
+            Transform rectangleArea = reaction.FindPropertyRelative("rectangleSpawnArea").objectReferenceValue as Transform;
+            Vector3 rectangleSize = reaction.FindPropertyRelative("rectangleSpawnAreaSize").vector3Value;
+            Transform usedOrigin = rectangleArea != null ? rectangleArea : (origin != null ? origin : (sourceIsSceneObject ? sourceTransform : fallback));
+            Vector3 basePosition = rectangleArea != null ? rectangleArea.position : (origin != null ? origin.position : (sourceIsSceneObject ? sourceTransform.position : (fallback != null ? fallback.position : Vector3.zero)));
+            Quaternion baseRotation = rectangleArea != null ? rectangleArea.rotation : (origin != null ? origin.rotation : (sourceIsSceneObject ? sourceTransform.rotation : Quaternion.identity));
+            Vector3 baseScale = sourceTransform.localScale;
+            // Editor preview uses the same rule as runtime: falling petals are one-shot world-space copies.
+            Transform parent = makeFall ? null : (keepWorld ? null : (sourceIsSceneObject ? sourceTransform.parent : null));
+            Vector3 spreadRight = usedOrigin != null ? usedOrigin.right : Vector3.right;
+            Vector3 spreadUp = usedOrigin != null ? usedOrigin.up : Vector3.up;
+            Vector3 spreadForward = usedOrigin != null ? usedOrigin.forward : Vector3.forward;
+
+            for (int i = 0; i < count; i++)
+            {
+                Vector3 offset;
+                if (insideRectangleArea)
+                {
+                    Vector3 size = rectangleSize;
+                    float x = UnityEngine.Random.Range(-Mathf.Abs(size.x) * 0.5f, Mathf.Abs(size.x) * 0.5f);
+                    float y = UnityEngine.Random.Range(-Mathf.Abs(size.y) * 0.5f, Mathf.Abs(size.y) * 0.5f);
+                    float z = UnityEngine.Random.Range(-Mathf.Abs(size.z) * 0.5f, Mathf.Abs(size.z) * 0.5f);
+                    offset = spreadRight * x + spreadUp * y + spreadForward * z;
+                }
+                else if (spreadAcrossPage)
+                {
+                    float x = UnityEngine.Random.Range(-pageSpread.x * 0.5f, pageSpread.x * 0.5f);
+                    float z = UnityEngine.Random.Range(-pageSpread.y * 0.5f, pageSpread.y * 0.5f);
+                    float y = UnityEngine.Random.Range(0f, Mathf.Max(0.02f, flutter * 2f));
+                    offset = spreadRight * x + spreadUp * y + spreadForward * z;
+                }
+                else
+                {
+                    offset = UnityEngine.Random.insideUnitSphere * Mathf.Max(0f, reaction.FindPropertyRelative("objectSpreadRadius").floatValue);
+                    offset.y = Mathf.Abs(offset.y);
+                }
+
+                GameObject clone = null;
+                if (!sourceIsSceneObject)
+                    clone = PrefabUtility.InstantiatePrefab(source) as GameObject;
+                if (clone == null)
+                    clone = Instantiate(source);
+
+                clone.name = "EDITOR_TEST_" + source.name;
+                Undo.RegisterCreatedObjectUndo(clone, "Test Activity Falling Effect");
+                if (parent != null) clone.transform.SetParent(parent, true);
+                clone.transform.position = basePosition + offset;
+                clone.transform.rotation = randomRotation ? UnityEngine.Random.rotation : baseRotation;
+                clone.transform.localScale = baseScale * UnityEngine.Random.Range(scaleMin, scaleMax);
+                float delay = makeFall ? UnityEngine.Random.Range(0f, randomDelayMax) : 0f;
+                float itemDuration = makeFall ? Mathf.Max(0.1f, duration + UnityEngine.Random.Range(0f, randomFallExtra)) : life;
+                clone.SetActive(delay <= 0.001f);
+
+                if (!makeFall)
+                {
+                    visualEffectEditorPreviewItems.Add(new VisualEffectEditorPreviewItem
+                    {
+                        go = clone,
+                        startPosition = clone.transform.position,
+                        startRotation = clone.transform.rotation,
+                        startedAt = (float)EditorApplication.timeSinceStartup + delay,
+                        hasStarted = delay <= 0.001f,
+                        duration = life,
+                        distance = 0f,
+                        sideMovement = 0f,
+                        flutter = 0f,
+                        spin = 0f,
+                        motion = motion,
+                        seed = UnityEngine.Random.Range(0f, 1000f),
+                        sideDirection = Vector3.right
+                    });
+                    continue;
+                }
+
+                Vector3 sideDir = UnityEngine.Random.insideUnitSphere;
+                sideDir.y = 0f;
+                if (sideDir.sqrMagnitude < 0.001f) sideDir = Vector3.right;
+                sideDir.Normalize();
+
+                visualEffectEditorPreviewItems.Add(new VisualEffectEditorPreviewItem
+                {
+                    go = clone,
+                    startPosition = clone.transform.position,
+                    startRotation = clone.transform.rotation,
+                    startedAt = (float)EditorApplication.timeSinceStartup + delay,
+                    hasStarted = delay <= 0.001f,
+                    duration = itemDuration,
+                    distance = distance,
+                    sideMovement = side,
+                    flutter = flutter,
+                    spin = spin,
+                    motion = motion,
+                    seed = UnityEngine.Random.Range(0f, 1000f),
+                    sideDirection = sideDir
+                });
+            }
+        }
+
+        RegisterVisualEffectEditorPreviewUpdate();
+        SceneView.RepaintAll();
+    }
+
+
+    private void CreatePetalFallArea(SerializedProperty reaction)
+    {
+        serializedObject.ApplyModifiedProperties();
+
+        SerializedProperty list = reaction.FindPropertyRelative("vfxObjects");
+        GameObject firstSource = null;
+        if (list != null && list.arraySize > 0)
+            firstSource = list.GetArrayElementAtIndex(0).objectReferenceValue as GameObject;
+
+        ContentController controller = target as ContentController;
+        Vector3 position = firstSource != null && firstSource.scene.IsValid()
+            ? firstSource.transform.position + Vector3.up * 0.35f
+            : (controller != null ? controller.transform.position + Vector3.up * 0.35f : Vector3.up * 0.35f);
+
+        GameObject area = new GameObject("Petal_Fall_Area");
+        Undo.RegisterCreatedObjectUndo(area, "Create Petal Fall Area");
+        area.transform.position = position;
+        area.transform.rotation = firstSource != null && firstSource.scene.IsValid() ? firstSource.transform.rotation : Quaternion.identity;
+        area.transform.localScale = new Vector3(1.8f, 0.05f, 1.2f);
+        BoxCollider box = area.AddComponent<BoxCollider>();
+        box.isTrigger = true;
+        box.size = Vector3.one;
+
+        reaction.FindPropertyRelative("rectangleSpawnArea").objectReferenceValue = area.transform;
+        reaction.FindPropertyRelative("spawnAreaMode").enumValueIndex = (int)ActivityVfxSpawnAreaMode.InsideRectangleArea;
+        serializedObject.ApplyModifiedProperties();
+        Selection.activeGameObject = area;
+        UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
+    }
+
+    private void SelectPetalFallArea(SerializedProperty reaction)
+    {
+        Transform area = reaction.FindPropertyRelative("rectangleSpawnArea").objectReferenceValue as Transform;
+        if (area != null)
+            Selection.activeGameObject = area.gameObject;
+    }
+
+    private static void RegisterVisualEffectEditorPreviewUpdate()
+    {
+        if (visualEffectEditorPreviewUpdateRegistered) return;
+        EditorApplication.update += UpdateVisualEffectEditorPreview;
+        visualEffectEditorPreviewUpdateRegistered = true;
+    }
+
+    private static void UpdateVisualEffectEditorPreview()
+    {
+        float now = (float)EditorApplication.timeSinceStartup;
+
+        for (int i = visualEffectEditorPreviewItems.Count - 1; i >= 0; i--)
+        {
+            VisualEffectEditorPreviewItem item = visualEffectEditorPreviewItems[i];
+            if (item == null || item.go == null)
+            {
+                visualEffectEditorPreviewItems.RemoveAt(i);
+                continue;
+            }
+
+            if (now < item.startedAt)
+                continue;
+
+            if (!item.hasStarted)
+            {
+                item.go.SetActive(true);
+                item.hasStarted = true;
+            }
+
+            float n = Mathf.Clamp01((now - item.startedAt) / Mathf.Max(0.1f, item.duration));
+            float ease = Mathf.SmoothStep(0f, 1f, n);
+            Vector3 pos = item.startPosition + Vector3.down * item.distance * ease;
+
+            switch (item.motion)
+            {
+                case FallingObjectMotion.GentleFall:
+                    pos += item.sideDirection * item.sideMovement * ease;
+                    break;
+                case FallingObjectMotion.SwirlFall:
+                    pos += new Vector3(Mathf.Sin((n * 8f) + item.seed), 0f, Mathf.Cos((n * 8f) + item.seed)) * item.sideMovement * n;
+                    break;
+                case FallingObjectMotion.BounceFall:
+                    pos += item.sideDirection * item.sideMovement * ease;
+                    pos += Vector3.up * Mathf.Sin(n * Mathf.PI * 3f) * item.flutter * (1f - n);
+                    break;
+                case FallingObjectMotion.FlutterFall:
+                default:
+                    pos += item.sideDirection * item.sideMovement * Mathf.Sin(n * Mathf.PI * 1.2f);
+                    pos += new Vector3(Mathf.Sin((n * 14f) + item.seed), 0f, Mathf.Cos((n * 9f) + item.seed)) * item.flutter;
+                    break;
+            }
+
+            item.go.transform.position = pos;
+            item.go.transform.rotation = item.startRotation * Quaternion.Euler(item.spin * n, item.spin * 0.35f * n, item.spin * 0.6f * n);
+
+            if (n >= 1f)
+            {
+                Undo.DestroyObjectImmediate(item.go);
+                visualEffectEditorPreviewItems.RemoveAt(i);
+            }
+        }
+
+        if (visualEffectEditorPreviewItems.Count == 0)
+        {
+            EditorApplication.update -= UpdateVisualEffectEditorPreview;
+            visualEffectEditorPreviewUpdateRegistered = false;
+        }
+
+        SceneView.RepaintAll();
+    }
+
+    private static void ClearVisualEffectEditorPreview()
+    {
+        for (int i = visualEffectEditorPreviewItems.Count - 1; i >= 0; i--)
+        {
+            GameObject go = visualEffectEditorPreviewItems[i] != null ? visualEffectEditorPreviewItems[i].go : null;
+            if (go != null)
+                DestroyImmediate(go);
+        }
+        visualEffectEditorPreviewItems.Clear();
+        if (visualEffectEditorPreviewUpdateRegistered)
+        {
+            EditorApplication.update -= UpdateVisualEffectEditorPreview;
+            visualEffectEditorPreviewUpdateRegistered = false;
+        }
+        SceneView.RepaintAll();
     }
 
     private void DrawAnimationReaction(SerializedProperty reaction)
     {
-        DrawMiniHeader("Animation", "Drag the Animator and drag the Animation Clip. No animation name typing needed.");
+        DrawMiniHeader("Animation", "Drag the Animator and choose whether to play one clip, random clip, all clips together, or all clips one by one.");
         EditorGUILayout.PropertyField(reaction.FindPropertyRelative("animator"), TipContent("Animator To Play"));
-        EditorGUILayout.PropertyField(reaction.FindPropertyRelative("animationClip"), TipContent("Animation Clip To Play"));
+        DrawEnumPopup(reaction.FindPropertyRelative("animationPlayMode"), ReactionAnimationPlayModeValues, ReactionAnimationPlayModeLabels, TipContent("How Should Animations Play"));
+        ActivityReactionAnimationPlayMode mode = (ActivityReactionAnimationPlayMode)reaction.FindPropertyRelative("animationPlayMode").enumValueIndex;
+        if (mode == ActivityReactionAnimationPlayMode.SelectedClipOnly)
+        {
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("animationClip"), TipContent("Animation Clip To Play"));
+        }
+        else
+        {
+            EditorGUILayout.PropertyField(reaction.FindPropertyRelative("animationClips"), TipContent("Animation Clips", "Add clips here. Random picks one. All Together starts all. One By One plays clips in order."), true);
+        }
         DrawCommonReactionAudio(reaction);
-        EditorGUILayout.PropertyField(reaction.FindPropertyRelative("doNotRestartWhilePlaying"), TipContent("Do Not Restart While Playing"));
+        EditorGUILayout.PropertyField(reaction.FindPropertyRelative("doNotRestartWhilePlaying"), TipContent("Do Not Restart Same Animation", "ON = if the same animation is already playing, a fast tap will not restart it from frame 0."));
         EditorGUILayout.PropertyField(reaction.FindPropertyRelative("waitUntilFinished"), TipContent("Wait Until Animation Finishes"));
         EditorGUILayout.PropertyField(reaction.FindPropertyRelative("animationSpeed"), TipContent("Animation Speed"));
         EditorGUILayout.PropertyField(reaction.FindPropertyRelative("blocksNextInput"), TipContent("Block All Child Input While This Plays"));
+        DrawActivityTransformFields(reaction);
     }
 
     private void DrawCommonReactionAudio(SerializedProperty reaction)
@@ -2631,6 +3561,7 @@ public class ContentControllerEditor : Editor
         EditorGUILayout.PropertyField(reaction.FindPropertyRelative("moveTarget"), TipContent("Move Target Optional"));
         EditorGUILayout.PropertyField(reaction.FindPropertyRelative("moveOffset"), TipContent("Move Offset Optional"));
         EditorGUILayout.PropertyField(reaction.FindPropertyRelative("moveDurationSeconds"), TipContent("Move Time Seconds"));
+        DrawActivityTransformFields(reaction);
         DrawCommonReactionAudio(reaction);
     }
 
@@ -2702,7 +3633,7 @@ public class ContentControllerEditor : Editor
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("maxReactionWaitSeconds"), TipContent("Safety Max Wait Seconds"));
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("showTimerProgress"), TipContent("Show Timer Or Progress UI If Needed"));
-            DrawEnumPopup(activity.FindPropertyRelative("noInputActionAfterHint"), NoInputActionValues, NoInputActionLabels, TipContent("After No Input Hint"));
+            EditorGUILayout.HelpBox("No-input timing is controlled only in Section 5 Timing, so beginner setup stays in one place.", MessageType.None);
             EditorGUI.indentLevel--;
         }
     }
@@ -2793,6 +3724,7 @@ public class ContentControllerEditor : Editor
         SerializedProperty activity = activities.GetArrayElementAtIndex(activities.arraySize - 1);
         activity.FindPropertyRelative("activityName").stringValue = name;
         activity.FindPropertyRelative("childInput").enumValueIndex = (int)kind;
+        activity.FindPropertyRelative("resultPlayTiming").enumValueIndex = (int)ActivityResultPlayTiming.OnEveryCorrectInput;
 
         if (kind == ActivityInputKind.ProgressGate)
         {
@@ -2800,14 +3732,14 @@ public class ContentControllerEditor : Editor
             activity.FindPropertyRelative("startWhen").enumValueIndex = (int)ActivityStartRule.AfterRevealFinishes;
             activity.FindPropertyRelative("instructionText").stringValue = "Keep tapping to continue";
             activity.FindPropertyRelative("finishWhen").enumValueIndex = (int)ActivityFinishRule.AfterActiveTimeEnds;
-            activity.FindPropertyRelative("showTimerProgress").boolValue = true;
+            activity.FindPropertyRelative("useProgressBar").boolValue = true;
             activity.FindPropertyRelative("progressGateCompletesBy").enumValueIndex = (int)ActivityProgressGateCompletionMode.RequiredTapCount;
             activity.FindPropertyRelative("progressRequiredTaps").intValue = 5;
             activity.FindPropertyRelative("progressRequiredTappingSeconds").floatValue = 5f;
             activity.FindPropertyRelative("progressTapActiveWindowSeconds").floatValue = 0.35f;
             activity.FindPropertyRelative("progressDropsWhenNotTapping").boolValue = true;
             activity.FindPropertyRelative("progressLossPerSecond").floatValue = 25f;
-            activity.FindPropertyRelative("progressAutoStartStoryAfterSeconds").floatValue = 8f;
+            activity.FindPropertyRelative("progressAutoStartStoryAfterSeconds").floatValue = 0f;
             activity.FindPropertyRelative("playResultWhenProgressAutoSkips").boolValue = true;
         }
         else if (kind == ActivityInputKind.GroupAction)
@@ -2816,8 +3748,8 @@ public class ContentControllerEditor : Editor
             activity.FindPropertyRelative("startWhen").enumValueIndex = (int)ActivityStartRule.AfterRevealFinishes;
             activity.FindPropertyRelative("instructionText").stringValue = "Tap any character";
             activity.FindPropertyRelative("finishWhen").enumValueIndex = (int)ActivityFinishRule.AfterActiveTimeEnds;
-            activity.FindPropertyRelative("groupAutoStartStoryAfterSeconds").floatValue = 8f;
-            activity.FindPropertyRelative("groupPlayActionsWhenAutoSkipped").boolValue = false;
+            activity.FindPropertyRelative("groupAutoStartStoryAfterSeconds").floatValue = 0f;
+            activity.FindPropertyRelative("groupPlayActionsWhenAutoSkipped").boolValue = true;
             activity.FindPropertyRelative("groupWaitSecondsBeforeStory").floatValue = 0f;
         }
         else if (kind == ActivityInputKind.AnswerQuestion || kind == ActivityInputKind.ChooseOption)
@@ -2846,7 +3778,7 @@ public class ContentControllerEditor : Editor
             activity.FindPropertyRelative("startWhen").enumValueIndex = (int)ActivityStartRule.AfterRevealFinishes;
             activity.FindPropertyRelative("instructionText").stringValue = "Tap to help";
             activity.FindPropertyRelative("finishWhen").enumValueIndex = (int)ActivityFinishRule.AfterActiveTimeEnds;
-            activity.FindPropertyRelative("showTimerProgress").boolValue = true;
+            activity.FindPropertyRelative("useProgressBar").boolValue = true;
             activity.FindPropertyRelative("helpProgressGainPerTap").floatValue = 20f;
             activity.FindPropertyRelative("helpProgressLossPerSecond").floatValue = 25f;
             activity.FindPropertyRelative("helpAutoContinueAfterSeconds").floatValue = 5f;
@@ -2893,6 +3825,7 @@ public class ContentControllerEditor : Editor
         activity.FindPropertyRelative("childInput").enumValueIndex = (int)ActivityInputKind.TapAnywhere;
         activity.FindPropertyRelative("nextInputRule").enumValueIndex = (int)ActivityNextInputRule.Immediately;
         activity.FindPropertyRelative("finishWhen").enumValueIndex = (int)ActivityFinishRule.AfterActiveTimeEnds;
+        activity.FindPropertyRelative("resultPlayTiming").enumValueIndex = (int)ActivityResultPlayTiming.OnEveryCorrectInput;
         activity.FindPropertyRelative("activeTimeSeconds").floatValue = 10f;
         activity.FindPropertyRelative("continueAfterComplete").boolValue = true;
         activity.FindPropertyRelative("waitForRunningReactionsBeforeFinish").boolValue = true;
@@ -2903,7 +3836,7 @@ public class ContentControllerEditor : Editor
         activity.FindPropertyRelative("enableNoInputHelp").boolValue = true;
         activity.FindPropertyRelative("noInputHintAfterSeconds").floatValue = 3f;
         activity.FindPropertyRelative("noInputHintText").stringValue = "Try the highlighted object";
-        activity.FindPropertyRelative("noInputActionAfterHint").enumValueIndex = (int)ActivityNoInputAction.SkipActivityAndContinue;
+        activity.FindPropertyRelative("noInputActionAfterHint").enumValueIndex = (int)ActivityNoInputAction.AutoPlayResultThenContinue;
         activity.FindPropertyRelative("autoSkipAfterHintSeconds").floatValue = 3f;
         activity.FindPropertyRelative("useSameHintEffectsForNoInput").boolValue = true;
         activity.FindPropertyRelative("helpProgressGainPerTap").floatValue = 20f;
@@ -2920,7 +3853,7 @@ public class ContentControllerEditor : Editor
         activity.FindPropertyRelative("progressTapActiveWindowSeconds").floatValue = 0.35f;
         activity.FindPropertyRelative("progressDropsWhenNotTapping").boolValue = true;
         activity.FindPropertyRelative("progressLossPerSecond").floatValue = 25f;
-        activity.FindPropertyRelative("progressAutoStartStoryAfterSeconds").floatValue = 8f;
+        activity.FindPropertyRelative("progressAutoStartStoryAfterSeconds").floatValue = 0f;
         activity.FindPropertyRelative("playResultWhenProgressAutoSkips").boolValue = true;
         activity.FindPropertyRelative("progressTapSoundVolume").floatValue = 1f;
         activity.FindPropertyRelative("resultAnimationSpeed").floatValue = 1f;
@@ -2930,8 +3863,8 @@ public class ContentControllerEditor : Editor
         activity.FindPropertyRelative("resultSoundVolume").floatValue = 1f;
         activity.FindPropertyRelative("waitForResultSound").boolValue = false;
         activity.FindPropertyRelative("resultExtraWaitSeconds").floatValue = 0f;
-        activity.FindPropertyRelative("groupAutoStartStoryAfterSeconds").floatValue = 8f;
-        activity.FindPropertyRelative("groupPlayActionsWhenAutoSkipped").boolValue = false;
+        activity.FindPropertyRelative("groupAutoStartStoryAfterSeconds").floatValue = 0f;
+        activity.FindPropertyRelative("groupPlayActionsWhenAutoSkipped").boolValue = true;
         activity.FindPropertyRelative("groupWaitSecondsBeforeStory").floatValue = 0f;
         activity.FindPropertyRelative("groupResultVoiceVolume").floatValue = 1f;
         activity.FindPropertyRelative("groupWaitForVoiceOver").boolValue = true;

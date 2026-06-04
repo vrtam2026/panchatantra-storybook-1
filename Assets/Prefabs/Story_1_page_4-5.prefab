@@ -25073,6 +25073,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7550954670898575784}
+  - {fileID: 5260235403758923816}
   - {fileID: 5529039914623009430}
   - {fileID: 8475550150236317862}
   - {fileID: 7329899136317316830}
@@ -25309,12 +25310,12 @@ MonoBehaviour:
     storyWaitAnimationStateName: 
     storyWaitTimeoutSeconds: 0
     pauseStoryWhileActivity: 0
-    instructionText: Tap to Welcome king!
+    instructionText: Tap on the screen to Welcome the King
     activityVoiceOver: {fileID: 0}
     waitForActivityVoiceOver: 0
     activityDurationAudio: {fileID: 8300000, guid: f73615a7e8d75324485227daef866e2e, type: 3}
     loopActivityDurationAudio: 1
-    activityDurationAudioVolume: 0.361
+    activityDurationAudioVolume: 0.299
     fadeActivityAudioOnEnd: 1
     activityAudioFadeSeconds: 0.8
     objectsOnWhenActivityStarts: []
@@ -25327,7 +25328,7 @@ MonoBehaviour:
     mustTapInOrder: 0
     requiredInputCount: 1
     waitOnlySeconds: 0
-    activeTimeSeconds: 10
+    activeTimeSeconds: 15
     maxTimeToFirstInput: 0
     helpProgressGainPerTap: 20
     helpProgressLossPerSecond: 25
@@ -25349,7 +25350,7 @@ MonoBehaviour:
     progressTapSpeedWindowSeconds: 1
     progressDropsWhenNotTapping: 1
     progressLossPerSecond: 25
-    progressAutoStartStoryAfterSeconds: 8
+    progressAutoStartStoryAfterSeconds: 0
     playResultWhenProgressAutoSkips: 1
     progressTapSound: {fileID: 0}
     progressTapSoundVolume: 1
@@ -25381,10 +25382,12 @@ MonoBehaviour:
     progressHelperAnimations: []
     progressHelperAnimationSelection: 1
     progressHelperSelectedAnimationNumber: 1
+    progressHelperSelectedAnimationNumbers: 1
     progressHelperAnimationSpeed: 1
     progressHelperLoopAnimation: 1
     progressHelperPauseWhenNotTapping: 1
     progressHelperResetWhenProgressEmpty: 0
+    progressAutoFinishAfterNoTapSeconds: 5
     resultAnimator: {fileID: 0}
     resultAnimationClip: {fileID: 0}
     resultAnimationSpeed: 1
@@ -25396,6 +25399,18 @@ MonoBehaviour:
     resultSoundVolume: 1
     waitForResultSound: 0
     resultExtraWaitSeconds: 0
+    resultUseActivityTransform: 0
+    resultPreviewActivityTransformInEditor: 0
+    resultObjectToMoveOrScale: {fileID: 0}
+    resultCopyTransformFrom: {fileID: 0}
+    resultActivityPosition: {x: 0, y: 0, z: 0}
+    resultActivityRotationEuler: {x: 0, y: 0, z: 0}
+    resultActivityScale: {x: 1, y: 1, z: 1}
+    resultRestoreTransformAfterAction: 1
+    resultHasSavedStoryPose: 0
+    resultStoryPosition: {x: 0, y: 0, z: 0}
+    resultStoryRotationEuler: {x: 0, y: 0, z: 0}
+    resultStoryScale: {x: 1, y: 1, z: 1}
     groupCompletionMode: 0
     targetActions: []
     groupTapObjects: []
@@ -25405,7 +25420,7 @@ MonoBehaviour:
     groupRepeatTapMessage: Already done. Tap another one.
     groupPlayOnlyTappedObjectAction: 1
     groupActions: []
-    groupAutoStartStoryAfterSeconds: 8
+    groupAutoStartStoryAfterSeconds: 0
     groupPlayActionsWhenAutoSkipped: 0
     groupWaitSecondsBeforeStory: 0
     groupResultVoiceOver: {fileID: 0}
@@ -25416,7 +25431,7 @@ MonoBehaviour:
     storyMomentRequiredTaps: 5
     storyMomentRequiredTappingSeconds: 5
     storyMomentTapActiveWindowSeconds: 0.35
-    storyMomentShowProgressBar: 1
+    storyMomentShowProgressBar: 0
     storyMomentTotalActivitySeconds: 30
     storyMomentShowHintAfterSeconds: 5
     storyMomentSkipAfterHintSeconds: 10
@@ -25445,15 +25460,15 @@ MonoBehaviour:
     storyMomentWrongTapText: Tap the highlighted object
     storyMomentWrongTapSound: {fileID: 0}
     storyMomentWrongTapSoundVolume: 1
-    showHintWhenWrongInput: 1
-    wrongInputHintText: Try tapping the highlighted object
+    showHintWhenWrongInput: 0
+    wrongInputHintText: Tap on the screen to Welcome the King
     wrongInputSound: {fileID: 0}
     wrongInputSoundVolume: 1
     enableNoInputHelp: 1
-    noInputHintAfterSeconds: 3
-    noInputHintText: Try the highlighted object
-    noInputActionAfterHint: 2
-    autoSkipAfterHintSeconds: 3
+    noInputHintAfterSeconds: 5
+    noInputHintText: Tap on the screen to Welcome the King
+    noInputActionAfterHint: 3
+    autoSkipAfterHintSeconds: 5
     useSameHintEffectsForNoInput: 1
     pulseTargetObject: 1
     targetPulseScale: 1.18
@@ -25468,6 +25483,12 @@ MonoBehaviour:
     hintObjectSeconds: 1.5
     nextInputRule: 0
     nextInputDelaySeconds: 0
+    useProgressBar: 0
+    progressBarFillMode: 0
+    progressBarBehavior: 0
+    progressGoDownPercentPerSecond: 10
+    progressMinimumPercent: 0
+    resultPlayTiming: 1
     showTimerProgress: 0
     choiceOptions: []
     optionTexts:
@@ -25483,8 +25504,15 @@ MonoBehaviour:
     - enabled: 1
       reactionName: Visual Effect
       type: 0
-      playWhen: 0
+      playWhen: 1
       visualEffectPlayMode: 0
+      hideSourceObjectsUntilPlayed: 1
+      spawnAreaMode: 1
+      pageSpreadSize: {x: 0.2, y: 2.04}
+      rectangleSpawnArea: {fileID: 0}
+      rectangleSpawnAreaSize: {x: 1.8, y: 0.35, z: 1.2}
+      fadeOutSpawnedObjects: 1
+      fadeOutSeconds: 0.35
       startDelaySeconds: 0
       extraWaitSeconds: 0
       cooldownSeconds: 0
@@ -25499,18 +25527,43 @@ MonoBehaviour:
       waitForReactionVoiceOver: 0
       stopVoiceWhenReactionEnds: 0
       vfxObjects:
-      - {fileID: 2974109626295162808}
-      - {fileID: 5457093776559368824}
+      - {fileID: 4777136775603399314}
+      - {fileID: 4777136775603399314}
       vfxSpawnOrigin: {fileID: 0}
       particleBurstCount: 25
-      objectBurstCount: 1
-      objectLifeSeconds: 2
+      objectBurstCount: 20
+      objectLifeSeconds: 1.5
       objectSpreadRadius: 0.15
       objectLaunchForce: 0
       randomizeObjectRotation: 0
       keepSpawnedObjectsInWorldSpace: 0
+      make3DObjectsFall: 1
+      fallingMotion: 3
+      fallDistance: 1.2
+      fallDurationSeconds: 1
+      randomStartDelayMaxSeconds: 0.35
+      randomFallTimeExtraSeconds: 0.5
+      fallSpreadSideways: 0.25
+      fallSpinDegrees: 90
+      fallFlutterAmount: 0.08
+      randomScaleMin: 0.85
+      randomScaleMax: 1.15
+      useActivityTransform: 0
+      previewActivityTransformInEditor: 0
+      objectToMoveOrScale: {fileID: 0}
+      copyTransformFrom: {fileID: 0}
+      activityPosition: {x: 0, y: 0, z: 0}
+      activityRotationEuler: {x: 0, y: 0, z: 0}
+      activityScale: {x: 1, y: 1, z: 1}
+      restoreTransformAfterAction: 1
+      hasSavedStoryPose: 0
+      storyPosition: {x: 0, y: 0, z: 0}
+      storyRotationEuler: {x: 0, y: 0, z: 0}
+      storyScale: {x: 1, y: 1, z: 1}
       animator: {fileID: 0}
       animationClip: {fileID: 0}
+      animationClips: []
+      animationPlayMode: 0
       animationSpeed: 1
       doNotRestartWhilePlaying: 0
       blocksNextInput: 0
@@ -25529,12 +25582,19 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       waitUntilFinished: 0
-      showAdvancedOptions: 1
+      showAdvancedOptions: 0
     - enabled: 1
       reactionName: Animation
       type: 1
       playWhen: 1
       visualEffectPlayMode: 0
+      hideSourceObjectsUntilPlayed: 1
+      spawnAreaMode: 0
+      pageSpreadSize: {x: 1.2, y: 0.7}
+      rectangleSpawnArea: {fileID: 0}
+      rectangleSpawnAreaSize: {x: 1.8, y: 0.35, z: 1.2}
+      fadeOutSpawnedObjects: 1
+      fadeOutSeconds: 0.35
       startDelaySeconds: 0
       extraWaitSeconds: 0
       cooldownSeconds: 0
@@ -25559,8 +25619,33 @@ MonoBehaviour:
       objectLaunchForce: 0
       randomizeObjectRotation: 1
       keepSpawnedObjectsInWorldSpace: 0
+      make3DObjectsFall: 0
+      fallingMotion: 3
+      fallDistance: 1.2
+      fallDurationSeconds: 1.6
+      randomStartDelayMaxSeconds: 0.35
+      randomFallTimeExtraSeconds: 0.5
+      fallSpreadSideways: 0.25
+      fallSpinDegrees: 180
+      fallFlutterAmount: 0.08
+      randomScaleMin: 0.85
+      randomScaleMax: 1.15
+      useActivityTransform: 0
+      previewActivityTransformInEditor: 0
+      objectToMoveOrScale: {fileID: 0}
+      copyTransformFrom: {fileID: 0}
+      activityPosition: {x: 0, y: 0, z: 0}
+      activityRotationEuler: {x: 0, y: 0, z: 0}
+      activityScale: {x: 1, y: 1, z: 1}
+      restoreTransformAfterAction: 1
+      hasSavedStoryPose: 0
+      storyPosition: {x: 0, y: 0, z: 0}
+      storyRotationEuler: {x: 0, y: 0, z: 0}
+      storyScale: {x: 1, y: 1, z: 1}
       animator: {fileID: 3107923249549785184}
       animationClip: {fileID: 7400000, guid: 4c0b0124cc79f9b43b9634b82896d867, type: 2}
+      animationClips: []
+      animationPlayMode: 0
       animationSpeed: 1
       doNotRestartWhilePlaying: 1
       blocksNextInput: 0
@@ -25594,7 +25679,7 @@ MonoBehaviour:
     onActivityCompleted:
       m_PersistentCalls:
         m_Calls: []
-  activityTemplateSchemaVersion: 20
+  activityTemplateSchemaVersion: 33
   activityPanel: {fileID: 0}
   defaultRaycastCamera: {fileID: 0}
   defaultAudioSource: {fileID: 9106171197154186402}
@@ -40981,6 +41066,97 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5870900875378237036, guid: 2c1e39774ab67d8448ec2c51e5736ac8, type: 3}
   m_PrefabInstance: {fileID: 3585787659648508667}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5659517609012795331
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1974636644454394274}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.5417611
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.845
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.5373577
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.789288
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.6140232
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 75.762
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_Name
+      value: rose_petals
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5453647341310420232, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+--- !u!1 &4777136775603399314 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+  m_PrefabInstance: {fileID: 5659517609012795331}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5260235403758923816 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 741c025377d78d443af1ec7518695a11, type: 3}
+  m_PrefabInstance: {fileID: 5659517609012795331}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7022947373962716912
 PrefabInstance:

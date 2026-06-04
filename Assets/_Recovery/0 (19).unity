@@ -322,7 +322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4444276884628259052, guid: adb1dc540ac2473439cfa91a7efaf13f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -886,7 +886,6 @@ GameObject:
   - component: {fileID: 218283074}
   - component: {fileID: 218283073}
   - component: {fileID: 218283072}
-  - component: {fileID: 218283077}
   m_Layer: 0
   m_Name: Story_1_page_84-quiz
   m_TagString: Untagged
@@ -1003,26 +1002,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 218283077}
---- !u!114 &218283077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 218283069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 218283076}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 84
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 218283076}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
+  mPreview: {fileID: 0}
 --- !u!1 &249125308
 GameObject:
   m_ObjectHideFlags: 0
@@ -1221,7 +1201,6 @@ GameObject:
   - component: {fileID: 313246788}
   - component: {fileID: 313246787}
   - component: {fileID: 313246786}
-  - component: {fileID: 313246791}
   m_Layer: 0
   m_Name: Story_1_page_64-quiz
   m_TagString: Untagged
@@ -1338,26 +1317,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 313246791}
---- !u!114 &313246791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 313246783}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 313246790}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 64
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 313246790}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
+  mPreview: {fileID: 0}
 --- !u!1 &360445468
 GameObject:
   m_ObjectHideFlags: 0
@@ -2893,6 +2853,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'Story_1_page_90-91 '
       objectReference: {fileID: 0}
+    - target: {fileID: 9040277737404478599, guid: b39da93fec577024cb58a410821e8d46, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3241,7 +3205,6 @@ GameObject:
   - component: {fileID: 984247715}
   - component: {fileID: 984247714}
   - component: {fileID: 984247713}
-  - component: {fileID: 984247718}
   m_Layer: 0
   m_Name: Story_1_page_108-quiz
   m_TagString: Untagged
@@ -3358,26 +3321,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 984247718}
---- !u!114 &984247718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 984247710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 984247717}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 108
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 984247717}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
+  mPreview: {fileID: 0}
 --- !u!1 &1000489696
 GameObject:
   m_ObjectHideFlags: 0
@@ -8667,7 +8611,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8152445640671337178}
+  mPreview: {fileID: 0}
 --- !u!1 &329687853074120751
 GameObject:
   m_ObjectHideFlags: 0
@@ -8772,7 +8716,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7314352887956999546}
+  mPreview: {fileID: 0}
 --- !u!114 &471114970352053958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8992,7 +8936,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8853043613768087296}
+  mPreview: {fileID: 0}
 --- !u!114 &728297411638591785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9159,7 +9103,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 6661141168799595082}
+  mPreview: {fileID: 0}
 --- !u!1 &843873794318495700
 GameObject:
   m_ObjectHideFlags: 0
@@ -9174,7 +9118,6 @@ GameObject:
   - component: {fileID: 3727652274449649248}
   - component: {fileID: 4027529103228536015}
   - component: {fileID: 5265542454217734649}
-  - component: {fileID: 7301724970458907743}
   m_Layer: 0
   m_Name: Story_1_page_18-19
   m_TagString: Untagged
@@ -9245,7 +9188,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 9109594003573270289}
+  mPreview: {fileID: 0}
 --- !u!114 &892910120638013223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9333,7 +9276,6 @@ GameObject:
   - component: {fileID: 4977136642156116825}
   - component: {fileID: 7426828779647595140}
   - component: {fileID: 1546979471782399461}
-  - component: {fileID: 9042283775654313514}
   m_Layer: 0
   m_Name: Story_1_page_34-35
   m_TagString: Untagged
@@ -9455,7 +9397,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7935453857452412310}
+  mPreview: {fileID: 0}
 --- !u!114 &1102793229171731186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9517,7 +9459,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7757085083600329426}
+  mPreview: {fileID: 0}
 --- !u!4 &1149125491113243210
 Transform:
   m_ObjectHideFlags: 0
@@ -9847,7 +9789,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8850851393279363144}
+  mPreview: {fileID: 0}
 --- !u!1 &1639285627949531257
 GameObject:
   m_ObjectHideFlags: 0
@@ -9862,7 +9804,6 @@ GameObject:
   - component: {fileID: 3921016712494295437}
   - component: {fileID: 6303784263610738705}
   - component: {fileID: 4199110205540300220}
-  - component: {fileID: 7572523681015662011}
   m_Layer: 0
   m_Name: Story_1_page_54-55
   m_TagString: Untagged
@@ -9884,7 +9825,6 @@ GameObject:
   - component: {fileID: 2771255799187481095}
   - component: {fileID: 1396463894970080120}
   - component: {fileID: 6661141168799595081}
-  - component: {fileID: 6661141168799595082}
   m_Layer: 0
   m_Name: Story_1_page_88-89
   m_TagString: Untagged
@@ -10020,7 +9960,6 @@ GameObject:
   - component: {fileID: 643143329316042393}
   - component: {fileID: 7951102233958115549}
   - component: {fileID: 6690119042559102381}
-  - component: {fileID: 8638380256709402246}
   m_Layer: 0
   m_Name: Story_1_page_32-33
   m_TagString: Untagged
@@ -10120,7 +10059,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 9026649962213080956}
+  mPreview: {fileID: 0}
 --- !u!4 &1811576558126573510
 Transform:
   m_ObjectHideFlags: 0
@@ -10165,7 +10104,6 @@ GameObject:
   - component: {fileID: 3890759360978190447}
   - component: {fileID: 7171484934515651766}
   - component: {fileID: 5938053307312844828}
-  - component: {fileID: 8629653976556289502}
   m_Layer: 0
   m_Name: Story_1_page_78-79
   m_TagString: Untagged
@@ -10229,7 +10167,6 @@ GameObject:
   - component: {fileID: 8278789482553564894}
   - component: {fileID: 2760428931299874145}
   - component: {fileID: 6249323912343310488}
-  - component: {fileID: 8278789482553564895}
   m_Layer: 0
   m_Name: Story_1_page_52-53
   m_TagString: Untagged
@@ -10263,7 +10200,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7335855823223901337}
+  mPreview: {fileID: 0}
 --- !u!114 &2088592431059642932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10299,7 +10236,6 @@ GameObject:
   - component: {fileID: 6911910421083432077}
   - component: {fileID: 763617136421814621}
   - component: {fileID: 1102793229171731186}
-  - component: {fileID: 7935453857452412310}
   m_Layer: 0
   m_Name: Story_1_page_76-77
   m_TagString: Untagged
@@ -10409,7 +10345,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8608717421813869550}
+  mPreview: {fileID: 0}
 --- !u!114 &2215999727722042923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10557,7 +10493,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8629653976556289502}
+  mPreview: {fileID: 0}
 --- !u!114 &2343396767716196780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10593,7 +10529,6 @@ GameObject:
   - component: {fileID: 8411608122162343439}
   - component: {fileID: 9181488691027047076}
   - component: {fileID: 7281754084645999673}
-  - component: {fileID: 9181488691027047077}
   m_Layer: 0
   m_Name: 'Story_1_page_60-61 '
   m_TagString: Untagged
@@ -10788,7 +10723,6 @@ GameObject:
   - component: {fileID: 2448296848461145228}
   - component: {fileID: 7195204374683746300}
   - component: {fileID: 7393955567977406386}
-  - component: {fileID: 7393955567977406387}
   m_Layer: 0
   m_Name: 'Story_1_page_62-63 '
   m_TagString: Untagged
@@ -10877,7 +10811,6 @@ GameObject:
   - component: {fileID: 7874445232241936959}
   - component: {fileID: 7756456902939015873}
   - component: {fileID: 3453091577204160013}
-  - component: {fileID: 7874445232241936960}
   m_Layer: 0
   m_Name: Story_1_page_6-7
   m_TagString: Untagged
@@ -10911,7 +10844,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 9134110994455827353}
+  mPreview: {fileID: 0}
 --- !u!4 &2950290438908734144
 Transform:
   m_ObjectHideFlags: 0
@@ -11005,7 +10938,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 6489767878755915553}
+  mPreview: {fileID: 0}
 --- !u!114 &3184907708943257157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11065,7 +10998,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 6828021459210957227}
+  mPreview: {fileID: 0}
 --- !u!114 &3240368036907141624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11155,7 +11088,6 @@ GameObject:
   - component: {fileID: 8608717421813869549}
   - component: {fileID: 5445832403944180785}
   - component: {fileID: 3665376073905875112}
-  - component: {fileID: 8608717421813869550}
   m_Layer: 0
   m_Name: 'Story_1_page_4-5 '
   m_TagString: Untagged
@@ -11177,7 +11109,6 @@ GameObject:
   - component: {fileID: 129619450552217862}
   - component: {fileID: 8874090331148103636}
   - component: {fileID: 1289323784915395486}
-  - component: {fileID: 8874090331148103637}
   m_Layer: 0
   m_Name: Story_1_page_92-93
   m_TagString: Untagged
@@ -11231,7 +11162,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8110144189683900266}
+  mPreview: {fileID: 0}
 --- !u!114 &3453091577204160013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11294,7 +11225,6 @@ GameObject:
   - component: {fileID: 4427087814181948229}
   - component: {fileID: 4270185030605257704}
   - component: {fileID: 6828021459210957226}
-  - component: {fileID: 6828021459210957227}
   m_Layer: 0
   m_Name: Story_1_page_66-67
   m_TagString: Untagged
@@ -11328,7 +11258,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7654922476001722154}
+  mPreview: {fileID: 0}
 --- !u!4 &3551965475789919969
 Transform:
   m_ObjectHideFlags: 0
@@ -11400,7 +11330,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7576435988586667652}
+  mPreview: {fileID: 0}
 --- !u!114 &3620739169063430241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11534,7 +11464,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8764808736107754616}
+  mPreview: {fileID: 0}
 --- !u!114 &3807575703538544160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11825,7 +11755,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 9078787994858263944}
+  mPreview: {fileID: 0}
 --- !u!114 &4199110205540300220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11866,7 +11796,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8736858258207975729}
+  mPreview: {fileID: 0}
 --- !u!114 &4270185030605257704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11926,7 +11856,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7733800387941544033}
+  mPreview: {fileID: 0}
 --- !u!114 &4417100897985512574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12151,7 +12081,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7874445232241936960}
+  mPreview: {fileID: 0}
 --- !u!224 &4523575952931657686
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12191,7 +12121,6 @@ GameObject:
   - component: {fileID: 6275476415888641059}
   - component: {fileID: 358118811893382410}
   - component: {fileID: 5367093531098719706}
-  - component: {fileID: 6526412272612969692}
   m_Layer: 0
   m_Name: Story_1_page_102-103
   m_TagString: Untagged
@@ -12321,7 +12250,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8278789482553564895}
+  mPreview: {fileID: 0}
 --- !u!114 &4765388179776767828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12348,7 +12277,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7393955567977406387}
+  mPreview: {fileID: 0}
 --- !u!4 &4772104673992524684
 Transform:
   m_ObjectHideFlags: 0
@@ -12438,7 +12367,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8825580158870789046}
+  mPreview: {fileID: 0}
 --- !u!114 &4876579362853853796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12479,7 +12408,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 9139568094497121605}
+  mPreview: {fileID: 0}
 --- !u!114 &4903979284869411044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12506,7 +12435,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8638380256709402246}
+  mPreview: {fileID: 0}
 --- !u!114 &4914122879495614784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12542,7 +12471,6 @@ GameObject:
   - component: {fileID: 6516923084532928490}
   - component: {fileID: 7891233265107786842}
   - component: {fileID: 6505891724170759666}
-  - component: {fileID: 7891233265107786843}
   m_Layer: 0
   m_Name: Story_1_page_96-97
   m_TagString: Untagged
@@ -12688,7 +12616,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7891233265107786843}
+  mPreview: {fileID: 0}
 --- !u!4 &5025690014500074853
 Transform:
   m_ObjectHideFlags: 0
@@ -12718,7 +12646,6 @@ GameObject:
   - component: {fileID: 762292449517992456}
   - component: {fileID: 8574182309368663195}
   - component: {fileID: 2215999727722042923}
-  - component: {fileID: 9069944171279210161}
   m_Layer: 0
   m_Name: Story_1_page_36-37
   m_TagString: Untagged
@@ -12740,7 +12667,6 @@ GameObject:
   - component: {fileID: 3205971339403450752}
   - component: {fileID: 285983179755594835}
   - component: {fileID: 4756740781759608403}
-  - component: {fileID: 7868257659171774575}
   m_Layer: 0
   m_Name: 'Story_1_page_50-51 '
   m_TagString: Untagged
@@ -12854,7 +12780,6 @@ GameObject:
   - component: {fileID: 1844498403573598480}
   - component: {fileID: 6399931089977564476}
   - component: {fileID: 801095024422476823}
-  - component: {fileID: 7335855823223901337}
   m_Layer: 0
   m_Name: Story_1_page_98-99
   m_TagString: Untagged
@@ -12935,7 +12860,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 9181488691027047077}
+  mPreview: {fileID: 0}
 --- !u!114 &5265542454217734649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12965,7 +12890,6 @@ GameObject:
   - component: {fileID: 8850851393279363141}
   - component: {fileID: 2358775623111242878}
   - component: {fileID: 8850851393279363143}
-  - component: {fileID: 8850851393279363144}
   m_Layer: 0
   m_Name: 'Story_1_page_56-57 '
   m_TagString: Untagged
@@ -13069,7 +12993,6 @@ GameObject:
   - component: {fileID: 8457463435790930584}
   - component: {fileID: 117334640399089507}
   - component: {fileID: 728297411638591785}
-  - component: {fileID: 8896229343416783462}
   m_Layer: 0
   m_Name: Story_1_page_106-107
   m_TagString: Untagged
@@ -13091,7 +13014,6 @@ GameObject:
   - component: {fileID: 3741463319708082500}
   - component: {fileID: 7704623558606663162}
   - component: {fileID: 4876579362853853796}
-  - component: {fileID: 8718820412859865785}
   m_Layer: 0
   m_Name: Story_1_page_86-87
   m_TagString: Untagged
@@ -13166,7 +13088,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7985119060926203956}
+  mPreview: {fileID: 0}
 --- !u!1 &5514075816868636451
 GameObject:
   m_ObjectHideFlags: 0
@@ -13181,7 +13103,6 @@ GameObject:
   - component: {fileID: 5156287404944170448}
   - component: {fileID: 360342249740259489}
   - component: {fileID: 1218724732772083388}
-  - component: {fileID: 8764808736107754616}
   m_Layer: 0
   m_Name: Story_1_page_46-quiz
   m_TagString: Untagged
@@ -13356,7 +13277,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8718820412859865785}
+  mPreview: {fileID: 0}
 --- !u!114 &5860945811485073759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13403,7 +13324,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 9139417178408644004}
+  mPreview: {fileID: 0}
 --- !u!114 &5938053307312844828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13444,7 +13365,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8631525144622387828}
+  mPreview: {fileID: 0}
 --- !u!1 &5976035769542819703
 GameObject:
   m_ObjectHideFlags: 0
@@ -13459,7 +13380,6 @@ GameObject:
   - component: {fileID: 7576435988586667651}
   - component: {fileID: 245197661051775273}
   - component: {fileID: 2347842235559519686}
-  - component: {fileID: 7576435988586667652}
   m_Layer: 0
   m_Name: Story_1_page_intro
   m_TagString: Untagged
@@ -13748,7 +13668,6 @@ GameObject:
   - component: {fileID: 2334989117738767277}
   - component: {fileID: 1283438095996738831}
   - component: {fileID: 4003523585791038297}
-  - component: {fileID: 7733800387941544033}
   m_Layer: 0
   m_Name: Story_1_page_94-95
   m_TagString: Untagged
@@ -14045,7 +13964,6 @@ GameObject:
   - component: {fileID: 5211202949861184502}
   - component: {fileID: 5593131453329565332}
   - component: {fileID: 5087687190740142414}
-  - component: {fileID: 6489767878755915553}
   m_Layer: 0
   m_Name: Story_1_page_26-27
   m_TagString: Untagged
@@ -14053,25 +13971,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &6489767878755915553
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6489767878755915552}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 3154009214626290087}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 26
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 3154009214626290087}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!4 &6503364128857239450
 Transform:
   m_ObjectHideFlags: 0
@@ -14151,26 +14050,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 6526412272612969692}
---- !u!114 &6526412272612969692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4561839134207249412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 6526412272612969691}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 102
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 6526412272612969691}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
+  mPreview: {fileID: 0}
 --- !u!1 &6569303371446953200
 GameObject:
   m_ObjectHideFlags: 0
@@ -14185,7 +14065,6 @@ GameObject:
   - component: {fileID: 3257544616057624884}
   - component: {fileID: 4699840846379258843}
   - component: {fileID: 290320035079557}
-  - component: {fileID: 7714239176949591647}
   m_Layer: 0
   m_Name: Story_1_page_72-73
   m_TagString: Untagged
@@ -14241,25 +14120,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   keepContentVisibleOnShortTrackingLoss: 1
   lostTrackingGraceSeconds: 0.6
---- !u!114 &6661141168799595082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1644568809541270623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 839278980586631205}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 89
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 839278980586631205}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &6690119042559102381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14316,25 +14176,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   keepContentVisibleOnShortTrackingLoss: 1
   lostTrackingGraceSeconds: 0.6
---- !u!114 &6828021459210957227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3513310338232544378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 3214152149076866639}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 66
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 3214152149076866639}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &6829216479686700510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14434,7 +14275,6 @@ GameObject:
   - component: {fileID: 2729743481301349085}
   - component: {fileID: 3184907708943257157}
   - component: {fileID: 2577929362509188644}
-  - component: {fileID: 7654922476001722154}
   m_Layer: 0
   m_Name: Story_1_page_68-69
   m_TagString: Untagged
@@ -14475,7 +14315,6 @@ GameObject:
   - component: {fileID: 812956063784460030}
   - component: {fileID: 203760161075506268}
   - component: {fileID: 7985119060926203955}
-  - component: {fileID: 7985119060926203956}
   m_Layer: 0
   m_Name: Story_1_page_12-13
   m_TagString: Untagged
@@ -14552,7 +14391,6 @@ GameObject:
   - component: {fileID: 6012536270144947207}
   - component: {fileID: 8698134605276049539}
   - component: {fileID: 4155430769728697801}
-  - component: {fileID: 8698134605276049540}
   m_Layer: 0
   m_Name: Story_1_page_22-quiz
   m_TagString: Untagged
@@ -14574,7 +14412,6 @@ GameObject:
   - component: {fileID: 7707501983515261761}
   - component: {fileID: 8462318661595852086}
   - component: {fileID: 5106545794974688946}
-  - component: {fileID: 8808945637060415310}
   m_Layer: 0
   m_Name: Story_1_page_82-83
   m_TagString: Untagged
@@ -14596,7 +14433,6 @@ GameObject:
   - component: {fileID: 4147025466640304721}
   - component: {fileID: 9134110994455827352}
   - component: {fileID: 816537563444273644}
-  - component: {fileID: 9134110994455827353}
   m_Layer: 0
   m_Name: Story_1_page_38-39
   m_TagString: Untagged
@@ -14736,7 +14572,6 @@ GameObject:
   - component: {fileID: 9170669992794141948}
   - component: {fileID: 345802739830253666}
   - component: {fileID: 8426262997888591096}
-  - component: {fileID: 9170669992794141949}
   m_Layer: 0
   m_Name: Story_1_page_24-25
   m_TagString: Untagged
@@ -14770,26 +14605,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7301724970458907743}
---- !u!114 &7301724970458907743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 843873794318495700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 7301724970458907742}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 19
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 7301724970458907742}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
+  mPreview: {fileID: 0}
 --- !u!1 &7314352887956999545
 GameObject:
   m_ObjectHideFlags: 0
@@ -14804,7 +14620,6 @@ GameObject:
   - component: {fileID: 4293585505350781312}
   - component: {fileID: 5543166656198101048}
   - component: {fileID: 3887406845559501593}
-  - component: {fileID: 7314352887956999546}
   m_Layer: 0
   m_Name: Story_1_page_90-91
   m_TagString: Untagged
@@ -14812,25 +14627,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &7314352887956999546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7314352887956999545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 460396871580599728}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 90
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 460396871580599728}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &7335084295049498153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14867,25 +14663,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8730098784387477893}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7335855823223901337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5171210570756226260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 1981682866985016490}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 98
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 1981682866985016490}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &7382898048609719280
 GameObject:
   m_ObjectHideFlags: 0
@@ -14900,7 +14677,6 @@ GameObject:
   - component: {fileID: 6118064562058327577}
   - component: {fileID: 9078787994858263943}
   - component: {fileID: 5317830272043814184}
-  - component: {fileID: 9078787994858263944}
   m_Layer: 0
   m_Name: Story_1_page_40-41
   m_TagString: Untagged
@@ -14922,25 +14698,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   keepContentVisibleOnShortTrackingLoss: 1
   lostTrackingGraceSeconds: 0.6
---- !u!114 &7393955567977406387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2685592139301262426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 4765388179776767828}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 63
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 4765388179776767828}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &7426828779647595140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14991,7 +14748,6 @@ GameObject:
   - component: {fileID: 4961392508600613469}
   - component: {fileID: 4110579998220826579}
   - component: {fileID: 128506210831299458}
-  - component: {fileID: 9065753405829953025}
   m_Layer: 0
   m_Name: Story_1_page_16-17
   m_TagString: Untagged
@@ -15063,26 +14819,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7572523681015662011}
---- !u!114 &7572523681015662011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1639285627949531257}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 7572523681015662010}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 54
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 7572523681015662010}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
+  mPreview: {fileID: 0}
 --- !u!114 &7576435988586667651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15096,25 +14833,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
   pageIndex: 0
---- !u!114 &7576435988586667652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5976035769542819703}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 3589613778764218431}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 3
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 3589613778764218431}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &7611727721542424098
 GameObject:
   m_ObjectHideFlags: 0
@@ -15129,7 +14847,6 @@ GameObject:
   - component: {fileID: 5979715948412707988}
   - component: {fileID: 1489257088906323005}
   - component: {fileID: 8110144189683900265}
-  - component: {fileID: 8110144189683900266}
   m_Layer: 0
   m_Name: Story_1_page_58-59
   m_TagString: Untagged
@@ -15151,7 +14868,6 @@ GameObject:
   - component: {fileID: 3755131064362836201}
   - component: {fileID: 8736858258207975728}
   - component: {fileID: 5088728634796874154}
-  - component: {fileID: 8736858258207975729}
   m_Layer: 0
   m_Name: Story_1_page_10-11
   m_TagString: Untagged
@@ -15194,25 +14910,6 @@ Transform:
   - {fileID: 53228467}
   m_Father: {fileID: 965437193038994913}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7654922476001722154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6928425368764717517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 3530196749920480477}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 69
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 3530196749920480477}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &7694403987594733484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15239,7 +14936,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7905722760389441314}
+  mPreview: {fileID: 0}
 --- !u!114 &7704623558606663162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15299,26 +14996,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7714239176949591647}
---- !u!114 &7714239176949591647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6569303371446953200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 7714239176949591646}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 73
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 7714239176949591646}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
+  mPreview: {fileID: 0}
 --- !u!114 &7733800387941544032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15340,25 +15018,6 @@ MonoBehaviour:
   autoHideSeconds: 5
   fadeDuration: 0.3
   keepReplayButtonAlwaysVisible: 0
---- !u!114 &7733800387941544033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6274724589330388179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 4296300573354609972}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 94
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 4296300573354609972}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &7756456902939015873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15393,7 +15052,6 @@ GameObject:
   - component: {fileID: 5207248228434902636}
   - component: {fileID: 5168606025473634545}
   - component: {fileID: 3620739169063430241}
-  - component: {fileID: 7757085083600329426}
   m_Layer: 0
   m_Name: Story_1_page_100-101
   m_TagString: Untagged
@@ -15401,25 +15059,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &7757085083600329426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7757085083600329425}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 1140591824539802050}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 101
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 1140591824539802050}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!4 &7768886773486905248
 Transform:
   m_ObjectHideFlags: 0
@@ -15449,7 +15088,6 @@ GameObject:
   - component: {fileID: 9026649962213080955}
   - component: {fileID: 3387869935024029490}
   - component: {fileID: 1411015700242625952}
-  - component: {fileID: 9026649962213080956}
   m_Layer: 0
   m_Name: Story_1_page_28-29
   m_TagString: Untagged
@@ -15500,26 +15138,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 7868257659171774575}
---- !u!114 &7868257659171774575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5080075073826474381}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 7868257659171774574}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 48
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 7868257659171774574}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
+  mPreview: {fileID: 0}
 --- !u!114 &7874445232241936959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15533,25 +15152,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
   pageIndex: 2
---- !u!114 &7874445232241936960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2826888045975194124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 4486671421198554319}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 7
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 4486671421198554319}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &7891233265107786842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15572,25 +15172,6 @@ MonoBehaviour:
   verticalSlider: {fileID: 6464217316641464389}
   minScale: 0.5
   maxScale: 3
---- !u!114 &7891233265107786843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4949850171039506655}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 5006083395730791288}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 96
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 5006083395730791288}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &7905722760389441313
 GameObject:
   m_ObjectHideFlags: 0
@@ -15605,7 +15186,6 @@ GameObject:
   - component: {fileID: 2255556960986290714}
   - component: {fileID: 6379492528853735816}
   - component: {fileID: 605179858252015488}
-  - component: {fileID: 7905722760389441314}
   m_Layer: 0
   m_Name: Story_1_page_30-31
   m_TagString: Untagged
@@ -15613,25 +15193,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &7905722760389441314
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7905722760389441313}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 7694403987594733484}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 31
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 7694403987594733484}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &7921724763459701802
 GameObject:
   m_ObjectHideFlags: 0
@@ -15686,25 +15247,6 @@ MonoBehaviour:
   autoHideSeconds: 5
   fadeDuration: 0.3
   keepReplayButtonAlwaysVisible: 0
---- !u!114 &7935453857452412310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2112988483954708298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 1092701088266084714}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 76
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 1092701088266084714}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &7951102233958115549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15760,7 +15302,6 @@ GameObject:
   - component: {fileID: 8853043613768087295}
   - component: {fileID: 5689080002678082493}
   - component: {fileID: 1874100564135409146}
-  - component: {fileID: 8853043613768087296}
   m_Layer: 0
   m_Name: Story_1_page_80-81
   m_TagString: Untagged
@@ -15782,25 +15323,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   keepContentVisibleOnShortTrackingLoss: 1
   lostTrackingGraceSeconds: 0.6
---- !u!114 &7985119060926203956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6948527301352423327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 5455050784769879012}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 12
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 5455050784769879012}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &7991856860227558337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15827,7 +15349,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 9170669992794141949}
+  mPreview: {fileID: 0}
 --- !u!1 &7994738833288241723
 GameObject:
   m_ObjectHideFlags: 0
@@ -15885,7 +15407,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8406961288177130547}
+  mPreview: {fileID: 0}
 --- !u!114 &8110144189683900265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15900,25 +15422,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
   keepContentVisibleOnShortTrackingLoss: 1
   lostTrackingGraceSeconds: 0.6
---- !u!114 &8110144189683900266
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7611727721542424098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 3425190368761305576}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 59
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 3425190368761305576}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!4 &8122284397810710968
 Transform:
   m_ObjectHideFlags: 0
@@ -16018,7 +15521,6 @@ GameObject:
   - component: {fileID: 5632059304184032564}
   - component: {fileID: 78067461117669952}
   - component: {fileID: 7927333640616178888}
-  - component: {fileID: 8152445640671337178}
   m_Layer: 0
   m_Name: Story_1_page_8-9
   m_TagString: Untagged
@@ -16026,25 +15528,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &8152445640671337178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8152445640671337177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 304630087861106364}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 8
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 304630087861106364}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!4 &8254604513270093339
 Transform:
   m_ObjectHideFlags: 0
@@ -16086,7 +15569,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 9069944171279210161}
+  mPreview: {fileID: 0}
 --- !u!114 &8260103968047024162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16121,25 +15604,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
   pageIndex: 25
---- !u!114 &8278789482553564895
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1968837412026297397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 4764498855174970566}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 52
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 4764498855174970566}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!4 &8283029603489983303
 Transform:
   m_ObjectHideFlags: 0
@@ -16203,7 +15667,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8808945637060415310}
+  mPreview: {fileID: 0}
 --- !u!1 &8364769943931641347
 GameObject:
   m_ObjectHideFlags: 0
@@ -16218,7 +15682,6 @@ GameObject:
   - component: {fileID: 3556303202693163204}
   - component: {fileID: 6582227828263568068}
   - component: {fileID: 6619204329791368752}
-  - component: {fileID: 8631525144622387828}
   m_Layer: 0
   m_Name: Story_1_page_20-21
   m_TagString: Untagged
@@ -16240,7 +15703,6 @@ GameObject:
   - component: {fileID: 6391197112873014876}
   - component: {fileID: 1267063744279429417}
   - component: {fileID: 4128631878820680657}
-  - component: {fileID: 8406961288177130547}
   m_Layer: 0
   m_Name: Story_1_page_14-15
   m_TagString: Untagged
@@ -16248,25 +15710,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &8406961288177130547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8406961288177130546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 8106170985478853346}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 14
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 8106170985478853346}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &8411608122162343439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16451,25 +15894,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
   pageIndex: 1
---- !u!114 &8608717421813869550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3367553964840370038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 2211729158489719967}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 5
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 2211729158489719967}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!222 &8608929914129592497
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -16504,7 +15928,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8698134605276049540}
+  mPreview: {fileID: 0}
 --- !u!114 &8629653976556289501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16526,25 +15950,6 @@ MonoBehaviour:
   autoHideSeconds: 5
   fadeDuration: 0.3
   keepReplayButtonAlwaysVisible: 0
---- !u!114 &8629653976556289502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1840689343494664744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 2338303901222283285}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 79
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 2338303901222283285}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &8631525144622387827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16566,25 +15971,6 @@ MonoBehaviour:
   autoHideSeconds: 5
   fadeDuration: 0.3
   keepReplayButtonAlwaysVisible: 0
---- !u!114 &8631525144622387828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8364769943931641347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 5954344818012558658}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 21
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 5954344818012558658}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!4 &8638380256709402245
 Transform:
   m_ObjectHideFlags: 0
@@ -16600,25 +15986,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7218255470469947100}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8638380256709402246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1790458370488719093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 4903979284869411044}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 33
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 4903979284869411044}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &8698134605276049539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16639,25 +16006,6 @@ MonoBehaviour:
   verticalSlider: {fileID: 6464217316641464389}
   minScale: 0.5
   maxScale: 2
---- !u!114 &8698134605276049540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7009022337448910540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 8621675770503328106}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 22
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 8621675770503328106}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &8705353378713785682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16703,25 +16051,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8730098784387477893}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8718820412859865785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5385598535264304011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 5844127893123688594}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 87
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 5844127893123688594}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!4 &8730098784387477893
 Transform:
   m_ObjectHideFlags: 0
@@ -16775,7 +16104,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8874090331148103637}
+  mPreview: {fileID: 0}
 --- !u!114 &8736858258207975728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16796,25 +16125,6 @@ MonoBehaviour:
   verticalSlider: {fileID: 6464217316641464389}
   minScale: 0.5
   maxScale: 3
---- !u!114 &8736858258207975729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7619617451474268360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 4233890079261099067}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 11
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 4233890079261099067}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &8738745368474905380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16851,25 +16161,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7218255470469947100}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8764808736107754616
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5514075816868636451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 3774400550201778142}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 46
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 3774400550201778142}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!4 &8808945637060415309
 Transform:
   m_ObjectHideFlags: 0
@@ -16885,25 +16176,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 965437193038994913}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8808945637060415310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7064715785762746526}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 8342466436587163747}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 83
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 8342466436587163747}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &8825580158870789045
 GameObject:
   m_ObjectHideFlags: 0
@@ -16918,7 +16190,6 @@ GameObject:
   - component: {fileID: 6167256721210251431}
   - component: {fileID: 5860945811485073759}
   - component: {fileID: 281496710949323389}
-  - component: {fileID: 8825580158870789046}
   m_Layer: 0
   m_Name: Story_1_page_74-75
   m_TagString: Untagged
@@ -16926,25 +16197,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &8825580158870789046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8825580158870789045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 4861311347551850689}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 74
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 4861311347551850689}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &8850851393279363141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16987,25 +16239,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8850851393279363144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5265974391584759891}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 1628820106143691066}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 56
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 1628820106143691066}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &8853043613768087295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17019,25 +16252,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
   pageIndex: 38
---- !u!114 &8853043613768087296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7953760029046851093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 708694191848999710}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 81
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 708694191848999710}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &8866179796353913221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17114,25 +16328,6 @@ MonoBehaviour:
   verticalSlider: {fileID: 6464217316641464389}
   minScale: 0.5
   maxScale: 3
---- !u!114 &8874090331148103637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3380254122162046095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 8731090318867810231}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 93
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 8731090318867810231}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &8896229343416783461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17159,26 +16354,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 8896229343416783462}
---- !u!114 &8896229343416783462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5376020689011973087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 8896229343416783461}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 107
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 8896229343416783461}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
+  mPreview: {fileID: 0}
 --- !u!1 &8959654178671578079
 GameObject:
   m_ObjectHideFlags: 0
@@ -17193,7 +16369,6 @@ GameObject:
   - component: {fileID: 4829337362920409045}
   - component: {fileID: 4845908157602587221}
   - component: {fileID: 6195704758372969248}
-  - component: {fileID: 9139417178408644004}
   m_Layer: 0
   m_Name: Story_1_page_44-45
   m_TagString: Untagged
@@ -17288,25 +16463,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
   pageIndex: 13
---- !u!114 &9026649962213080956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7786079911332371838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 1803937333098519363}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 28
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 1803937333098519363}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &9042283775654313513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17333,26 +16489,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 9042283775654313514}
---- !u!114 &9042283775654313514
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 932980881328298146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 9042283775654313513}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 35
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 9042283775654313513}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
+  mPreview: {fileID: 0}
 --- !u!114 &9065753405829953024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17379,26 +16516,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 9065753405829953025}
---- !u!114 &9065753405829953025
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7493160274367388112}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 9065753405829953024}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 16
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 9065753405829953024}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
+  mPreview: {fileID: 0}
 --- !u!114 &9069944171279210160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17420,25 +16538,6 @@ MonoBehaviour:
   autoHideSeconds: 5
   fadeDuration: 0.3
   keepReplayButtonAlwaysVisible: 0
---- !u!114 &9069944171279210161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5068885325549530721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 8258674369021475458}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 37
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 8258674369021475458}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &9078787994858263943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17459,25 +16558,6 @@ MonoBehaviour:
   verticalSlider: {fileID: 6464217316641464389}
   minScale: 0.5
   maxScale: 3
---- !u!114 &9078787994858263944
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7382898048609719280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 4191746745972658705}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 41
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 4191746745972658705}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &9109594003573270288
 GameObject:
   m_ObjectHideFlags: 0
@@ -17492,7 +16572,6 @@ GameObject:
   - component: {fileID: 6278977443393037419}
   - component: {fileID: 1771300828875271073}
   - component: {fileID: 819180517874318120}
-  - component: {fileID: 9109594003573270289}
   m_Layer: 0
   m_Name: Story_1_page_42-43
   m_TagString: Untagged
@@ -17500,25 +16579,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &9109594003573270289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9109594003573270288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 892615280447237478}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 43
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 892615280447237478}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &9134110994455827352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17539,25 +16599,6 @@ MonoBehaviour:
   verticalSlider: {fileID: 6464217316641464389}
   minScale: 0.5
   maxScale: 3
---- !u!114 &9134110994455827353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7098551220698045020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 2833237047899003354}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 39
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 2833237047899003354}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!4 &9139417178408644003
 Transform:
   m_ObjectHideFlags: 0
@@ -17573,25 +16614,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7218255470469947100}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9139417178408644004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8959654178671578079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 5874474466288660728}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 44
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 5874474466288660728}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &9139568094497121604
 GameObject:
   m_ObjectHideFlags: 0
@@ -17606,7 +16628,6 @@ GameObject:
   - component: {fileID: 2133343382507502714}
   - component: {fileID: 498535898141860711}
   - component: {fileID: 1774024768474093670}
-  - component: {fileID: 9139568094497121605}
   m_Layer: 0
   m_Name: Story_1_page_104-105
   m_TagString: Untagged
@@ -17614,25 +16635,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &9139568094497121605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9139568094497121604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 4887865916907072863}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 105
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 4887865916907072863}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &9170669992794141948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17646,25 +16648,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTarget
   pageIndex: 11
---- !u!114 &9170669992794141949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7283981948933368620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 7991856860227558337}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 25
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 7991856860227558337}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &9181488691027047076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17685,25 +16668,6 @@ MonoBehaviour:
   verticalSlider: {fileID: 6464217316641464389}
   minScale: 0.5
   maxScale: 3
---- !u!114 &9181488691027047077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2344647468064356849}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Vuforia.Unity.Engine.dll::Vuforia.ImageTargetPreview
-  mObserverBehaviour: {fileID: 5219436071408563322}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: 61
-  mDatasetName: Vuforia/ALL_Panchatantra_story.xml
-  mCastedBehaviour: {fileID: 5219436071408563322}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

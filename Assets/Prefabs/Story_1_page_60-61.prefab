@@ -1166,7 +1166,7 @@ MonoBehaviour:
     storyWaitAnimationStateName: 
     storyWaitTimeoutSeconds: 0
     pauseStoryWhileActivity: 0
-    instructionText: Tap to continue
+    instructionText: Tap the drum to scare the King, Keep tapping to scare him more!
     activityVoiceOver: {fileID: 0}
     waitForActivityVoiceOver: 0
     activityDurationAudio: {fileID: 0}
@@ -1206,7 +1206,7 @@ MonoBehaviour:
     progressTapSpeedWindowSeconds: 0
     progressDropsWhenNotTapping: 0
     progressLossPerSecond: 25
-    progressAutoStartStoryAfterSeconds: 20
+    progressAutoStartStoryAfterSeconds: 0
     playResultWhenProgressAutoSkips: 1
     progressTapSound: {fileID: 8300000, guid: 9c198e7a3d1a1d84797e4d5fcd0e424b, type: 3}
     progressTapSoundVolume: 1
@@ -1235,7 +1235,7 @@ MonoBehaviour:
     - {fileID: 1827226128182048838, guid: 2c273cf4943069b478411aecd0100670, type: 3}
     - {fileID: 1827226128182048838, guid: f0f24607aaceca3408b0ed530bf0786a, type: 3}
     progressReactionOrder: 3
-    progressReactionPlaybackMode: 0
+    progressReactionPlaybackMode: 1
     progressReactionMinimumGapSeconds: 0
     progressReactionAnimationSpeed: 1
     progressUseHelperAnimationWhileTapping: 0
@@ -1243,10 +1243,12 @@ MonoBehaviour:
     progressHelperAnimations: []
     progressHelperAnimationSelection: 0
     progressHelperSelectedAnimationNumber: 0
+    progressHelperSelectedAnimationNumbers: 1
     progressHelperAnimationSpeed: 1
     progressHelperLoopAnimation: 0
     progressHelperPauseWhenNotTapping: 0
     progressHelperResetWhenProgressEmpty: 0
+    progressAutoFinishAfterNoTapSeconds: 5
     resultAnimator: {fileID: 7223516597248908325}
     resultAnimationClip: {fileID: 1827226128182048838, guid: bd86e43c9dee4b64ca0819d05f64f879, type: 3}
     resultAnimationSpeed: 1
@@ -1258,6 +1260,18 @@ MonoBehaviour:
     resultSoundVolume: 1
     waitForResultSound: 0
     resultExtraWaitSeconds: 0
+    resultUseActivityTransform: 0
+    resultPreviewActivityTransformInEditor: 0
+    resultObjectToMoveOrScale: {fileID: 0}
+    resultCopyTransformFrom: {fileID: 0}
+    resultActivityPosition: {x: 0, y: 0, z: 0}
+    resultActivityRotationEuler: {x: 0, y: 0, z: 0}
+    resultActivityScale: {x: 1, y: 1, z: 1}
+    resultRestoreTransformAfterAction: 1
+    resultHasSavedStoryPose: 0
+    resultStoryPosition: {x: 0, y: 0, z: 0}
+    resultStoryRotationEuler: {x: 0, y: 0, z: 0}
+    resultStoryScale: {x: 1, y: 1, z: 1}
     groupCompletionMode: 0
     targetActions: []
     groupTapObjects: []
@@ -1267,7 +1281,7 @@ MonoBehaviour:
     groupRepeatTapMessage: 
     groupPlayOnlyTappedObjectAction: 0
     groupActions: []
-    groupAutoStartStoryAfterSeconds: 8
+    groupAutoStartStoryAfterSeconds: 0
     groupPlayActionsWhenAutoSkipped: 0
     groupWaitSecondsBeforeStory: 0
     groupResultVoiceOver: {fileID: 0}
@@ -1307,21 +1321,21 @@ MonoBehaviour:
     storyMomentWrongTapText: 
     storyMomentWrongTapSound: {fileID: 0}
     storyMomentWrongTapSoundVolume: 0
-    showHintWhenWrongInput: 1
-    wrongInputHintText: Try tapping the highlighted object
+    showHintWhenWrongInput: 0
+    wrongInputHintText: Oppies! The drum can only scare the King. Give it a tap!
     wrongInputSound: {fileID: 0}
     wrongInputSoundVolume: 1
     enableNoInputHelp: 1
-    noInputHintAfterSeconds: 3
-    noInputHintText: Try the highlighted object
-    noInputActionAfterHint: 2
-    autoSkipAfterHintSeconds: 3
+    noInputHintAfterSeconds: 5
+    noInputHintText: 'Tap the drum to see what happens! '
+    noInputActionAfterHint: 3
+    autoSkipAfterHintSeconds: 5
     useSameHintEffectsForNoInput: 1
     pulseTargetObject: 1
     targetPulseScale: 1.18
     targetPulseRepeatCount: 3
     targetPulseSeconds: 0.45
-    tintTargetObject: 0
+    tintTargetObject: 1
     targetTintColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     targetTintRepeatCount: 3
     targetTintSeconds: 0.45
@@ -1330,6 +1344,12 @@ MonoBehaviour:
     hintObjectSeconds: 1.5
     nextInputRule: 0
     nextInputDelaySeconds: 0
+    useProgressBar: 1
+    progressBarFillMode: 0
+    progressBarBehavior: 0
+    progressGoDownPercentPerSecond: 10
+    progressMinimumPercent: 0
+    resultPlayTiming: 1
     showTimerProgress: 0
     choiceOptions: []
     optionTexts: []
@@ -1354,7 +1374,7 @@ MonoBehaviour:
     onActivityCompleted:
       m_PersistentCalls:
         m_Calls: []
-  activityTemplateSchemaVersion: 20
+  activityTemplateSchemaVersion: 33
   activityPanel: {fileID: 0}
   defaultRaycastCamera: {fileID: 0}
   defaultAudioSource: {fileID: 4336228284325888322}
@@ -10583,27 +10603,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 3e597a54e2ffe1e44acc858ede9516e4, type: 3}
       propertyPath: m_LocalScale.x
-      value: 10.22504
+      value: 15.606782
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3e597a54e2ffe1e44acc858ede9516e4, type: 3}
       propertyPath: m_LocalScale.y
-      value: 10.22504
+      value: 15.606782
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3e597a54e2ffe1e44acc858ede9516e4, type: 3}
       propertyPath: m_LocalScale.z
-      value: 10.22504
+      value: 15.606782
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3e597a54e2ffe1e44acc858ede9516e4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.383
+      value: -0.38465
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3e597a54e2ffe1e44acc858ede9516e4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.082
+      value: 0.11857
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3e597a54e2ffe1e44acc858ede9516e4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.307
+      value: -0.25761
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3e597a54e2ffe1e44acc858ede9516e4, type: 3}
       propertyPath: m_LocalRotation.w

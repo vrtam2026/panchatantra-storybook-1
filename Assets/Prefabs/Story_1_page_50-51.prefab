@@ -4786,8 +4786,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.0000002, y: 1.061836, z: 3.2848413}
+  m_Center: {x: 0.00000020842768, y: 0.28519267, z: -0.008730054}
 --- !u!1 &4010306118960311351
 GameObject:
   m_ObjectHideFlags: 0
@@ -5764,7 +5764,7 @@ MonoBehaviour:
     storyWaitAnimationStateName: 
     storyWaitTimeoutSeconds: 0
     pauseStoryWhileActivity: 0
-    instructionText: Tap to help monkey!
+    instructionText: Tap the monkey to pull out the wedge
     activityVoiceOver: {fileID: 0}
     waitForActivityVoiceOver: 0
     activityDurationAudio: {fileID: 0}
@@ -5782,7 +5782,7 @@ MonoBehaviour:
     mustTapInOrder: 0
     requiredInputCount: 1
     waitOnlySeconds: 0
-    activeTimeSeconds: 15
+    activeTimeSeconds: 40
     maxTimeToFirstInput: 0
     helpProgressGainPerTap: 10
     helpProgressLossPerSecond: 5
@@ -5795,16 +5795,16 @@ MonoBehaviour:
     helpWaitForAnimationBeforeContinue: 0
     helpTapSound: {fileID: 0}
     helpTapSoundVolume: 0
-    progressGateCompletesBy: 1
-    progressRequiredTaps: 1
+    progressGateCompletesBy: 0
+    progressRequiredTaps: 15
     progressRequiredTappingSeconds: 6
-    progressTapActiveWindowSeconds: 0.5
+    progressTapActiveWindowSeconds: 2
     progressRequiredTapsPerSecond: 3
     progressRequiredSpeedSeconds: 5
     progressTapSpeedWindowSeconds: 1
-    progressDropsWhenNotTapping: 1
+    progressDropsWhenNotTapping: 0
     progressLossPerSecond: 5
-    progressAutoStartStoryAfterSeconds: 10
+    progressAutoStartStoryAfterSeconds: 0
     playResultWhenProgressAutoSkips: 1
     progressTapSound: {fileID: 0}
     progressTapSoundVolume: 0
@@ -5816,7 +5816,7 @@ MonoBehaviour:
     progressCorrectTapFeedbackSeconds: 0.16
     progressCorrectReturnSeconds: 0.08
     progressUseWrongTapFeedback: 1
-    progressWrongTapText: Try tapping the highlighted object
+    progressWrongTapText: Oops! Tap on the monkey
     progressWrongTapSound: {fileID: 0}
     progressWrongTapSoundVolume: 1
     progressPulseCorrectObjectOnWrongTap: 1
@@ -5837,12 +5837,14 @@ MonoBehaviour:
     - {fileID: 1827226128182048838, guid: 461840b0d13eb2d49b30b86b43a2e2eb, type: 3}
     - {fileID: 1827226128182048838, guid: 76411290957b2ff4fb6e28fa56d117ed, type: 3}
     - {fileID: 1827226128182048838, guid: 13e8cdecda34264418b19d716c096a71, type: 3}
-    progressHelperAnimationSelection: 1
-    progressHelperSelectedAnimationNumber: 1
+    progressHelperAnimationSelection: 4
+    progressHelperSelectedAnimationNumber: 123
+    progressHelperSelectedAnimationNumbers: 123
     progressHelperAnimationSpeed: 1
     progressHelperLoopAnimation: 1
     progressHelperPauseWhenNotTapping: 1
     progressHelperResetWhenProgressEmpty: 1
+    progressAutoFinishAfterNoTapSeconds: 5
     resultAnimator: {fileID: 4506736363689910499}
     resultAnimationClip: {fileID: 1827226128182048838, guid: c47275d914a745d459429a74ba0df87f, type: 3}
     resultAnimationSpeed: 0.3
@@ -5854,6 +5856,18 @@ MonoBehaviour:
     resultSoundVolume: 0
     waitForResultSound: 0
     resultExtraWaitSeconds: 0
+    resultUseActivityTransform: 0
+    resultPreviewActivityTransformInEditor: 0
+    resultObjectToMoveOrScale: {fileID: 0}
+    resultCopyTransformFrom: {fileID: 0}
+    resultActivityPosition: {x: 0, y: 0, z: 0}
+    resultActivityRotationEuler: {x: 0, y: 0, z: 0}
+    resultActivityScale: {x: 1, y: 1, z: 1}
+    resultRestoreTransformAfterAction: 1
+    resultHasSavedStoryPose: 0
+    resultStoryPosition: {x: 0, y: 0, z: 0}
+    resultStoryRotationEuler: {x: 0, y: 0, z: 0}
+    resultStoryScale: {x: 1, y: 1, z: 1}
     groupCompletionMode: 0
     targetActions: []
     groupTapObjects: []
@@ -5908,10 +5922,10 @@ MonoBehaviour:
     wrongInputSound: {fileID: 0}
     wrongInputSoundVolume: 1
     enableNoInputHelp: 1
-    noInputHintAfterSeconds: 3
-    noInputHintText: Try the highlighted object
-    noInputActionAfterHint: 2
-    autoSkipAfterHintSeconds: 3
+    noInputHintAfterSeconds: 5
+    noInputHintText: The Monkey need your help -TAP!
+    noInputActionAfterHint: 3
+    autoSkipAfterHintSeconds: 5
     useSameHintEffectsForNoInput: 1
     pulseTargetObject: 1
     targetPulseScale: 1.18
@@ -5926,6 +5940,12 @@ MonoBehaviour:
     hintObjectSeconds: 1.5
     nextInputRule: 0
     nextInputDelaySeconds: 0
+    useProgressBar: 1
+    progressBarFillMode: 0
+    progressBarBehavior: 0
+    progressGoDownPercentPerSecond: 10
+    progressMinimumPercent: 0
+    resultPlayTiming: 1
     showTimerProgress: 0
     choiceOptions: []
     optionTexts: []
@@ -5943,14 +5963,14 @@ MonoBehaviour:
     successMessage: 
     tryAgainMessage: 
     successMessageSeconds: 0
-    maxReactionWaitSeconds: 15
+    maxReactionWaitSeconds: 25
     onActivityStarted:
       m_PersistentCalls:
         m_Calls: []
     onActivityCompleted:
       m_PersistentCalls:
         m_Calls: []
-  activityTemplateSchemaVersion: 20
+  activityTemplateSchemaVersion: 33
   activityPanel: {fileID: 0}
   defaultRaycastCamera: {fileID: 0}
   defaultAudioSource: {fileID: 1319105537388822517}

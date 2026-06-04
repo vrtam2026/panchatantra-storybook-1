@@ -26,7 +26,7 @@ public class ContentController : MonoBehaviour, IARContent
     [SerializeField] private List<ActivityStep> activities = new List<ActivityStep>();
 
     [SerializeField, HideInInspector] private int activityTemplateSchemaVersion = 0;
-    private const int CurrentActivityTemplateSchemaVersion = 20;
+    private const int CurrentActivityTemplateSchemaVersion = 33;
 
     [Header("Required Setup")]
     [SerializeField] private ActivityPanel activityPanel;
@@ -85,6 +85,8 @@ public class ContentController : MonoBehaviour, IARContent
     private readonly List<PlayableGraph> _activeGraphs = new List<PlayableGraph>();
     private readonly List<PlayableGraph> _activeChoiceGraphs = new List<PlayableGraph>();
     private readonly List<Coroutine> _activeChoiceAnimationRoutines = new List<Coroutine>();
+    // Tracks coroutines that restore scenario transforms after a delay so they can be stopped on reset.
+    private readonly List<Coroutine> _scenarioTransformRestoreRoutines = new List<Coroutine>();
     private readonly List<GameObject> _spawnedVfxObjects = new List<GameObject>();
     private readonly Dictionary<ActivityReaction, List<GameObject>> _spawnedVisualEffectObjectsByReaction = new Dictionary<ActivityReaction, List<GameObject>>();
     private readonly Dictionary<Renderer, Color> _originalRendererColors = new Dictionary<Renderer, Color>();
@@ -96,6 +98,9 @@ public class ContentController : MonoBehaviour, IARContent
     private bool _inputCycleLocked;
     private Coroutine _inputUnlockRoutine;
     private Coroutine _activityVoiceRoutine;
+
+    private float _visibleProgressValue;
+    private float _lastValidProgressInputTime;
 
 
     private void OnValidate()
@@ -137,12 +142,38 @@ public class ContentController : MonoBehaviour, IARContent
 
         step.requiredInputCount = Mathf.Max(1, step.requiredInputCount);
         step.progressRequiredTaps = Mathf.Max(1, step.progressRequiredTaps);
+        step.progressAutoFinishAfterNoTapSeconds = Mathf.Max(0f, step.progressAutoFinishAfterNoTapSeconds);
         step.storyMomentRequiredTaps = Mathf.Max(1, step.storyMomentRequiredTaps);
         step.groupRequiredObjectCount = Mathf.Max(1, step.groupRequiredObjectCount);
+        step.progressGoDownPercentPerSecond = Mathf.Max(0f, step.progressGoDownPercentPerSecond);
+        step.progressMinimumPercent = Mathf.Clamp(step.progressMinimumPercent, 0f, 100f);
+        // Progress bar display is optional. Legacy progress flags must never force the visible UI back ON.
+        // If the setup person turns Progress Bar OFF, the activity logic still works but the UI stays hidden.
+        if (!step.useProgressBar)
+        {
+            if (step.showTimerProgress) { step.showTimerProgress = false; changed++; }
+            if (step.storyMomentShowProgressBar) { step.storyMomentShowProgressBar = false; changed++; }
+        }
+
+        // Old auto-start-story timers caused duplicate timing sections and could skip the activity result.
+        // The only beginner no-input path is now: show hint -> selected no-input action -> result/continue.
+        if (step.progressAutoStartStoryAfterSeconds > 0f) { step.progressAutoStartStoryAfterSeconds = 0f; changed++; }
+        if (step.groupAutoStartStoryAfterSeconds > 0f) { step.groupAutoStartStoryAfterSeconds = 0f; changed++; }
         step.progressReactionAnimationSpeed = SafeSpeed(step.progressReactionAnimationSpeed);
         step.resultAnimationSpeed = SafeSpeed(step.resultAnimationSpeed);
         step.helpAnimationSpeed = SafeSpeed(step.helpAnimationSpeed);
         step.progressHelperAnimationSpeed = SafeSpeed(step.progressHelperAnimationSpeed);
+
+        // Template rule: keep no-input behavior user selectable.
+        // New activities default to AutoPlayResultThenContinue, but existing setups must not be overwritten here.
+
+        // Template-wide safety: any result action with a 3D object can use the same activity-only transform flow.
+        // Keep safe scale defaults so Refresh repairs old empty data without losing assignments.
+        if (step.resultActivityScale == Vector3.zero)
+        {
+            step.resultActivityScale = Vector3.one;
+            changed++;
+        }
 
         if (step.targetObjects == null) { step.targetObjects = new List<GameObject>(); changed++; }
         if (step.objectsOnWhenActivityStarts == null) { step.objectsOnWhenActivityStarts = new List<GameObject>(); changed++; }
@@ -370,6 +401,11 @@ public class ContentController : MonoBehaviour, IARContent
                 if (action == null) continue;
                 if (string.IsNullOrWhiteSpace(action.actionName)) { action.actionName = "Group Action Item"; changed++; }
                 action.animationSpeed = SafeSpeed(action.animationSpeed);
+                if (action.activityScale == Vector3.zero)
+                {
+                    action.activityScale = Vector3.one;
+                    changed++;
+                }
             }
         }
         return changed;
@@ -389,6 +425,31 @@ public class ContentController : MonoBehaviour, IARContent
             reaction.reactionVoiceVolume = Mathf.Clamp01(reaction.reactionVoiceVolume);
             if (reaction.vfxObjects == null) { reaction.vfxObjects = new List<GameObject>(); changed++; }
             if (reaction.objects == null) { reaction.objects = new List<GameObject>(); changed++; }
+            if (reaction.animationClips == null) { reaction.animationClips = new List<AnimationClip>(); changed++; }
+            if (reaction.activityScale == Vector3.zero)
+            {
+                reaction.activityScale = Vector3.one;
+                changed++;
+            }
+            reaction.objectBurstCount = Mathf.Max(1, reaction.objectBurstCount);
+            reaction.objectLifeSeconds = Mathf.Max(0.05f, reaction.objectLifeSeconds);
+            reaction.fallDurationSeconds = Mathf.Max(0.05f, reaction.fallDurationSeconds);
+            reaction.fallDistance = Mathf.Max(0f, reaction.fallDistance);
+            reaction.fadeOutSeconds = Mathf.Max(0f, reaction.fadeOutSeconds);
+            reaction.pageSpreadSize.x = Mathf.Max(0f, reaction.pageSpreadSize.x);
+            reaction.pageSpreadSize.y = Mathf.Max(0f, reaction.pageSpreadSize.y);
+            reaction.rectangleSpawnAreaSize.x = Mathf.Max(0.01f, Mathf.Abs(reaction.rectangleSpawnAreaSize.x));
+            reaction.rectangleSpawnAreaSize.y = Mathf.Max(0.01f, Mathf.Abs(reaction.rectangleSpawnAreaSize.y));
+            reaction.rectangleSpawnAreaSize.z = Mathf.Max(0.01f, Mathf.Abs(reaction.rectangleSpawnAreaSize.z));
+
+            if (reaction.type == ActivityReactionType.VisualEffect && reaction.make3DObjectsFall)
+            {
+                if (reaction.visualEffectPlayMode != VisualEffectPlayMode.AddNewEachInput)
+                {
+                    reaction.visualEffectPlayMode = VisualEffectPlayMode.AddNewEachInput;
+                    changed++;
+                }
+            }
         }
         return changed;
     }
@@ -414,7 +475,10 @@ public class ContentController : MonoBehaviour, IARContent
 
         // Hard safety: editor preview or previous activity poses must never leak into story, VFX, or popup.
         // Restore story pose before any reveal/story system can use the objects.
+        // Clear saved story poses first so replay never restores a stale position from a prior session.
+        ClearAllSavedStoryPoses();
         RestoreAllActivityActionTransforms();
+        PrepareAllVisualEffectSources();
 
         activityPanel?.ResetPanel();
         StopAllConfiguredVisualEffects(clear: true);
@@ -424,6 +488,7 @@ public class ContentController : MonoBehaviour, IARContent
     {
         // Second safety pass after Unity has enabled scene objects. Story/VFX must start from story pose.
         RestoreAllActivityActionTransforms();
+        PrepareAllVisualEffectSources();
         StopAllConfiguredVisualEffects(clear: true);
         StartCoroutine(StopConfiguredVisualEffectsNextFrame());
     }
@@ -577,7 +642,11 @@ public class ContentController : MonoBehaviour, IARContent
         StopTargetHintVisuals();
         RestoreMaterialColors();
         RestoreTargetScales();
+        // Clear saved story poses before restoring so the next play captures fresh positions.
+        // Without this, replay restores a stale pose from the previous play session.
+        ClearAllSavedStoryPoses();
         RestoreAllActivityActionTransforms();
+        PrepareAllVisualEffectSources();
         StopAllConfiguredVisualEffects(clear: true);
         HideActivityUI();
         SetAnyActivityRunning(false);
@@ -587,6 +656,10 @@ public class ContentController : MonoBehaviour, IARContent
     public void NotifyRevealComplete()
     {
         _revealCompleteReached = true;
+        // Re-hide all VFX source objects after reveal completes.
+        // The reveal sequence may re-enable parent objects that contain petal or VFX sources.
+        // This ensures sources stay hidden even if their parent was activated by the reveal system.
+        PrepareAllVisualEffectSources();
         EnsureFlowRunning();
     }
 
@@ -716,7 +789,16 @@ public class ContentController : MonoBehaviour, IARContent
         // This is the first moment where the child activity is actually ON.
         ApplyActivityOnlyTransformsAtActivityStart(step);
 
-        activityPanel?.BeginActivity(step.instructionText, StepUsesProgress(step), StepUsesButtons(step));
+        bool showProgressForThisActivity = StepUsesProgress(step);
+        if (!showProgressForThisActivity)
+            activityPanel?.HideProgress();
+
+        activityPanel?.BeginActivity(step.instructionText, showProgressForThisActivity, StepUsesButtons(step));
+
+        if (!showProgressForThisActivity)
+            activityPanel?.HideProgress();
+
+        ShowProgressIfResultMode(step, 0f, "Ready");
 
         _acceptedInputCount = 0;
         _sequenceIndex = 0;
@@ -765,7 +847,7 @@ public class ContentController : MonoBehaviour, IARContent
 
         ClearInput();
         activityPanel?.HideButtons();
-        activityPanel?.HideProgress();
+        if (StepUsesProgress(step)) activityPanel?.HideProgress();
 
         RunReactions(step, ActivityReactionMoment.WhenActivityCompletes);
         if (step.waitForRunningReactionsBeforeFinish)
@@ -794,6 +876,7 @@ public class ContentController : MonoBehaviour, IARContent
         // Activity transforms are applied only inside the specific activity runtime path, not before reveal/story setup.
         RestoreAllActivityActionTransforms();
         StopConfiguredVisualEffects(step, clear: true);
+        PrepareVisualEffectSourcesForActivity(step);
         ApplyObjectStateList(step.objectsOnWhenActivityStarts, true);
         ApplyObjectStateList(step.objectsOffWhenActivityStarts, false);
     }
@@ -1077,7 +1160,7 @@ public class ContentController : MonoBehaviour, IARContent
             helpGraph.Evaluate(0f);
         }
 
-        activityPanel?.ShowProgress(0f, "0%");
+        if (ProgressBarFollowsInput(step)) activityPanel?.ShowProgress(0f, "0%");
 
         BeginInput(step, data => IsInputValidForStep(step, data), data =>
         {
@@ -1101,7 +1184,7 @@ public class ContentController : MonoBehaviour, IARContent
             if (progress > 0f && step.helpProgressLossPerSecond > 0f)
                 progress = Mathf.Max(0f, progress - (step.helpProgressLossPerSecond / 100f) * Time.deltaTime);
 
-            activityPanel?.ShowProgress(progress, Mathf.RoundToInt(progress * 100f) + "%");
+            if (ProgressBarFollowsInput(step)) activityPanel?.ShowProgress(progress, Mathf.RoundToInt(progress * 100f) + "%");
 
             if (hasHelpAnimation && helpGraph.IsValid())
             {
@@ -1142,11 +1225,15 @@ public class ContentController : MonoBehaviour, IARContent
                 }
             }
 
-            if (_acceptedInputCount == 0 && noInputHintShown && step.noInputActionAfterHint == ActivityNoInputAction.SkipActivityAndContinue)
+            if (_acceptedInputCount == 0 && noInputHintShown && (ShouldAutoPlayResultAfterNoInput(step) || ShouldSkipActivityAfterNoInput(step)))
             {
                 float skipWait = Mathf.Max(0f, step.autoSkipAfterHintSeconds);
                 if (Time.time - noInputHintShownAt >= skipWait)
                 {
+                    if (ShouldAutoPlayResultAfterNoInput(step))
+                    {
+                        yield return AutoPlayResultBecauseChildDidNothing(step);
+                    }
                     complete = true;
                     break;
                 }
@@ -1181,71 +1268,255 @@ public class ContentController : MonoBehaviour, IARContent
     }
 
 
-    private AnimationClip SelectProgressHelperAnimation(ActivityStep step)
+    private bool ProgressHelperUsesProgressPercent(ActivityStep step)
     {
-        if (step == null || step.progressHelperAnimations == null || step.progressHelperAnimations.Count == 0)
-            return null;
+        if (step == null) return false;
+        return step.progressHelperAnimationSelection == ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsByProgress ||
+               step.progressHelperAnimationSelection == ProgressGatePreviewAnimationSelectionMode.PlaySelectedNumbersByProgress;
+    }
 
-        List<AnimationClip> validClips = new List<AnimationClip>();
-        for (int i = 0; i < step.progressHelperAnimations.Count; i++)
+    private List<AnimationClip> GetProgressHelperClipChoices(ActivityStep step)
+    {
+        List<AnimationClip> validClips = GetValidClips(step != null ? step.progressHelperAnimations : null);
+        if (step == null || validClips.Count == 0)
+            return validClips;
+
+        bool useSelectedList = step.progressHelperAnimationSelection == ProgressGatePreviewAnimationSelectionMode.PlaySelectedAnimationNumbers ||
+                               step.progressHelperAnimationSelection == ProgressGatePreviewAnimationSelectionMode.PlaySelectedNumbersByProgress;
+        if (!useSelectedList)
+            return validClips;
+
+        List<AnimationClip> selected = new List<AnimationClip>();
+        string raw = string.IsNullOrWhiteSpace(step.progressHelperSelectedAnimationNumbers)
+            ? step.progressHelperSelectedAnimationNumber.ToString()
+            : step.progressHelperSelectedAnimationNumbers;
+
+        string[] parts = raw.Split(',', ' ', ';', '|');
+        HashSet<int> used = new HashSet<int>();
+        for (int i = 0; i < parts.Length; i++)
         {
-            if (step.progressHelperAnimations[i] != null)
-                validClips.Add(step.progressHelperAnimations[i]);
+            if (!int.TryParse(parts[i], out int oneBased))
+                continue;
+
+            int index = Mathf.Clamp(oneBased - 1, 0, validClips.Count - 1);
+            if (used.Add(index) && validClips[index] != null)
+                selected.Add(validClips[index]);
         }
 
-        if (validClips.Count == 0)
+        return selected.Count > 0 ? selected : validClips;
+    }
+
+    private AnimationClip SelectProgressHelperAnimation(ActivityStep step)
+    {
+        if (step == null)
+            return null;
+
+        List<AnimationClip> clips = GetProgressHelperClipChoices(step);
+        if (clips.Count == 0)
             return null;
 
         switch (step.progressHelperAnimationSelection)
         {
             case ProgressGatePreviewAnimationSelectionMode.UseSelectedAnimationNumber:
-                int requestedIndex = Mathf.Clamp(step.progressHelperSelectedAnimationNumber - 1, 0, validClips.Count - 1);
-                return validClips[requestedIndex];
+                int requestedIndex = Mathf.Clamp(step.progressHelperSelectedAnimationNumber - 1, 0, clips.Count - 1);
+                return clips[requestedIndex];
+
+            case ProgressGatePreviewAnimationSelectionMode.PlaySelectedAnimationNumbers:
+            case ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsInOrder:
+                return clips[0];
 
             case ProgressGatePreviewAnimationSelectionMode.PickRandomAnimationOnce:
-                return validClips[UnityEngine.Random.Range(0, validClips.Count)];
+                return clips[UnityEngine.Random.Range(0, clips.Count)];
 
+            case ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsByProgress:
+            case ProgressGatePreviewAnimationSelectionMode.PlaySelectedNumbersByProgress:
             case ProgressGatePreviewAnimationSelectionMode.UseFirstAnimation:
             default:
-                return validClips[0];
+                return clips[0];
         }
     }
 
-    private void UpdateProgressHelperAnimation(ActivityStep step, bool childIsActivelyTapping, float progress, bool hasHelperAnimation, PlayableGraph graph, AnimationClipPlayable playable, AnimationClip clip)
+    private AnimationClip SelectProgressHelperAnimationForProgress(ActivityStep step, float progress)
     {
-        if (!hasHelperAnimation || !graph.IsValid() || clip == null)
-            return;
+        List<AnimationClip> clips = GetProgressHelperClipChoices(step);
+        if (clips.Count == 0)
+            return null;
 
-        bool shouldPlay = childIsActivelyTapping && progress > 0.001f;
+        float p = Mathf.Clamp01(progress);
+        int index = p >= 0.999f ? clips.Count - 1 : Mathf.Clamp(Mathf.FloorToInt(p * clips.Count), 0, clips.Count - 1);
+        return clips[index];
+    }
 
-        if (shouldPlay)
+    private bool ProgressHelperShouldPlayAsSequence(ActivityStep step)
+    {
+        if (step == null || !step.progressUseHelperAnimationWhileTapping)
+            return false;
+
+        return step.progressHelperAnimationSelection == ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsInOrder ||
+               step.progressHelperAnimationSelection == ProgressGatePreviewAnimationSelectionMode.PlaySelectedAnimationNumbers;
+    }
+
+    private IEnumerator PlayProgressHelperAnimationsOnce(ActivityStep step)
+    {
+        if (step == null || !step.progressUseHelperAnimationWhileTapping)
+            yield break;
+
+        Animator helperAnimator = step.progressHelperAnimator != null ? step.progressHelperAnimator : step.resultAnimator;
+        if (helperAnimator == null)
+            yield break;
+
+        List<AnimationClip> clips = GetProgressHelperClipChoices(step);
+        if (clips.Count == 0)
+            yield break;
+
+        float speed = Mathf.Max(0.01f, step.progressHelperAnimationSpeed);
+        for (int i = 0; i < clips.Count; i++)
         {
-            playable.SetSpeed(Mathf.Max(0.01f, step.progressHelperAnimationSpeed));
+            AnimationClip clip = clips[i];
+            if (clip == null)
+                continue;
 
-            if (step.progressHelperLoopAnimation)
+            if (CreateActivityAnimationGraph(helperAnimator, clip, speed, out PlayableGraph graph, out AnimationClipPlayable playable))
             {
-                double clipLength = Mathf.Max(0.01f, clip.length);
-                double currentTime = playable.GetTime();
-                if (currentTime >= clipLength)
+                float wait = Mathf.Max(0.01f, clip.length / speed);
+                yield return new WaitForSeconds(wait);
+                if (graph.IsValid())
                 {
-                    playable.SetTime(currentTime % clipLength);
-                    graph.Evaluate(0f);
+                    graph.Destroy();
+                    _activeGraphs.Remove(graph);
                 }
             }
         }
-        else
-        {
-            if (step.progressHelperPauseWhenNotTapping)
-                playable.SetSpeed(0f);
+    }
 
-            if (progress <= 0.001f && step.progressHelperResetWhenProgressEmpty)
+    private IEnumerator PlayProgressHelperAnimationsFromProgressToEnd(ActivityStep step, float progress)
+    {
+        if (step == null || !step.progressUseHelperAnimationWhileTapping)
+            yield break;
+
+        Animator helperAnimator = step.progressHelperAnimator != null ? step.progressHelperAnimator : step.resultAnimator;
+        if (helperAnimator == null)
+            yield break;
+
+        List<AnimationClip> clips = GetProgressHelperClipChoices(step);
+        if (clips.Count == 0)
+            yield break;
+
+        int startIndex = Mathf.Clamp(Mathf.FloorToInt(Mathf.Clamp01(progress) * clips.Count), 0, clips.Count - 1);
+        float speed = Mathf.Max(0.01f, step.progressHelperAnimationSpeed);
+
+        for (int i = startIndex; i < clips.Count; i++)
+        {
+            AnimationClip clip = clips[i];
+            if (clip == null)
+                continue;
+
+            if (CreateActivityAnimationGraph(helperAnimator, clip, speed, out PlayableGraph graph, out AnimationClipPlayable playable))
             {
-                playable.SetTime(0f);
+                float wait = Mathf.Max(0.01f, clip.length / speed);
+                yield return new WaitForSeconds(wait);
+                if (graph.IsValid())
+                {
+                    graph.Destroy();
+                    _activeGraphs.Remove(graph);
+                }
+            }
+        }
+    }
+
+    private void UpdateProgressHelperAnimation(ActivityStep step, Animator helperAnimator, bool childIsActivelyTapping, float progress, ref bool hasHelperAnimation, ref PlayableGraph graph, ref AnimationClipPlayable playable, ref AnimationClip activeClip)
+    {
+        if (step == null || !step.progressUseHelperAnimationWhileTapping)
+            return;
+
+        if (helperAnimator == null)
+            return;
+
+        bool useProgressPercent = ProgressHelperUsesProgressPercent(step);
+
+        // Progress animation rule:
+        // In progress mode the animation follows the current bar value, not the latest tap.
+        // If the child stops and the bar falls from 45% to 10%, the animation must move back
+        // to the 10% range and keep looping there. Do not pause just because tapping stopped.
+        bool shouldAnimate = useProgressPercent ? progress > 0.001f : (childIsActivelyTapping && progress > 0.001f);
+
+        if (!shouldAnimate)
+        {
+            if (hasHelperAnimation && graph.IsValid())
+            {
+                if (!useProgressPercent && step.progressHelperPauseWhenNotTapping)
+                    playable.SetSpeed(0f);
+
+                if (progress <= 0.001f && step.progressHelperResetWhenProgressEmpty)
+                {
+                    playable.SetTime(0f);
+                    graph.Evaluate(0f);
+                }
+            }
+            return;
+        }
+
+        AnimationClip neededClip = useProgressPercent ? SelectProgressHelperAnimationForProgress(step, progress) : (activeClip != null ? activeClip : SelectProgressHelperAnimation(step));
+        if (neededClip == null)
+            return;
+
+        float speed = Mathf.Max(0.01f, step.progressHelperAnimationSpeed);
+        if (!hasHelperAnimation || !graph.IsValid() || activeClip != neededClip)
+        {
+            if (graph.IsValid())
+            {
+                graph.Destroy();
+                _activeGraphs.Remove(graph);
+            }
+
+            if (!CreateActivityAnimationGraph(helperAnimator, neededClip, speed, out graph, out playable))
+            {
+                hasHelperAnimation = false;
+                activeClip = null;
+                return;
+            }
+
+            hasHelperAnimation = true;
+            activeClip = neededClip;
+
+            // Proportional start time fix:
+            // When progress drops and we switch to a lower clip, start that clip from the
+            // proportional position matching where progress is within that clip's range.
+            // This prevents the visual jump of always restarting from frame 0.
+            float startTime = 0f;
+            if (useProgressPercent && neededClip != null)
+            {
+                List<AnimationClip> clips = GetProgressHelperClipChoices(step);
+                int clipCount = Mathf.Max(1, clips.Count);
+                int clipIndex = clips.IndexOf(neededClip);
+                if (clipIndex >= 0 && neededClip.length > 0.01f)
+                {
+                    float rangeStart = (float)clipIndex / clipCount;
+                    float rangeEnd   = (float)(clipIndex + 1) / clipCount;
+                    float rangeSize  = Mathf.Max(0.001f, rangeEnd - rangeStart);
+                    float progressInRange = Mathf.Clamp01((Mathf.Clamp01(progress) - rangeStart) / rangeSize);
+                    startTime = progressInRange * neededClip.length;
+                }
+            }
+
+            playable.SetTime(startTime);
+            playable.SetSpeed(speed);
+            graph.Evaluate(0f);
+            return;
+        }
+
+        playable.SetSpeed(speed);
+        if (step.progressHelperLoopAnimation)
+        {
+            double clipLength = Mathf.Max(0.01f, activeClip.length);
+            double currentTime = playable.GetTime();
+            if (currentTime >= clipLength)
+            {
+                playable.SetTime(currentTime % clipLength);
                 graph.Evaluate(0f);
             }
         }
     }
-
 
     private IEnumerator RunWaitForStoryThenTapObject(ActivityStep step)
     {
@@ -1274,7 +1545,7 @@ public class ContentController : MonoBehaviour, IARContent
         float tapShakeAmount = 0f;
         List<float> recentTapTimes = new List<float>();
 
-        if (step.storyMomentShowProgressBar)
+        if (StepUsesProgress(step))
             activityPanel?.ShowProgress(0f, "0%");
 
         BeginInput(step, data => data.type == ActivityInputType.ModelTap && IsTargetMatch(tapObject, data.hitObject), data =>
@@ -1329,7 +1600,7 @@ public class ContentController : MonoBehaviour, IARContent
                 movingObject.localPosition = Vector3.Lerp(movingObject.localPosition, targetPosition, Time.deltaTime * Mathf.Max(1f, step.storyMomentMoveSmoothness));
             }
 
-            if (step.storyMomentShowProgressBar)
+            if (StepUsesProgress(step))
                 activityPanel?.ShowProgress(progress, Mathf.RoundToInt(progress * 100f) + "%");
 
             if (progress >= 0.999f)
@@ -1349,13 +1620,19 @@ public class ContentController : MonoBehaviour, IARContent
 
             if (hintShown && step.storyMomentSkipAfterHintSeconds > 0f && Time.time - hintShownAt >= step.storyMomentSkipAfterHintSeconds)
             {
-                skipped = true;
+                if (ShouldAutoPlayResultAfterNoInput(step))
+                    completed = true;
+                else
+                    skipped = true;
                 break;
             }
 
             if (step.storyMomentTotalActivitySeconds > 0f && elapsed >= step.storyMomentTotalActivitySeconds)
             {
-                skipped = true;
+                if (ShouldAutoPlayResultAfterNoInput(step))
+                    completed = true;
+                else
+                    skipped = true;
                 break;
             }
 
@@ -1364,16 +1641,24 @@ public class ContentController : MonoBehaviour, IARContent
 
         ClearInput();
 
-        if (step.storyMomentShowProgressBar)
+        if (StepUsesProgress(step))
             activityPanel?.HideProgress();
 
         if (completed)
         {
             yield return PlayStoryMomentBreakAndDrop(step, movingObject, originalLocalPosition);
+            // Play shared result (animation, sound, voice) after the break-and-drop finishes.
+            yield return PlayStoryResult(step);
         }
-        else if (movingObject != null)
+        else
         {
-            yield return MoveLocalPosition(movingObject, movingObject.localPosition, originalLocalPosition, Mathf.Max(0.01f, step.storyMomentDropBackSeconds));
+            // Skipped (no input timeout or hint skip): drop object back then play activity result.
+            // Story must not continue before result finishes.
+            if (movingObject != null)
+                yield return MoveLocalPosition(movingObject, movingObject.localPosition, originalLocalPosition, Mathf.Max(0.01f, step.storyMomentDropBackSeconds));
+
+            if (ShouldAutoPlayResultAfterNoInput(step))
+                yield return AutoPlayResultBecauseChildDidNothing(step);
         }
     }
 
@@ -1455,6 +1740,9 @@ public class ContentController : MonoBehaviour, IARContent
     {
         bool complete = false;
         bool autoSkipped = false;
+        bool skipResultAfterNoInput = false;
+        bool autoFinishBecauseChildStopped = false;
+        float autoFinishStartProgress = 0f;
         float startedAt = Time.time;
         float progress = 0f;
         int validTapCount = 0;
@@ -1478,20 +1766,24 @@ public class ContentController : MonoBehaviour, IARContent
         AnimationClipPlayable progressReactionHoldPlayable = default(AnimationClipPlayable);
         AnimationClip progressReactionHoldClip = null;
 
+        Animator helperAnimator = null;
         if (step.progressUseHelperAnimationWhileTapping)
         {
-            selectedHelperClip = SelectProgressHelperAnimation(step);
-            Animator helperAnimator = step.progressHelperAnimator != null ? step.progressHelperAnimator : step.resultAnimator;
-            hasHelperAnimation = CreateActivityAnimationGraph(helperAnimator, selectedHelperClip, 0f, out helperGraph, out helperPlayable);
-            if (hasHelperAnimation && helperGraph.IsValid())
+            helperAnimator = step.progressHelperAnimator != null ? step.progressHelperAnimator : step.resultAnimator;
+            if (!ProgressHelperUsesProgressPercent(step))
             {
-                helperPlayable.SetTime(0f);
-                helperPlayable.SetSpeed(0f);
-                helperGraph.Evaluate(0f);
+                selectedHelperClip = SelectProgressHelperAnimation(step);
+                hasHelperAnimation = CreateActivityAnimationGraph(helperAnimator, selectedHelperClip, 0f, out helperGraph, out helperPlayable);
+                if (hasHelperAnimation && helperGraph.IsValid())
+                {
+                    helperPlayable.SetTime(0f);
+                    helperPlayable.SetSpeed(0f);
+                    helperGraph.Evaluate(0f);
+                }
             }
         }
 
-        activityPanel?.ShowProgress(0f, "0%");
+        if (ProgressBarFollowsInput(step)) activityPanel?.ShowProgress(0f, "0%");
 
         BeginInput(step, data => IsInputValidForStep(step, data), data =>
         {
@@ -1555,12 +1847,27 @@ public class ContentController : MonoBehaviour, IARContent
                 progress = Mathf.Max(0f, progress - (Mathf.Max(0f, step.progressLossPerSecond) / 100f) * Time.deltaTime);
             }
 
-            UpdateProgressHelperAnimation(step, childIsActivelyTapping, progress, hasHelperAnimation, helperGraph, helperPlayable, selectedHelperClip);
+            // If the child already started the activity and then stops, do not loop the current
+            // progress animation forever. After the chosen idle time, auto-play the remaining
+            // activity helper/result animations, then continue the story.
+            if (_acceptedInputCount > 0 && !childIsActivelyTapping &&
+                step.progressAutoFinishAfterNoTapSeconds > 0f &&
+                Time.time - lastValidTapTime >= step.progressAutoFinishAfterNoTapSeconds)
+            {
+                autoSkipped = true;
+                skipResultAfterNoInput = false;
+                autoFinishBecauseChildStopped = true;
+                autoFinishStartProgress = progress;
+                complete = true;
+                break;
+            }
+
+            UpdateProgressHelperAnimation(step, helperAnimator, childIsActivelyTapping, progress, ref hasHelperAnimation, ref helperGraph, ref helperPlayable, ref selectedHelperClip);
 
             string progressLabel = Mathf.RoundToInt(progress * 100f) + "%";
             if (step.progressGateCompletesBy == ActivityProgressGateCompletionMode.RequiredTapSpeedForTime)
                 progressLabel += "  " + tapSpeed.ToString("0.0") + "/s";
-            activityPanel?.ShowProgress(progress, progressLabel);
+            if (ProgressBarFollowsInput(step)) activityPanel?.ShowProgress(progress, progressLabel);
 
             if (progress >= 0.999f)
             {
@@ -1568,12 +1875,8 @@ public class ContentController : MonoBehaviour, IARContent
                 break;
             }
 
-            if (step.progressAutoStartStoryAfterSeconds > 0f && elapsed >= step.progressAutoStartStoryAfterSeconds)
-            {
-                autoSkipped = true;
-                complete = true;
-                break;
-            }
+            // NOTE: progressAutoStartStoryAfterSeconds is intentionally zeroed by NormalizeActivityStep.
+            // The no-input helper below handles auto-finish cleanly via AutoPlayResultBecauseChildDidNothing.
 
             if (_acceptedInputCount == 0 && step.enableNoInputHelp && step.noInputHintAfterSeconds > 0f && !noInputHintShown)
             {
@@ -1585,12 +1888,15 @@ public class ContentController : MonoBehaviour, IARContent
                 }
             }
 
-            if (_acceptedInputCount == 0 && noInputHintShown && step.noInputActionAfterHint == ActivityNoInputAction.SkipActivityAndContinue)
+            if (_acceptedInputCount == 0 && noInputHintShown && (ShouldAutoPlayResultAfterNoInput(step) || ShouldSkipActivityAfterNoInput(step)))
             {
                 float skipWait = Mathf.Max(0f, step.autoSkipAfterHintSeconds);
                 if (Time.time - noInputHintShownAt >= skipWait)
                 {
                     autoSkipped = true;
+                    // Auto Play = play configured result through the existing result path.
+                    // Skip = finish without result.
+                    skipResultAfterNoInput = ShouldSkipActivityAfterNoInput(step);
                     complete = true;
                     break;
                 }
@@ -1600,7 +1906,7 @@ public class ContentController : MonoBehaviour, IARContent
         }
 
         ClearInput();
-        activityPanel?.HideProgress();
+        if (StepUsesProgress(step)) activityPanel?.HideProgress();
 
         if (hasHelperAnimation && helperGraph.IsValid())
         {
@@ -1620,8 +1926,15 @@ public class ContentController : MonoBehaviour, IARContent
             _activeGraphs.Remove(progressReactionHoldGraph);
         }
 
-        if (!autoSkipped || step.playResultWhenProgressAutoSkips)
+        if (autoSkipped)
+        {
+            if (!skipResultAfterNoInput && step.playResultWhenProgressAutoSkips)
+                yield return AutoPlayResultBecauseChildDidNothing(step, autoFinishBecauseChildStopped ? autoFinishStartProgress : 0f);
+        }
+        else
+        {
             yield return PlayStoryResult(step);
+        }
     }
 
     private void PlayProgressCorrectTapFeedback(ActivityStep step, ActivityInputData data)
@@ -1791,6 +2104,20 @@ public class ContentController : MonoBehaviour, IARContent
         float speed = Mathf.Max(0.01f, step.progressReactionAnimationSpeed);
         PrepareActivityAnimator(step.progressReactionAnimator, speed);
 
+        if (activeClip == clip && graph.IsValid())
+        {
+            // Same progress stage. Keep looping instead of restarting from frame 0 on every tap.
+            playable.SetSpeed(speed);
+            double clipLength = Mathf.Max(0.01f, clip.length);
+            if (playable.GetTime() >= clipLength)
+            {
+                playable.SetTime(0f);
+                graph.Evaluate(0f);
+            }
+            lastPlayTime = Time.time;
+            return;
+        }
+
         // Important: only one progress reaction graph should drive this reaction animator at a time.
         // Multiple active PlayableGraphs targeting the same Animator can fight each other and make the model look frozen.
         if (graph.IsValid())
@@ -1853,7 +2180,10 @@ public class ContentController : MonoBehaviour, IARContent
             playable.SetSpeed(speed);
             double clipLength = Mathf.Max(0.01f, clip.length);
             if (playable.GetTime() >= clipLength)
+            {
                 playable.SetTime(0f);
+                graph.Evaluate(0f);
+            }
         }
     }
 
@@ -1869,7 +2199,9 @@ public class ContentController : MonoBehaviour, IARContent
                 int speedIndex = Mathf.Clamp(Mathf.FloorToInt(tapSpeed / Mathf.Max(0.1f, step.progressRequiredTapsPerSecond) * clips.Count), 0, clips.Count - 1);
                 return clips[speedIndex];
             case ActivityReactionSequenceMode.ByProgress:
-                int progressIndex = Mathf.Clamp(Mathf.FloorToInt(progress * clips.Count), 0, clips.Count - 1);
+                // Beginner rule: with 5 clips, 1-20% uses clip 1, 21-40% uses clip 2, etc.
+                // This avoids restarting the next clip exactly at 20% when the user expects 10% and 20% to stay in the same stage.
+                int progressIndex = Mathf.Clamp(Mathf.CeilToInt(Mathf.Clamp01(progress) * clips.Count) - 1, 0, clips.Count - 1);
                 return clips[progressIndex];
             case ActivityReactionSequenceMode.InOrder:
             default:
@@ -1900,6 +2232,7 @@ public class ContentController : MonoBehaviour, IARContent
     {
         bool complete = false;
         bool autoSkipped = false;
+        bool skipGroupActionsAfterNoInput = false;
         float startedAt = Time.time;
         bool noInputHintShown = false;
         float noInputHintShownAt = 0f;
@@ -1945,11 +2278,8 @@ public class ContentController : MonoBehaviour, IARContent
         {
             float elapsed = Time.time - startedAt;
 
-            if (step.groupAutoStartStoryAfterSeconds > 0f && elapsed >= step.groupAutoStartStoryAfterSeconds)
-            {
-                autoSkipped = true;
-                break;
-            }
+            // NOTE: groupAutoStartStoryAfterSeconds is always 0 (zeroed by NormalizeActivityStep).
+            // No-input handling below uses the shared result path so story never starts before result.
 
             if (_acceptedInputCount == 0 && step.enableNoInputHelp && step.noInputHintAfterSeconds > 0f && !noInputHintShown)
             {
@@ -1961,12 +2291,13 @@ public class ContentController : MonoBehaviour, IARContent
                 }
             }
 
-            if (_acceptedInputCount == 0 && noInputHintShown && step.noInputActionAfterHint == ActivityNoInputAction.SkipActivityAndContinue)
+            if (_acceptedInputCount == 0 && noInputHintShown && (ShouldAutoPlayResultAfterNoInput(step) || ShouldSkipActivityAfterNoInput(step)))
             {
                 float skipWait = Mathf.Max(0f, step.autoSkipAfterHintSeconds);
                 if (Time.time - noInputHintShownAt >= skipWait)
                 {
                     autoSkipped = true;
+                    skipGroupActionsAfterNoInput = ShouldSkipActivityAfterNoInput(step);
                     break;
                 }
             }
@@ -1976,20 +2307,38 @@ public class ContentController : MonoBehaviour, IARContent
 
         ClearInput();
 
-        if (autoSkipped && step.groupPlayActionsWhenAutoSkipped)
-            yield return PlayGroupActions(step, null);
-
+        // Always wait for any in-flight group action coroutines before moving to result.
         while (runningGroupActions > 0)
             yield return null;
 
-        if (step.groupWaitSecondsBeforeStory > 0f)
-            yield return new WaitForSeconds(step.groupWaitSecondsBeforeStory);
-
-        if (step.groupResultVoiceOver != null)
+        if (autoSkipped)
         {
-            AudioSource voice = CreateTempAudioSource(step.groupResultVoiceOver, step.groupResultVoiceVolume, false);
-            if (step.groupWaitForVoiceOver && voice != null)
-                yield return new WaitForSeconds(step.groupResultVoiceOver.length);
+            // No-input path: play the activity result first (animations, voice, VFX).
+            // Story must not continue until result finishes.
+            if (!skipGroupActionsAfterNoInput)
+            {
+                if (step.groupPlayActionsWhenAutoSkipped)
+                    yield return PlayGroupActions(step, null);
+                yield return AutoPlayResultBecauseChildDidNothing(step);
+            }
+            // else: SkipActivityAndContinue - no result plays, go straight to cleanup.
+        }
+        else
+        {
+            // Normal completion: play group-specific result then shared result.
+            if (step.groupWaitSecondsBeforeStory > 0f)
+                yield return new WaitForSeconds(step.groupWaitSecondsBeforeStory);
+
+            if (step.groupResultVoiceOver != null)
+            {
+                AudioSource voice = CreateTempAudioSource(step.groupResultVoiceOver, step.groupResultVoiceVolume, false);
+                if (step.groupWaitForVoiceOver && voice != null)
+                    yield return new WaitForSeconds(step.groupResultVoiceOver.length);
+            }
+
+            // Shared result: plays resultAnimator/resultAnimationClip/resultSoundEffect/resultVoiceOver
+            // if the setup person configured them. Does nothing if not set.
+            yield return PlayStoryResult(step);
         }
 
         RestoreTargetActivityTransformsForActivity(step);
@@ -2140,7 +2489,7 @@ public class ContentController : MonoBehaviour, IARContent
         }
 
         int done = Mathf.Min(_uniqueTappedGroupObjects.Count, needed);
-        activityPanel.ShowProgress(Mathf.Clamp01((float)done / needed), done + " / " + needed);
+        if (ProgressBarFollowsInput(step)) activityPanel.ShowProgress(Mathf.Clamp01((float)done / needed), done + " / " + needed);
     }
 
     private int CountRequiredGroupTargets(ActivityStep step)
@@ -2209,7 +2558,8 @@ public class ContentController : MonoBehaviour, IARContent
                 ActivityGroupAction action = step.groupActions[i];
                 if (action == null || !action.enabled) continue;
 
-                ApplyGroupActivityTransform(action);
+                // Transform is already applied at activity start via ApplyGroupActivityTransformsAtStart.
+                // Do not apply again here to avoid fighting the already-set position.
 
                 if (action.soundEffect != null)
                     CreateTempAudioSource(action.soundEffect, action.soundVolume, false);
@@ -2317,10 +2667,26 @@ public class ContentController : MonoBehaviour, IARContent
         if (step == null)
             return;
 
-        // Common template rule:
-        // Any target/object transform configured for the activity is applied only after the activity starts.
-        // Story, VFX, popup, spline and page flow keep their normal story pose before this point.
+        // Template-wide rule: every transform that is flagged as activity-only must apply
+        // at the moment the activity starts, not mid-activity or on first tap.
+        // This keeps story/VFX/popup free of activity poses before the child interacts.
         ApplyTargetActivityTransformsForActivity(step);
+        ApplyGroupActivityTransformsAtStart(step);
+    }
+
+    // Applies group action transforms at activity start.
+    // This matches target-action behavior and prevents models from jumping on the first tap.
+    private void ApplyGroupActivityTransformsAtStart(ActivityStep step)
+    {
+        if (step == null || step.groupActions == null)
+            return;
+
+        for (int i = 0; i < step.groupActions.Count; i++)
+        {
+            ActivityGroupAction action = step.groupActions[i];
+            if (action != null && action.useActivityTransform)
+                ApplyGroupActivityTransform(action);
+        }
     }
 
     private void ApplyTargetActivityTransformsForActivity(ActivityStep step)
@@ -2365,6 +2731,7 @@ public class ContentController : MonoBehaviour, IARContent
                 continue;
 
             RestoreTargetActivityTransformsForActivity(step);
+            RestoreResultActivityTransform(step);
 
             if (step.choiceOptions != null)
             {
@@ -2384,12 +2751,27 @@ public class ContentController : MonoBehaviour, IARContent
                 for (int g = 0; g < step.groupActions.Count; g++)
                     RestoreGroupActivityTransform(step.groupActions[g]);
             }
+
+            if (step.reactions != null)
+            {
+                for (int r = 0; r < step.reactions.Count; r++)
+                    RestoreReactionActivityTransform(step.reactions[r]);
+            }
         }
     }
 
     private IEnumerator PlayStoryResult(ActivityStep step)
     {
         if (step == null) yield break;
+
+        ShowProgressIfResultMode(step, 1f, "Done");
+
+        bool resultTransformApplied = false;
+        if (step.resultUseActivityTransform)
+        {
+            ApplyResultActivityTransform(step);
+            resultTransformApplied = true;
+        }
 
         float waitTime = Mathf.Max(0f, step.resultExtraWaitSeconds);
 
@@ -2421,6 +2803,9 @@ public class ContentController : MonoBehaviour, IARContent
 
         if (waitTime > 0f)
             yield return new WaitForSeconds(waitTime);
+
+        if (resultTransformApplied)
+            RestoreResultActivityTransform(step);
     }
 
     private IEnumerator PlayGroupActions(ActivityStep step)
@@ -2443,7 +2828,7 @@ public class ContentController : MonoBehaviour, IARContent
                 ActivityGroupAction action = step.groupActions[i];
                 if (action == null || !action.enabled) continue;
 
-                ApplyGroupActivityTransform(action);
+                // Transform already applied at activity start. Do not re-apply here.
 
                 if (action.soundEffect != null)
                     CreateTempAudioSource(action.soundEffect, action.soundVolume, false);
@@ -2479,13 +2864,108 @@ public class ContentController : MonoBehaviour, IARContent
         }
     }
 
+    private bool ShouldAutoPlayResultAfterNoInput(ActivityStep step)
+    {
+        return step != null && step.noInputActionAfterHint == ActivityNoInputAction.AutoPlayResultThenContinue;
+    }
+
+    private bool ShouldSkipActivityAfterNoInput(ActivityStep step)
+    {
+        return step != null && step.noInputActionAfterHint == ActivityNoInputAction.SkipActivityAndContinue;
+    }
+
+    private IEnumerator AutoPlayResultBecauseChildDidNothing(ActivityStep step, float helperStartProgress = 0f)
+    {
+        if (step == null) yield break;
+
+        // No input means skip waiting for the child, not skip the activity.
+        // Run only the activity result path. Do not directly start story animation here.
+        ClearInput();
+        activityPanel?.HideButtons();
+
+        _acceptedInputCount = Mathf.Max(_acceptedInputCount, Mathf.Max(1, step.requiredInputCount));
+        _visibleProgressValue = 1f;
+        UpdateProgress(step);
+        ShowProgressIfResultMode(step, 1f, "Auto");
+
+        // If this is a progress/tapping activity, the helper animations are part of the activity result.
+        // On no input, play them once in order before continuing. Do not touch story animation here.
+        if (ProgressHelperShouldPlayAsSequence(step))
+            yield return PlayProgressHelperAnimationsOnce(step);
+        else if (ProgressHelperUsesProgressPercent(step))
+            yield return PlayProgressHelperAnimationsFromProgressToEnd(step, helperStartProgress);
+
+        // Prefer the new no-coder Result Actions.
+        // Run old legacy result fields only when no result actions are configured, so no-input cannot accidentally replay story-side animation.
+        bool includeLegacyResult = !HasRunnableActivityResultReactions(step);
+        yield return PlayConfiguredActivityResult(step, includeLegacyResult);
+    }
+
+    private bool HasRunnableActivityResultReactions(ActivityStep step)
+    {
+        if (step == null || step.reactions == null) return false;
+        for (int i = 0; i < step.reactions.Count; i++)
+        {
+            ActivityReaction reaction = step.reactions[i];
+            if (reaction == null || !reaction.enabled) continue;
+            if (reaction.playWhen == ActivityReactionMoment.EveryValidInput ||
+                reaction.playWhen == ActivityReactionMoment.IfReactionIsFree)
+                return true;
+        }
+        return false;
+    }
+
+    private bool ShouldPlayResultOnEachInput(ActivityStep step)
+    {
+        if (step == null) return true;
+
+        if (step.resultPlayTiming == ActivityResultPlayTiming.OnEveryCorrectInput ||
+            step.resultPlayTiming == ActivityResultPlayTiming.WhileChildIsInteracting)
+            return true;
+
+        // Backward-compatible safety for simple tap activities.
+        // If the activity completes by time, there is no required-input finish point,
+        // so Every Valid Input reactions must still run when the child taps.
+        // This fixes activities like King Welcome: tap screen -> petals/animation play.
+        if (step.resultPlayTiming == ActivityResultPlayTiming.AfterRequiredInputs &&
+            step.finishWhen == ActivityFinishRule.AfterActiveTimeEnds)
+            return true;
+
+        return false;
+    }
+
+    private bool ShouldPlayResultAfterActivityInput(ActivityStep step)
+    {
+        if (step == null) return false;
+        return step.resultPlayTiming == ActivityResultPlayTiming.AfterRequiredInputs ||
+               step.resultPlayTiming == ActivityResultPlayTiming.WhenProgressIsFull ||
+               step.resultPlayTiming == ActivityResultPlayTiming.AfterNoInputAutoPlay;
+    }
+
+    private IEnumerator PlayConfiguredActivityResult(ActivityStep step, bool includeLegacyResult)
+    {
+        if (step == null) yield break;
+
+        bool startedBlockingReaction = false;
+        startedBlockingReaction |= RunReactions(step, ActivityReactionMoment.EveryValidInput);
+        startedBlockingReaction |= RunReactions(step, ActivityReactionMoment.IfReactionIsFree);
+
+        if (includeLegacyResult)
+            yield return PlayStoryResult(step);
+
+        if (startedBlockingReaction || step.waitForRunningReactionsBeforeFinish)
+            yield return WaitForRunningReactions(step);
+    }
+
     private IEnumerator RunInputActivity(ActivityStep step)
     {
         bool complete = false;
         float startedAt = Time.time;
         bool noInputHintShown = false;
+        bool autoPlayedResultAlready = false;
         float noInputHintShownAt = 0f;
         UpdateInputTimeProgress(step, startedAt);
+        ResetVisibleProgress(step);
 
         BeginInput(step, data => IsInputValidForStep(step, data), data =>
         {
@@ -2494,6 +2974,8 @@ public class ContentController : MonoBehaviour, IARContent
 
             _acceptedInputCount++;
             bool startedBlockingReaction = false;
+            // A reaction marked Every Valid Input must run when a valid input happens.
+            // This keeps tap effects like flower petals responsive even if the activity completion mode is different.
             startedBlockingReaction |= RunReactions(step, ActivityReactionMoment.EveryValidInput);
             startedBlockingReaction |= RunReactions(step, ActivityReactionMoment.IfReactionIsFree);
             UpdateProgress(step);
@@ -2525,6 +3007,7 @@ public class ContentController : MonoBehaviour, IARContent
         while (!complete)
         {
             UpdateInputTimeProgress(step, startedAt);
+            UpdateProgressIdleBehavior(step);
 
             if (step.finishWhen == ActivityFinishRule.AfterActiveTimeEnds && step.activeTimeSeconds > 0f)
             {
@@ -2545,11 +3028,16 @@ public class ContentController : MonoBehaviour, IARContent
                 }
             }
 
-            if (_acceptedInputCount == 0 && noInputHintShown && step.noInputActionAfterHint == ActivityNoInputAction.SkipActivityAndContinue)
+            if (_acceptedInputCount == 0 && noInputHintShown && (ShouldAutoPlayResultAfterNoInput(step) || ShouldSkipActivityAfterNoInput(step)))
             {
                 float skipWait = Mathf.Max(0f, step.autoSkipAfterHintSeconds);
                 if (Time.time - noInputHintShownAt >= skipWait)
                 {
+                    if (ShouldAutoPlayResultAfterNoInput(step))
+                    {
+                        yield return AutoPlayResultBecauseChildDidNothing(step);
+                        autoPlayedResultAlready = true;
+                    }
                     complete = true;
                     break;
                 }
@@ -2571,7 +3059,9 @@ public class ContentController : MonoBehaviour, IARContent
         ClearInput();
         activityPanel?.HideButtons();
 
-        if (step.waitForRunningReactionsBeforeFinish)
+        if (!autoPlayedResultAlready && ShouldPlayResultAfterActivityInput(step))
+            yield return PlayConfiguredActivityResult(step, true);
+        else if (step.waitForRunningReactionsBeforeFinish)
             yield return WaitForRunningReactions(step);
     }
 
@@ -2831,6 +3321,63 @@ public class ContentController : MonoBehaviour, IARContent
     }
 
 
+    private void ApplyResultActivityTransform(ActivityStep step)
+    {
+        if (step == null || !step.resultUseActivityTransform)
+            return;
+
+        Transform target = ResolveActivityTransformTarget(step.resultObjectToMoveOrScale, step.resultAnimator);
+        if (target == null)
+            return;
+
+        StoreResultStoryPoseIfNeeded(step, target);
+
+        if (!step._resultHasStoredTransform)
+        {
+            step._resultOriginalLocalPosition = target.localPosition;
+            step._resultOriginalLocalEulerAngles = target.localEulerAngles;
+            step._resultOriginalLocalScale = target.localScale;
+            step._resultHasStoredTransform = true;
+        }
+
+        if (step.resultCopyTransformFrom != null)
+        {
+            target.position = step.resultCopyTransformFrom.position;
+            target.rotation = step.resultCopyTransformFrom.rotation;
+            target.localScale = SafeActivityScale(step.resultCopyTransformFrom.localScale);
+            return;
+        }
+
+        target.localPosition = step.resultActivityPosition;
+        target.localEulerAngles = step.resultActivityRotationEuler;
+        target.localScale = SafeActivityScale(step.resultActivityScale);
+    }
+
+    private void RestoreResultActivityTransform(ActivityStep step)
+    {
+        if (step == null || !step.resultRestoreTransformAfterAction)
+            return;
+        if (!step.resultUseActivityTransform && !step._resultHasStoredTransform && !step.resultHasSavedStoryPose)
+            return;
+
+        Transform target = ResolveActivityTransformTarget(step.resultObjectToMoveOrScale, step.resultAnimator);
+        if (target == null)
+            return;
+
+        if (step.resultHasSavedStoryPose)
+        {
+            RestoreStoryPose(target, true, step.resultStoryPosition, step.resultStoryRotationEuler, step.resultStoryScale);
+        }
+        else if (step._resultHasStoredTransform)
+        {
+            target.localPosition = step._resultOriginalLocalPosition;
+            target.localEulerAngles = step._resultOriginalLocalEulerAngles;
+            target.localScale = step._resultOriginalLocalScale;
+        }
+
+        step._resultHasStoredTransform = false;
+    }
+
 
     private void ApplyTargetActivityTransform(ActivityTargetAction action)
     {
@@ -2866,7 +3413,9 @@ public class ContentController : MonoBehaviour, IARContent
 
     private void RestoreTargetActivityTransform(ActivityTargetAction action)
     {
-        if (action == null || !action.useActivityTransform || !action.restoreTransformAfterAction)
+        if (action == null || !action.restoreTransformAfterAction)
+            return;
+        if (!action.useActivityTransform && !action._hasStoredTransform && !action.hasSavedStoryPose)
             return;
 
         Transform target = ResolveActivityTransformTarget(action.objectToMoveOrScale, action.animator);
@@ -2931,13 +3480,21 @@ public class ContentController : MonoBehaviour, IARContent
         Vector3 restorePosition = action.hasSavedStoryPose ? action.storyPosition : action._originalLocalPosition;
         Vector3 restoreRotation = action.hasSavedStoryPose ? action.storyRotationEuler : action._originalLocalEulerAngles;
         Vector3 restoreScale = action.hasSavedStoryPose ? action.storyScale : action._originalLocalScale;
-        StartCoroutine(RestoreTransformAfterDelay(target, restorePosition, restoreRotation, restoreScale, waitSeconds));
+
+        // Track restore coroutine so StopAllChoiceScenarioRoutines can cancel it on fast replay.
+        // Without tracking, fast replay stops the coroutine but the restore never runs, leaving model stuck.
+        Coroutine c = StartCoroutine(RestoreTransformAfterDelay(target, restorePosition, restoreRotation, restoreScale, waitSeconds));
+        if (c != null)
+            _scenarioTransformRestoreRoutines.Add(c);
+
         action._hasStoredTransform = false;
     }
 
     private void RestoreScenarioActivityTransformNow(ActivityScenarioAction action)
     {
-        if (action == null || !action.useActivityTransform || !action.restoreTransformAfterAction)
+        if (action == null || !action.restoreTransformAfterAction)
+            return;
+        if (!action.useActivityTransform && !action._hasStoredTransform && !action.hasSavedStoryPose)
             return;
 
         Transform target = ResolveActivityTransformTarget(action.objectToMoveOrScale, action.animator);
@@ -2993,7 +3550,9 @@ public class ContentController : MonoBehaviour, IARContent
 
     private void RestoreGroupActivityTransform(ActivityGroupAction action)
     {
-        if (action == null || !action.useActivityTransform || !action.restoreTransformAfterAction)
+        if (action == null || !action.restoreTransformAfterAction)
+            return;
+        if (!action.useActivityTransform && !action._hasStoredTransform && !action.hasSavedStoryPose)
             return;
 
         Transform target = ResolveActivityTransformTarget(action.objectToMoveOrScale, action.animator);
@@ -3014,6 +3573,63 @@ public class ContentController : MonoBehaviour, IARContent
         action._hasStoredTransform = false;
     }
 
+    private void ApplyReactionActivityTransform(ActivityReaction reaction)
+    {
+        if (reaction == null || !reaction.useActivityTransform)
+            return;
+
+        Transform target = ResolveActivityTransformTarget(reaction.objectToMoveOrScale, reaction.animator);
+        if (target == null)
+            return;
+
+        StoreStoryPoseIfNeeded(reaction, target);
+
+        if (!reaction._hasStoredTransform)
+        {
+            reaction._originalLocalPosition = target.localPosition;
+            reaction._originalLocalEulerAngles = target.localEulerAngles;
+            reaction._originalLocalScale = target.localScale;
+            reaction._hasStoredTransform = true;
+        }
+
+        if (reaction.copyTransformFrom != null)
+        {
+            target.position = reaction.copyTransformFrom.position;
+            target.rotation = reaction.copyTransformFrom.rotation;
+            target.localScale = reaction.copyTransformFrom.localScale;
+            return;
+        }
+
+        target.localPosition = reaction.activityPosition;
+        target.localEulerAngles = reaction.activityRotationEuler;
+        target.localScale = SafeActivityScale(reaction.activityScale);
+    }
+
+    private void RestoreReactionActivityTransform(ActivityReaction reaction)
+    {
+        if (reaction == null || !reaction.restoreTransformAfterAction)
+            return;
+        if (!reaction.useActivityTransform && !reaction._hasStoredTransform && !reaction.hasSavedStoryPose)
+            return;
+
+        Transform target = ResolveActivityTransformTarget(reaction.objectToMoveOrScale, reaction.animator);
+        if (target == null)
+            return;
+
+        if (reaction.hasSavedStoryPose)
+        {
+            RestoreStoryPose(target, true, reaction.storyPosition, reaction.storyRotationEuler, reaction.storyScale);
+        }
+        else if (reaction._hasStoredTransform)
+        {
+            target.localPosition = reaction._originalLocalPosition;
+            target.localEulerAngles = reaction._originalLocalEulerAngles;
+            target.localScale = reaction._originalLocalScale;
+        }
+
+        reaction._hasStoredTransform = false;
+    }
+
     private Transform ResolveActivityTransformTarget(GameObject objectToMoveOrScale, Animator animator)
     {
         if (objectToMoveOrScale != null)
@@ -3031,6 +3647,54 @@ public class ContentController : MonoBehaviour, IARContent
     private static bool IsValidActivityScale(Vector3 value)
     {
         return !Mathf.Approximately(value.x, 0f) && !Mathf.Approximately(value.y, 0f) && !Mathf.Approximately(value.z, 0f);
+    }
+
+    /// <summary>
+    /// Clears all saved story poses across every activity, action, and reaction.
+    /// Must be called before Awake restore and before replay so the next capture
+    /// always reads the current object positions, not a stale pose from a previous session.
+    /// </summary>
+    private void ClearAllSavedStoryPoses()
+    {
+        if (activities == null) return;
+
+        for (int i = 0; i < activities.Count; i++)
+        {
+            ActivityStep step = activities[i];
+            if (step == null) continue;
+
+            // Result transform
+            step.resultHasSavedStoryPose = false;
+
+            // Target actions
+            if (step.targetActions != null)
+                for (int j = 0; j < step.targetActions.Count; j++)
+                    if (step.targetActions[j] != null)
+                        step.targetActions[j].hasSavedStoryPose = false;
+
+            // Choice option scenario actions
+            if (step.choiceOptions != null)
+                for (int j = 0; j < step.choiceOptions.Count; j++)
+                {
+                    ActivityChoiceOption opt = step.choiceOptions[j];
+                    if (opt?.scenarioActions == null) continue;
+                    for (int k = 0; k < opt.scenarioActions.Count; k++)
+                        if (opt.scenarioActions[k] != null)
+                            opt.scenarioActions[k].hasSavedStoryPose = false;
+                }
+
+            // Group actions
+            if (step.groupActions != null)
+                for (int j = 0; j < step.groupActions.Count; j++)
+                    if (step.groupActions[j] != null)
+                        step.groupActions[j].hasSavedStoryPose = false;
+
+            // Reactions
+            if (step.reactions != null)
+                for (int j = 0; j < step.reactions.Count; j++)
+                    if (step.reactions[j] != null)
+                        step.reactions[j].hasSavedStoryPose = false;
+        }
     }
 
     private static void StoreStoryPoseIfNeeded(ActivityTargetAction action, Transform target)
@@ -3058,6 +3722,24 @@ public class ContentController : MonoBehaviour, IARContent
         action.storyRotationEuler = target.localEulerAngles;
         action.storyScale = target.localScale;
         action.hasSavedStoryPose = true;
+    }
+
+    private static void StoreStoryPoseIfNeeded(ActivityReaction reaction, Transform target)
+    {
+        if (reaction == null || target == null || reaction.hasSavedStoryPose) return;
+        reaction.storyPosition = target.localPosition;
+        reaction.storyRotationEuler = target.localEulerAngles;
+        reaction.storyScale = target.localScale;
+        reaction.hasSavedStoryPose = true;
+    }
+
+    private static void StoreResultStoryPoseIfNeeded(ActivityStep step, Transform target)
+    {
+        if (step == null || target == null || step.resultHasSavedStoryPose) return;
+        step.resultStoryPosition = target.localPosition;
+        step.resultStoryRotationEuler = target.localEulerAngles;
+        step.resultStoryScale = target.localScale;
+        step.resultHasSavedStoryPose = true;
     }
 
     private static void RestoreStoryPose(Transform target, bool hasStoryPose, Vector3 storyPosition, Vector3 storyRotationEuler, Vector3 storyScale)
@@ -3164,23 +3846,98 @@ public class ContentController : MonoBehaviour, IARContent
         return new List<string> { "Left", "Right" };
     }
 
+    private void ResetVisibleProgress(ActivityStep step)
+    {
+        _visibleProgressValue = 0f;
+        _lastValidProgressInputTime = Time.time;
+        if (ProgressBarFollowsInput(step))
+            activityPanel?.ShowProgress(0f, "0%");
+    }
+
     private void UpdateProgress(ActivityStep step)
     {
-        if (step.childInput == ActivityInputKind.TapManyTimes)
+        if (!ProgressBarFollowsInput(step))
+            return;
+
+        float target = GetInputProgressValue(step);
+
+        // Beginner rule:
+        // Only Fill Up = progress never drops.
+        // Go Down If Child Stops = valid input pushes progress up, idle time can reduce it later.
+        if (step.progressBarBehavior == ActivityProgressBarBehavior.OnlyFillUp || step.progressBarBehavior == ActivityProgressBarBehavior.GoDownIfChildStops || step.progressBarBehavior == ActivityProgressBarBehavior.AdvancedCustom)
+            _visibleProgressValue = Mathf.Max(_visibleProgressValue, target);
+        else
+            _visibleProgressValue = target;
+
+        _lastValidProgressInputTime = Time.time;
+        ShowVisibleInputProgress(step);
+    }
+
+    private float GetInputProgressValue(ActivityStep step)
+    {
+        if (step == null) return 0f;
+
+        if (step.childInput == ActivityInputKind.TapObjectsInOrder && step.targetObjects != null && step.targetObjects.Count > 0)
+            return Mathf.Clamp01((float)_sequenceIndex / Mathf.Max(1, step.targetObjects.Count));
+
+        if (step.childInput == ActivityInputKind.GroupAction && step.groupCompletionMode == ActivityGroupCompletionMode.RequiredObjectCount)
+            return Mathf.Clamp01((float)_uniqueTappedGroupObjects.Count / Mathf.Max(1, step.groupRequiredObjectCount));
+
+        int required = Mathf.Max(1, step.requiredInputCount);
+        return Mathf.Clamp01((float)_acceptedInputCount / required);
+    }
+
+    private void UpdateProgressIdleBehavior(ActivityStep step)
+    {
+        if (!ProgressBarFollowsInput(step)) return;
+        if (step.progressBarBehavior != ActivityProgressBarBehavior.GoDownIfChildStops && step.progressBarBehavior != ActivityProgressBarBehavior.AdvancedCustom) return;
+
+        float decrease = Mathf.Max(0f, step.progressGoDownPercentPerSecond) / 100f * Time.deltaTime;
+        if (decrease <= 0f) return;
+
+        float min = Mathf.Clamp01(step.progressMinimumPercent / 100f);
+        float next = Mathf.Max(min, _visibleProgressValue - decrease);
+        if (!Mathf.Approximately(next, _visibleProgressValue))
         {
-            int required = Mathf.Max(1, step.requiredInputCount);
-            activityPanel?.ShowProgress(Mathf.Clamp01((float)_acceptedInputCount / required), _acceptedInputCount + " / " + required);
+            _visibleProgressValue = next;
+            ShowVisibleInputProgress(step);
         }
-        else if (step.childInput == ActivityInputKind.TapObjectsInOrder && step.targetObjects != null && step.targetObjects.Count > 0)
-        {
-            activityPanel?.ShowProgress(Mathf.Clamp01((float)_sequenceIndex / step.targetObjects.Count), _sequenceIndex + " / " + step.targetObjects.Count);
-        }
+    }
+
+    private void ShowVisibleInputProgress(ActivityStep step)
+    {
+        if (!ProgressBarFollowsInput(step)) return;
+        int percent = Mathf.RoundToInt(Mathf.Clamp01(_visibleProgressValue) * 100f);
+        activityPanel?.ShowProgress(Mathf.Clamp01(_visibleProgressValue), percent + "%");
     }
 
     private bool StepUsesProgress(ActivityStep step)
     {
         if (step == null) return false;
-        return step.showTimerProgress || (step.childInput == ActivityInputKind.WaitForStoryThenTapObject && step.storyMomentShowProgressBar) || step.childInput == ActivityInputKind.TapManyTimes || step.childInput == ActivityInputKind.TapObjectsInOrder || step.childInput == ActivityInputKind.KeepTapping || step.childInput == ActivityInputKind.HelpAction || step.childInput == ActivityInputKind.ProgressGate || step.childInput == ActivityInputKind.GroupAction;
+        // Template rule: progress UI is optional for every activity.
+        // The activity can still use tap counts or internal progress, but the visible bar appears only when the setup person enables it.
+        return step.useProgressBar;
+    }
+
+    private bool ProgressBarFollowsInput(ActivityStep step)
+    {
+        return StepUsesProgress(step) && step.progressBarFillMode == ActivityProgressBarFillMode.FollowInputProgress;
+    }
+
+    private bool ProgressBarFollowsTime(ActivityStep step)
+    {
+        return StepUsesProgress(step) && step.progressBarFillMode == ActivityProgressBarFillMode.FollowActivityTime;
+    }
+
+    private bool ProgressBarFillsWhenResultPlays(ActivityStep step)
+    {
+        return StepUsesProgress(step) && step.progressBarFillMode == ActivityProgressBarFillMode.FillWhenResultPlays;
+    }
+
+    private void ShowProgressIfResultMode(ActivityStep step, float normalized, string label)
+    {
+        if (ProgressBarFillsWhenResultPlays(step))
+            activityPanel?.ShowProgress(Mathf.Clamp01(normalized), label);
     }
 
     private bool StepUsesButtons(ActivityStep step)
@@ -3571,7 +4328,11 @@ public class ContentController : MonoBehaviour, IARContent
         if (reaction == null || !reaction.enabled) return false;
         if (reaction.playWhen != moment) return false;
 
-        if ((reaction.playWhen == ActivityReactionMoment.IfReactionIsFree || reaction.doNotRestartWhilePlaying) && _busyReactions.Contains(reaction))
+        bool independentFallingBatch = reaction.type == ActivityReactionType.VisualEffect
+            && reaction.make3DObjectsFall
+            && reaction.visualEffectPlayMode == VisualEffectPlayMode.AddNewEachInput;
+
+        if (!independentFallingBatch && (reaction.playWhen == ActivityReactionMoment.IfReactionIsFree || reaction.doNotRestartWhilePlaying) && _busyReactions.Contains(reaction))
             return false;
 
         if (reaction.maxTriggerCount > 0 && _reactionTriggerCounts.TryGetValue(reaction, out int count) && count >= reaction.maxTriggerCount)
@@ -3595,7 +4356,17 @@ public class ContentController : MonoBehaviour, IARContent
 
     private IEnumerator RunReaction(ActivityReaction reaction)
     {
-        bool shouldBeBusy = reaction.playWhen == ActivityReactionMoment.IfReactionIsFree || reaction.doNotRestartWhilePlaying || reaction.blocksNextInput;
+        bool reactionTransformApplied = false;
+        if (reaction != null && reaction.useActivityTransform)
+        {
+            ApplyReactionActivityTransform(reaction);
+            reactionTransformApplied = true;
+        }
+
+        bool independentFallingBatch = reaction.type == ActivityReactionType.VisualEffect
+            && reaction.make3DObjectsFall
+            && reaction.visualEffectPlayMode == VisualEffectPlayMode.AddNewEachInput;
+        bool shouldBeBusy = !independentFallingBatch && (reaction.playWhen == ActivityReactionMoment.IfReactionIsFree || reaction.doNotRestartWhilePlaying || reaction.blocksNextInput);
         if (shouldBeBusy)
             _busyReactions.Add(reaction);
 
@@ -3675,6 +4446,9 @@ public class ContentController : MonoBehaviour, IARContent
         StopReactionSfxIfNeeded(reaction, reactionSfxSource);
         StopReactionVoiceIfNeeded(reaction, reactionVoiceSource);
 
+        if (reactionTransformApplied)
+            RestoreReactionActivityTransform(reaction);
+
         if (shouldBeBusy)
             _busyReactions.Remove(reaction);
 
@@ -3737,12 +4511,55 @@ public class ContentController : MonoBehaviour, IARContent
         if (step == null || step.finishWhen != ActivityFinishRule.AfterActiveTimeEnds || step.activeTimeSeconds <= 0f)
             return;
 
-        if (!StepUsesProgress(step))
+        if (!ProgressBarFollowsTime(step))
             return;
 
         float normalized = Mathf.Clamp01((Time.time - startedAt) / step.activeTimeSeconds);
         float remaining = Mathf.Max(0f, step.activeTimeSeconds - (Time.time - startedAt));
-        activityPanel?.ShowProgress(normalized, Mathf.CeilToInt(remaining).ToString());
+        if (ProgressBarFollowsTime(step)) activityPanel?.ShowProgress(normalized, Mathf.CeilToInt(remaining).ToString());
+    }
+
+    private void PrepareAllVisualEffectSources()
+    {
+        if (activities == null) return;
+        for (int i = 0; i < activities.Count; i++)
+            PrepareVisualEffectSourcesForActivity(activities[i]);
+    }
+
+    private void PrepareVisualEffectSourcesForActivity(ActivityStep step)
+    {
+        if (step == null || step.reactions == null) return;
+
+        for (int i = 0; i < step.reactions.Count; i++)
+        {
+            ActivityReaction reaction = step.reactions[i];
+            if (reaction == null || reaction.type != ActivityReactionType.VisualEffect || !reaction.hideSourceObjectsUntilPlayed || reaction.vfxObjects == null)
+                continue;
+
+            for (int j = 0; j < reaction.vfxObjects.Count; j++)
+            {
+                GameObject source = reaction.vfxObjects[j];
+                if (source == null) continue;
+
+                // Only hide scene objects. Prefab assets are not visible in the scene.
+                if (!source.scene.IsValid()) continue;
+
+                source.SetActive(false);
+
+                // Also disable all child renderers directly.
+                // This is a safety net: if the reveal system re-enables the source object's
+                // parent, the child renderers stay disabled so petals/VFX stay invisible.
+                Renderer[] renderers = source.GetComponentsInChildren<Renderer>(true);
+                for (int r = 0; r < renderers.Length; r++)
+                    if (renderers[r] != null)
+                        renderers[r].enabled = false;
+
+                ParticleSystem[] particles = source.GetComponentsInChildren<ParticleSystem>(true);
+                for (int p = 0; p < particles.Length; p++)
+                    if (particles[p] != null)
+                        particles[p].Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
+        }
     }
 
     private void StopAllConfiguredVisualEffects(bool clear)
@@ -3760,6 +4577,8 @@ public class ContentController : MonoBehaviour, IARContent
             ActivityReaction reaction = step.reactions[i];
             if (reaction == null || reaction.type != ActivityReactionType.VisualEffect) continue;
             StopParticleObjects(reaction.vfxObjects, clear);
+            if (clear)
+                ClearSpawnedVisualEffectObjectsForReaction(reaction);
         }
     }
 
@@ -3785,10 +4604,11 @@ public class ContentController : MonoBehaviour, IARContent
     {
         if (reaction == null || reaction.vfxObjects == null) return;
 
-        if (reaction.visualEffectPlayMode == VisualEffectPlayMode.RestartSameEffect)
+        // Falling 3D objects should always create a new batch. Existing falling petals must continue falling.
+        if (reaction.visualEffectPlayMode == VisualEffectPlayMode.RestartSameEffect && !reaction.make3DObjectsFall)
             ClearSpawnedVisualEffectObjectsForReaction(reaction);
 
-        if (reaction.visualEffectPlayMode == VisualEffectPlayMode.PlayOnlyWhenFinished)
+        if (reaction.visualEffectPlayMode == VisualEffectPlayMode.PlayOnlyWhenFinished && !reaction.make3DObjectsFall)
         {
             if (HasLiveSpawnedVisualEffectObjects(reaction) || AnyAssignedParticleIsPlaying(reaction))
                 return;
@@ -3798,6 +4618,14 @@ public class ContentController : MonoBehaviour, IARContent
         {
             GameObject go = reaction.vfxObjects[i];
             if (go == null) continue;
+
+            // Petal shower / falling 3D objects must always spawn fresh copies.
+            // Never replay or move the original object and never restart old falling copies.
+            if (reaction.make3DObjectsFall)
+            {
+                SpawnObjectBurst(reaction, go);
+                continue;
+            }
 
             ParticleSystem[] systems = go.GetComponentsInChildren<ParticleSystem>(true);
             if (systems != null && systems.Length > 0)
@@ -3870,6 +4698,18 @@ public class ContentController : MonoBehaviour, IARContent
         return list.Count > 0;
     }
 
+    private Vector3 GetPetalSpawnAreaSize(ActivityReaction reaction)
+    {
+        if (reaction == null) return Vector3.one;
+        Vector3 size = reaction.rectangleSpawnAreaSize;
+        if (size == Vector3.zero && reaction.rectangleSpawnArea != null)
+            size = reaction.rectangleSpawnArea.lossyScale;
+        size.x = Mathf.Max(0.01f, Mathf.Abs(size.x));
+        size.y = Mathf.Max(0.01f, Mathf.Abs(size.y));
+        size.z = Mathf.Max(0.01f, Mathf.Abs(size.z));
+        return size;
+    }
+
     private void SpawnObjectBurst(ActivityReaction reaction, GameObject source)
     {
         if (reaction == null || source == null) return;
@@ -3880,10 +4720,20 @@ public class ContentController : MonoBehaviour, IARContent
         Transform origin = reaction.vfxSpawnOrigin != null ? reaction.vfxSpawnOrigin : transform;
         bool sourceIsSceneObject = source.scene.IsValid();
 
-        Vector3 basePosition = reaction.vfxSpawnOrigin != null ? reaction.vfxSpawnOrigin.position : (sourceIsSceneObject ? source.transform.position : origin.position);
-        Quaternion baseRotation = reaction.vfxSpawnOrigin != null ? reaction.vfxSpawnOrigin.rotation : (sourceIsSceneObject ? source.transform.rotation : origin.rotation);
+        Transform rectangleArea = reaction.rectangleSpawnArea;
+        Vector3 basePosition = rectangleArea != null
+            ? rectangleArea.position
+            : (reaction.vfxSpawnOrigin != null ? reaction.vfxSpawnOrigin.position : (sourceIsSceneObject ? source.transform.position : origin.position));
+        Quaternion baseRotation = rectangleArea != null
+            ? rectangleArea.rotation
+            : (reaction.vfxSpawnOrigin != null ? reaction.vfxSpawnOrigin.rotation : (sourceIsSceneObject ? source.transform.rotation : origin.rotation));
         Vector3 baseScale = source.transform.localScale;
-        Transform parent = reaction.keepSpawnedObjectsInWorldSpace ? null : (sourceIsSceneObject ? source.transform.parent : origin);
+        // Falling petals are independent one-shot copies. Keep them in world space so later taps, parent movement,
+        // or source-object changes cannot pull old petals back to the start point.
+        Transform parent = reaction.make3DObjectsFall ? null : (reaction.keepSpawnedObjectsInWorldSpace ? null : (sourceIsSceneObject ? source.transform.parent : origin));
+        Vector3 spreadRight = rectangleArea != null ? rectangleArea.right : (origin != null ? origin.right : Vector3.right);
+        Vector3 spreadUp = origin != null ? origin.up : Vector3.up;
+        Vector3 spreadForward = rectangleArea != null ? rectangleArea.forward : (origin != null ? origin.forward : Vector3.forward);
 
         if (!_spawnedVisualEffectObjectsByReaction.TryGetValue(reaction, out List<GameObject> spawnedForReaction))
         {
@@ -3893,32 +4743,167 @@ public class ContentController : MonoBehaviour, IARContent
 
         for (int i = 0; i < count; i++)
         {
-            Vector3 offset = spread > 0f ? UnityEngine.Random.insideUnitSphere * spread : Vector3.zero;
-            offset.y = Mathf.Abs(offset.y);
+            Vector3 offset;
+            if (reaction.spawnAreaMode == ActivityVfxSpawnAreaMode.InsideRectangleArea)
+            {
+                // Natural flower shower: each copy starts from a unique point inside the box.
+                // X = left/right, Y = height, Z = front/back. This prevents every petal from appearing in one stack.
+                Vector3 size = GetPetalSpawnAreaSize(reaction);
+                float x = UnityEngine.Random.Range(-Mathf.Abs(size.x) * 0.5f, Mathf.Abs(size.x) * 0.5f);
+                float y = UnityEngine.Random.Range(-Mathf.Abs(size.y) * 0.5f, Mathf.Abs(size.y) * 0.5f);
+                float z = UnityEngine.Random.Range(-Mathf.Abs(size.z) * 0.5f, Mathf.Abs(size.z) * 0.5f);
+                offset = spreadRight * x + spreadUp * y + spreadForward * z;
+            }
+            else if (reaction.spawnAreaMode == ActivityVfxSpawnAreaMode.SpreadAcrossPage)
+            {
+                // Spread across a simple page-like rectangle. X = width, Y = depth. Height gets a small random offset.
+                float x = UnityEngine.Random.Range(-reaction.pageSpreadSize.x * 0.5f, reaction.pageSpreadSize.x * 0.5f);
+                float z = UnityEngine.Random.Range(-reaction.pageSpreadSize.y * 0.5f, reaction.pageSpreadSize.y * 0.5f);
+                float y = UnityEngine.Random.Range(0f, Mathf.Max(0.02f, reaction.fallFlutterAmount * 2f));
+                offset = spreadRight * x + spreadUp * y + spreadForward * z;
+            }
+            else
+            {
+                offset = spread > 0f ? UnityEngine.Random.insideUnitSphere * spread : Vector3.zero;
+                offset.y = Mathf.Abs(offset.y);
+            }
 
             Quaternion rotation = reaction.randomizeObjectRotation ? UnityEngine.Random.rotation : baseRotation;
             GameObject clone = Instantiate(source, basePosition + offset, rotation, parent);
             clone.name = source.name + "_ActivityVisualEffect";
-            clone.transform.localScale = baseScale;
-            clone.SetActive(true);
 
-            Rigidbody rb = clone.GetComponent<Rigidbody>();
-            if (rb != null && reaction.objectLaunchForce > 0f)
-            {
-                Vector3 force = Vector3.up * reaction.objectLaunchForce + UnityEngine.Random.insideUnitSphere * reaction.objectLaunchForce * 0.35f;
-                rb.AddForce(force, ForceMode.Impulse);
-            }
+            // Re-enable renderers on the copy. The source object has its renderers disabled
+            // by PrepareVisualEffectSourcesForActivity to prevent it from showing during reveal.
+            // Spawned copies are independent and must be fully visible.
+            Renderer[] cloneRenderers = clone.GetComponentsInChildren<Renderer>(true);
+            for (int r = 0; r < cloneRenderers.Length; r++)
+                if (cloneRenderers[r] != null)
+                    cloneRenderers[r].enabled = true;
+
+            float randomScaleMin = Mathf.Max(0.01f, Mathf.Min(reaction.randomScaleMin, reaction.randomScaleMax));
+            float randomScaleMax = Mathf.Max(randomScaleMin, Mathf.Max(reaction.randomScaleMin, reaction.randomScaleMax));
+            float scaleMultiplier = UnityEngine.Random.Range(randomScaleMin, randomScaleMax);
+            clone.transform.localScale = baseScale * scaleMultiplier;
+
+            float startDelay = reaction.make3DObjectsFall
+                ? UnityEngine.Random.Range(0f, Mathf.Max(0f, reaction.randomStartDelayMaxSeconds))
+                : 0f;
+            clone.SetActive(startDelay <= 0.001f);
 
             _spawnedVfxObjects.Add(clone);
             spawnedForReaction.Add(clone);
-            StartCoroutine(DestroySpawnedVfxObjectAfter(reaction, clone, life));
+            StartCoroutine(RunSpawnedVisualObject(reaction, clone, life, startDelay));
+        }
+    }
+
+    private IEnumerator RunSpawnedVisualObject(ActivityReaction reaction, GameObject go, float visibleSeconds, float startDelaySeconds)
+    {
+        if (reaction == null || go == null) yield break;
+
+        if (startDelaySeconds > 0f)
+            yield return new WaitForSeconds(startDelaySeconds);
+
+        if (go == null) yield break;
+        go.SetActive(true);
+
+        Rigidbody rb = go.GetComponent<Rigidbody>();
+        if (rb != null && reaction.objectLaunchForce > 0f)
+        {
+            Vector3 force = Vector3.up * reaction.objectLaunchForce + UnityEngine.Random.insideUnitSphere * reaction.objectLaunchForce * 0.35f;
+            rb.AddForce(force, ForceMode.Impulse);
+        }
+
+        float fadeSeconds = reaction.fadeOutSpawnedObjects ? Mathf.Max(0f, reaction.fadeOutSeconds) : 0f;
+        float fallDuration = Mathf.Max(0.1f, reaction.fallDurationSeconds + UnityEngine.Random.Range(0f, Mathf.Max(0f, reaction.randomFallTimeExtraSeconds)));
+
+        if (reaction.make3DObjectsFall)
+            yield return AnimateFalling3DObject(reaction, go, visibleSeconds, fallDuration);
+
+        float waitBeforeFade = reaction.make3DObjectsFall
+            ? Mathf.Max(0f, visibleSeconds - fallDuration - fadeSeconds)
+            : Mathf.Max(0f, visibleSeconds - fadeSeconds);
+        if (waitBeforeFade > 0f)
+            yield return new WaitForSeconds(waitBeforeFade);
+
+        if (go != null && fadeSeconds > 0f)
+            yield return FadeSpawnedObject(go, fadeSeconds);
+
+        if (go != null)
+            Destroy(go);
+
+        _spawnedVfxObjects.Remove(go);
+        if (reaction != null && _spawnedVisualEffectObjectsByReaction.TryGetValue(reaction, out List<GameObject> list))
+        {
+            list.Remove(go);
+            if (list.Count == 0)
+                _spawnedVisualEffectObjectsByReaction.Remove(reaction);
+        }
+    }
+
+    private IEnumerator AnimateFalling3DObject(ActivityReaction reaction, GameObject go, float lifeSeconds, float durationOverrideSeconds = -1f)
+    {
+        if (reaction == null || go == null) yield break;
+
+        Transform t = go.transform;
+        Vector3 start = t.position;
+        Quaternion startRot = t.rotation;
+        float duration = Mathf.Max(0.1f, durationOverrideSeconds > 0f ? durationOverrideSeconds : (reaction.fallDurationSeconds > 0f ? reaction.fallDurationSeconds : lifeSeconds));
+        float distance = Mathf.Max(0f, reaction.fallDistance);
+        float side = Mathf.Max(0f, reaction.fallSpreadSideways);
+        float flutter = Mathf.Max(0f, reaction.fallFlutterAmount);
+        float spin = reaction.fallSpinDegrees;
+
+        Vector3 sideDir = UnityEngine.Random.insideUnitSphere;
+        sideDir.y = 0f;
+        if (sideDir.sqrMagnitude < 0.001f) sideDir = Vector3.right;
+        sideDir.Normalize();
+
+        float seed = UnityEngine.Random.Range(0f, 1000f);
+        float elapsed = 0f;
+        while (elapsed < duration && go != null)
+        {
+            elapsed += Time.deltaTime;
+            float n = Mathf.Clamp01(elapsed / duration);
+            float ease = Mathf.SmoothStep(0f, 1f, n);
+
+            Vector3 pos = start + Vector3.down * distance * ease;
+
+            switch (reaction.fallingMotion)
+            {
+                case FallingObjectMotion.GentleFall:
+                    pos += sideDir * side * ease;
+                    break;
+                case FallingObjectMotion.SwirlFall:
+                    pos += new Vector3(Mathf.Sin((n * 8f) + seed), 0f, Mathf.Cos((n * 8f) + seed)) * side * n;
+                    break;
+                case FallingObjectMotion.BounceFall:
+                    pos += sideDir * side * ease;
+                    pos += Vector3.up * Mathf.Sin(n * Mathf.PI * 3f) * flutter * (1f - n);
+                    break;
+                case FallingObjectMotion.FlutterFall:
+                default:
+                    pos += sideDir * side * Mathf.Sin(n * Mathf.PI * 1.2f);
+                    pos += new Vector3(Mathf.Sin((n * 14f) + seed), 0f, Mathf.Cos((n * 9f) + seed)) * flutter;
+                    break;
+            }
+
+            t.position = pos;
+            t.rotation = startRot * Quaternion.Euler(spin * n, spin * 0.35f * n, spin * 0.6f * n);
+            yield return null;
         }
     }
 
     private IEnumerator DestroySpawnedVfxObjectAfter(ActivityReaction reaction, GameObject go, float seconds)
     {
-        if (seconds > 0f)
-            yield return new WaitForSeconds(seconds);
+        float fadeSeconds = reaction != null && reaction.fadeOutSpawnedObjects ? Mathf.Max(0f, reaction.fadeOutSeconds) : 0f;
+        float visibleSeconds = Mathf.Max(0f, seconds - fadeSeconds);
+
+        if (visibleSeconds > 0f)
+            yield return new WaitForSeconds(visibleSeconds);
+
+        if (go != null && fadeSeconds > 0f)
+            yield return FadeSpawnedObject(go, fadeSeconds);
+
         if (go != null)
             Destroy(go);
         _spawnedVfxObjects.Remove(go);
@@ -3927,6 +4912,43 @@ public class ContentController : MonoBehaviour, IARContent
             list.Remove(go);
             if (list.Count == 0)
                 _spawnedVisualEffectObjectsByReaction.Remove(reaction);
+        }
+    }
+
+    private IEnumerator FadeSpawnedObject(GameObject go, float seconds)
+    {
+        if (go == null || seconds <= 0f) yield break;
+
+        Renderer[] renderers = go.GetComponentsInChildren<Renderer>(true);
+        List<Material> materials = new List<Material>();
+        List<Color> startColors = new List<Color>();
+
+        for (int r = 0; r < renderers.Length; r++)
+        {
+            if (renderers[r] == null) continue;
+            Material[] mats = renderers[r].materials;
+            for (int m = 0; m < mats.Length; m++)
+            {
+                Material mat = mats[m];
+                if (mat == null || !mat.HasProperty("_Color")) continue;
+                materials.Add(mat);
+                startColors.Add(mat.color);
+            }
+        }
+
+        float elapsed = 0f;
+        while (elapsed < seconds && go != null)
+        {
+            elapsed += Time.deltaTime;
+            float n = Mathf.Clamp01(elapsed / seconds);
+            for (int i = 0; i < materials.Count; i++)
+            {
+                if (materials[i] == null) continue;
+                Color c = startColors[i];
+                c.a = Mathf.Lerp(startColors[i].a, 0f, n);
+                materials[i].color = c;
+            }
+            yield return null;
         }
     }
 
@@ -4008,16 +5030,91 @@ public class ContentController : MonoBehaviour, IARContent
 
     private float PlayAnimationReaction(ActivityReaction reaction)
     {
-        if (reaction.animator == null || reaction.animationClip == null)
+        if (reaction == null || reaction.animator == null)
+            return 0f;
+
+        List<AnimationClip> clips = GetReactionAnimationClips(reaction);
+        if (clips.Count == 0)
             return 0f;
 
         float speed = Mathf.Max(0.01f, reaction.animationSpeed);
-        float length = reaction.animationClip.length / speed;
 
-        if (CreateActivityAnimationGraph(reaction.animator, reaction.animationClip, speed, out PlayableGraph graph, out AnimationClipPlayable playable))
+        switch (reaction.animationPlayMode)
+        {
+            case ActivityReactionAnimationPlayMode.RandomClip:
+            {
+                AnimationClip clip = clips[UnityEngine.Random.Range(0, clips.Count)];
+                return PlayOneReactionAnimation(reaction.animator, clip, speed);
+            }
+            case ActivityReactionAnimationPlayMode.AllTogether:
+            {
+                float longest = 0f;
+                for (int i = 0; i < clips.Count; i++)
+                    longest = Mathf.Max(longest, PlayOneReactionAnimation(reaction.animator, clips[i], speed));
+                return longest;
+            }
+            case ActivityReactionAnimationPlayMode.AllOneByOne:
+            {
+                StartCoroutine(PlayReactionAnimationsOneByOne(reaction.animator, clips, speed));
+                float total = 0f;
+                for (int i = 0; i < clips.Count; i++)
+                    total += clips[i] != null ? Mathf.Max(0.01f, clips[i].length / speed) : 0f;
+                return total;
+            }
+            case ActivityReactionAnimationPlayMode.SelectedClipOnly:
+            default:
+                return PlayOneReactionAnimation(reaction.animator, clips[0], speed);
+        }
+    }
+
+    private List<AnimationClip> GetReactionAnimationClips(ActivityReaction reaction)
+    {
+        List<AnimationClip> clips = new List<AnimationClip>();
+        if (reaction == null) return clips;
+
+        if (reaction.animationPlayMode == ActivityReactionAnimationPlayMode.SelectedClipOnly && reaction.animationClip != null)
+        {
+            clips.Add(reaction.animationClip);
+            return clips;
+        }
+
+        if (reaction.animationClips != null)
+        {
+            for (int i = 0; i < reaction.animationClips.Count; i++)
+            {
+                if (reaction.animationClips[i] != null)
+                    clips.Add(reaction.animationClips[i]);
+            }
+        }
+
+        if (clips.Count == 0 && reaction.animationClip != null)
+            clips.Add(reaction.animationClip);
+
+        return clips;
+    }
+
+    private float PlayOneReactionAnimation(Animator animator, AnimationClip clip, float speed)
+    {
+        if (animator == null || clip == null)
+            return 0f;
+
+        float length = Mathf.Max(0.01f, clip.length / Mathf.Max(0.01f, speed));
+        if (CreateActivityAnimationGraph(animator, clip, speed, out PlayableGraph graph, out AnimationClipPlayable playable))
             StartCoroutine(DestroyGraphAfter(graph, length));
-
         return length;
+    }
+
+    private IEnumerator PlayReactionAnimationsOneByOne(Animator animator, List<AnimationClip> clips, float speed)
+    {
+        if (animator == null || clips == null) yield break;
+        for (int i = 0; i < clips.Count; i++)
+        {
+            AnimationClip clip = clips[i];
+            if (clip == null) continue;
+            float length = PlayOneReactionAnimation(animator, clip, speed);
+            if (length > 0f)
+                yield return new WaitForSeconds(length);
+        }
     }
 
     private IEnumerator DestroyGraphAfter(PlayableGraph graph, float seconds)
@@ -4322,6 +5419,16 @@ public class ContentController : MonoBehaviour, IARContent
                 StopCoroutine(routine);
         }
         _activeChoiceAnimationRoutines.Clear();
+
+        // Stop any pending scenario transform restore coroutines.
+        // If not stopped, a fast replay can leave models stuck in activity pose.
+        for (int i = _scenarioTransformRestoreRoutines.Count - 1; i >= 0; i--)
+        {
+            Coroutine routine = _scenarioTransformRestoreRoutines[i];
+            if (routine != null)
+                StopCoroutine(routine);
+        }
+        _scenarioTransformRestoreRoutines.Clear();
     }
 
     private void StopAllChoiceGraphs()
@@ -4502,7 +5609,11 @@ public enum ProgressGatePreviewAnimationSelectionMode
 {
     UseFirstAnimation,
     PickRandomAnimationOnce,
-    UseSelectedAnimationNumber
+    UseSelectedAnimationNumber,
+    PlaySelectedAnimationNumbers,
+    PlayAllAnimationsByProgress,
+    PlaySelectedNumbersByProgress,
+    PlayAllAnimationsInOrder
 }
 
 public enum ActivityFinishRule
@@ -4525,7 +5636,48 @@ public enum ActivityNoInputAction
 {
     DoNothing,
     ShowHintOnly,
-    SkipActivityAndContinue
+    SkipActivityAndContinue,
+    AutoPlayResultThenContinue
+}
+
+public enum ActivityProgressBarFillMode
+{
+    FollowInputProgress,
+    FollowActivityTime,
+    FillWhenResultPlays
+}
+
+public enum ActivityProgressBarBehavior
+{
+    OnlyFillUp,
+    GoDownIfChildStops,
+    FillWithTime,
+    FillDuringResult,
+    AdvancedCustom
+}
+
+public enum ActivityResultPlayTiming
+{
+    OnEveryCorrectInput,
+    AfterRequiredInputs,
+    WhenProgressIsFull,
+    WhileChildIsInteracting,
+    AfterNoInputAutoPlay
+}
+
+public enum ActivityReactionAnimationPlayMode
+{
+    SelectedClipOnly,
+    RandomClip,
+    AllTogether,
+    AllOneByOne
+}
+
+public enum ActivityVfxSpawnAreaMode
+{
+    FromSourceOrSpawnPoint,
+    SpreadAcrossPage,
+    InsideRectangleArea
 }
 
 public enum ActivityReactionType
@@ -4556,6 +5708,14 @@ public enum VisualEffectPlayMode
     AddNewEachInput,
     RestartSameEffect,
     PlayOnlyWhenFinished
+}
+
+public enum FallingObjectMotion
+{
+    GentleFall,
+    SwirlFall,
+    BounceFall,
+    FlutterFall
 }
 
 public enum ReactionSfxMode
@@ -4650,7 +5810,7 @@ public class ActivityStep
     public float progressTapSpeedWindowSeconds = 1f;
     public bool progressDropsWhenNotTapping = true;
     public float progressLossPerSecond = 25f;
-    public float progressAutoStartStoryAfterSeconds = 8f;
+    public float progressAutoStartStoryAfterSeconds = 0f;
     public bool playResultWhenProgressAutoSkips = true;
     public AudioClip progressTapSound;
     [Range(0f, 1f)] public float progressTapSoundVolume = 1f;
@@ -4700,10 +5860,14 @@ public class ActivityStep
     public List<AnimationClip> progressHelperAnimations = new List<AnimationClip>();
     public ProgressGatePreviewAnimationSelectionMode progressHelperAnimationSelection = ProgressGatePreviewAnimationSelectionMode.PickRandomAnimationOnce;
     public int progressHelperSelectedAnimationNumber = 1;
+    [Tooltip("Optional. Type clip numbers like 1,3,4,5. Used by selected animation modes. Numbers start from 1.")]
+    public string progressHelperSelectedAnimationNumbers = "1";
     public float progressHelperAnimationSpeed = 1f;
     public bool progressHelperLoopAnimation = true;
     public bool progressHelperPauseWhenNotTapping = true;
     public bool progressHelperResetWhenProgressEmpty = false;
+    [Tooltip("If the child stops after starting, wait this many seconds, then auto-play the remaining activity animations and finish. 0 = wait forever.")]
+    public float progressAutoFinishAfterNoTapSeconds = 5f;
 
     [Header("Story Result After Progress")]
     public Animator resultAnimator;
@@ -4717,6 +5881,32 @@ public class ActivityStep
     [Range(0f, 1f)] public float resultSoundVolume = 1f;
     public bool waitForResultSound = false;
     public float resultExtraWaitSeconds = 0f;
+
+    [Header("Result Activity Transform Optional")]
+    [Tooltip("ON = temporarily move, rotate, or scale the result model only while this activity result plays.")]
+    public bool resultUseActivityTransform = false;
+    [Tooltip("Editor only. ON = show the result activity pose in Scene view while setting up. Turn OFF or use Back To Story Position before testing story/VFX.")]
+    public bool resultPreviewActivityTransformInEditor = false;
+    [Tooltip("Object to move or scale. If empty, Result Animator object is used.")]
+    public GameObject resultObjectToMoveOrScale;
+    [Tooltip("Optional. Copy position, rotation, and scale from this helper transform instead of typing values manually.")]
+    public Transform resultCopyTransformFrom;
+    [Tooltip("Local position used only while this activity result plays.")]
+    public Vector3 resultActivityPosition = Vector3.zero;
+    [Tooltip("Local rotation used only while this activity result plays.")]
+    public Vector3 resultActivityRotationEuler = Vector3.zero;
+    [Tooltip("Local scale used only while this activity result plays.")]
+    public Vector3 resultActivityScale = Vector3.one;
+    [Tooltip("ON = return the result model to story position when the activity result finishes, resets, or replay starts.")]
+    public bool resultRestoreTransformAfterAction = true;
+    [HideInInspector] public bool resultHasSavedStoryPose = false;
+    [HideInInspector] public Vector3 resultStoryPosition = Vector3.zero;
+    [HideInInspector] public Vector3 resultStoryRotationEuler = Vector3.zero;
+    [HideInInspector] public Vector3 resultStoryScale = Vector3.one;
+    [NonSerialized] public Vector3 _resultOriginalLocalPosition;
+    [NonSerialized] public Vector3 _resultOriginalLocalEulerAngles;
+    [NonSerialized] public Vector3 _resultOriginalLocalScale;
+    [NonSerialized] public bool _resultHasStoredTransform;
 
     [Header("Group / Target Set Action")]
     [Tooltip("How the tapped objects complete this activity. Any one, all, required objects, or a required count.")]
@@ -4737,8 +5927,8 @@ public class ActivityStep
     public bool groupPlayOnlyTappedObjectAction = true;
     [Tooltip("Older group reaction list. Use this if one tap should make several assigned objects react together.")]
     public List<ActivityGroupAction> groupActions = new List<ActivityGroupAction>();
-    public float groupAutoStartStoryAfterSeconds = 8f;
-    public bool groupPlayActionsWhenAutoSkipped = false;
+    public float groupAutoStartStoryAfterSeconds = 0f;
+    public bool groupPlayActionsWhenAutoSkipped = true;
     public float groupWaitSecondsBeforeStory = 0f;
     public AudioClip groupResultVoiceOver;
     [Range(0f, 1f)] public float groupResultVoiceVolume = 1f;
@@ -4756,7 +5946,7 @@ public class ActivityStep
     [Tooltip("After each tap, this many seconds still count as active tapping.")]
     public float storyMomentTapActiveWindowSeconds = 0.35f;
     [Tooltip("ON = show a progress bar while the child taps.")]
-    public bool storyMomentShowProgressBar = true;
+    public bool storyMomentShowProgressBar = false;
     [Tooltip("Maximum time this activity can stay active. 0 means no maximum.")]
     public float storyMomentTotalActivitySeconds = 30f;
     [Tooltip("Show hint if there is no correct tap after this many seconds.")]
@@ -4825,7 +6015,7 @@ public class ActivityStep
     public bool enableNoInputHelp = true;
     public float noInputHintAfterSeconds = 3f;
     public string noInputHintText = "Try the highlighted object";
-    public ActivityNoInputAction noInputActionAfterHint = ActivityNoInputAction.SkipActivityAndContinue;
+    public ActivityNoInputAction noInputActionAfterHint = ActivityNoInputAction.AutoPlayResultThenContinue;
     public float autoSkipAfterHintSeconds = 3f;
     public bool useSameHintEffectsForNoInput = true;
 
@@ -4844,6 +6034,19 @@ public class ActivityStep
 
     public ActivityNextInputRule nextInputRule = ActivityNextInputRule.Immediately;
     public float nextInputDelaySeconds = 0f;
+    [Tooltip("Optional. ON = show the ActivityPanel progress bar for this activity. OFF = no progress bar is shown, even if the activity uses counts or progress internally.")]
+    public bool useProgressBar = false;
+    [Tooltip("Choose how the visible progress bar increases. Input Progress follows valid taps or required objects. Activity Time fills with time. Fill When Result Plays stays empty until the activity result starts.")]
+    public ActivityProgressBarFillMode progressBarFillMode = ActivityProgressBarFillMode.FollowInputProgress;
+    [Tooltip("Simple beginner setting for how the visible progress bar behaves.")]
+    public ActivityProgressBarBehavior progressBarBehavior = ActivityProgressBarBehavior.OnlyFillUp;
+    [Tooltip("How many percent the progress bar should go down per second when the child stops. Used only by Go Down If Child Stops.")]
+    public float progressGoDownPercentPerSecond = 10f;
+    [Tooltip("Progress will not go below this percent. Keep 0 for normal setup. Example: 50 means the bar never goes below halfway.")]
+    [Range(0f, 100f)] public float progressMinimumPercent = 0f;
+    [Tooltip("Choose when result actions should play. This makes the same template support animation on every tap or only after required inputs.")]
+    public ActivityResultPlayTiming resultPlayTiming = ActivityResultPlayTiming.AfterRequiredInputs;
+    [Tooltip("Legacy. Kept only so old scenes do not lose data. Use Use Progress Bar in the beginner Inspector.")]
     public bool showTimerProgress = false;
 
     [Header("Choice Options")]
@@ -5114,6 +6317,20 @@ public class ActivityReaction
 
     [Header("Visual Effect Play Style")]
     public VisualEffectPlayMode visualEffectPlayMode = VisualEffectPlayMode.AddNewEachInput;
+    [Tooltip("ON = assigned 3D source objects are hidden when the activity starts. Only spawned copies appear after child input.")]
+    public bool hideSourceObjectsUntilPlayed = true;
+    [Tooltip("Choose whether spawned 3D copies appear from one point or spread across the page area.")]
+    public ActivityVfxSpawnAreaMode spawnAreaMode = ActivityVfxSpawnAreaMode.FromSourceOrSpawnPoint;
+    [Tooltip("Used by Spread Across Page. X is left/right spread, Y is up/down spread, in world units.")]
+    public Vector2 pageSpreadSize = new Vector2(1.2f, 0.7f);
+    [Tooltip("Optional rectangle/box area. Petals spawn randomly inside this area. Recommended for King welcome flower shower.")]
+    public Transform rectangleSpawnArea;
+    [Tooltip("Used if Rectangle Area is selected but no helper object is assigned. X = width, Z = depth.")]
+    public Vector3 rectangleSpawnAreaSize = new Vector3(1.8f, 0.35f, 1.2f);
+    [Tooltip("ON = spawned 3D copies fade before disappearing. Works best with transparent-capable materials.")]
+    public bool fadeOutSpawnedObjects = true;
+    [Tooltip("How long the spawned 3D copy fades before disappearing.")]
+    public float fadeOutSeconds = 0.35f;
 
     [Header("Timing")]
     public float startDelaySeconds = 0f;
@@ -5143,9 +6360,48 @@ public class ActivityReaction
     public bool randomizeObjectRotation = true;
     public bool keepSpawnedObjectsInWorldSpace = false;
 
+    [Header("Falling 3D Object Effect Optional")]
+    public bool make3DObjectsFall = false;
+    public FallingObjectMotion fallingMotion = FallingObjectMotion.FlutterFall;
+    public float fallDistance = 1.2f;
+    public float fallDurationSeconds = 1.6f;
+    [Tooltip("Random extra delay before each copy appears. Example: 0.35 means petals start at different moments within 0.35 seconds.")]
+    public float randomStartDelayMaxSeconds = 0.35f;
+    [Tooltip("Random change added to fall time so some petals fall fast and some fall slow.")]
+    public float randomFallTimeExtraSeconds = 0.5f;
+    public float fallSpreadSideways = 0.25f;
+    public float fallSpinDegrees = 180f;
+    public float fallFlutterAmount = 0.08f;
+    [Tooltip("Smallest random size for each spawned copy. 1 means original size.")]
+    public float randomScaleMin = 0.85f;
+    [Tooltip("Largest random size for each spawned copy. 1 means original size.")]
+    public float randomScaleMax = 1.15f;
+
+    [Header("Activity Transform Optional")]
+    public bool useActivityTransform = false;
+    public bool previewActivityTransformInEditor = false;
+    public GameObject objectToMoveOrScale;
+    public Transform copyTransformFrom;
+    public Vector3 activityPosition = Vector3.zero;
+    public Vector3 activityRotationEuler = Vector3.zero;
+    public Vector3 activityScale = Vector3.one;
+    public bool restoreTransformAfterAction = true;
+    [HideInInspector] public bool hasSavedStoryPose = false;
+    [HideInInspector] public Vector3 storyPosition = Vector3.zero;
+    [HideInInspector] public Vector3 storyRotationEuler = Vector3.zero;
+    [HideInInspector] public Vector3 storyScale = Vector3.one;
+    [NonSerialized] public Vector3 _originalLocalPosition;
+    [NonSerialized] public Vector3 _originalLocalEulerAngles;
+    [NonSerialized] public Vector3 _originalLocalScale;
+    [NonSerialized] public bool _hasStoredTransform;
+
     [Header("Animation")]
     public Animator animator;
     public AnimationClip animationClip;
+    [Tooltip("Optional. Use this when one reaction should choose from or play multiple animation clips.")]
+    public List<AnimationClip> animationClips = new List<AnimationClip>();
+    [Tooltip("Choose how the animation clips are played.")]
+    public ActivityReactionAnimationPlayMode animationPlayMode = ActivityReactionAnimationPlayMode.SelectedClipOnly;
     public float animationSpeed = 1f;
     public bool doNotRestartWhilePlaying = true;
     public bool blocksNextInput = false;

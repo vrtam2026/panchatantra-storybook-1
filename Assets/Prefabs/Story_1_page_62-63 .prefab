@@ -3817,7 +3817,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ContentController
   activities: []
-  activityTemplateSchemaVersion: 20
+  activityTemplateSchemaVersion: 33
   activityPanel: {fileID: 0}
   defaultRaycastCamera: {fileID: 0}
   defaultAudioSource: {fileID: 0}

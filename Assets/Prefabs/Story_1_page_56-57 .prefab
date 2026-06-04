@@ -8525,11 +8525,11 @@ GameObject:
   - component: {fileID: 2125877237764931576}
   - component: {fileID: 4574099576921519662}
   - component: {fileID: 4153295240634920503}
-  - component: {fileID: 5039946483484715145}
   - component: {fileID: 1825300040788880764}
   - component: {fileID: 6481043810207217500}
   - component: {fileID: 2202813941828637957}
   - component: {fileID: 2334496673176335026}
+  - component: {fileID: 6640171526782425260}
   m_Layer: 0
   m_Name: 'Story_1_page_56-57 '
   m_TagString: Untagged
@@ -8550,7 +8550,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3773562497637754454}
+  - {fileID: 8438070241475573418}
   - {fileID: 6530281887355071256}
   - {fileID: 2386824161687641947}
   - {fileID: 4865529565768736260}
@@ -8615,291 +8615,6 @@ MonoBehaviour:
   animatorToControl: {fileID: 9011365716037083572}
   playAnimatorWhileMoving: 1
   freezeAnimatorOnComplete: 1
---- !u!114 &5039946483484715145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7564312997854788044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58f88054253ad3c4facfa36ca1ca3dea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ContentController
-  activities:
-  - enabled: 1
-    activityName: greetings
-    startWhen: 1
-    waitBeforeStart: 0
-    startKey: 
-    storyWaitObjectOrAnimator: {fileID: 0}
-    storyWaitComponent: {fileID: 0}
-    storyWaitAnimator: {fileID: 0}
-    storyWaitAnimationClip: {fileID: 0}
-    storyWaitAnimationStateName: 
-    storyWaitTimeoutSeconds: 0
-    pauseStoryWhileActivity: 0
-    instructionText: Tap to greet
-    activityVoiceOver: {fileID: 0}
-    waitForActivityVoiceOver: 0
-    activityDurationAudio: {fileID: 0}
-    loopActivityDurationAudio: 0
-    activityDurationAudioVolume: 0
-    fadeActivityAudioOnEnd: 0
-    activityAudioFadeSeconds: 0
-    objectsOnWhenActivityStarts: []
-    objectsOffWhenActivityStarts: []
-    objectsOnWhenActivityCompletes: []
-    objectsOffWhenActivityCompletes: []
-    childInput: 12
-    targetObject: {fileID: 0}
-    targetObjects: []
-    mustTapInOrder: 0
-    requiredInputCount: 1
-    waitOnlySeconds: 0
-    activeTimeSeconds: 30
-    maxTimeToFirstInput: 0
-    helpProgressGainPerTap: 20
-    helpProgressLossPerSecond: 25
-    helpAutoContinueAfterSeconds: 5
-    helpCompleteWhenProgressFull: 1
-    helpAnimator: {fileID: 0}
-    helpAnimationClip: {fileID: 0}
-    helpAnimationSpeed: 1
-    helpResetAnimationWhenProgressIsEmpty: 1
-    helpWaitForAnimationBeforeContinue: 1
-    helpTapSound: {fileID: 0}
-    helpTapSoundVolume: 1
-    progressGateCompletesBy: 0
-    progressRequiredTaps: 5
-    progressRequiredTappingSeconds: 5
-    progressTapActiveWindowSeconds: 0.35
-    progressRequiredTapsPerSecond: 0
-    progressRequiredSpeedSeconds: 0
-    progressTapSpeedWindowSeconds: 0
-    progressDropsWhenNotTapping: 1
-    progressLossPerSecond: 25
-    progressAutoStartStoryAfterSeconds: 8
-    playResultWhenProgressAutoSkips: 1
-    progressTapSound: {fileID: 0}
-    progressTapSoundVolume: 1
-    progressUseCorrectTapFeedback: 0
-    progressCorrectTapFeedbackObject: {fileID: 0}
-    progressCorrectTapFeedbackStyle: 0
-    progressCorrectMoveUpHeight: 0
-    progressCorrectShakeAmount: 0
-    progressCorrectTapFeedbackSeconds: 0
-    progressCorrectReturnSeconds: 0
-    progressUseWrongTapFeedback: 0
-    progressWrongTapText: 
-    progressWrongTapSound: {fileID: 0}
-    progressWrongTapSoundVolume: 0
-    progressPulseCorrectObjectOnWrongTap: 0
-    progressShakeWrongTappedObject: 0
-    progressWrongShakeAmount: 0
-    progressWrongTapFeedbackSeconds: 0
-    progressWrongReturnSeconds: 0
-    progressUseReactionSequence: 0
-    progressReactionAnimator: {fileID: 0}
-    progressReactionAnimations: []
-    progressReactionOrder: 0
-    progressReactionPlaybackMode: 0
-    progressReactionMinimumGapSeconds: 0
-    progressReactionAnimationSpeed: 1
-    progressUseHelperAnimationWhileTapping: 0
-    progressHelperAnimator: {fileID: 0}
-    progressHelperAnimations: []
-    progressHelperAnimationSelection: 0
-    progressHelperSelectedAnimationNumber: 0
-    progressHelperAnimationSpeed: 1
-    progressHelperLoopAnimation: 0
-    progressHelperPauseWhenNotTapping: 0
-    progressHelperResetWhenProgressEmpty: 0
-    resultAnimator: {fileID: 0}
-    resultAnimationClip: {fileID: 0}
-    resultAnimationSpeed: 1
-    waitForResultAnimation: 1
-    resultVoiceOver: {fileID: 0}
-    resultVoiceVolume: 1
-    waitForResultVoiceOver: 1
-    resultSoundEffect: {fileID: 0}
-    resultSoundVolume: 1
-    waitForResultSound: 0
-    resultExtraWaitSeconds: 0
-    groupCompletionMode: 0
-    targetActions:
-    - enabled: 1
-      actionName: Target Action
-      tapObject: {fileID: 4545736991754386668}
-      required: 0
-      useActivityTransform: 0
-      previewActivityTransformInEditor: 0
-      objectToMoveOrScale: {fileID: 0}
-      copyTransformFrom: {fileID: 0}
-      activityPosition: {x: 0, y: 0, z: 0}
-      activityRotationEuler: {x: 0, y: 0, z: 0}
-      activityScale: {x: 1, y: 1, z: 1}
-      restoreTransformAfterAction: 1
-      hasSavedStoryPose: 0
-      storyPosition: {x: 0, y: 0, z: 0}
-      storyRotationEuler: {x: 0, y: 0, z: 0}
-      storyScale: {x: 1, y: 1, z: 1}
-      animator: {fileID: 6615104655671506325}
-      animationClip: {fileID: 1827226128182048838, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      animationSpeed: 1
-      waitForAnimation: 1
-      soundEffect: {fileID: 0}
-      soundVolume: 0
-      voiceOver: {fileID: 0}
-      voiceVolume: 0
-      waitForVoiceOver: 0
-      objectsToTurnOn: []
-      objectsToTurnOff: []
-      extraWaitSeconds: 0
-      onTapped:
-        m_PersistentCalls:
-          m_Calls: []
-    - enabled: 1
-      actionName: Target Action
-      tapObject: {fileID: 7787363254983246721}
-      required: 0
-      useActivityTransform: 1
-      previewActivityTransformInEditor: 0
-      objectToMoveOrScale: {fileID: 0}
-      copyTransformFrom: {fileID: 0}
-      activityPosition: {x: 0.59, y: -0.003000006, z: -0}
-      activityRotationEuler: {x: -0, y: 270, z: 0}
-      activityScale: {x: 0.45000002, y: 0.45000002, z: 0.45000002}
-      restoreTransformAfterAction: 1
-      hasSavedStoryPose: 1
-      storyPosition: {x: 1.056, y: -0.003000006, z: -0}
-      storyRotationEuler: {x: -0, y: 270, z: 0}
-      storyScale: {x: 0.45000002, y: 0.45000002, z: 0.45000002}
-      animator: {fileID: 9011365716037083572}
-      animationClip: {fileID: 1827226128182048838, guid: 098788c2916bf2946b1b9d3ae58193ec, type: 3}
-      animationSpeed: 1
-      waitForAnimation: 1
-      soundEffect: {fileID: 0}
-      soundVolume: 0
-      voiceOver: {fileID: 0}
-      voiceVolume: 0
-      waitForVoiceOver: 0
-      objectsToTurnOn: []
-      objectsToTurnOff: []
-      extraWaitSeconds: 0
-      onTapped:
-        m_PersistentCalls:
-          m_Calls: []
-    groupTapObjects: []
-    groupRequiredObjects: []
-    groupRequiredObjectCount: 1
-    groupIgnoreRepeatTaps: 1
-    groupRepeatTapMessage: 
-    groupPlayOnlyTappedObjectAction: 0
-    groupActions: []
-    groupAutoStartStoryAfterSeconds: 10
-    groupPlayActionsWhenAutoSkipped: 0
-    groupWaitSecondsBeforeStory: 0
-    groupResultVoiceOver: {fileID: 0}
-    groupResultVoiceVolume: 1
-    groupWaitForVoiceOver: 1
-    storyMomentTapObject: {fileID: 0}
-    storyMomentCompletesBy: 0
-    storyMomentRequiredTaps: 1
-    storyMomentRequiredTappingSeconds: 0
-    storyMomentTapActiveWindowSeconds: 0
-    storyMomentShowProgressBar: 0
-    storyMomentTotalActivitySeconds: 0
-    storyMomentShowHintAfterSeconds: 0
-    storyMomentSkipAfterHintSeconds: 0
-    storyMomentHintText: 
-    storyMomentTapSound: {fileID: 0}
-    storyMomentTapSoundVolume: 0
-    storyMomentProgressDropsIfChildStops: 0
-    storyMomentProgressDropSpeed: 0
-    storyMomentMovingObject: {fileID: 0}
-    storyMomentMoveUpHeight: 0
-    storyMomentMoveSmoothness: 0
-    storyMomentSlowTapShake: 0
-    storyMomentFastTapShake: 0
-    storyMomentTapShakeSeconds: 0
-    storyMomentFastTapSpeed: 0
-    storyMomentTapSpeedWindowSeconds: 0
-    storyMomentObjectBeforeComplete: {fileID: 0}
-    storyMomentObjectAfterComplete: {fileID: 0}
-    storyMomentBreakShakeAmount: 0
-    storyMomentBreakShakeSeconds: 0
-    storyMomentSwitchAtShakePercent: 0
-    storyMomentDropBackSeconds: 0
-    storyMomentBreakSound: {fileID: 0}
-    storyMomentBreakSoundVolume: 0
-    storyMomentExtraWaitAfterComplete: 0
-    storyMomentWrongTapText: 
-    storyMomentWrongTapSound: {fileID: 0}
-    storyMomentWrongTapSoundVolume: 0
-    showHintWhenWrongInput: 1
-    wrongInputHintText: Try tapping the highlighted object
-    wrongInputSound: {fileID: 0}
-    wrongInputSoundVolume: 1
-    enableNoInputHelp: 1
-    noInputHintAfterSeconds: 5
-    noInputHintText: Try the highlighted object
-    noInputActionAfterHint: 2
-    autoSkipAfterHintSeconds: 5
-    useSameHintEffectsForNoInput: 1
-    pulseTargetObject: 1
-    targetPulseScale: 1.18
-    targetPulseRepeatCount: 3
-    targetPulseSeconds: 0.45
-    tintTargetObject: 1
-    targetTintColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    targetTintRepeatCount: 3
-    targetTintSeconds: 0.45
-    showHintObject: 0
-    hintObject: {fileID: 0}
-    hintObjectSeconds: 1.5
-    nextInputRule: 0
-    nextInputDelaySeconds: 0
-    showTimerProgress: 0
-    choiceOptions: []
-    optionTexts: []
-    correctOptionIndex: 0
-    choiceCorrectBehaviour: 0
-    choiceWrongOptionBehaviour: 0
-    choiceHideUiWhileResultPlays: 0
-    choiceBlockInputWhileResultPlays: 0
-    choiceReturnQuestionAfterWrong: 0
-    reactions: []
-    finishWhen: 1
-    waitForRunningReactionsBeforeFinish: 1
-    continueAfterComplete: 1
-    retryIfFailed: 0
-    successMessage: 
-    tryAgainMessage: 
-    successMessageSeconds: 0
-    maxReactionWaitSeconds: 30
-    onActivityStarted:
-      m_PersistentCalls:
-        m_Calls: []
-    onActivityCompleted:
-      m_PersistentCalls:
-        m_Calls: []
-  activityTemplateSchemaVersion: 20
-  activityPanel: {fileID: 0}
-  defaultRaycastCamera: {fileID: 0}
-  defaultAudioSource: {fileID: 2334496673176335026}
-  completeImmediatelyWhenNoActivities: 1
-  restartImmediatelyOnReplay: 0
-  onActivitiesStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  onActivitiesCompleted:
-    m_PersistentCalls:
-      m_Calls: []
-  onActivitiesReset:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1825300040788880764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8927,7 +8642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ARVFXPopupController
   revealModels:
-  - modelTransform: {fileID: 3773562497637754454}
+  - modelTransform: {fileID: 8438070241475573418}
     visualContentRoot: {fileID: 0}
     vfxWrapper: {fileID: 6530281887355071256}
     startDelay: 0
@@ -9154,6 +8869,409 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6640171526782425260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7564312997854788044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58f88054253ad3c4facfa36ca1ca3dea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ContentController
+  activities:
+  - enabled: 1
+    activityName: Tap on the screen to make them greet
+    startWhen: 1
+    waitBeforeStart: 0
+    startKey: 
+    storyWaitObjectOrAnimator: {fileID: 0}
+    storyWaitComponent: {fileID: 0}
+    storyWaitAnimator: {fileID: 0}
+    storyWaitAnimationClip: {fileID: 0}
+    storyWaitAnimationStateName: 
+    storyWaitTimeoutSeconds: 0
+    pauseStoryWhileActivity: 0
+    instructionText: Tap on the screen to make them greet
+    activityVoiceOver: {fileID: 0}
+    waitForActivityVoiceOver: 0
+    activityDurationAudio: {fileID: 0}
+    loopActivityDurationAudio: 0
+    activityDurationAudioVolume: 0
+    fadeActivityAudioOnEnd: 0
+    activityAudioFadeSeconds: 0
+    objectsOnWhenActivityStarts: []
+    objectsOffWhenActivityStarts: []
+    objectsOnWhenActivityCompletes: []
+    objectsOffWhenActivityCompletes: []
+    childInput: 0
+    targetObject: {fileID: 0}
+    targetObjects: []
+    mustTapInOrder: 0
+    requiredInputCount: 1
+    waitOnlySeconds: 0
+    activeTimeSeconds: 15
+    maxTimeToFirstInput: 0
+    helpProgressGainPerTap: 20
+    helpProgressLossPerSecond: 25
+    helpAutoContinueAfterSeconds: 5
+    helpCompleteWhenProgressFull: 1
+    helpAnimator: {fileID: 0}
+    helpAnimationClip: {fileID: 0}
+    helpAnimationSpeed: 1
+    helpResetAnimationWhenProgressIsEmpty: 1
+    helpWaitForAnimationBeforeContinue: 1
+    helpTapSound: {fileID: 0}
+    helpTapSoundVolume: 1
+    progressGateCompletesBy: 0
+    progressRequiredTaps: 5
+    progressRequiredTappingSeconds: 5
+    progressTapActiveWindowSeconds: 0.35
+    progressRequiredTapsPerSecond: 0
+    progressRequiredSpeedSeconds: 0
+    progressTapSpeedWindowSeconds: 0
+    progressDropsWhenNotTapping: 1
+    progressLossPerSecond: 25
+    progressAutoStartStoryAfterSeconds: 0
+    playResultWhenProgressAutoSkips: 1
+    progressTapSound: {fileID: 0}
+    progressTapSoundVolume: 1
+    progressUseCorrectTapFeedback: 0
+    progressCorrectTapFeedbackObject: {fileID: 0}
+    progressCorrectTapFeedbackStyle: 0
+    progressCorrectMoveUpHeight: 0
+    progressCorrectShakeAmount: 0
+    progressCorrectTapFeedbackSeconds: 0
+    progressCorrectReturnSeconds: 0
+    progressUseWrongTapFeedback: 0
+    progressWrongTapText: 
+    progressWrongTapSound: {fileID: 0}
+    progressWrongTapSoundVolume: 0
+    progressPulseCorrectObjectOnWrongTap: 0
+    progressShakeWrongTappedObject: 0
+    progressWrongShakeAmount: 0
+    progressWrongTapFeedbackSeconds: 0
+    progressWrongReturnSeconds: 0
+    progressUseReactionSequence: 0
+    progressReactionAnimator: {fileID: 0}
+    progressReactionAnimations: []
+    progressReactionOrder: 0
+    progressReactionPlaybackMode: 0
+    progressReactionMinimumGapSeconds: 0
+    progressReactionAnimationSpeed: 1
+    progressUseHelperAnimationWhileTapping: 0
+    progressHelperAnimator: {fileID: 0}
+    progressHelperAnimations: []
+    progressHelperAnimationSelection: 0
+    progressHelperSelectedAnimationNumber: 0
+    progressHelperSelectedAnimationNumbers: 
+    progressHelperAnimationSpeed: 1
+    progressHelperLoopAnimation: 0
+    progressHelperPauseWhenNotTapping: 0
+    progressHelperResetWhenProgressEmpty: 0
+    progressAutoFinishAfterNoTapSeconds: 0
+    resultAnimator: {fileID: 0}
+    resultAnimationClip: {fileID: 0}
+    resultAnimationSpeed: 1
+    waitForResultAnimation: 1
+    resultVoiceOver: {fileID: 0}
+    resultVoiceVolume: 1
+    waitForResultVoiceOver: 1
+    resultSoundEffect: {fileID: 0}
+    resultSoundVolume: 1
+    waitForResultSound: 0
+    resultExtraWaitSeconds: 0
+    resultUseActivityTransform: 0
+    resultPreviewActivityTransformInEditor: 0
+    resultObjectToMoveOrScale: {fileID: 0}
+    resultCopyTransformFrom: {fileID: 0}
+    resultActivityPosition: {x: 0, y: 0, z: 0}
+    resultActivityRotationEuler: {x: 0, y: 0, z: 0}
+    resultActivityScale: {x: 1, y: 1, z: 1}
+    resultRestoreTransformAfterAction: 0
+    resultHasSavedStoryPose: 0
+    resultStoryPosition: {x: 0, y: 0, z: 0}
+    resultStoryRotationEuler: {x: 0, y: 0, z: 0}
+    resultStoryScale: {x: 0, y: 0, z: 0}
+    groupCompletionMode: 0
+    targetActions: []
+    groupTapObjects: []
+    groupRequiredObjects: []
+    groupRequiredObjectCount: 1
+    groupIgnoreRepeatTaps: 0
+    groupRepeatTapMessage: 
+    groupPlayOnlyTappedObjectAction: 0
+    groupActions: []
+    groupAutoStartStoryAfterSeconds: 0
+    groupPlayActionsWhenAutoSkipped: 1
+    groupWaitSecondsBeforeStory: 0
+    groupResultVoiceOver: {fileID: 0}
+    groupResultVoiceVolume: 1
+    groupWaitForVoiceOver: 1
+    storyMomentTapObject: {fileID: 0}
+    storyMomentCompletesBy: 0
+    storyMomentRequiredTaps: 1
+    storyMomentRequiredTappingSeconds: 0
+    storyMomentTapActiveWindowSeconds: 0
+    storyMomentShowProgressBar: 0
+    storyMomentTotalActivitySeconds: 0
+    storyMomentShowHintAfterSeconds: 0
+    storyMomentSkipAfterHintSeconds: 0
+    storyMomentHintText: 
+    storyMomentTapSound: {fileID: 0}
+    storyMomentTapSoundVolume: 0
+    storyMomentProgressDropsIfChildStops: 0
+    storyMomentProgressDropSpeed: 0
+    storyMomentMovingObject: {fileID: 0}
+    storyMomentMoveUpHeight: 0
+    storyMomentMoveSmoothness: 0
+    storyMomentSlowTapShake: 0
+    storyMomentFastTapShake: 0
+    storyMomentTapShakeSeconds: 0
+    storyMomentFastTapSpeed: 0
+    storyMomentTapSpeedWindowSeconds: 0
+    storyMomentObjectBeforeComplete: {fileID: 0}
+    storyMomentObjectAfterComplete: {fileID: 0}
+    storyMomentBreakShakeAmount: 0
+    storyMomentBreakShakeSeconds: 0
+    storyMomentSwitchAtShakePercent: 0
+    storyMomentDropBackSeconds: 0
+    storyMomentBreakSound: {fileID: 0}
+    storyMomentBreakSoundVolume: 0
+    storyMomentExtraWaitAfterComplete: 0
+    storyMomentWrongTapText: 
+    storyMomentWrongTapSound: {fileID: 0}
+    storyMomentWrongTapSoundVolume: 0
+    showHintWhenWrongInput: 0
+    wrongInputHintText: Try tapping the highlighted object
+    wrongInputSound: {fileID: 0}
+    wrongInputSoundVolume: 1
+    enableNoInputHelp: 1
+    noInputHintAfterSeconds: 5
+    noInputHintText: They're waiting to greet each other. Tap on the screen!
+    noInputActionAfterHint: 3
+    autoSkipAfterHintSeconds: 3
+    useSameHintEffectsForNoInput: 1
+    pulseTargetObject: 1
+    targetPulseScale: 1.18
+    targetPulseRepeatCount: 3
+    targetPulseSeconds: 0.45
+    tintTargetObject: 0
+    targetTintColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    targetTintRepeatCount: 3
+    targetTintSeconds: 0.45
+    showHintObject: 0
+    hintObject: {fileID: 0}
+    hintObjectSeconds: 1.5
+    nextInputRule: 0
+    nextInputDelaySeconds: 0
+    useProgressBar: 0
+    progressBarFillMode: 0
+    progressBarBehavior: 0
+    progressGoDownPercentPerSecond: 0
+    progressMinimumPercent: 0
+    resultPlayTiming: 0
+    showTimerProgress: 0
+    choiceOptions: []
+    optionTexts: []
+    correctOptionIndex: 0
+    choiceCorrectBehaviour: 0
+    choiceWrongOptionBehaviour: 0
+    choiceHideUiWhileResultPlays: 0
+    choiceBlockInputWhileResultPlays: 0
+    choiceReturnQuestionAfterWrong: 0
+    reactions:
+    - enabled: 1
+      reactionName: Animation
+      type: 1
+      playWhen: 1
+      visualEffectPlayMode: 0
+      hideSourceObjectsUntilPlayed: 0
+      spawnAreaMode: 0
+      pageSpreadSize: {x: 0, y: 0}
+      rectangleSpawnArea: {fileID: 0}
+      rectangleSpawnAreaSize: {x: 0.01, y: 0.01, z: 0.01}
+      fadeOutSpawnedObjects: 0
+      fadeOutSeconds: 0
+      startDelaySeconds: 0
+      extraWaitSeconds: 0
+      cooldownSeconds: 0
+      maxTriggerCount: 0
+      reactionDurationSeconds: 0
+      optionalSfx: {fileID: 0}
+      sfxMode: 3
+      sfxVolume: 1
+      sfxMinimumGapSeconds: 0
+      reactionVoiceOver: {fileID: 0}
+      reactionVoiceVolume: 1
+      waitForReactionVoiceOver: 0
+      stopVoiceWhenReactionEnds: 0
+      vfxObjects: []
+      vfxSpawnOrigin: {fileID: 0}
+      particleBurstCount: 25
+      objectBurstCount: 1
+      objectLifeSeconds: 2
+      objectSpreadRadius: 0.15
+      objectLaunchForce: 0
+      randomizeObjectRotation: 1
+      keepSpawnedObjectsInWorldSpace: 0
+      make3DObjectsFall: 0
+      fallingMotion: 0
+      fallDistance: 0
+      fallDurationSeconds: 0.05
+      randomStartDelayMaxSeconds: 0
+      randomFallTimeExtraSeconds: 0
+      fallSpreadSideways: 0
+      fallSpinDegrees: 0
+      fallFlutterAmount: 0
+      randomScaleMin: 0
+      randomScaleMax: 0
+      useActivityTransform: 0
+      previewActivityTransformInEditor: 0
+      objectToMoveOrScale: {fileID: 0}
+      copyTransformFrom: {fileID: 0}
+      activityPosition: {x: 0, y: 0, z: 0}
+      activityRotationEuler: {x: 0, y: 0, z: 0}
+      activityScale: {x: 1, y: 1, z: 1}
+      restoreTransformAfterAction: 0
+      hasSavedStoryPose: 0
+      storyPosition: {x: 0, y: 0, z: 0}
+      storyRotationEuler: {x: 0, y: 0, z: 0}
+      storyScale: {x: 0, y: 0, z: 0}
+      animator: {fileID: 6750209651257103656}
+      animationClip: {fileID: 1827226128182048838, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      animationClips: []
+      animationPlayMode: 0
+      animationSpeed: 1
+      doNotRestartWhilePlaying: 1
+      blocksNextInput: 1
+      mainAudio: {fileID: 0}
+      mainAudioVolume: 1
+      objects: []
+      targetRenderer: {fileID: 0}
+      targetColor: {r: 0, g: 0, b: 0, a: 0}
+      colorChangeSeconds: 0
+      restoreColorAfterSeconds: 0
+      objectToMove: {fileID: 0}
+      moveTarget: {fileID: 0}
+      moveOffset: {x: 0, y: 0, z: 0}
+      moveDurationSeconds: 0
+      customAction:
+        m_PersistentCalls:
+          m_Calls: []
+      waitUntilFinished: 1
+      showAdvancedOptions: 0
+    - enabled: 1
+      reactionName: Animation
+      type: 1
+      playWhen: 1
+      visualEffectPlayMode: 0
+      hideSourceObjectsUntilPlayed: 0
+      spawnAreaMode: 0
+      pageSpreadSize: {x: 0, y: 0}
+      rectangleSpawnArea: {fileID: 0}
+      rectangleSpawnAreaSize: {x: 0.01, y: 0.01, z: 0.01}
+      fadeOutSpawnedObjects: 0
+      fadeOutSeconds: 0
+      startDelaySeconds: 0
+      extraWaitSeconds: 0
+      cooldownSeconds: 0
+      maxTriggerCount: 0
+      reactionDurationSeconds: 0
+      optionalSfx: {fileID: 0}
+      sfxMode: 3
+      sfxVolume: 1
+      sfxMinimumGapSeconds: 0
+      reactionVoiceOver: {fileID: 0}
+      reactionVoiceVolume: 1
+      waitForReactionVoiceOver: 0
+      stopVoiceWhenReactionEnds: 0
+      vfxObjects: []
+      vfxSpawnOrigin: {fileID: 0}
+      particleBurstCount: 25
+      objectBurstCount: 1
+      objectLifeSeconds: 2
+      objectSpreadRadius: 0.15
+      objectLaunchForce: 0
+      randomizeObjectRotation: 1
+      keepSpawnedObjectsInWorldSpace: 0
+      make3DObjectsFall: 0
+      fallingMotion: 0
+      fallDistance: 0
+      fallDurationSeconds: 0.05
+      randomStartDelayMaxSeconds: 0
+      randomFallTimeExtraSeconds: 0
+      fallSpreadSideways: 0
+      fallSpinDegrees: 0
+      fallFlutterAmount: 0
+      randomScaleMin: 0
+      randomScaleMax: 0
+      useActivityTransform: 1
+      previewActivityTransformInEditor: 1
+      objectToMoveOrScale: {fileID: 0}
+      copyTransformFrom: {fileID: 0}
+      activityPosition: {x: 0.66, y: -0.003000006, z: -0}
+      activityRotationEuler: {x: -0, y: 270, z: 0}
+      activityScale: {x: 0.45000002, y: 0.45000002, z: 0.45000002}
+      restoreTransformAfterAction: 1
+      hasSavedStoryPose: 0
+      storyPosition: {x: 0, y: 0, z: 0}
+      storyRotationEuler: {x: 0, y: 0, z: 0}
+      storyScale: {x: 0, y: 0, z: 0}
+      animator: {fileID: 9011365716037083572}
+      animationClip: {fileID: 1827226128182048838, guid: 098788c2916bf2946b1b9d3ae58193ec, type: 3}
+      animationClips: []
+      animationPlayMode: 0
+      animationSpeed: 1
+      doNotRestartWhilePlaying: 1
+      blocksNextInput: 1
+      mainAudio: {fileID: 0}
+      mainAudioVolume: 1
+      objects: []
+      targetRenderer: {fileID: 0}
+      targetColor: {r: 0, g: 0, b: 0, a: 0}
+      colorChangeSeconds: 0
+      restoreColorAfterSeconds: 0
+      objectToMove: {fileID: 0}
+      moveTarget: {fileID: 0}
+      moveOffset: {x: 0, y: 0, z: 0}
+      moveDurationSeconds: 0
+      customAction:
+        m_PersistentCalls:
+          m_Calls: []
+      waitUntilFinished: 1
+      showAdvancedOptions: 0
+    finishWhen: 1
+    waitForRunningReactionsBeforeFinish: 1
+    continueAfterComplete: 1
+    retryIfFailed: 0
+    successMessage: 
+    tryAgainMessage: 
+    successMessageSeconds: 0
+    maxReactionWaitSeconds: 20
+    onActivityStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    onActivityCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+  activityTemplateSchemaVersion: 33
+  activityPanel: {fileID: 0}
+  defaultRaycastCamera: {fileID: 0}
+  defaultAudioSource: {fileID: 2334496673176335026}
+  completeImmediatelyWhenNoActivities: 1
+  restartImmediatelyOnReplay: 0
+  onActivitiesStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onActivitiesCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  onActivitiesReset:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7616633416244714592
 GameObject:
   m_ObjectHideFlags: 0
@@ -9369,7 +9487,7 @@ Transform:
   m_GameObject: {fileID: 7787363254983246721}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: -0.7071068}
-  m_LocalPosition: {x: 1.056, y: -0.003000006, z: -0}
+  m_LocalPosition: {x: 0.66, y: -0.003000006, z: -0}
   m_LocalScale: {x: 0.45000002, y: 0.45000002, z: 0.45000002}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -10865,190 +10983,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5870900875378237036, guid: 2c1e39774ab67d8448ec2c51e5736ac8, type: 3}
   m_PrefabInstance: {fileID: 2150619806343552369}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &3734850115367748029
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 2125877237764931576}
-    m_Modifications:
-    - target: {fileID: -9148411212697477340, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: f5650704ef037c04680f652524dbf9ba, type: 2}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.064
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.014
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -7646353707602332579, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -7646353707602332579, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_Quality
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -7646353707602332579, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -7646353707602332579, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_SkinnedMotionVectors
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -7646353707602332579, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 4b9ced0f57168514f96e47b6b88f5524, type: 2}
-    - target: {fileID: -5014593077318960116, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 4b9ced0f57168514f96e47b6b88f5524, type: 2}
-    - target: {fileID: -3422591274120940000, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 90191b49335e6a84489efd79fbdffa16, type: 2}
-    - target: {fileID: -2287472204864555405, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 4b9ced0f57168514f96e47b6b88f5524, type: 2}
-    - target: {fileID: 919132149155446097, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: m_Name
-      value: 9,10 lion activity page
-      objectReference: {fileID: 0}
-    - target: {fileID: 2905837413272831077, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 4b9ced0f57168514f96e47b6b88f5524, type: 2}
-    - target: {fileID: 3014296162855619882, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 2bd96cf96b854c74082be860005874ba, type: 2}
-    - target: {fileID: 3110215443829757993, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: e01b0d9e45475b0418a690ab1b779693, type: 2}
-    - target: {fileID: 5008386648876797876, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 90191b49335e6a84489efd79fbdffa16, type: 2}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6615104655671506325}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1720634304721223403}
-  m_SourcePrefab: {fileID: 100100000, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
---- !u!4 &3773562497637754454 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-  m_PrefabInstance: {fileID: 3734850115367748029}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4545736991754386668 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
-  m_PrefabInstance: {fileID: 3734850115367748029}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &6615104655671506325
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4545736991754386668}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6062f950af8357d41b7f3e45547d7941, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!65 &1720634304721223403
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4545736991754386668}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.5789642, y: 2.6675472, z: 1.6168683}
-  m_Center: {x: 0.28159714, y: 1.0941849, z: 0.025451541}
 --- !u!1001 &3842180192375944256
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11237,3 +11171,147 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5870900875378237036, guid: 2c1e39774ab67d8448ec2c51e5736ac8, type: 3}
   m_PrefabInstance: {fileID: 6927892355181889300}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8255297476371632449
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2125877237764931576}
+    m_Modifications:
+    - target: {fileID: -9148411212697477340, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f5650704ef037c04680f652524dbf9ba, type: 2}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.081
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.009
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7646353707602332579, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7514f4613b994f74ab7847d191bd1a1d, type: 2}
+    - target: {fileID: -5014593077318960116, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7514f4613b994f74ab7847d191bd1a1d, type: 2}
+    - target: {fileID: -3422591274120940000, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 90191b49335e6a84489efd79fbdffa16, type: 2}
+    - target: {fileID: -2287472204864555405, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7514f4613b994f74ab7847d191bd1a1d, type: 2}
+    - target: {fileID: 919132149155446097, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: m_Name
+      value: 9,10 lion activity page
+      objectReference: {fileID: 0}
+    - target: {fileID: 2905837413272831077, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7514f4613b994f74ab7847d191bd1a1d, type: 2}
+    - target: {fileID: 3014296162855619882, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 90191b49335e6a84489efd79fbdffa16, type: 2}
+    - target: {fileID: 3110215443829757993, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e01b0d9e45475b0418a690ab1b779693, type: 2}
+    - target: {fileID: 5008386648876797876, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 90191b49335e6a84489efd79fbdffa16, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6750209651257103656}
+  m_SourcePrefab: {fileID: 100100000, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+--- !u!4 &8438070241475573418 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+  m_PrefabInstance: {fileID: 8255297476371632449}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &9102298769009044496 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 00d02495e8ba6e8458aaea357fe3c086, type: 3}
+  m_PrefabInstance: {fileID: 8255297476371632449}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6750209651257103656
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9102298769009044496}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6062f950af8357d41b7f3e45547d7941, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
