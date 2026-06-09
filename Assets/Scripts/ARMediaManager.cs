@@ -229,6 +229,16 @@ public class ARMediaManager : MonoBehaviour
 
         Debug.Log($"[AR] TrackingFound pageId:'{node.PageId}' isSamePage:{isSamePage} canResume:{canResume} timeSinceLost:{Time.time - _lastLostTime:F1}s");
 
+        // If a middle-story activity is active, tracking found must not restart or resume story.
+        // It should only restore the page root and keep story visuals/audio frozen until the activity finishes.
+        if (node.IsStoryBlockedByActivity)
+        {
+            _lastLostTime = -999f;
+            HideReplay();
+            node.ResumeVisuals();
+            return;
+        }
+
         if (!canResume)
         {
             _lastLostTime = -999f;

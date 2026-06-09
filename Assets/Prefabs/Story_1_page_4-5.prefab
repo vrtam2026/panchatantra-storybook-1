@@ -25377,6 +25377,11 @@ MonoBehaviour:
     progressReactionPlaybackMode: 0
     progressReactionMinimumGapSeconds: 0.15
     progressReactionAnimationSpeed: 1
+    progressReactionGroupLoopSound: {fileID: 0}
+    progressReactionGroupLoopSoundVolume: 1
+    loopProgressReactionGroupSoundUntilAnimationEnds: 0
+    progressReactionAnimationSounds: []
+    progressReactionAnimationSoundVolumes: []
     progressUseHelperAnimationWhileTapping: 0
     progressHelperAnimator: {fileID: 0}
     progressHelperAnimations: []
@@ -25423,6 +25428,9 @@ MonoBehaviour:
     groupAutoStartStoryAfterSeconds: 0
     groupPlayActionsWhenAutoSkipped: 0
     groupWaitSecondsBeforeStory: 0
+    groupLoopSound: {fileID: 0}
+    groupLoopSoundVolume: 1
+    loopGroupSoundUntilGroupFinishes: 0
     groupResultVoiceOver: {fileID: 0}
     groupResultVoiceVolume: 1
     groupWaitForVoiceOver: 1
@@ -25669,8 +25677,8 @@ MonoBehaviour:
     waitForRunningReactionsBeforeFinish: 1
     continueAfterComplete: 1
     retryIfFailed: 0
-    successMessage: 'welldone '
-    tryAgainMessage: Retry!
+    successMessage: 
+    tryAgainMessage: 
     successMessageSeconds: 0
     maxReactionWaitSeconds: 10
     onActivityStarted:
@@ -25679,7 +25687,31 @@ MonoBehaviour:
     onActivityCompleted:
       m_PersistentCalls:
         m_Calls: []
-  activityTemplateSchemaVersion: 33
+    activityStartSound: {fileID: 0}
+    activityStartSoundVolume: 1
+    activityCompleteSound: {fileID: 0}
+    activityCompleteSoundVolume: 1
+    generalCorrectTapSound: {fileID: 0}
+    generalCorrectTapSoundVolume: 1
+    correctTapSoundGapMode: 2
+    correctTapCustomGapSeconds: 0.15
+    progressDropSound: {fileID: 0}
+    progressDropSoundVolume: 1
+    progressFullSound: {fileID: 0}
+    progressFullSoundVolume: 1
+    noInputHintSound: {fileID: 0}
+    noInputHintSoundVolume: 1
+    resultAnimationStartSound: {fileID: 0}
+    resultAnimationStartSoundVolume: 1
+    sharedHelperAnimationSound: {fileID: 0}
+    sharedHelperAnimationSoundVolume: 1
+    progressHelperGroupLoopSound: {fileID: 0}
+    progressHelperGroupLoopSoundVolume: 1
+    loopProgressHelperGroupSoundUntilAnimationEnds: 0
+    progressHelperAnimationSounds: []
+    progressHelperAnimationSoundVolumes: []
+    progressMilestones: []
+  activityTemplateSchemaVersion: 34
   activityPanel: {fileID: 0}
   defaultRaycastCamera: {fileID: 0}
   defaultAudioSource: {fileID: 9106171197154186402}

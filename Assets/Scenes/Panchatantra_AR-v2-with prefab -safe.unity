@@ -242,6 +242,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &30148702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,6 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -291,8 +294,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &30148705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575,8 +580,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &73775967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,6 +596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 0
   canPinchScale: 1
   sliderMinAngle: -45
@@ -621,6 +629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 0
   canPinchScale: 1
   sliderMinAngle: -45
@@ -658,8 +667,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &73775972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -672,6 +683,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &73775973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -932,6 +945,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &189986064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -944,6 +959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -981,8 +997,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &189986067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1079,6 +1097,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &200307052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1091,6 +1111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -1128,8 +1149,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &200307055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1268,6 +1291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -1305,8 +1329,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &205577099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1319,6 +1345,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &205577100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1367,22 +1395,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afb0a4a8e9c4854583aefcb2bcbc049, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OverlayManager
-  pageEndPanel: {fileID: 1996391533}
-  pageEndImage: {fileID: 1124087863}
+  overlayPanel: {fileID: 0}
+  overlayImage: {fileID: 0}
   pageEndCharacters:
   - frames:
     - {fileID: 21300000, guid: f3c1e3b224b76fe40bc0afd4cd76e73f, type: 3}
     - {fileID: 21300000, guid: a5699fbc9fd7f704cb60fa98694fc7e0, type: 3}
-  pageEndFadeDuration: 1
-  lostTrackingPanel: {fileID: 1522804973}
-  lostTrackingImage: {fileID: 1189148822}
   lostTrackingCharacters:
   - frames:
     - {fileID: 21300000, guid: d11755dae66e63445826e92d6a6e6809, type: 3}
     - {fileID: 21300000, guid: 380ece161d479a24d8a264e759f3168c, type: 3}
-  loopAnimation: 1
+  loopPageEnd: 1
+  loopLostTracking: 1
   randomFrame: 0
   frameSpeed: 1.5
+  panelFadeInDuration: 1
+  pageEndDelay: 2
+  lostTrackingDelay: 1
 --- !u!4 &296841653
 Transform:
   m_ObjectHideFlags: 0
@@ -1540,6 +1569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -1577,8 +1607,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &370939670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1591,6 +1623,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &370939671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1675,6 +1709,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &387323786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1687,6 +1723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -1724,8 +1761,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &387323789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1841,6 +1880,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &435484410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1853,6 +1894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -1890,8 +1932,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &435484413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2181,8 +2225,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &484360999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2208,6 +2254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -2227,6 +2274,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &484361002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2299,6 +2348,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &503088098
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2311,6 +2362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -2348,8 +2400,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &503088101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2474,8 +2528,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &515065636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2501,6 +2557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -2520,6 +2577,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &515065639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2653,6 +2712,7 @@ MonoBehaviour:
   frameSpeed: 1.5
   fadeInDuration: 0.4
   fadeOutDuration: 0.4
+  showThresholdSeconds: 0.5
   appearSfx: {fileID: 0}
 --- !u!224 &553878523
 RectTransform:
@@ -2771,6 +2831,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &578403827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2783,6 +2845,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -2820,8 +2883,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &578403830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3092,6 +3157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -3129,8 +3195,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &606472931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3143,6 +3211,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &606472932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3239,6 +3309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -3276,8 +3347,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &610435624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3290,6 +3363,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &610435625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3424,6 +3499,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &644907617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3436,6 +3513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -3473,8 +3551,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &644907620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3664,6 +3744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -3701,8 +3782,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &713923706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3715,6 +3798,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &713923707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3946,6 +4031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -3983,8 +4069,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &775770241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3997,6 +4085,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &775770242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4069,6 +4159,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &784529879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4081,6 +4173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -4118,8 +4211,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &784529882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4216,6 +4311,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &822843115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4228,6 +4325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -4265,8 +4363,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &822843118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4380,7 +4480,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8808812967710572682, guid: 554a50b64e20d59438dceead7aff26a0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4511,6 +4611,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &955862514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4523,6 +4625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -4560,8 +4663,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &955862517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4658,6 +4763,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &957182769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4670,6 +4777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -4707,8 +4815,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &957182772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4846,8 +4956,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &993644864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4860,6 +4972,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -4879,6 +4992,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &993644866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5053,8 +5168,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1025655710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5080,6 +5197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -5099,6 +5217,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1025655713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5171,6 +5291,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1033812644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5183,6 +5305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -5220,8 +5343,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1033812647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5318,6 +5443,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1038531853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5330,6 +5457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -5367,8 +5495,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1038531856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5465,6 +5595,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1075244462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5477,6 +5609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -5514,8 +5647,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1075244465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5635,6 +5770,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1086218565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5707,6 +5844,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1100939551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5719,6 +5858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -5756,8 +5896,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1100939554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5878,6 +6020,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -5915,8 +6058,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1104173372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5929,6 +6074,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1104173373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6057,6 +6204,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1145640765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6069,6 +6218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -6106,8 +6256,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1145640768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6252,8 +6404,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1183498637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6279,6 +6433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -6298,6 +6453,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1183498640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6445,6 +6602,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1193264185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6457,6 +6616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -6494,8 +6654,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1193264188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6856,6 +7018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -6893,8 +7056,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1338429502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6907,6 +7072,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1338429503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7010,6 +7177,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1411885699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7022,6 +7191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -7059,8 +7229,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1411885702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7157,6 +7329,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1418995021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7169,6 +7343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -7206,8 +7381,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1418995024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7333,8 +7510,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1485571895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7360,6 +7539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -7379,6 +7559,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1485571898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7633,6 +7815,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1545840879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7645,6 +7829,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -7682,8 +7867,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1545840882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7992,6 +8179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1692973194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8004,6 +8193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -8041,8 +8231,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1692973197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8214,6 +8406,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1758907502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8226,6 +8420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -8263,8 +8458,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1758907505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8384,6 +8581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -8421,8 +8619,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1767315855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8435,6 +8635,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1767315856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8535,8 +8737,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1771766236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8549,6 +8753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -8581,6 +8786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -8655,6 +8861,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1771766243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8672,8 +8880,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1771766244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8686,6 +8896,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1771766245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8777,6 +8989,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1793663588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8789,6 +9003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -8826,8 +9041,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1793663591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9012,6 +9229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -9049,8 +9267,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1880130341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9063,6 +9283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1880130342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9116,6 +9338,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1947440731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9128,6 +9352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -9165,8 +9390,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1947440734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9310,8 +9537,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1970981159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9337,6 +9566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -9356,6 +9586,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1970981162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9522,8 +9754,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1995345973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9549,6 +9783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -9568,6 +9803,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1995345976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9710,6 +9947,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &2020589227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9722,6 +9961,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -9759,8 +9999,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &2020589230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9904,8 +10146,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &2040524889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9931,6 +10175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -9950,6 +10195,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &2040524892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10073,6 +10320,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &2095110797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10085,6 +10334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e9462e382d0a247b5227b9ad0c9205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModelInteraction
+  pageType: 0
   canSliderRotate: 1
   canPinchScale: 1
   sliderMinAngle: -45
@@ -10122,8 +10372,10 @@ MonoBehaviour:
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
+  resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &2095110800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10197,6 +10449,10 @@ PrefabInstance:
     - target: {fileID: 1818261466569464485, guid: 67132600bc5b87c4ca0a878165c931ad, type: 3}
       propertyPath: m_Name
       value: Story_1_page_66-67
+      objectReference: {fileID: 0}
+    - target: {fileID: 1818261466569464485, guid: 67132600bc5b87c4ca0a878165c931ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4765250842229223871, guid: 67132600bc5b87c4ca0a878165c931ad, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11741,6 +11997,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AutoHideUI
   hideDelay: 3
   uiRoot: {fileID: 329687853074120751}
+  pauseWhileActivityIsRunning: 1
 --- !u!1001 &6193137984237540894
 PrefabInstance:
   m_ObjectHideFlags: 0

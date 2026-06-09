@@ -647,13 +647,43 @@ public class ARTrackedPageNode : MonoBehaviour
         PauseVideos(mainVideos);
         PauseVideos(backgroundLoopVideos);
 
-        // Keep story animators at frame zero until the activity completes.
-        // Activity-specific animation clips can still be played by ContentController.
+        // Pre-story gate only: keep story at first frame until a before-story activity completes.
         ResetAnimatorsToFrameZeroPaused();
 
         // Stop movement. It will be reset and started by BeginStorySystemsNow()
         // after the activity is completed.
         StopSplinesForIntro();
+    }
+
+    private void PauseStorySystemsAtCurrentFrameForActivity()
+    {
+        PauseVideos(mainVideos);
+        PauseVideos(backgroundLoopVideos);
+
+        for (int i = 0; i < animators.Count; i++)
+        {
+            Animator a = animators[i];
+            if (a == null) continue;
+            a.speed = 0f;
+        }
+
+        for (int i = 0; i < splineMovers.Count; i++)
+        {
+            ARTrackableSplineMover m = splineMovers[i];
+            if (m == null) continue;
+            m.Pause();
+        }
+
+        for (int i = 0; i < splinePathMovers.Count; i++)
+        {
+            SplinePathMover m = splinePathMovers[i];
+            if (m == null) continue;
+            m.Pause();
+        }
+
+        ARVFXPopupController popup = GetComponentInChildren<ARVFXPopupController>(true);
+        if (popup != null)
+            popup.PauseReveal();
     }
 
     private void ResetStorySystemsToStartPaused()
@@ -849,12 +879,17 @@ public class ARTrackedPageNode : MonoBehaviour
 
     public void PauseStoryForActivity()
     {
-        PauseVisuals();
+        // Middle-story activity lock.
+        // Freeze the story exactly where it is. Do not reset story animators to frame zero.
+        _storyBlockedByActivity = true;
+        PauseStorySystemsAtCurrentFrameForActivity();
         PauseMediaAudioForActivity();
     }
 
     public void ResumeStoryFromActivity()
     {
+        // Only the activity completion path may release this lock.
+        _storyBlockedByActivity = false;
         ResumeVisuals();
         ResumeMediaAudioFromActivity();
     }
@@ -948,7 +983,9 @@ public class ARTrackedPageNode : MonoBehaviour
 
         if (_storyBlockedByActivity)
         {
-            PauseStorySystemsForActivityGate();
+            // Tracking found while an activity is active.
+            // Restore the page root but keep the story frozen at its current frame.
+            PauseStorySystemsAtCurrentFrameForActivity();
             return;
         }
 

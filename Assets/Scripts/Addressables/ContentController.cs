@@ -26,7 +26,7 @@ public class ContentController : MonoBehaviour, IARContent
     [SerializeField] private List<ActivityStep> activities = new List<ActivityStep>();
 
     [SerializeField, HideInInspector] private int activityTemplateSchemaVersion = 0;
-    private const int CurrentActivityTemplateSchemaVersion = 33;
+    private const int CurrentActivityTemplateSchemaVersion = 34;
 
     [Header("Required Setup")]
     [SerializeField] private ActivityPanel activityPanel;
@@ -87,6 +87,27 @@ public class ContentController : MonoBehaviour, IARContent
     private readonly List<Coroutine> _activeChoiceAnimationRoutines = new List<Coroutine>();
     // Tracks coroutines that restore scenario transforms after a delay so they can be stopped on reset.
     private readonly List<Coroutine> _scenarioTransformRestoreRoutines = new List<Coroutine>();
+    // Records the active state of every object that an activity will change so replay can restore them.
+    private readonly Dictionary<GameObject, bool> _originalObjectActiveStates = new Dictionary<GameObject, bool>();
+
+    // ── SFX runtime tracking ──────────────────────────────────────────────
+    // Tracks the last time a correct tap sound played for gap enforcement.
+    private float _lastCorrectTapSoundTime = -999f;
+    // Tracks which helper animation clip index last played its sound (0-based).
+    private int _lastHelperClipSoundIndex = -1;
+    // Time the last helper clip sound played, for cooldown gate.
+    private float _lastHelperClipSoundTime = -999f;
+    // Active looping sound for the helper animation group. This is optional and stops with the activity.
+    private AudioSource _activeProgressHelperGroupLoopSource;
+    private ActivityStep _activeProgressHelperGroupLoopStep;
+    // Tracks reaction-target animation clip sounds.
+    private int _lastReactionClipSoundIndex = -1;
+    private float _lastReactionClipSoundTime = -999f;
+    // Active looping sound for reaction-target animation groups.
+    private AudioSource _activeProgressReactionGroupLoopSource;
+    private ActivityStep _activeProgressReactionGroupLoopStep;
+    // Active coroutine that shows a milestone hint text then returns to instruction.
+    private Coroutine _activeMilestoneTextCoroutine;
     private readonly List<GameObject> _spawnedVfxObjects = new List<GameObject>();
     private readonly Dictionary<ActivityReaction, List<GameObject>> _spawnedVisualEffectObjectsByReaction = new Dictionary<ActivityReaction, List<GameObject>>();
     private readonly Dictionary<Renderer, Color> _originalRendererColors = new Dictionary<Renderer, Color>();
@@ -181,7 +202,48 @@ public class ContentController : MonoBehaviour, IARContent
         if (step.objectsOnWhenActivityCompletes == null) { step.objectsOnWhenActivityCompletes = new List<GameObject>(); changed++; }
         if (step.objectsOffWhenActivityCompletes == null) { step.objectsOffWhenActivityCompletes = new List<GameObject>(); changed++; }
         if (step.progressReactionAnimations == null) { step.progressReactionAnimations = new List<AnimationClip>(); changed++; }
+        if (step.progressReactionAnimationSounds == null) { step.progressReactionAnimationSounds = new List<AudioClip>(); changed++; }
+        if (step.progressReactionAnimationSoundVolumes == null) { step.progressReactionAnimationSoundVolumes = new List<float>(); changed++; }
+        while (step.progressReactionAnimationSounds.Count < step.progressReactionAnimations.Count) { step.progressReactionAnimationSounds.Add(null); changed++; }
+        while (step.progressReactionAnimationSoundVolumes.Count < step.progressReactionAnimations.Count) { step.progressReactionAnimationSoundVolumes.Add(1f); changed++; }
+        for (int sfxIndex = 0; sfxIndex < step.progressReactionAnimationSoundVolumes.Count; sfxIndex++)
+        {
+            float clampedVolume = Mathf.Clamp(step.progressReactionAnimationSoundVolumes[sfxIndex], 0f, 2f);
+            if (!Mathf.Approximately(step.progressReactionAnimationSoundVolumes[sfxIndex], clampedVolume))
+            {
+                step.progressReactionAnimationSoundVolumes[sfxIndex] = clampedVolume;
+                changed++;
+            }
+        }
+        if (step.progressReactionGroupLoopSoundVolume < 0f || step.progressReactionGroupLoopSoundVolume > 2f) { step.progressReactionGroupLoopSoundVolume = Mathf.Clamp(step.progressReactionGroupLoopSoundVolume, 0f, 2f); changed++; }
         if (step.progressHelperAnimations == null) { step.progressHelperAnimations = new List<AnimationClip>(); changed++; }
+        if (step.progressHelperAnimationSounds == null) { step.progressHelperAnimationSounds = new List<AudioClip>(); changed++; }
+        if (step.progressHelperAnimationSoundVolumes == null) { step.progressHelperAnimationSoundVolumes = new List<float>(); changed++; }
+        while (step.progressHelperAnimationSounds.Count < step.progressHelperAnimations.Count) { step.progressHelperAnimationSounds.Add(null); changed++; }
+        while (step.progressHelperAnimationSoundVolumes.Count < step.progressHelperAnimations.Count) { step.progressHelperAnimationSoundVolumes.Add(1f); changed++; }
+        for (int sfxIndex = 0; sfxIndex < step.progressHelperAnimationSoundVolumes.Count; sfxIndex++)
+        {
+            float clampedVolume = Mathf.Clamp(step.progressHelperAnimationSoundVolumes[sfxIndex], 0f, 2f);
+            if (!Mathf.Approximately(step.progressHelperAnimationSoundVolumes[sfxIndex], clampedVolume))
+            {
+                step.progressHelperAnimationSoundVolumes[sfxIndex] = clampedVolume;
+                changed++;
+            }
+        }
+        if (step.progressMilestones == null) { step.progressMilestones = new List<ActivityProgressMilestone>(); changed++; }
+        for (int milestoneIndex = 0; milestoneIndex < step.progressMilestones.Count; milestoneIndex++)
+        {
+            ActivityProgressMilestone milestone = step.progressMilestones[milestoneIndex];
+            if (milestone == null) continue;
+            float clampedMilestoneVolume = Mathf.Clamp(milestone.soundVolume, 0f, 2f);
+            if (!Mathf.Approximately(milestone.soundVolume, clampedMilestoneVolume))
+            {
+                milestone.soundVolume = clampedMilestoneVolume;
+                changed++;
+            }
+        }
+        if (step.groupLoopSoundVolume < 0f || step.groupLoopSoundVolume > 2f) { step.groupLoopSoundVolume = Mathf.Clamp(step.groupLoopSoundVolume, 0f, 2f); changed++; }
+        if (step.progressHelperGroupLoopSoundVolume < 0f || step.progressHelperGroupLoopSoundVolume > 2f) { step.progressHelperGroupLoopSoundVolume = Mathf.Clamp(step.progressHelperGroupLoopSoundVolume, 0f, 2f); changed++; }
         if (step.targetActions == null) { step.targetActions = new List<ActivityTargetAction>(); changed++; }
         if (step.groupTapObjects == null) { step.groupTapObjects = new List<GameObject>(); changed++; }
         if (step.groupRequiredObjects == null) { step.groupRequiredObjects = new List<GameObject>(); changed++; }
@@ -359,9 +421,9 @@ public class ContentController : MonoBehaviour, IARContent
                 }
                 action.animationSpeed = SafeSpeed(action.animationSpeed);
                 action.animationLoopCount = Mathf.Max(1, action.animationLoopCount);
-                action.soundVolume = Mathf.Clamp01(action.soundVolume);
-                action.voiceVolume = Mathf.Clamp01(action.voiceVolume);
-                action.narrationVolume = Mathf.Clamp01(action.narrationVolume);
+                action.soundVolume = Mathf.Clamp(action.soundVolume, 0f, 2f);
+                action.voiceVolume = Mathf.Clamp(action.voiceVolume, 0f, 2f);
+                action.narrationVolume = Mathf.Clamp(action.narrationVolume, 0f, 2f);
                 if (action.activityScale == Vector3.zero)
                 {
                     action.activityScale = Vector3.one;
@@ -420,9 +482,9 @@ public class ContentController : MonoBehaviour, IARContent
             if (reaction == null) continue;
             if (string.IsNullOrWhiteSpace(reaction.reactionName)) { reaction.reactionName = "Reaction"; changed++; }
             reaction.animationSpeed = SafeSpeed(reaction.animationSpeed);
-            reaction.sfxVolume = Mathf.Clamp01(reaction.sfxVolume);
-            reaction.mainAudioVolume = Mathf.Clamp01(reaction.mainAudioVolume);
-            reaction.reactionVoiceVolume = Mathf.Clamp01(reaction.reactionVoiceVolume);
+            reaction.sfxVolume = Mathf.Clamp(reaction.sfxVolume, 0f, 2f);
+            reaction.mainAudioVolume = Mathf.Clamp(reaction.mainAudioVolume, 0f, 2f);
+            reaction.reactionVoiceVolume = Mathf.Clamp(reaction.reactionVoiceVolume, 0f, 2f);
             if (reaction.vfxObjects == null) { reaction.vfxObjects = new List<GameObject>(); changed++; }
             if (reaction.objects == null) { reaction.objects = new List<GameObject>(); changed++; }
             if (reaction.animationClips == null) { reaction.animationClips = new List<AnimationClip>(); changed++; }
@@ -642,14 +704,29 @@ public class ContentController : MonoBehaviour, IARContent
         StopTargetHintVisuals();
         RestoreMaterialColors();
         RestoreTargetScales();
-        // Clear saved story poses before restoring so the next play captures fresh positions.
-        // Without this, replay restores a stale pose from the previous play session.
+        RestoreAllObjectActiveStates();
         ClearAllSavedStoryPoses();
         RestoreAllActivityActionTransforms();
         PrepareAllVisualEffectSources();
         StopAllConfiguredVisualEffects(clear: true);
         HideActivityUI();
         SetAnyActivityRunning(false);
+        // Reset milestone states so replay starts fresh
+        ResetAllMilestoneStates();
+        // Reset SFX gap tracking
+        StopProgressHelperGroupLoopSound();
+        StopProgressReactionGroupLoopSound();
+        _lastCorrectTapSoundTime = -999f;
+        _lastHelperClipSoundIndex = -1;
+        _lastHelperClipSoundTime = -999f;
+        _lastReactionClipSoundIndex = -1;
+        _lastReactionClipSoundTime = -999f;
+        // Stop any active milestone text coroutine
+        if (_activeMilestoneTextCoroutine != null)
+        {
+            StopCoroutine(_activeMilestoneTextCoroutine);
+            _activeMilestoneTextCoroutine = null;
+        }
         onActivitiesReset?.Invoke();
     }
 
@@ -849,6 +926,16 @@ public class ContentController : MonoBehaviour, IARContent
         activityPanel?.HideButtons();
         if (StepUsesProgress(step)) activityPanel?.HideProgress();
 
+        // Stop any active milestone text coroutine before result plays
+        if (_activeMilestoneTextCoroutine != null)
+        {
+            StopCoroutine(_activeMilestoneTextCoroutine);
+            _activeMilestoneTextCoroutine = null;
+        }
+
+        // Play activity complete sound before result actions
+        PlayActivityCompleteSound(step);
+
         RunReactions(step, ActivityReactionMoment.WhenActivityCompletes);
         if (step.waitForRunningReactionsBeforeFinish)
             yield return WaitForRunningReactions(step);
@@ -872,13 +959,20 @@ public class ContentController : MonoBehaviour, IARContent
 
     private void PrepareActivityForStart(ActivityStep step)
     {
-        // Safety: make sure no previous editor preview, replay, or old activity pose leaks into the story/VFX pose.
-        // Activity transforms are applied only inside the specific activity runtime path, not before reveal/story setup.
         RestoreAllActivityActionTransforms();
         StopConfiguredVisualEffects(step, clear: true);
         PrepareVisualEffectSourcesForActivity(step);
+        RecordActivityObjectStates(step);
         ApplyObjectStateList(step.objectsOnWhenActivityStarts, true);
         ApplyObjectStateList(step.objectsOffWhenActivityStarts, false);
+        // Reset SFX gap tracking so each new activity starts clean
+        _lastCorrectTapSoundTime = -999f;
+        _lastHelperClipSoundIndex = -1;
+        _lastHelperClipSoundTime = -999f;
+        // Play the activity start sound here (before voice and before ambient loop).
+        // Ambient loop (activityDurationAudio) is started in RunActivity after voice setup
+        // at the correct point in the flow — do NOT call StartActivityAudio here.
+        PlayActivityStartSound(step);
     }
 
 
@@ -1108,7 +1202,17 @@ public class ContentController : MonoBehaviour, IARContent
     private void PauseStoryForActivityIfNeeded(ActivityStep step)
     {
         if (step == null) return;
-        if (!step.pauseStoryWhileActivity && step.childInput != ActivityInputKind.WaitForStoryThenTapObject) return;
+
+        // Choice/scenario activities can happen in the middle of the story.
+        // They must always hold the story until the correct option finishes.
+        bool isChoiceScenario = step.childInput == ActivityInputKind.ChooseOption ||
+                                step.childInput == ActivityInputKind.AnswerQuestion;
+
+        bool mustPauseStory = step.pauseStoryWhileActivity ||
+                              step.childInput == ActivityInputKind.WaitForStoryThenTapObject ||
+                              isChoiceScenario;
+
+        if (!mustPauseStory) return;
         if (_storyPausedForActivity) return;
 
         _pausedStoryNodeForActivity = GetComponentInParent<ARTrackedPageNode>();
@@ -1169,6 +1273,8 @@ public class ContentController : MonoBehaviour, IARContent
 
             if (step.helpTapSound != null)
                 CreateTempAudioSource(step.helpTapSound, step.helpTapSoundVolume, false);
+            else
+                TryPlayCorrectTapSound(step); // shared fallback if no dedicated tap sound
 
             RunReactions(step, ActivityReactionMoment.EveryValidInput);
             RunReactions(step, ActivityReactionMoment.IfReactionIsFree);
@@ -1440,6 +1546,11 @@ public class ContentController : MonoBehaviour, IARContent
         // to the 10% range and keep looping there. Do not pause just because tapping stopped.
         bool shouldAnimate = useProgressPercent ? progress > 0.001f : (childIsActivelyTapping && progress > 0.001f);
 
+        if (shouldAnimate)
+            StartProgressHelperGroupLoopSound(step);
+        else
+            StopProgressHelperGroupLoopSound(step);
+
         if (!shouldAnimate)
         {
             if (hasHelperAnimation && graph.IsValid())
@@ -1478,6 +1589,18 @@ public class ContentController : MonoBehaviour, IARContent
 
             hasHelperAnimation = true;
             activeClip = neededClip;
+
+            // Play the sound for this clip (individual or shared fallback)
+            if (useProgressPercent)
+            {
+                List<AnimationClip> clips = GetProgressHelperClipChoices(step);
+                int soundClipIndex = clips.IndexOf(neededClip);
+                TryPlayHelperClipSound(step, soundClipIndex >= 0 ? soundClipIndex : 0);
+            }
+            else
+            {
+                TryPlayHelperClipSound(step, 0);
+            }
 
             // Proportional start time fix:
             // When progress drops and we switch to a lower clip, start that clip from the
@@ -1544,11 +1667,39 @@ public class ContentController : MonoBehaviour, IARContent
         float tapShakeUntil = 0f;
         float tapShakeAmount = 0f;
         List<float> recentTapTimes = new List<float>();
+        // Track drop state so the drop sound fires ONCE when bar starts falling.
+        bool wasProgressDropping = false;
 
         if (StepUsesProgress(step))
             activityPanel?.ShowProgress(0f, "0%");
 
-        BeginInput(step, data => data.type == ActivityInputType.ModelTap && IsTargetMatch(tapObject, data.hitObject), data =>
+        // ---- Animation While Tapping (shared system) ----
+        // Uses the same progressHelper fields as ProgressGate so the same
+        // Animation While Tapping section in the Inspector works for this activity too.
+        AnimationClip storyHelperClip = null;
+        PlayableGraph storyHelperGraph = default(PlayableGraph);
+        AnimationClipPlayable storyHelperPlayable = default(AnimationClipPlayable);
+        bool hasStoryHelperAnimation = false;
+        Animator storyHelperAnimator = null;
+
+        if (step.progressUseHelperAnimationWhileTapping)
+        {
+            storyHelperAnimator = step.progressHelperAnimator != null ? step.progressHelperAnimator : step.resultAnimator;
+            if (!ProgressHelperUsesProgressPercent(step))
+            {
+                storyHelperClip = SelectProgressHelperAnimation(step);
+                hasStoryHelperAnimation = CreateActivityAnimationGraph(storyHelperAnimator, storyHelperClip, 0f, out storyHelperGraph, out storyHelperPlayable);
+                if (hasStoryHelperAnimation && storyHelperGraph.IsValid())
+                {
+                    storyHelperPlayable.SetTime(0f);
+                    storyHelperPlayable.SetSpeed(0f);
+                    storyHelperGraph.Evaluate(0f);
+                }
+            }
+        }
+        // ---- End Animation While Tapping setup ----
+
+        BeginInput(step, data => IsInputValidForStep(step, data), data =>
         {
             tapCount++;
             _acceptedInputCount++;
@@ -1557,6 +1708,8 @@ public class ContentController : MonoBehaviour, IARContent
 
             if (step.storyMomentTapSound != null)
                 CreateTempAudioSource(step.storyMomentTapSound, step.storyMomentTapSoundVolume, false);
+            else
+                TryPlayCorrectTapSound(step); // shared fallback if no dedicated tap sound
 
             float tapSpeed = GetTapSpeed(recentTapTimes, Mathf.Max(0.25f, step.storyMomentTapSpeedWindowSeconds));
             float fastT = Mathf.Clamp01(tapSpeed / Mathf.Max(0.1f, step.storyMomentFastTapSpeed));
@@ -1589,7 +1742,17 @@ public class ContentController : MonoBehaviour, IARContent
 
             if (step.storyMomentProgressDropsIfChildStops && !activeTap && progress > 0f)
             {
+                float prevProgress = progress;
                 progress = Mathf.Max(0f, progress - (Mathf.Max(0f, step.storyMomentProgressDropSpeed) / 100f) * Time.deltaTime);
+                bool isDropping = progress < prevProgress;
+                // Only fire drop sound on the FIRST frame of the drop, not every frame.
+                if (isDropping && !wasProgressDropping)
+                    PlayProgressDropSound(step);
+                wasProgressDropping = isDropping;
+            }
+            else
+            {
+                wasProgressDropping = false;
             }
 
             if (movingObject != null)
@@ -1603,8 +1766,16 @@ public class ContentController : MonoBehaviour, IARContent
             if (StepUsesProgress(step))
                 activityPanel?.ShowProgress(progress, Mathf.RoundToInt(progress * 100f) + "%");
 
+            // Update the character's animation based on current progress.
+            if (step.progressUseHelperAnimationWhileTapping)
+                UpdateProgressHelperAnimation(step, storyHelperAnimator, activeTap, progress, ref hasStoryHelperAnimation, ref storyHelperGraph, ref storyHelperPlayable, ref storyHelperClip);
+
+            // Check positive milestone hints every frame
+            CheckAndFireProgressMilestones(step, progress);
+
             if (progress >= 0.999f)
             {
+                PlayProgressFullSound(step);
                 completed = true;
                 break;
             }
@@ -1640,6 +1811,13 @@ public class ContentController : MonoBehaviour, IARContent
         }
 
         ClearInput();
+
+        // Clean up the tapping animation graph before result plays.
+        if (hasStoryHelperAnimation && storyHelperGraph.IsValid())
+        {
+            storyHelperGraph.Destroy();
+            _activeGraphs.Remove(storyHelperGraph);
+        }
 
         if (StepUsesProgress(step))
             activityPanel?.HideProgress();
@@ -1752,6 +1930,9 @@ public class ContentController : MonoBehaviour, IARContent
         float lastSequenceReactionTime = -999f;
         int reactionSequenceIndex = 0;
         List<float> recentTapTimes = new List<float>();
+        // Track drop state so the drop sound fires ONCE when the bar starts falling,
+        // not every frame for the full duration of the drop.
+        bool wasProgressDropping = false;
 
         AnimationClip selectedHelperClip = null;
         PlayableGraph helperGraph = default(PlayableGraph);
@@ -1802,6 +1983,8 @@ public class ContentController : MonoBehaviour, IARContent
 
             if (step.progressTapSound != null)
                 CreateTempAudioSource(step.progressTapSound, step.progressTapSoundVolume, false);
+            else
+                TryPlayCorrectTapSound(step); // shared fallback if no dedicated tap sound
 
             float tapSpeed = GetTapSpeed(recentTapTimes, Mathf.Max(0.25f, step.progressTapSpeedWindowSeconds));
             if (step.progressReactionPlaybackMode == ActivityProgressReactionPlaybackMode.PlayOnValidTap)
@@ -1844,12 +2027,20 @@ public class ContentController : MonoBehaviour, IARContent
 
             if (step.progressDropsWhenNotTapping && !childIsActivelyTapping && progress > 0f)
             {
+                float prevProgress = progress;
                 progress = Mathf.Max(0f, progress - (Mathf.Max(0f, step.progressLossPerSecond) / 100f) * Time.deltaTime);
+                bool isDropping = progress < prevProgress;
+                // Play drop sound only on the FIRST frame the bar starts falling,
+                // not every frame for the full duration of the drop.
+                if (isDropping && !wasProgressDropping)
+                    PlayProgressDropSound(step);
+                wasProgressDropping = isDropping;
+            }
+            else
+            {
+                wasProgressDropping = false;
             }
 
-            // If the child already started the activity and then stops, do not loop the current
-            // progress animation forever. After the chosen idle time, auto-play the remaining
-            // activity helper/result animations, then continue the story.
             if (_acceptedInputCount > 0 && !childIsActivelyTapping &&
                 step.progressAutoFinishAfterNoTapSeconds > 0f &&
                 Time.time - lastValidTapTime >= step.progressAutoFinishAfterNoTapSeconds)
@@ -1864,6 +2055,9 @@ public class ContentController : MonoBehaviour, IARContent
 
             UpdateProgressHelperAnimation(step, helperAnimator, childIsActivelyTapping, progress, ref hasHelperAnimation, ref helperGraph, ref helperPlayable, ref selectedHelperClip);
 
+            // Check positive milestone hints every frame
+            CheckAndFireProgressMilestones(step, progress);
+
             string progressLabel = Mathf.RoundToInt(progress * 100f) + "%";
             if (step.progressGateCompletesBy == ActivityProgressGateCompletionMode.RequiredTapSpeedForTime)
                 progressLabel += "  " + tapSpeed.ToString("0.0") + "/s";
@@ -1871,6 +2065,7 @@ public class ContentController : MonoBehaviour, IARContent
 
             if (progress >= 0.999f)
             {
+                PlayProgressFullSound(step);
                 complete = true;
                 break;
             }
@@ -2094,6 +2289,8 @@ public class ContentController : MonoBehaviour, IARContent
         if (Time.time - lastPlayTime < Mathf.Max(0f, step.progressReactionMinimumGapSeconds))
             return;
 
+        StartProgressReactionGroupLoopSound(step);
+
         AnimationClip clip = SelectProgressReactionClip(step, clips, progress, tapSpeed, sequenceIndex);
         if (clip == null)
             return;
@@ -2129,6 +2326,7 @@ public class ContentController : MonoBehaviour, IARContent
         if (CreateActivityAnimationGraph(step.progressReactionAnimator, clip, speed, out graph, out playable))
         {
             activeClip = clip;
+            TryPlayProgressReactionClipSound(step, clips.IndexOf(clip));
             playable.SetTime(0f);
             playable.SetSpeed(speed);
             graph.Evaluate(0f);
@@ -2149,6 +2347,14 @@ public class ContentController : MonoBehaviour, IARContent
         List<AnimationClip> clips = GetValidClips(step.progressReactionAnimations);
         if (clips.Count == 0) return;
 
+        if (progress <= 0.001f)
+        {
+            StopProgressReactionGroupLoopSound(step);
+            return;
+        }
+
+        StartProgressReactionGroupLoopSound(step);
+
         AnimationClip clip = SelectProgressReactionClip(step, clips, progress, tapSpeed, 0);
         if (clip == null) return;
 
@@ -2166,6 +2372,7 @@ public class ContentController : MonoBehaviour, IARContent
             if (CreateActivityAnimationGraph(step.progressReactionAnimator, clip, speed, out graph, out playable))
             {
                 activeClip = clip;
+                TryPlayProgressReactionClipSound(step, clips.IndexOf(clip));
                 playable.SetTime(0f);
                 playable.SetSpeed(speed);
                 graph.Evaluate(0f);
@@ -2260,6 +2467,11 @@ public class ContentController : MonoBehaviour, IARContent
             _acceptedInputCount++;
             if (tappedObject != null)
                 _uniqueTappedGroupObjects.Add(tappedObject);
+
+            // Play correct tap sound for group activities.
+            // Each group action may also have its own sound (action.soundEffect) which plays
+            // when the action animates. This shared tap sound plays immediately on tap.
+            TryPlayCorrectTapSound(step);
 
             runningGroupActions++;
             StartCoroutine(PlayGroupActionsAndCount(step, tappedObject, () => runningGroupActions--));
@@ -2520,10 +2732,24 @@ public class ContentController : MonoBehaviour, IARContent
         return count;
     }
 
+    private AudioSource StartGroupLoopSound(ActivityStep step)
+    {
+        if (step == null || !step.loopGroupSoundUntilGroupFinishes || step.groupLoopSound == null)
+            return null;
+        return CreateTempAudioSource(step.groupLoopSound, step.groupLoopSoundVolume, true);
+    }
+
+    private void StopGroupLoopSound(AudioSource source)
+    {
+        if (source != null)
+            Destroy(source.gameObject);
+    }
+
     private IEnumerator PlayGroupActions(ActivityStep step, GameObject tappedObject)
     {
         if (step == null) yield break;
 
+        AudioSource groupLoopSource = StartGroupLoopSound(step);
         bool playedTargetSpecificAction = false;
 
         if (step.targetActions != null && step.targetActions.Count > 0)
@@ -2577,7 +2803,7 @@ public class ContentController : MonoBehaviour, IARContent
                     float length = Mathf.Max(0.01f, action.animationClip.length / speed);
                     if (CreateActivityAnimationGraph(action.animator, action.animationClip, speed, out PlayableGraph graph, out AnimationClipPlayable playable))
                     {
-                        if (action.waitForAnimation)
+                        if (action.waitForAnimation || step.loopGroupSoundUntilGroupFinishes)
                             waitTime = Mathf.Max(waitTime, length);
                         StartCoroutine(DestroyGraphAfter(graph, length));
                     }
@@ -2590,6 +2816,8 @@ public class ContentController : MonoBehaviour, IARContent
             for (int i = 0; i < step.groupActions.Count; i++)
                 RestoreGroupActivityTransform(step.groupActions[i]);
         }
+
+        StopGroupLoopSound(groupLoopSource);
     }
 
     private IEnumerator PlayTargetActionsTogether(List<ActivityTargetAction> actions)
@@ -2766,6 +2994,9 @@ public class ContentController : MonoBehaviour, IARContent
 
         ShowProgressIfResultMode(step, 1f, "Done");
 
+        // Play result animation start sound immediately when result begins
+        PlayResultAnimationStartSound(step);
+
         bool resultTransformApplied = false;
         if (step.resultUseActivityTransform)
         {
@@ -2812,6 +3043,7 @@ public class ContentController : MonoBehaviour, IARContent
     {
         if (step == null) yield break;
 
+        AudioSource groupLoopSource = StartGroupLoopSound(step);
         float waitTime = Mathf.Max(0f, step.groupWaitSecondsBeforeStory);
 
         if (step.groupResultVoiceOver != null)
@@ -2846,7 +3078,7 @@ public class ContentController : MonoBehaviour, IARContent
                     float length = Mathf.Max(0.01f, action.animationClip.length / speed);
                     if (CreateActivityAnimationGraph(action.animator, action.animationClip, speed, out PlayableGraph graph, out AnimationClipPlayable playable))
                     {
-                        if (action.waitForAnimation)
+                        if (action.waitForAnimation || step.loopGroupSoundUntilGroupFinishes)
                             waitTime = Mathf.Max(waitTime, length);
                         StartCoroutine(DestroyGraphAfter(graph, length));
                     }
@@ -2856,6 +3088,8 @@ public class ContentController : MonoBehaviour, IARContent
 
         if (waitTime > 0f)
             yield return new WaitForSeconds(waitTime);
+
+        StopGroupLoopSound(groupLoopSource);
 
         if (step.groupActions != null)
         {
@@ -2974,8 +3208,10 @@ public class ContentController : MonoBehaviour, IARContent
 
             _acceptedInputCount++;
             bool startedBlockingReaction = false;
+            // Play correct tap sound for all generic tap activity types.
+            // ProgressGate and WaitForStoryThenTapObject have their own dedicated tap sound fields.
+            TryPlayCorrectTapSound(step);
             // A reaction marked Every Valid Input must run when a valid input happens.
-            // This keeps tap effects like flower petals responsive even if the activity completion mode is different.
             startedBlockingReaction |= RunReactions(step, ActivityReactionMoment.EveryValidInput);
             startedBlockingReaction |= RunReactions(step, ActivityReactionMoment.IfReactionIsFree);
             UpdateProgress(step);
@@ -3125,6 +3361,12 @@ public class ContentController : MonoBehaviour, IARContent
 
         HideChoiceUIForScenario();
 
+        // Stop all choice animation graphs before story resumes.
+        // The animation already finished fully above (forceWaitForScenario: true).
+        // This is a safety cleanup in case any graph is still referenced.
+        StopAllChoiceGraphs();
+        StopAllChoiceScenarioRoutines();
+
         if (step.waitForRunningReactionsBeforeFinish)
             yield return WaitForRunningReactions(step);
     }
@@ -3158,8 +3400,13 @@ public class ContentController : MonoBehaviour, IARContent
 
         if (ShouldPlayChoiceOptionResult(step, option, correct))
         {
-            // Wrong-option scenarios must be isolated and fully finish before the UI returns.
-            yield return PlayChoiceOption(option, correct, forceWaitForScenario: !correct);
+            // Every selected option — correct or wrong — must fully finish its animation,
+            // voice, and sound before the system moves to the next step.
+            // Wrong options return the question after finishing.
+            // Correct options continue the story after finishing.
+            // If a correct option has no animation and "Continue Story Immediately" is selected,
+            // ShouldPlayChoiceOptionResult returns false above and this line never runs.
+            yield return PlayChoiceOption(option, correct, forceWaitForScenario: true);
         }
 
         if (!correct && !string.IsNullOrWhiteSpace(step.tryAgainMessage))
@@ -3784,30 +4031,62 @@ public class ContentController : MonoBehaviour, IARContent
     {
         if (animator == null || clip == null) yield break;
 
-        float originalAnimatorSpeed = animator.speed;
+        // Scenario option clips must be isolated from the normal story Animator Controller.
+        // We freeze the controller and drive only the selected clip through a temporary PlayableGraph.
+        // This prevents Unity Animator transitions from jumping to the next story slot after a wrong/correct choice clip.
         animator.speed = 0f;
 
         for (int i = 0; i < Mathf.Max(1, loops); i++)
         {
-            if (CreateActivityAnimationGraph(animator, clip, speed, out PlayableGraph graph, out AnimationClipPlayable playable))
+            if (CreateIsolatedChoiceAnimationGraph(animator, clip, speed, out PlayableGraph graph, out AnimationClipPlayable playable))
             {
                 _activeChoiceGraphs.Add(graph);
                 yield return new WaitForSeconds(singleLength);
                 if (graph.IsValid())
                     graph.Destroy();
                 _activeChoiceGraphs.Remove(graph);
+
+                // Keep the controller frozen after the graph is destroyed.
+                // Story resumes only through ResumeStoryFromActivity after the activity is complete.
+                if (animator != null)
+                    animator.speed = 0f;
             }
             else
             {
                 if (animator != null)
-                    animator.speed = originalAnimatorSpeed;
+                    animator.speed = 0f;
                 Debug.LogWarning($"[ContentController] Choice scenario animation could not play. Animator: {(animator != null ? animator.name : "Missing")}, Clip: {(clip != null ? clip.name : "Missing")}", this);
                 yield break;
             }
         }
+    }
 
-        if (animator != null)
-            animator.speed = originalAnimatorSpeed;
+    private bool CreateIsolatedChoiceAnimationGraph(Animator animator, AnimationClip clip, float speed, out PlayableGraph graph, out AnimationClipPlayable playable)
+    {
+        graph = default(PlayableGraph);
+        playable = default(AnimationClipPlayable);
+
+        if (animator == null || clip == null)
+            return false;
+
+        if (!animator.gameObject.activeInHierarchy)
+            return false;
+
+        animator.enabled = true;
+        animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+
+        graph = PlayableGraph.Create("ChoiceScenario_Isolated_" + clip.name);
+        graph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
+
+        playable = AnimationClipPlayable.Create(graph, clip);
+        playable.SetSpeed(Mathf.Max(0.01f, speed));
+        playable.SetApplyFootIK(false);
+
+        AnimationPlayableOutput output = AnimationPlayableOutput.Create(graph, "ChoiceScenarioAnimation", animator);
+        output.SetSourcePlayable(playable);
+
+        graph.Play();
+        return true;
     }
 
     private bool ShouldFinishFromInput(ActivityStep step)
@@ -4079,17 +4358,386 @@ public class ContentController : MonoBehaviour, IARContent
         }
     }
 
+    // ---------------------------------------------------------------
+    // OBJECT STATE RESTORE - ensures replay returns every object to
+    // its pre-activity state (visible/hidden) so nothing stays stuck.
+    // ---------------------------------------------------------------
+
+    private void RecordActivityObjectStates(ActivityStep step)
+    {
+        if (step == null) return;
+
+        // Record all four activity-level lists
+        RecordObjectListStates(step.objectsOnWhenActivityStarts);
+        RecordObjectListStates(step.objectsOffWhenActivityStarts);
+        RecordObjectListStates(step.objectsOnWhenActivityCompletes);
+        RecordObjectListStates(step.objectsOffWhenActivityCompletes);
+
+        // Story moment before/after objects
+        RecordSingleObjectState(step.storyMomentObjectBeforeComplete);
+        RecordSingleObjectState(step.storyMomentObjectAfterComplete);
+
+        // Target action object lists
+        if (step.targetActions != null)
+            for (int i = 0; i < step.targetActions.Count; i++)
+            {
+                ActivityTargetAction a = step.targetActions[i];
+                if (a == null) continue;
+                RecordObjectListStates(a.objectsToTurnOn);
+                RecordObjectListStates(a.objectsToTurnOff);
+            }
+
+        // Scenario action object lists
+        if (step.choiceOptions != null)
+            for (int i = 0; i < step.choiceOptions.Count; i++)
+            {
+                ActivityChoiceOption opt = step.choiceOptions[i];
+                if (opt?.scenarioActions == null) continue;
+                for (int k = 0; k < opt.scenarioActions.Count; k++)
+                {
+                    ActivityScenarioAction a = opt.scenarioActions[k];
+                    if (a == null) continue;
+                    RecordObjectListStates(a.objectsToTurnOn);
+                    RecordObjectListStates(a.objectsToTurnOff);
+                }
+            }
+    }
+
+    private void RecordObjectListStates(List<GameObject> objects)
+    {
+        if (objects == null) return;
+        for (int i = 0; i < objects.Count; i++)
+            RecordSingleObjectState(objects[i]);
+    }
+
+    private void RecordSingleObjectState(GameObject go)
+    {
+        // Only record once per object per activity session.
+        // If called again for the same object, the first recorded value is kept (the true pre-activity state).
+        if (go == null || _originalObjectActiveStates.ContainsKey(go)) return;
+        _originalObjectActiveStates[go] = go.activeSelf;
+    }
+
+    private void RestoreAllObjectActiveStates()
+    {
+        foreach (var pair in _originalObjectActiveStates)
+            if (pair.Key != null)
+                pair.Key.SetActive(pair.Value);
+        _originalObjectActiveStates.Clear();
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // SFX SYSTEM — all sound helpers for the activity template
+    // ═══════════════════════════════════════════════════════════════════════
+
+    private void PlayActivityStartSound(ActivityStep step)
+    {
+        if (step?.activityStartSound == null) return;
+        CreateTempAudioSource(step.activityStartSound, step.activityStartSoundVolume, false);
+    }
+
+    private void PlayActivityCompleteSound(ActivityStep step)
+    {
+        if (step?.activityCompleteSound == null) return;
+        CreateTempAudioSource(step.activityCompleteSound, step.activityCompleteSoundVolume, false);
+    }
+
+    private void PlayProgressDropSound(ActivityStep step)
+    {
+        if (step?.progressDropSound == null) return;
+        CreateTempAudioSource(step.progressDropSound, step.progressDropSoundVolume, false);
+    }
+
+    private void PlayProgressFullSound(ActivityStep step)
+    {
+        if (step?.progressFullSound == null) return;
+        CreateTempAudioSource(step.progressFullSound, step.progressFullSoundVolume, false);
+    }
+
+    private void PlayResultAnimationStartSound(ActivityStep step)
+    {
+        if (step?.resultAnimationStartSound == null) return;
+        CreateTempAudioSource(step.resultAnimationStartSound, step.resultAnimationStartSoundVolume, false);
+    }
+
+    private void PlayHintSound(AudioClip clip, float volume)
+    {
+        if (clip == null) return;
+        CreateTempAudioSource(clip, Mathf.Clamp(volume, 0f, 2f), false);
+    }
+
+    /// <summary>
+    /// Plays the correct tap sound for activities that do not have their own dedicated sound field.
+    /// Respects the gap mode so fast tapping does not cause audio spam.
+    /// </summary>
+    private void TryPlayCorrectTapSound(ActivityStep step)
+    {
+        if (step?.generalCorrectTapSound == null) return;
+
+        float gap = step.correctTapSoundGapMode switch
+        {
+            CorrectTapSoundGapMode.NoGap          => 0f,
+            CorrectTapSoundGapMode.TinyGap_0_1s   => 0.10f,
+            CorrectTapSoundGapMode.SmallGap_0_15s => 0.15f,
+            CorrectTapSoundGapMode.MediumGap_0_2s => 0.20f,
+            CorrectTapSoundGapMode.LargeGap_0_3s  => 0.30f,
+            CorrectTapSoundGapMode.Custom         => Mathf.Max(0f, step.correctTapCustomGapSeconds),
+            _                                      => 0.15f
+        };
+
+        if (Time.time - _lastCorrectTapSoundTime < gap) return;
+        _lastCorrectTapSoundTime = Time.time;
+        CreateTempAudioSource(step.generalCorrectTapSound, step.generalCorrectTapSoundVolume, false);
+    }
+
+    /// <summary>Starts the optional looping sound for the whole helper animation group.</summary>
+    private void StartProgressHelperGroupLoopSound(ActivityStep step)
+    {
+        if (step == null || step.progressHelperGroupLoopSound == null) return;
+        if (!step.loopProgressHelperGroupSoundUntilAnimationEnds) return;
+
+        if (_activeProgressHelperGroupLoopSource != null && _activeProgressHelperGroupLoopStep == step)
+            return;
+
+        StopProgressHelperGroupLoopSound();
+
+        _activeProgressHelperGroupLoopSource = CreateTempAudioSource(step.progressHelperGroupLoopSound, step.progressHelperGroupLoopSoundVolume, true);
+        _activeProgressHelperGroupLoopStep = step;
+        if (_activeProgressHelperGroupLoopSource != null && !_activityAudioSources.Contains(_activeProgressHelperGroupLoopSource))
+            _activityAudioSources.Add(_activeProgressHelperGroupLoopSource);
+    }
+
+    /// <summary>Stops the optional looping sound for the helper animation group.</summary>
+    private void StopProgressHelperGroupLoopSound(ActivityStep step = null)
+    {
+        if (step != null && _activeProgressHelperGroupLoopStep != step) return;
+
+        if (_activeProgressHelperGroupLoopSource != null)
+        {
+            _activityAudioSources.Remove(_activeProgressHelperGroupLoopSource);
+            Destroy(_activeProgressHelperGroupLoopSource.gameObject);
+        }
+
+        _activeProgressHelperGroupLoopSource = null;
+        _activeProgressHelperGroupLoopStep = null;
+    }
+
+    /// <summary>
+    /// Called by UpdateProgressHelperAnimation when progress enters a new clip's range.
+    /// Plays the individual clip sound if assigned, or falls back to the shared sound.
+    /// 0.5-second cooldown prevents double-fire when progress bounces at a range boundary.
+    /// </summary>
+    private void TryPlayHelperClipSound(ActivityStep step, int clipIndex)
+    {
+        if (step == null) return;
+        if (clipIndex == _lastHelperClipSoundIndex && Time.time - _lastHelperClipSoundTime < 0.5f) return;
+
+        AudioClip clip = null;
+        float volume = 1f;
+
+        // Individual clip sound takes priority over shared fallback.
+        if (step.progressHelperAnimationSounds != null && clipIndex < step.progressHelperAnimationSounds.Count)
+        {
+            clip = step.progressHelperAnimationSounds[clipIndex];
+            if (step.progressHelperAnimationSoundVolumes != null && clipIndex < step.progressHelperAnimationSoundVolumes.Count)
+                volume = step.progressHelperAnimationSoundVolumes[clipIndex];
+            else
+                volume = step.sharedHelperAnimationSoundVolume;
+        }
+
+        // Fall back to shared sound if no individual sound assigned for this clip.
+        if (clip == null && step.sharedHelperAnimationSound != null)
+        {
+            clip = step.sharedHelperAnimationSound;
+            volume = step.sharedHelperAnimationSoundVolume;
+        }
+
+        if (clip == null) return;
+
+        _lastHelperClipSoundIndex = clipIndex;
+        _lastHelperClipSoundTime = Time.time;
+        CreateTempAudioSource(clip, Mathf.Clamp(volume, 0f, 2f), false);
+    }
+
+    /// <summary>Starts the optional looping sound for the reaction-target animation group.</summary>
+    private void StartProgressReactionGroupLoopSound(ActivityStep step)
+    {
+        if (step == null || step.progressReactionGroupLoopSound == null) return;
+        if (!step.loopProgressReactionGroupSoundUntilAnimationEnds) return;
+
+        if (_activeProgressReactionGroupLoopSource != null && _activeProgressReactionGroupLoopStep == step)
+            return;
+
+        StopProgressReactionGroupLoopSound();
+
+        _activeProgressReactionGroupLoopSource = CreateTempAudioSource(step.progressReactionGroupLoopSound, step.progressReactionGroupLoopSoundVolume, true);
+        _activeProgressReactionGroupLoopStep = step;
+        if (_activeProgressReactionGroupLoopSource != null && !_activityAudioSources.Contains(_activeProgressReactionGroupLoopSource))
+            _activityAudioSources.Add(_activeProgressReactionGroupLoopSource);
+    }
+
+    /// <summary>Stops the optional looping sound for the reaction-target animation group.</summary>
+    private void StopProgressReactionGroupLoopSound(ActivityStep step = null)
+    {
+        if (step != null && _activeProgressReactionGroupLoopStep != step) return;
+
+        if (_activeProgressReactionGroupLoopSource != null)
+        {
+            _activityAudioSources.Remove(_activeProgressReactionGroupLoopSource);
+            Destroy(_activeProgressReactionGroupLoopSource.gameObject);
+        }
+
+        _activeProgressReactionGroupLoopSource = null;
+        _activeProgressReactionGroupLoopStep = null;
+    }
+
+    /// <summary>Plays the optional sound attached to a reaction-target animation clip.</summary>
+    private void TryPlayProgressReactionClipSound(ActivityStep step, int clipIndex)
+    {
+        if (step == null || clipIndex < 0) return;
+        if (clipIndex == _lastReactionClipSoundIndex && Time.time - _lastReactionClipSoundTime < 0.5f) return;
+
+        AudioClip clip = null;
+        float volume = 1f;
+
+        if (step.progressReactionAnimationSounds != null && clipIndex < step.progressReactionAnimationSounds.Count)
+        {
+            clip = step.progressReactionAnimationSounds[clipIndex];
+            if (step.progressReactionAnimationSoundVolumes != null && clipIndex < step.progressReactionAnimationSoundVolumes.Count)
+                volume = step.progressReactionAnimationSoundVolumes[clipIndex];
+        }
+
+        if (clip == null) return;
+
+        _lastReactionClipSoundIndex = clipIndex;
+        _lastReactionClipSoundTime = Time.time;
+        CreateTempAudioSource(clip, Mathf.Clamp(volume, 0f, 2f), false);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // MILESTONE HINTS — positive encouragement during correct tapping
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Called every frame inside progress loops. Checks each milestone and fires
+    /// text + sound if the threshold is crossed and the repeat mode allows it.
+    /// </summary>
+    private void CheckAndFireProgressMilestones(ActivityStep step, float progress)
+    {
+        if (step?.progressMilestones == null || step.progressMilestones.Count == 0) return;
+
+        float progressPct = Mathf.Clamp01(progress) * 100f;
+
+        for (int i = 0; i < step.progressMilestones.Count; i++)
+        {
+            ActivityProgressMilestone m = step.progressMilestones[i];
+            if (m == null || !m.enabled) continue;
+
+            bool shouldFire = false;
+            switch (m.repeatMode)
+            {
+                case MilestoneRepeatMode.FireOnce:
+                    shouldFire = !m._hasFired && progressPct >= m.progressPercent;
+                    break;
+                case MilestoneRepeatMode.EveryTimeCrossed:
+                    shouldFire = progressPct >= m.progressPercent &&
+                                 (m._lastFiredAtProgress < 0f || m._lastFiredAtProgress < m.progressPercent);
+                    break;
+                case MilestoneRepeatMode.FireAgainAfterDrop:
+                    bool droppedBelow = m._lastFiredAtProgress >= 0f && m._lastFiredAtProgress < m.progressPercent;
+                    shouldFire = progressPct >= m.progressPercent && (!m._hasFired || droppedBelow);
+                    break;
+            }
+
+            if (!shouldFire) continue;
+
+            m._hasFired = true;
+            m._lastFiredAtProgress = progressPct;
+
+            // Play milestone sound
+            PlayHintSound(m.sound, m.soundVolume);
+
+            // Show milestone text and keep it visible.
+            // It is replaced only by the next milestone or cleared when the activity ends/resets.
+            if (!string.IsNullOrWhiteSpace(m.hintText))
+            {
+                if (_activeMilestoneTextCoroutine != null)
+                {
+                    StopCoroutine(_activeMilestoneTextCoroutine);
+                    _activeMilestoneTextCoroutine = null;
+                }
+                ShowQuickFeedback(m.hintText);
+            }
+        }
+
+        // Track current progress for FireAgainAfterDrop AND EveryTimeCrossed modes.
+        // Both modes need to know when progress dropped below a threshold so they can
+        // re-fire when progress crosses back up. Without this, EveryTimeCrossed only
+        // fires once because _lastFiredAtProgress is never updated after the first fire.
+        for (int i = 0; i < step.progressMilestones.Count; i++)
+        {
+            ActivityProgressMilestone m = step.progressMilestones[i];
+            if (m == null) continue;
+            if (m.repeatMode != MilestoneRepeatMode.FireAgainAfterDrop &&
+                m.repeatMode != MilestoneRepeatMode.EveryTimeCrossed) continue;
+            // Only update after the first fire so the initial -1 sentinel is preserved until first fire.
+            if (m._lastFiredAtProgress >= 0f)
+                m._lastFiredAtProgress = progressPct;
+        }
+    }
+
+    /// <summary>
+    /// Legacy method kept for old compiled references. Milestone text now stays visible
+    /// until the next milestone replaces it or the activity ends.
+    /// </summary>
+    private IEnumerator ShowMilestoneHintAndReturn(string milestoneText, float displayDuration, string instructionText)
+    {
+        ShowQuickFeedback(milestoneText);
+        _activeMilestoneTextCoroutine = null;
+        yield break;
+    }
+
+    /// <summary>Called from ResetInteractions so replay starts with all milestones fresh.</summary>
+    private void ResetMilestoneStates(ActivityStep step)
+    {
+        if (step?.progressMilestones == null) return;
+        for (int i = 0; i < step.progressMilestones.Count; i++)
+        {
+            ActivityProgressMilestone m = step.progressMilestones[i];
+            if (m == null) continue;
+            m._hasFired = false;
+            m._lastFiredAtProgress = -1f;
+        }
+    }
+
+    private void ResetAllMilestoneStates()
+    {
+        if (activities == null) return;
+        for (int i = 0; i < activities.Count; i++)
+            ResetMilestoneStates(activities[i]);
+    }
+
     private void HandleWrongInput(ActivityStep step)
     {
         if (step == null) return;
 
         RunReactions(step, ActivityReactionMoment.WhenInputFails);
 
+        // Stop any active milestone text — error text takes priority
+        if (_activeMilestoneTextCoroutine != null)
+        {
+            StopCoroutine(_activeMilestoneTextCoroutine);
+            _activeMilestoneTextCoroutine = null;
+        }
+
         if (step.showHintWhenWrongInput)
         {
             string text = !string.IsNullOrWhiteSpace(step.wrongInputHintText) ? step.wrongInputHintText : step.tryAgainMessage;
             if (!string.IsNullOrWhiteSpace(text))
                 ShowQuickFeedback(text);
+
+            // Play wrong input hint sound
+            PlayHintSound(step.wrongInputSound, step.wrongInputSoundVolume);
 
             PlayGuidanceSound(step);
             HighlightTargetForStep(step);
@@ -4107,9 +4755,19 @@ public class ContentController : MonoBehaviour, IARContent
         if (step.noInputActionAfterHint == ActivityNoInputAction.DoNothing)
             return;
 
+        // Stop any active milestone text — no-input hint takes priority
+        if (_activeMilestoneTextCoroutine != null)
+        {
+            StopCoroutine(_activeMilestoneTextCoroutine);
+            _activeMilestoneTextCoroutine = null;
+        }
+
         string text = !string.IsNullOrWhiteSpace(step.noInputHintText) ? step.noInputHintText : step.wrongInputHintText;
         if (!string.IsNullOrWhiteSpace(text))
             ShowQuickFeedback(text);
+
+        // Play no-input hint sound (separate from wrong-input sound)
+        PlayHintSound(step.noInputHintSound, step.noInputHintSoundVolume);
 
         if (step.useSameHintEffectsForNoInput)
         {
@@ -5249,6 +5907,10 @@ public class ContentController : MonoBehaviour, IARContent
                     StartCoroutine(FadeAndDestroyAudio(_activityAudioSources[i], step.activityAudioFadeSeconds));
             }
             _activityAudioSources.Clear();
+            _activeProgressHelperGroupLoopSource = null;
+            _activeProgressHelperGroupLoopStep = null;
+            _activeProgressReactionGroupLoopSource = null;
+            _activeProgressReactionGroupLoopStep = null;
             return;
         }
 
@@ -5258,6 +5920,10 @@ public class ContentController : MonoBehaviour, IARContent
                 Destroy(_activityAudioSources[i].gameObject);
         }
         _activityAudioSources.Clear();
+        _activeProgressHelperGroupLoopSource = null;
+        _activeProgressHelperGroupLoopStep = null;
+        _activeProgressReactionGroupLoopSource = null;
+        _activeProgressReactionGroupLoopStep = null;
     }
 
     private IEnumerator FadeAndDestroyAudio(AudioSource source, float seconds)
@@ -5352,7 +6018,20 @@ public class ContentController : MonoBehaviour, IARContent
         audioGo.transform.SetParent(transform, false);
         AudioSource source = audioGo.AddComponent<AudioSource>();
         source.clip = clip;
-        source.volume = Mathf.Clamp01(volume);
+
+        float safeVolume = Mathf.Clamp(volume, 0f, 2f);
+        source.volume = Mathf.Clamp01(safeVolume);
+
+        // Unity AudioSource volume is capped at 1. For activity SFX above 1,
+        // use the existing AudioAmplifier component so setup can safely use up to 2x.
+        if (safeVolume > 1f)
+        {
+            AudioAmplifier amplifier = audioGo.GetComponent<AudioAmplifier>();
+            if (amplifier == null)
+                amplifier = audioGo.AddComponent<AudioAmplifier>();
+            amplifier.multiplier = safeVolume;
+        }
+
         source.loop = loop;
         source.playOnAwake = false;
         source.Play();
@@ -5761,7 +6440,7 @@ public class ActivityStep
 
     public AudioClip activityDurationAudio;
     public bool loopActivityDurationAudio = false;
-    [Range(0f, 1f)] public float activityDurationAudioVolume = 1f;
+    [Range(0f, 2f)] public float activityDurationAudioVolume = 1f;
     public bool fadeActivityAudioOnEnd = false;
     public float activityAudioFadeSeconds = 0.5f;
 
@@ -5795,7 +6474,7 @@ public class ActivityStep
     public bool helpResetAnimationWhenProgressIsEmpty = true;
     public bool helpWaitForAnimationBeforeContinue = true;
     public AudioClip helpTapSound;
-    [Range(0f, 1f)] public float helpTapSoundVolume = 1f;
+    [Range(0f, 2f)] public float helpTapSoundVolume = 1f;
 
     [Header("Progress Gate")]
     public ActivityProgressGateCompletionMode progressGateCompletesBy = ActivityProgressGateCompletionMode.RequiredTapCount;
@@ -5813,7 +6492,7 @@ public class ActivityStep
     public float progressAutoStartStoryAfterSeconds = 0f;
     public bool playResultWhenProgressAutoSkips = true;
     public AudioClip progressTapSound;
-    [Range(0f, 1f)] public float progressTapSoundVolume = 1f;
+    [Range(0f, 2f)] public float progressTapSoundVolume = 1f;
 
     [Header("Correct Tap Feedback")]
     [Tooltip("ON = the object tapped by the child can move or shake on every correct tap.")]
@@ -5831,7 +6510,7 @@ public class ActivityStep
     public bool progressUseWrongTapFeedback = true;
     public string progressWrongTapText = "Try tapping the highlighted object";
     public AudioClip progressWrongTapSound;
-    [Range(0f, 1f)] public float progressWrongTapSoundVolume = 1f;
+    [Range(0f, 2f)] public float progressWrongTapSoundVolume = 1f;
     public bool progressPulseCorrectObjectOnWrongTap = true;
     public bool progressShakeWrongTappedObject = false;
     public float progressWrongShakeAmount = 0.03f;
@@ -5853,6 +6532,15 @@ public class ActivityStep
     public float progressReactionMinimumGapSeconds = 0.15f;
     [Tooltip("Speed used when playing the reaction animation. 1 is normal speed.")]
     public float progressReactionAnimationSpeed = 1f;
+    [Tooltip("Optional looping sound for this whole reaction animation group. Starts when reaction animations are active and stops when the group/activity ends.")]
+    public AudioClip progressReactionGroupLoopSound;
+    [Range(0f, 2f)] public float progressReactionGroupLoopSoundVolume = 1f;
+    [Tooltip("ON = the reaction group sound loops until reaction animations finish or the activity ends.")]
+    public bool loopProgressReactionGroupSoundUntilAnimationEnds = false;
+    [Tooltip("Optional sound per reaction animation clip. Position 1 matches clip 1, position 2 matches clip 2, and so on.")]
+    public List<AudioClip> progressReactionAnimationSounds = new List<AudioClip>();
+    [Tooltip("Volume per reaction animation sound. Position 1 matches clip 1. 1 = normal, 2 = boosted.")]
+    public List<float> progressReactionAnimationSoundVolumes = new List<float>();
 
     [Header("Helper Animation While Filling Progress")]
     public bool progressUseHelperAnimationWhileTapping = false;
@@ -5875,10 +6563,10 @@ public class ActivityStep
     public float resultAnimationSpeed = 1f;
     public bool waitForResultAnimation = true;
     public AudioClip resultVoiceOver;
-    [Range(0f, 1f)] public float resultVoiceVolume = 1f;
+    [Range(0f, 2f)] public float resultVoiceVolume = 1f;
     public bool waitForResultVoiceOver = true;
     public AudioClip resultSoundEffect;
-    [Range(0f, 1f)] public float resultSoundVolume = 1f;
+    [Range(0f, 2f)] public float resultSoundVolume = 1f;
     public bool waitForResultSound = false;
     public float resultExtraWaitSeconds = 0f;
 
@@ -5930,8 +6618,13 @@ public class ActivityStep
     public float groupAutoStartStoryAfterSeconds = 0f;
     public bool groupPlayActionsWhenAutoSkipped = true;
     public float groupWaitSecondsBeforeStory = 0f;
+    [Tooltip("Optional looping sound for the whole group action. Starts when the group animations start and stops when the group finishes.")]
+    public AudioClip groupLoopSound;
+    [Range(0f, 2f)] public float groupLoopSoundVolume = 1f;
+    [Tooltip("ON = groupLoopSound loops until all group animations and voices finish.")]
+    public bool loopGroupSoundUntilGroupFinishes = false;
     public AudioClip groupResultVoiceOver;
-    [Range(0f, 1f)] public float groupResultVoiceVolume = 1f;
+    [Range(0f, 2f)] public float groupResultVoiceVolume = 1f;
     public bool groupWaitForVoiceOver = true;
 
     [Header("Wait For Story Then Tap Object")]
@@ -5957,7 +6650,7 @@ public class ActivityStep
     public string storyMomentHintText = "Tap the highlighted object";
     [Tooltip("Sound played for each correct tap.")]
     public AudioClip storyMomentTapSound;
-    [Range(0f, 1f)] public float storyMomentTapSoundVolume = 1f;
+    [Range(0f, 2f)] public float storyMomentTapSoundVolume = 1f;
     [Tooltip("If ON, progress slowly goes down when the child stops tapping.")]
     public bool storyMomentProgressDropsIfChildStops = false;
     [Tooltip("How fast progress drops each second, in percent.")]
@@ -5991,25 +6684,25 @@ public class ActivityStep
     [Tooltip("How long the heavy break shake lasts.")]
     public float storyMomentBreakShakeSeconds = 0.45f;
     [Tooltip("When to switch objects during the shake. 0.5 = middle of shake.")]
-    [Range(0f, 1f)] public float storyMomentSwitchAtShakePercent = 0.5f;
+    [Range(0f, 2f)] public float storyMomentSwitchAtShakePercent = 0.5f;
     [Tooltip("How long the moved object takes to drop back to its original Unity position.")]
     public float storyMomentDropBackSeconds = 0.45f;
     [Tooltip("Optional sound when the object breaks or changes.")]
     public AudioClip storyMomentBreakSound;
-    [Range(0f, 1f)] public float storyMomentBreakSoundVolume = 1f;
+    [Range(0f, 2f)] public float storyMomentBreakSoundVolume = 1f;
     [Tooltip("Optional wait after the object has dropped back.")]
     public float storyMomentExtraWaitAfterComplete = 0.2f;
 
     [Header("Wrong Tap Feedback For Story Moment")]
     public string storyMomentWrongTapText = "Tap the highlighted object";
     public AudioClip storyMomentWrongTapSound;
-    [Range(0f, 1f)] public float storyMomentWrongTapSoundVolume = 1f;
+    [Range(0f, 2f)] public float storyMomentWrongTapSoundVolume = 1f;
 
     [Header("Wrong Input Help")]
     public bool showHintWhenWrongInput = true;
     public string wrongInputHintText = "Try tapping the highlighted object";
     public AudioClip wrongInputSound;
-    [Range(0f, 1f)] public float wrongInputSoundVolume = 1f;
+    [Range(0f, 2f)] public float wrongInputSoundVolume = 1f;
 
     [Header("No Input Help")]
     public bool enableNoInputHelp = true;
@@ -6082,6 +6775,104 @@ public class ActivityStep
 
     public UnityEvent onActivityStarted;
     public UnityEvent onActivityCompleted;
+
+    // ── ACTIVITY-LEVEL SOUNDS ──────────────────────────────────────────────
+    [Header("Activity Sounds")]
+    [Tooltip("Plays once the moment this activity begins, before the child does anything.")]
+    public AudioClip activityStartSound;
+    [Range(0f, 2f)] public float activityStartSoundVolume = 1f;
+
+    [Tooltip("Plays after the child completes the activity, before the result animation starts.")]
+    public AudioClip activityCompleteSound;
+    [Range(0f, 2f)] public float activityCompleteSoundVolume = 1f;
+
+    // ── CORRECT TAP SOUNDS ────────────────────────────────────────────────
+    [Header("Correct Tap Sounds")]
+    [Tooltip("Sound played on every correct tap. Shared across activity types that do not have their own tap sound. ProgressGate uses progressTapSound and WaitForStoryThenTapObject uses storyMomentTapSound.")]
+    public AudioClip generalCorrectTapSound;
+    [Range(0f, 2f)] public float generalCorrectTapSoundVolume = 1f;
+    [Tooltip("Gap mode controls how fast the correct tap sound can repeat. Prevents noise on fast tapping.")]
+    public CorrectTapSoundGapMode correctTapSoundGapMode = CorrectTapSoundGapMode.SmallGap_0_15s;
+    [Tooltip("Used only when Gap Mode is Custom.")]
+    public float correctTapCustomGapSeconds = 0.15f;
+
+    // ── PROGRESS SOUNDS ───────────────────────────────────────────────────
+    [Header("Progress Sounds")]
+    [Tooltip("Plays when the progress bar drops because the child stopped tapping.")]
+    public AudioClip progressDropSound;
+    [Range(0f, 2f)] public float progressDropSoundVolume = 1f;
+
+    [Tooltip("Plays the moment progress reaches 100 percent.")]
+    public AudioClip progressFullSound;
+    [Range(0f, 2f)] public float progressFullSoundVolume = 1f;
+
+    // ── HINT SOUNDS ───────────────────────────────────────────────────────
+    [Header("Hint Sounds")]
+    [Tooltip("Sound played when the no-input hint appears (child has done nothing for too long).")]
+    public AudioClip noInputHintSound;
+    [Range(0f, 2f)] public float noInputHintSoundVolume = 1f;
+
+    // wrongInputSound already exists at line 6124 — used here for wrong-input hint
+
+    // ── RESULT SOUNDS ─────────────────────────────────────────────────────
+    [Header("Result Sounds")]
+    [Tooltip("Plays at the start of the result animation. Separate from resultSoundEffect which plays after.")]
+    public AudioClip resultAnimationStartSound;
+    [Range(0f, 2f)] public float resultAnimationStartSoundVolume = 1f;
+
+    // ── ANIMATION WHILE TAPPING SOUNDS ───────────────────────────────────
+    [Header("Animation While Tapping Sounds")]
+    [Tooltip("Shared sound for all animation clips. Plays when progress enters any clip's range. Ignored if that clip has its own sound assigned below.")]
+    public AudioClip sharedHelperAnimationSound;
+    [Range(0f, 2f)] public float sharedHelperAnimationSoundVolume = 1f;
+    [Tooltip("Optional looping sound for the whole helper animation group. Starts when helper animation begins and stops when the activity/helper animation ends.")]
+    public AudioClip progressHelperGroupLoopSound;
+    [Range(0f, 2f)] public float progressHelperGroupLoopSoundVolume = 1f;
+    [Tooltip("ON = Progress Helper Group Loop Sound loops until the helper animation/activity ends.")]
+    public bool loopProgressHelperGroupSoundUntilAnimationEnds = false;
+    [Tooltip("Individual sound per animation clip. Position 1 matches clip 1, position 2 matches clip 2, and so on. Leave empty to use the shared sound above.")]
+    public List<AudioClip> progressHelperAnimationSounds = new List<AudioClip>();
+    [Tooltip("Volume per clip. Position 1 matches clip 1. Leave empty or shorter than the clip list to use 1.0 for remaining clips.")]
+    public List<float> progressHelperAnimationSoundVolumes = new List<float>();
+
+    // ── PROGRESS MILESTONES (Hints While Doing Well) ──────────────────────
+    [Header("Hints While Doing Well")]
+    [Tooltip("Add milestones that show encouraging text when the child reaches a progress percentage. Uses the same UI text slot as instruction and hint text.")]
+    public List<ActivityProgressMilestone> progressMilestones = new List<ActivityProgressMilestone>();
+}
+
+/// <summary>
+/// One milestone the setup person adds to a progress activity.
+/// When progress crosses progressPercent the hint text shows and the sound plays.
+/// </summary>
+[Serializable]
+public class ActivityProgressMilestone
+{
+    [Tooltip("Turn this milestone off without deleting it.")]
+    public bool enabled = true;
+
+    [Range(0f, 100f)]
+    [Tooltip("Progress percentage (0-100) that triggers this milestone. Example: 50 = fires at halfway.")]
+    public float progressPercent = 50f;
+
+    [TextArea(1, 2)]
+    [Tooltip("Text shown when this milestone is reached. Example: Keep going! You are halfway there!")]
+    public string hintText = "";
+
+    [Tooltip("How long this hint text stays visible in seconds before returning to the instruction text.")]
+    public float displayDurationSeconds = 2f;
+
+    [Tooltip("FireOnce = shows once per run. EveryTimeCrossed = fires every time progress goes up past this. FireAgainAfterDrop = fires again after progress drops below and rises above this.")]
+    public MilestoneRepeatMode repeatMode = MilestoneRepeatMode.FireOnce;
+
+    [Tooltip("Optional sound that plays when this milestone is reached.")]
+    public AudioClip sound;
+    [Range(0f, 2f)]
+    public float soundVolume = 1f;
+
+    // Runtime tracking — not saved to scene
+    [NonSerialized] public bool _hasFired;
+    [NonSerialized] public float _lastFiredAtProgress = -1f;
 }
 
 [Serializable]
@@ -6131,10 +6922,10 @@ public class ActivityTargetAction
     public bool waitForAnimation = false;
     [Tooltip("Optional short sound effect after this target is tapped.")]
     public AudioClip soundEffect;
-    [Range(0f, 1f)] public float soundVolume = 1f;
+    [Range(0f, 2f)] public float soundVolume = 1f;
     [Tooltip("Optional voice or dialogue after this target is tapped.")]
     public AudioClip voiceOver;
-    [Range(0f, 1f)] public float voiceVolume = 1f;
+    [Range(0f, 2f)] public float voiceVolume = 1f;
     [Tooltip("ON = wait for the voice before the story continues.")]
     public bool waitForVoiceOver = false;
     [Tooltip("Objects turned ON after this target is tapped.")]
@@ -6183,15 +6974,15 @@ public class ActivityChoiceOption
     public bool waitForAnimation = true;
     [Tooltip("Legacy fallback optional short sound effect.")]
     public AudioClip soundEffect;
-    [Range(0f, 1f)] public float soundVolume = 1f;
+    [Range(0f, 2f)] public float soundVolume = 1f;
     [Tooltip("Legacy fallback optional voice line.")]
     public AudioClip voiceOver;
-    [Range(0f, 1f)] public float voiceVolume = 1f;
+    [Range(0f, 2f)] public float voiceVolume = 1f;
     [Tooltip("Legacy fallback. ON = wait for the voice line before accepting the next choice or continuing.")]
     public bool waitForVoiceOver = true;
     [Tooltip("Legacy fallback optional narration clip.")]
     public AudioClip narration;
-    [Range(0f, 1f)] public float narrationVolume = 1f;
+    [Range(0f, 2f)] public float narrationVolume = 1f;
     [Tooltip("Legacy fallback. ON = wait for narration before accepting the next choice or continuing.")]
     public bool waitForNarration = true;
     [Tooltip("Optional extra wait after this option plays.")]
@@ -6245,15 +7036,15 @@ public class ActivityScenarioAction
     public bool waitForAnimation = true;
     [Tooltip("Optional sound effect for this action.")]
     public AudioClip soundEffect;
-    [Range(0f, 1f)] public float soundVolume = 1f;
+    [Range(0f, 2f)] public float soundVolume = 1f;
     [Tooltip("Optional voice line for this action.")]
     public AudioClip voiceOver;
-    [Range(0f, 1f)] public float voiceVolume = 1f;
+    [Range(0f, 2f)] public float voiceVolume = 1f;
     [Tooltip("ON = wait for voice line before moving to the next action.")]
     public bool waitForVoiceOver = true;
     [Tooltip("Optional narration clip for this action.")]
     public AudioClip narration;
-    [Range(0f, 1f)] public float narrationVolume = 1f;
+    [Range(0f, 2f)] public float narrationVolume = 1f;
     [Tooltip("ON = wait for narration before moving to the next action.")]
     public bool waitForNarration = true;
     [Tooltip("Objects to turn ON when this action plays.")]
@@ -6301,9 +7092,9 @@ public class ActivityGroupAction
     public float animationSpeed = 1f;
     public bool waitForAnimation = true;
     public AudioClip soundEffect;
-    [Range(0f, 1f)] public float soundVolume = 1f;
+    [Range(0f, 2f)] public float soundVolume = 1f;
     public AudioClip voiceLine;
-    [Range(0f, 1f)] public float voiceVolume = 1f;
+    [Range(0f, 2f)] public float voiceVolume = 1f;
     public bool waitForVoiceLine = false;
 }
 
@@ -6342,10 +7133,10 @@ public class ActivityReaction
     [Header("Reaction Audio")]
     public AudioClip optionalSfx;
     public ReactionSfxMode sfxMode = ReactionSfxMode.PlayOnce;
-    [Range(0f, 1f)] public float sfxVolume = 1f;
+    [Range(0f, 2f)] public float sfxVolume = 1f;
     public float sfxMinimumGapSeconds = 0f;
     public AudioClip reactionVoiceOver;
-    [Range(0f, 1f)] public float reactionVoiceVolume = 1f;
+    [Range(0f, 2f)] public float reactionVoiceVolume = 1f;
     public bool waitForReactionVoiceOver = false;
     public bool stopVoiceWhenReactionEnds = false;
 
@@ -6408,7 +7199,7 @@ public class ActivityReaction
 
     [Header("Audio / Voice")]
     public AudioClip mainAudio;
-    [Range(0f, 1f)] public float mainAudioVolume = 1f;
+    [Range(0f, 2f)] public float mainAudioVolume = 1f;
 
     [Header("Objects")]
     public List<GameObject> objects = new List<GameObject>();
@@ -6430,4 +7221,34 @@ public class ActivityReaction
 
     public bool waitUntilFinished = true;
     public bool showAdvancedOptions = false;
+}
+
+// ── New enums added for SFX system and milestone hints ──────────────────────
+
+/// <summary>Controls when a progress milestone hint fires again after it has fired once.</summary>
+public enum MilestoneRepeatMode
+{
+    /// <summary>Fires one time only per activity run. Does not fire again even if progress drops.</summary>
+    FireOnce,
+    /// <summary>Fires every time progress crosses this percentage going upward.</summary>
+    EveryTimeCrossed,
+    /// <summary>Fires again only if progress drops below this percentage and then crosses it again going up.</summary>
+    FireAgainAfterDrop
+}
+
+/// <summary>Controls the minimum gap between plays of the correct tap sound so it does not feel noisy.</summary>
+public enum CorrectTapSoundGapMode
+{
+    /// <summary>Every correct tap plays the sound, no gap enforced.</summary>
+    NoGap,
+    /// <summary>Minimum 0.1 second gap between plays.</summary>
+    TinyGap_0_1s,
+    /// <summary>Minimum 0.15 second gap between plays. Good default for most drum activities.</summary>
+    SmallGap_0_15s,
+    /// <summary>Minimum 0.2 second gap between plays.</summary>
+    MediumGap_0_2s,
+    /// <summary>Minimum 0.3 second gap between plays.</summary>
+    LargeGap_0_3s,
+    /// <summary>Use the Custom Gap Seconds value below.</summary>
+    Custom
 }

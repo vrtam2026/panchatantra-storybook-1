@@ -1238,6 +1238,21 @@ MonoBehaviour:
     progressReactionPlaybackMode: 1
     progressReactionMinimumGapSeconds: 0
     progressReactionAnimationSpeed: 1
+    progressReactionGroupLoopSound: {fileID: 0}
+    progressReactionGroupLoopSoundVolume: 1
+    loopProgressReactionGroupSoundUntilAnimationEnds: 0
+    progressReactionAnimationSounds:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    progressReactionAnimationSoundVolumes:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
     progressUseHelperAnimationWhileTapping: 0
     progressHelperAnimator: {fileID: 0}
     progressHelperAnimations: []
@@ -1284,6 +1299,9 @@ MonoBehaviour:
     groupAutoStartStoryAfterSeconds: 0
     groupPlayActionsWhenAutoSkipped: 0
     groupWaitSecondsBeforeStory: 0
+    groupLoopSound: {fileID: 0}
+    groupLoopSoundVolume: 1
+    loopGroupSoundUntilGroupFinishes: 0
     groupResultVoiceOver: {fileID: 0}
     groupResultVoiceVolume: 1
     groupWaitForVoiceOver: 1
@@ -1374,7 +1392,66 @@ MonoBehaviour:
     onActivityCompleted:
       m_PersistentCalls:
         m_Calls: []
-  activityTemplateSchemaVersion: 33
+    activityStartSound: {fileID: 0}
+    activityStartSoundVolume: 1
+    activityCompleteSound: {fileID: 0}
+    activityCompleteSoundVolume: 1
+    generalCorrectTapSound: {fileID: 0}
+    generalCorrectTapSoundVolume: 1
+    correctTapSoundGapMode: 2
+    correctTapCustomGapSeconds: 0.15
+    progressDropSound: {fileID: 0}
+    progressDropSoundVolume: 1
+    progressFullSound: {fileID: 0}
+    progressFullSoundVolume: 1
+    noInputHintSound: {fileID: 0}
+    noInputHintSoundVolume: 1
+    resultAnimationStartSound: {fileID: 0}
+    resultAnimationStartSoundVolume: 1
+    sharedHelperAnimationSound: {fileID: 0}
+    sharedHelperAnimationSoundVolume: 1
+    progressHelperGroupLoopSound: {fileID: 0}
+    progressHelperGroupLoopSoundVolume: 1
+    loopProgressHelperGroupSoundUntilAnimationEnds: 0
+    progressHelperAnimationSounds: []
+    progressHelperAnimationSoundVolumes: []
+    progressMilestones:
+    - enabled: 1
+      progressPercent: 20
+      hintText: 20
+      displayDurationSeconds: 0
+      repeatMode: 0
+      sound: {fileID: 0}
+      soundVolume: 0
+    - enabled: 1
+      progressPercent: 40
+      hintText: 40
+      displayDurationSeconds: 0
+      repeatMode: 0
+      sound: {fileID: 0}
+      soundVolume: 0
+    - enabled: 1
+      progressPercent: 60
+      hintText: 60
+      displayDurationSeconds: 0
+      repeatMode: 0
+      sound: {fileID: 0}
+      soundVolume: 0
+    - enabled: 1
+      progressPercent: 80
+      hintText: 60
+      displayDurationSeconds: 0
+      repeatMode: 0
+      sound: {fileID: 0}
+      soundVolume: 0
+    - enabled: 1
+      progressPercent: 100
+      hintText: 60
+      displayDurationSeconds: 0
+      repeatMode: 0
+      sound: {fileID: 0}
+      soundVolume: 0
+  activityTemplateSchemaVersion: 34
   activityPanel: {fileID: 0}
   defaultRaycastCamera: {fileID: 0}
   defaultAudioSource: {fileID: 4336228284325888322}
@@ -5143,7 +5220,7 @@ Transform:
   m_GameObject: {fileID: 4860676190393664331}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.036, z: 0}
+  m_LocalPosition: {x: 0.028, y: 0.036, z: 0.013}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -7577,15 +7654,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6808123866014376833}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: 0.022999913, y: -0.003, z: -0.000000029802322}
+  m_LocalRotation: {x: -0, y: 0.82696575, z: -0, w: -0.5622523}
+  m_LocalPosition: {x: 0.025358915, y: -0.003000006, z: 0.025}
   m_LocalScale: {x: 0.45, y: 0.45, z: 0.45}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1988406218652730976}
   - {fileID: 7590904944414427514}
   m_Father: {fileID: 5522285966407316415}
-  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 248.423, z: 0}
 --- !u!95 &6511468258414278720
 Animator:
   serializedVersion: 7
@@ -10615,7 +10692,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3e597a54e2ffe1e44acc858ede9516e4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.38465
+      value: -0.256
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3e597a54e2ffe1e44acc858ede9516e4, type: 3}
       propertyPath: m_LocalPosition.y

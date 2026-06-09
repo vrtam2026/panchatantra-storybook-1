@@ -553,6 +553,19 @@ public class ContentControllerEditor : Editor
         onActivitiesStarted = serializedObject.FindProperty("onActivitiesStarted");
         onActivitiesCompleted = serializedObject.FindProperty("onActivitiesCompleted");
         onActivitiesReset = serializedObject.FindProperty("onActivitiesReset");
+
+        // Safe migration when the Inspector opens. This creates missing new optional lists/fields
+        // without deleting old activity setup. It keeps the guided Inspector current after code updates.
+        ContentController controller = target as ContentController;
+        if (controller != null)
+        {
+            int changed = controller.RefreshActivityTemplateData(false);
+            if (changed > 0)
+            {
+                EditorUtility.SetDirty(controller);
+                serializedObject.UpdateIfRequiredOrScript();
+            }
+        }
     }
 
     public override void OnInspectorGUI()
@@ -589,10 +602,11 @@ public class ContentControllerEditor : Editor
         ContentController controller = target as ContentController;
         if (controller == null) return;
 
+        serializedObject.ApplyModifiedProperties();
         Undo.RecordObject(controller, "Refresh Activity Template");
         int changed = controller.RefreshActivityTemplateData(force);
         EditorUtility.SetDirty(controller);
-        serializedObject.Update();
+        serializedObject.UpdateIfRequiredOrScript();
         Repaint();
         SceneView.RepaintAll();
         Debug.Log("[Activity Template] Refreshed selected ContentController. Changed items: " + changed, controller);
@@ -796,18 +810,21 @@ public class ContentControllerEditor : Editor
         EditorGUILayout.PropertyField(enabled, TipContent("Use This Activity"));
         EditorGUILayout.PropertyField(name, TipContent("Activity Name"));
 
-        DrawStartSection(activity);
-        DrawInstructionSection(activity);
-        DrawInputSection(activity);
-        DrawHelpAndTimeoutSection(activity);
-        DrawReactionSection(activity);
-        DrawProgressBarSection(activity);
-        DrawWrongFeedbackSection(activity);
-        DrawFinishSection(activity);
+        DrawStartSection(activity);           // 2. When Should This Activity Start
+        DrawInstructionSection(activity);     // 3. What Should The Child See Or Hear
+        DrawInputSection(activity);           // 4. What Should The Child Do
+        DrawTappingAnimationSection(activity);// 5. Character Animation While Tapping
+        DrawHelpAndTimeoutSection(activity);  // 6. Timing
+        DrawProgressBarSection(activity);     // 7. Progress Bar Optional
+        DrawWrongFeedbackSection(activity);   // 8. Wrong Input Optional
+        DrawReactionSection(activity);        // 9. Result Actions
+        DrawFinishSection(activity);          // 10. After Activity
+        DrawActivitySoundsSection(activity);  // 12. Sounds Optional
+        DrawObjectStateSection(activity);     // 13. Object On / Off Changes
 
-        DrawStepBox("11. Setup Check", "This tells a non-coder what is missing before testing the activity.");
+        // Setup Check is always last so the person reads it after completing the setup above.
+        DrawStepBox("14. Setup Check", "Read this before testing. It tells you exactly what is missing and how to fix it.");
         DrawActivitySetupCheck(activity);
-        DrawObjectStateSection(activity);
 
         EditorGUILayout.EndVertical();
     }
@@ -1130,38 +1147,186 @@ public class ContentControllerEditor : Editor
 
     private void DrawInstructionSection(SerializedProperty activity)
     {
-        DrawStepBox("3. What Should The Child See Or Hear?", "Instruction text, optional voice, or background sound for this activity.");
+        DrawStepBox("3. What Should The Child See Or Hear?", "Instruction text and optional voice for this activity. Background sounds are in section 12 Sounds.");
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("instructionText"), TipContent("Text Shown To Child"));
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("activityVoiceOver"), TipContent("Instruction Voice Optional"));
         if (activity.FindPropertyRelative("activityVoiceOver").objectReferenceValue != null)
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("waitForActivityVoiceOver"), TipContent("Wait Until Voice Finishes"));
+    }
 
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("activityDurationAudio"), TipContent("Background Audio During Activity Optional"));
+    // ═══════════════════════════════════════════════════════════════════════
+    // SECTION: ALL SOUNDS OPTIONAL
+    // ═══════════════════════════════════════════════════════════════════════
+    private void DrawActivitySoundsSection(SerializedProperty activity)
+    {
+        DrawStepBox("12. Sounds Optional",
+            "All sounds are optional. Leave any field empty for silence. " +
+            "Each sound has its own volume slider.");
+
+        SerializedProperty fold = activity.FindPropertyRelative("activityStartSound");
+        fold.isExpanded = EditorGUILayout.Foldout(fold.isExpanded, "Show All Sound Settings", true);
+        if (!fold.isExpanded) return;
+
+        EditorGUI.indentLevel++;
+
+        EditorGUILayout.LabelField("Activity Sounds", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("activityStartSound"),
+            TipContent("Sound When Activity Starts", "Plays once the moment this activity begins."));
+        if (activity.FindPropertyRelative("activityStartSound").objectReferenceValue != null)
+            EditorGUILayout.Slider(activity.FindPropertyRelative("activityStartSoundVolume"), 0f, 2f, TipContent("Volume"));
+
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("activityCompleteSound"),
+            TipContent("Sound When Activity Completes", "Plays after the child finishes, before result animation."));
+        if (activity.FindPropertyRelative("activityCompleteSound").objectReferenceValue != null)
+            EditorGUILayout.Slider(activity.FindPropertyRelative("activityCompleteSoundVolume"), 0f, 2f, TipContent("Volume"));
+
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("activityDurationAudio"),
+            TipContent("Background Sound During Activity", "Loops while this activity is running. Stops when activity ends."));
         if (activity.FindPropertyRelative("activityDurationAudio").objectReferenceValue != null)
         {
             EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("loopActivityDurationAudio"), TipContent("Loop Background Audio"));
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("activityDurationAudioVolume"), TipContent("Background Audio Volume"));
+            EditorGUILayout.Slider(activity.FindPropertyRelative("activityDurationAudioVolume"), 0f, 2f, TipContent("Background Volume"));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("loopActivityDurationAudio"), TipContent("Loop"));
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("fadeActivityAudioOnEnd"), TipContent("Fade Out When Activity Ends"));
             if (activity.FindPropertyRelative("fadeActivityAudioOnEnd").boolValue)
-                EditorGUILayout.PropertyField(activity.FindPropertyRelative("activityAudioFadeSeconds"), TipContent("Fade Seconds"));
+                EditorGUILayout.PropertyField(activity.FindPropertyRelative("activityAudioFadeSeconds"), TipContent("Fade Duration"));
             EditorGUI.indentLevel--;
         }
+
+        EditorGUILayout.Space(4);
+        EditorGUILayout.LabelField("Correct Tap Sounds", EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox(
+            "This shared sound plays when the child taps correctly. " +
+            "If the specific activity already has its own tap sound assigned (like Fill Meter or Drum activities), " +
+            "this is used as a fallback only.",
+            MessageType.None);
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("generalCorrectTapSound"),
+            TipContent("Sound On Correct Tap", "Plays every correct tap. Leave empty if the activity already has its own tap sound."));
+        if (activity.FindPropertyRelative("generalCorrectTapSound").objectReferenceValue != null)
+        {
+            EditorGUI.indentLevel++;
+            EditorGUILayout.Slider(activity.FindPropertyRelative("generalCorrectTapSoundVolume"), 0f, 2f, TipContent("Volume"));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("correctTapSoundGapMode"),
+                TipContent("Gap Between Plays",
+                "Prevents the same sound from playing too fast. SmallGap 0.15s is a good choice for most drum activities. NoGap = every tap plays."));
+            if ((CorrectTapSoundGapMode)activity.FindPropertyRelative("correctTapSoundGapMode").enumValueIndex == CorrectTapSoundGapMode.Custom)
+                EditorGUILayout.PropertyField(activity.FindPropertyRelative("correctTapCustomGapSeconds"), TipContent("Custom Gap Seconds"));
+            EditorGUI.indentLevel--;
+        }
+
+        EditorGUILayout.Space(4);
+        EditorGUILayout.LabelField("Progress Sounds", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressDropSound"),
+            TipContent("Sound When Bar Goes Down", "Plays when the progress bar drops because the child stopped tapping."));
+        if (activity.FindPropertyRelative("progressDropSound").objectReferenceValue != null)
+            EditorGUILayout.Slider(activity.FindPropertyRelative("progressDropSoundVolume"), 0f, 2f, TipContent("Volume"));
+
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressFullSound"),
+            TipContent("Sound When Bar Is Full", "Plays the moment progress reaches 100 percent."));
+        if (activity.FindPropertyRelative("progressFullSound").objectReferenceValue != null)
+            EditorGUILayout.Slider(activity.FindPropertyRelative("progressFullSoundVolume"), 0f, 2f, TipContent("Volume"));
+
+        EditorGUILayout.Space(4);
+        EditorGUILayout.LabelField("Animation Sounds", EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox("Animation-while-tapping sounds are shown directly inside the Character Animation While Tapping section so you can assign sounds next to the clips.", MessageType.None);
+
+        EditorGUILayout.Space(4);
+        EditorGUILayout.LabelField("Hint Sounds", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("noInputHintSound"),
+            TipContent("Sound When No-Input Hint Appears", "Plays when the child has done nothing for too long."));
+        if (activity.FindPropertyRelative("noInputHintSound").objectReferenceValue != null)
+            EditorGUILayout.Slider(activity.FindPropertyRelative("noInputHintSoundVolume"), 0f, 2f, TipContent("Volume"));
+        EditorGUILayout.HelpBox("Wrong-input hint sound is in section 8 Wrong Input, next to the hint text.", MessageType.None);
+
+        EditorGUILayout.Space(4);
+        EditorGUILayout.LabelField("Result Sounds", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("resultAnimationStartSound"),
+            TipContent("Sound When Result Starts", "Plays at the start of the result animation. Different from Result Sound Effect which plays after."));
+        if (activity.FindPropertyRelative("resultAnimationStartSound").objectReferenceValue != null)
+            EditorGUILayout.Slider(activity.FindPropertyRelative("resultAnimationStartSoundVolume"), 0f, 2f, TipContent("Volume"));
+
+        EditorGUI.indentLevel--;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // SECTION: HINTS WHILE DOING WELL (positive milestone hints)
+    // ═══════════════════════════════════════════════════════════════════════
+    private void DrawMilestoneHintsSection(SerializedProperty activity)
+    {
+        DrawStepBox("Hints While Doing Well Optional",
+            "Add encouraging text that shows when the child reaches a progress milestone.\n" +
+            "Uses the same text area as instruction and hint text.\n" +
+            "Example: At 50% show 'Keep going! Halfway there!'");
+
+        SerializedProperty milestones = activity.FindPropertyRelative("progressMilestones");
+        milestones.isExpanded = EditorGUILayout.Foldout(milestones.isExpanded, "Show Milestone Hints (" + milestones.arraySize + " added)", true);
+        if (!milestones.isExpanded) return;
+
+        EditorGUI.indentLevel++;
+        EditorGUILayout.HelpBox(
+            "Each milestone fires when progress crosses the percentage you set.\n" +
+            "Text stays visible until the next milestone replaces it or the activity ends.\n" +
+            "Wrong-input or no-input hints can still override milestone text.",
+            MessageType.Info);
+
+        for (int i = 0; i < milestones.arraySize; i++)
+        {
+            SerializedProperty m = milestones.GetArrayElementAtIndex(i);
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+
+            EditorGUILayout.BeginHorizontal();
+            SerializedProperty mEnabled = m.FindPropertyRelative("enabled");
+            EditorGUILayout.PropertyField(mEnabled, GUIContent.none, GUILayout.Width(16));
+            float pct = m.FindPropertyRelative("progressPercent").floatValue;
+            EditorGUILayout.LabelField("Milestone " + (i + 1) + " — fires at " + Mathf.RoundToInt(pct) + "%",
+                mEnabled.boolValue ? EditorStyles.boldLabel : EditorStyles.miniLabel);
+            if (GUILayout.Button("Remove", GUILayout.Width(60)))
+            {
+                milestones.DeleteArrayElementAtIndex(i);
+                break;
+            }
+            EditorGUILayout.EndHorizontal();
+
+            if (!mEnabled.boolValue) { EditorGUILayout.EndVertical(); continue; }
+
+            EditorGUI.indentLevel++;
+            EditorGUILayout.Slider(m.FindPropertyRelative("progressPercent"), 0f, 100f,
+                TipContent("Fires At Progress %", "0 = fires at start. 50 = fires at halfway. 100 = fires when complete."));
+            EditorGUILayout.PropertyField(m.FindPropertyRelative("hintText"),
+                TipContent("Text To Show", "Example: Keep going! You are halfway there!"));
+            EditorGUILayout.PropertyField(m.FindPropertyRelative("repeatMode"),
+                TipContent("When To Show Again",
+                "FireOnce = shows once per run. EveryTimeCrossed = shows every time progress goes up past this. FireAgainAfterDrop = shows again if progress dropped below this and rose above again."));
+            EditorGUILayout.PropertyField(m.FindPropertyRelative("sound"),
+                TipContent("Sound Optional", "Plays when this milestone is reached."));
+            if (m.FindPropertyRelative("sound").objectReferenceValue != null)
+                EditorGUILayout.Slider(m.FindPropertyRelative("soundVolume"), 0f, 2f, TipContent("Sound Volume"));
+            EditorGUI.indentLevel--;
+
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.Space(2);
+        }
+
+        if (GUILayout.Button("+ Add Milestone Hint"))
+            milestones.InsertArrayElementAtIndex(milestones.arraySize);
+
+        EditorGUI.indentLevel--;
     }
 
     private void DrawObjectStateSection(SerializedProperty activity)
     {
-        DrawStepBox("12. More Setup", "Optional. Use only if objects must turn on or off when the activity starts or completes.");
+        DrawStepBox("13. Object On / Off Changes", "Optional. Use this when objects must appear or disappear when the activity starts or completes. These are automatically restored when replay happens.");
         SerializedProperty fold = activity.FindPropertyRelative("objectsOnWhenActivityStarts");
-        fold.isExpanded = EditorGUILayout.Foldout(fold.isExpanded, "Object On / Off Changes", true);
+        fold.isExpanded = EditorGUILayout.Foldout(fold.isExpanded, "Show / Hide Objects", true);
         if (!fold.isExpanded)
             return;
 
         EditorGUI.indentLevel++;
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("objectsOnWhenActivityStarts"), TipContent("Objects On When Activity Starts"), true);
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("objectsOffWhenActivityStarts"), TipContent("Objects Off When Activity Starts"), true);
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("objectsOnWhenActivityCompletes"), TipContent("Objects On When Activity Completes"), true);
-        EditorGUILayout.PropertyField(activity.FindPropertyRelative("objectsOffWhenActivityCompletes"), TipContent("Objects Off When Activity Completes"), true);
+        EditorGUILayout.HelpBox("All changes here are reversed automatically when the page replays. Objects return to their original state.", MessageType.Info);
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("objectsOnWhenActivityStarts"), TipContent("Show These When Activity Starts", "These objects become visible the moment this activity begins."), true);
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("objectsOffWhenActivityStarts"), TipContent("Hide These When Activity Starts", "These objects become invisible the moment this activity begins."), true);
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("objectsOnWhenActivityCompletes"), TipContent("Show These When Activity Completes", "These objects become visible after the activity finishes successfully."), true);
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("objectsOffWhenActivityCompletes"), TipContent("Hide These When Activity Completes", "These objects become invisible after the activity finishes successfully."), true);
         EditorGUI.indentLevel--;
     }
 
@@ -2441,7 +2606,29 @@ public class ContentControllerEditor : Editor
         EditorGUILayout.Slider(activity.FindPropertyRelative("storyMomentTapShakeSeconds"), 0.03f, 0.6f, TipContent("Tap Shake Time"));
         EditorGUILayout.Slider(activity.FindPropertyRelative("storyMomentFastTapSpeed"), 1f, 12f, TipContent("Fast Tap Speed"));
 
-        DrawMiniHeader("5. Change Object When Complete", "Hide the normal visible part during the heavy shake. Optional: show another object if your project needs it.");
+        // ── 5. CHARACTER ANIMATION WHILE TAPPING ──────────────────────────────
+        EditorGUILayout.Space(6);
+        DrawMiniHeader("5. Character Animation While Tapping",
+            "Should a character animate while the child is tapping?\n" +
+            "Example: the fox should react as the drum gets hit.\n" +
+            "Turn this ON and add the fox animation clips below.");
+
+        EditorGUILayout.HelpBox(
+            "HOW IT WORKS:\n" +
+            "Add 3 animation clips → progress splits into 3 parts automatically.\n" +
+            "  0% to 33%  → clip 1 plays and loops\n" +
+            "  34% to 66% → clip 2 plays and loops\n" +
+            "  67% to 100% → clip 3 plays and loops\n\n" +
+            "The animation changes on its own. No percentages needed.",
+            MessageType.Info);
+
+        DrawAnimationWhileTappingFields(activity, "fox");
+
+        // ── Hints While Doing Well (inline for Fox Drum and similar activities) ──
+        EditorGUILayout.Space(6);
+        DrawMilestoneHintsSection(activity);
+
+        DrawMiniHeader("6. Change Object When Complete", "Hide the normal visible part during the heavy shake. Optional: show another object if your project needs it.");
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentObjectBeforeComplete"), TipContent("Object To Hide When Complete", "Drag the normal visible part. Example: top_head. It turns OFF during the heavy shake."));
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentObjectAfterComplete"), TipContent("Optional Object To Show", "Usually leave empty if the broken layer is already ON under the normal layer. Use only when another object must turn ON."));
         EditorGUILayout.Slider(activity.FindPropertyRelative("storyMomentBreakShakeAmount"), 0f, 0.5f, TipContent("Heavy Shake Amount"));
@@ -2453,7 +2640,7 @@ public class ContentControllerEditor : Editor
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentBreakSoundVolume"), TipContent("Break Sound Volume"));
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentExtraWaitAfterComplete"), TipContent("Extra Wait After Complete"));
 
-        DrawMiniHeader("6. Wrong Tap Feedback", "Wrong taps should guide the child, not move or break the object.");
+        DrawMiniHeader("7. Wrong Tap Feedback", "Wrong taps should guide the child, not move or break the object.");
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentWrongTapText"), TipContent("Wrong Tap Text"));
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("storyMomentWrongTapSound"), TipContent("Wrong Tap Sound Optional"));
         if (activity.FindPropertyRelative("storyMomentWrongTapSound").objectReferenceValue != null)
@@ -2468,7 +2655,7 @@ public class ContentControllerEditor : Editor
             EditorGUI.indentLevel--;
         }
 
-        DrawMiniHeader("7. Finish", "After the object drops back, story resumes from the paused point.");
+        DrawMiniHeader("8. Finish", "After the object drops back, story resumes from the paused point.");
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("continueAfterComplete"), TipContent("Resume Story After Activity"));
         EditorGUILayout.HelpBox("This activity pauses story only while it runs. It should resume story from the same point, not restart from the beginning.", MessageType.None);
     }
@@ -2567,7 +2754,16 @@ public class ContentControllerEditor : Editor
         {
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressReactionAnimator"), TipContent("Character That Reacts", "Drag the Animator of the character or object that should react while the meter fills. Example: lion Animator."));
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressReactionAnimations"), TipContent("Reaction Animations", "Add clips in the order they should play. If using By Meter Percent, the list is split across the progress range."), true);
+            DrawAnimationClipsWithSounds(
+                activity,
+                activity.FindPropertyRelative("progressReactionAnimations"),
+                "progressReactionGroupLoopSound",
+                "progressReactionGroupLoopSoundVolume",
+                "loopProgressReactionGroupSoundUntilAnimationEnds",
+                "progressReactionAnimationSounds",
+                "progressReactionAnimationSoundVolumes",
+                "Reaction Animation Clips",
+                "Sound For This Reaction Group Optional");
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressReactionOrder"), TipContent("Animation Selection", "Use By Meter Percent when animation should change based on the meter. With 5 clips: 0 to 20, 20 to 40, 40 to 60, 60 to 80, 80 to 100 percent."));
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressReactionPlaybackMode"), TipContent("Playback Mode", "Play On Each Tap plays a reaction every valid tap. Hold By Meter Percent keeps the character on the animation that matches the current meter range."));
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressReactionMinimumGapSeconds"), TipContent("Minimum Gap Between Reactions", "Prevents animation spam when the child taps very fast. Use 0 while testing."));
@@ -2576,45 +2772,21 @@ public class ContentControllerEditor : Editor
         }
 
         EditorGUILayout.Space(4);
-        EditorGUILayout.LabelField("Animation While Child Taps", EditorStyles.boldLabel);
-        EditorGUILayout.HelpBox("Optional. Use this when a character should animate while the child fills the bar. For monkey/drum style activities, choose Change Animation With Progress.", MessageType.None);
-        SerializedProperty useHelper = activity.FindPropertyRelative("progressUseHelperAnimationWhileTapping");
-        EditorGUILayout.PropertyField(useHelper, TipContent("Use Animation While Tapping", "ON = a helper character/object animates while the child taps. OFF = no helper animation."));
-        if (useHelper.boolValue)
-        {
-            EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperAnimator"), TipContent("Animated Character", "Drag the Animator of the monkey or object that should animate. If empty, Result Animator is used."));
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperAnimations"), TipContent("Animation Clips", "Add clips in order. For progress mode, the bar automatically splits across these clips. Example: 5 clips = 20% each."), true);
-            SerializedProperty helperMode = activity.FindPropertyRelative("progressHelperAnimationSelection");
-            DrawEnumPopup(helperMode, ProgressHelperSelectionValues, ProgressHelperSelectionLabels, TipContent("How Should These Animations Play", "Choose one simple behaviour. Progress mode means the current progress percent decides which animation loops."));
-            ProgressGatePreviewAnimationSelectionMode helperSelection = (ProgressGatePreviewAnimationSelectionMode)helperMode.enumValueIndex;
-            if (helperSelection == ProgressGatePreviewAnimationSelectionMode.UseSelectedAnimationNumber)
-                EditorGUILayout.IntSlider(activity.FindPropertyRelative("progressHelperSelectedAnimationNumber"), 1, Mathf.Max(1, activity.FindPropertyRelative("progressHelperAnimations").arraySize), TipContent("Animation Number", "Choose one animation. 1 means the first clip."));
-            if (helperSelection == ProgressGatePreviewAnimationSelectionMode.PlaySelectedAnimationNumbers || helperSelection == ProgressGatePreviewAnimationSelectionMode.PlaySelectedNumbersByProgress)
-                EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperSelectedAnimationNumbers"), TipContent("Animation Numbers To Use", "Type numbers like 1,3,4,5. Only those clips are used, in that order."));
-            if (helperSelection == ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsInOrder)
-                EditorGUILayout.HelpBox("Plays all clips once in order: 1, 2, 3, 4, 5. Use this when the activity result should show the full sequence.", MessageType.None);
-            if (helperSelection == ProgressGatePreviewAnimationSelectionMode.PlaySelectedAnimationNumbers)
-                EditorGUILayout.HelpBox("Plays only the typed numbers once in order. Example: 1,3,5 plays clip 1, then 3, then 5.", MessageType.None);
-            if (helperSelection == ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsByProgress || helperSelection == ProgressGatePreviewAnimationSelectionMode.PlaySelectedNumbersByProgress)
-            {
-                EditorGUILayout.HelpBox("Progress mode: the bar chooses the animation. If progress goes down, the animation also goes back to the matching range. The current range animation keeps looping until progress enters another range.", MessageType.None);
-                EditorGUILayout.HelpBox("Example with 5 clips: 0-20% clip 1, 20-40% clip 2, 40-60% clip 3, 60-80% clip 4, 80-100% clip 5.", MessageType.None);
-            }
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperAnimationSpeed"), TipContent("Animation Speed", "1 is normal speed. 0.5 is half speed. 2 is double speed."));
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperLoopAnimation"), TipContent("Loop Current Animation", "ON = the current progress animation keeps playing until the bar moves to another range."));
-            if (helperSelection != ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsByProgress &&
-                helperSelection != ProgressGatePreviewAnimationSelectionMode.PlaySelectedNumbersByProgress)
-            {
-                EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperPauseWhenNotTapping"), TipContent("Pause When Child Stops", "ON = helper animation pauses when the child stops. For progress mode this is ignored because animation follows the bar."));
-            }
-            else
-            {
-                EditorGUILayout.HelpBox("In progress mode, the animation does not simply pause when the child stops. It follows the bar. If the bar drops from 45% to 10%, the matching 10% animation plays.", MessageType.None);
-            }
-            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperResetWhenProgressEmpty"), TipContent("Reset When Bar Is Empty", "ON = helper animation returns to the start when progress reaches 0%."));
-            EditorGUI.indentLevel--;
-        }
+        DrawMiniHeader("Character Animation While Tapping",
+            "Should a character animate while the child fills the bar?\n" +
+            "Example: monkey climbs as progress fills.\n" +
+            "Add clips. Progress splits automatically.");
+        EditorGUILayout.HelpBox(
+            "HOW IT WORKS:\n" +
+            "Add clips → progress is split automatically across them.\n" +
+            "3 clips = 0-33%, 34-66%, 67-100%.\n" +
+            "5 clips = 0-20%, 21-40%, 41-60%, 61-80%, 81-100%.\n" +
+            "No percentages needed. Just add your clips.",
+            MessageType.Info);
+        DrawAnimationWhileTappingFields(activity, "monkey");
+
+        EditorGUILayout.Space(4);
+        DrawMilestoneHintsSection(activity);
 
         EditorGUILayout.Space(4);
         EditorGUILayout.LabelField("Story Result After Progress", EditorStyles.boldLabel);
@@ -2781,6 +2953,16 @@ public class ContentControllerEditor : Editor
         EditorGUILayout.Space(4);
         EditorGUILayout.LabelField("After Target Set Action", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("groupWaitSecondsBeforeStory"), TipContent("Extra Wait Before Story Continues", "Optional wait after the target action starts."));
+
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("groupLoopSound"), TipContent("Looping Sound For Whole Group", "Optional. Starts when the group animations start and stops when the group finishes."));
+        if (activity.FindPropertyRelative("groupLoopSound").objectReferenceValue != null)
+        {
+            EditorGUI.indentLevel++;
+            EditorGUILayout.Slider(activity.FindPropertyRelative("groupLoopSoundVolume"), 0f, 2f, TipContent("Loop Sound Volume"));
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("loopGroupSoundUntilGroupFinishes"), TipContent("Loop Until Group Finishes", "ON = sound loops until all group animations and voices finish."));
+            EditorGUI.indentLevel--;
+        }
+
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("groupResultVoiceOver"), TipContent("Voice Over After Action", "Optional narration after the action starts."));
         if (activity.FindPropertyRelative("groupResultVoiceOver").objectReferenceValue != null)
         {
@@ -2816,6 +2998,265 @@ public class ContentControllerEditor : Editor
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("helpTapSound"), TipContent("Sound On Correct Tap Optional", "Optional short sound that plays when the child taps the correct object."));
         if (activity.FindPropertyRelative("helpTapSound").objectReferenceValue != null)
             EditorGUILayout.PropertyField(activity.FindPropertyRelative("helpTapSoundVolume"), TipContent("Tap Sound Volume"));
+
+        EditorGUILayout.Space(6);
+        DrawMilestoneHintsSection(activity);
+    }
+
+    // ---------------------------------------------------------------
+    // SHARED HELPER: Draw the Animation While Tapping fields.
+    // Used by WaitForStoryThenTapObject, ProgressGate, and any other
+    // tap activity. characterExample is just for the tooltip hint text.
+    // ---------------------------------------------------------------
+    private void DrawAnimationWhileTappingFields(SerializedProperty activity, string characterExample)
+    {
+        SerializedProperty useHelper = activity.FindPropertyRelative("progressUseHelperAnimationWhileTapping");
+
+        EditorGUILayout.PropertyField(useHelper, TipContent(
+            "Animate A Character While Child Taps",
+            "ON = the " + characterExample + " animates as the child taps. Clips change with progress. OFF = no character animation."));
+
+        if (!useHelper.boolValue)
+        {
+            EditorGUILayout.HelpBox("Turn this ON to make the " + characterExample + " animate while the child is tapping.", MessageType.None);
+            return;
+        }
+
+        EditorGUI.indentLevel++;
+
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperAnimator"),
+            TipContent("Animated Character",
+            "Drag the Animator of the " + characterExample + " here. Example: drag the " + characterExample + " Animator from the Scene or Hierarchy."));
+
+        SerializedProperty clips = activity.FindPropertyRelative("progressHelperAnimations");
+        DrawAnimationClipsWithSounds(
+            activity,
+            clips,
+            "progressHelperGroupLoopSound",
+            "progressHelperGroupLoopSoundVolume",
+            "loopProgressHelperGroupSoundUntilAnimationEnds",
+            "progressHelperAnimationSounds",
+            "progressHelperAnimationSoundVolumes",
+            "Animation Clips",
+            "Group Sound For These Clips Optional");
+
+        int clipCount = clips.arraySize;
+        if (clipCount == 0)
+            EditorGUILayout.HelpBox("No clips added yet. Drag animation clips from the Project window into the list above.", MessageType.Warning);
+        else if (clipCount == 1)
+            EditorGUILayout.HelpBox("1 clip. It loops the whole time. Add more clips to change the animation as progress fills.", MessageType.Info);
+        else
+        {
+            string preview = "";
+            for (int ci = 0; ci < clipCount; ci++)
+                preview += "  Clip " + (ci + 1) + ": " + Mathf.RoundToInt((float)ci / clipCount * 100f) + "% - " + Mathf.RoundToInt((float)(ci + 1) / clipCount * 100f) + "%\n";
+            EditorGUILayout.HelpBox(clipCount + " clips. Progress split:\n" + preview.TrimEnd(), MessageType.Info);
+        }
+
+        SerializedProperty helperMode = activity.FindPropertyRelative("progressHelperAnimationSelection");
+        DrawEnumPopup(helperMode, ProgressHelperSelectionValues, ProgressHelperSelectionLabels,
+            TipContent("How Should The Animation Play",
+            "Change With Progress = recommended. Animation changes as the bar fills. Same clip never restarts on every tap."));
+
+        ProgressGatePreviewAnimationSelectionMode sel = (ProgressGatePreviewAnimationSelectionMode)helperMode.enumValueIndex;
+        bool isProgressMode = sel == ProgressGatePreviewAnimationSelectionMode.PlayAllAnimationsByProgress ||
+                              sel == ProgressGatePreviewAnimationSelectionMode.PlaySelectedNumbersByProgress;
+
+        if (sel == ProgressGatePreviewAnimationSelectionMode.UseSelectedAnimationNumber)
+            EditorGUILayout.IntSlider(activity.FindPropertyRelative("progressHelperSelectedAnimationNumber"),
+                1, Mathf.Max(1, clipCount),
+                TipContent("Which Clip Number", "1 = first clip. 2 = second clip. And so on."));
+
+        if (sel == ProgressGatePreviewAnimationSelectionMode.PlaySelectedAnimationNumbers ||
+            sel == ProgressGatePreviewAnimationSelectionMode.PlaySelectedNumbersByProgress)
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperSelectedAnimationNumbers"),
+                TipContent("Clip Numbers To Use", "Type numbers separated by commas. Example: 1,3,5 uses clips 1, 3, and 5 only."));
+
+        if (isProgressMode)
+            EditorGUILayout.HelpBox(
+                "Progress mode is active.\n" +
+                "- Animation changes when progress enters a new range.\n" +
+                "- Same clip will NOT restart on every tap.\n" +
+                "- If progress drops, animation goes back to the matching range clip.\n" +
+                "- Current clip loops until progress moves to the next range.",
+                MessageType.Info);
+
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperAnimationSpeed"),
+            TipContent("Animation Speed", "1 = normal. 0.5 = half speed. 2 = double speed."));
+
+        EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperLoopAnimation"),
+            TipContent("Loop Current Animation",
+            "Keep this ON. The current animation loops until progress enters the next range."));
+
+        if (!isProgressMode)
+            EditorGUILayout.PropertyField(activity.FindPropertyRelative("progressHelperPauseWhenNotTapping"),
+                TipContent("Pause When Child Stops", "ON = animation pauses when there is no tapping."));
+
+        EditorGUI.indentLevel--;
+    }
+
+    private void DrawAnimationClipsWithSounds(
+        SerializedProperty activity,
+        SerializedProperty clips,
+        string groupLoopSoundProperty,
+        string groupLoopVolumeProperty,
+        string loopGroupSoundProperty,
+        string clipSoundsProperty,
+        string clipVolumesProperty,
+        string clipsLabel,
+        string groupSoundLabel)
+    {
+        if (clips == null)
+        {
+            EditorGUILayout.HelpBox("Animation clip list is missing. Click Refresh Activity Template once.", MessageType.Warning);
+            if (GUILayout.Button(TipContent("Refresh Activity Template", "Creates missing optional fields without changing the existing setup.")))
+                RefreshSelectedController(force: true);
+            return;
+        }
+
+        SerializedProperty groupLoopSound = activity.FindPropertyRelative(groupLoopSoundProperty);
+        SerializedProperty groupLoopVolume = activity.FindPropertyRelative(groupLoopVolumeProperty);
+        SerializedProperty loopGroupSound = activity.FindPropertyRelative(loopGroupSoundProperty);
+        SerializedProperty clipSounds = activity.FindPropertyRelative(clipSoundsProperty);
+        SerializedProperty clipVolumes = activity.FindPropertyRelative(clipVolumesProperty);
+
+        EditorGUILayout.Space(4);
+        EditorGUILayout.LabelField(groupSoundLabel, EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox("Use this when one sound should loop while these animation clips are active. Leave empty if each clip has its own sound only.", MessageType.None);
+
+        if (groupLoopSound != null)
+            EditorGUILayout.PropertyField(groupLoopSound, TipContent("Loop Sound", "Optional. One sound that loops while this animation group is active."));
+        if (groupLoopVolume != null)
+            EditorGUILayout.Slider(groupLoopVolume, 0f, 2f, TipContent("Loop Sound Volume", "0 = silent. 1 = normal. 2 = boosted."));
+        if (loopGroupSound != null)
+            EditorGUILayout.PropertyField(loopGroupSound, TipContent("Loop Until Clips Finish", "ON = sound stops automatically when the animation group finishes."));
+
+        if (clipSounds == null || clipVolumes == null)
+        {
+            EditorGUILayout.HelpBox("Clip sound fields are missing. Click Refresh Activity Template once.", MessageType.Warning);
+            if (GUILayout.Button(TipContent("Fix Clip Sound Fields Now", "Creates the missing optional sound lists without changing your existing clips.")))
+                RefreshSelectedController(force: true);
+            return;
+        }
+
+        while (clipSounds.arraySize < clips.arraySize)
+            clipSounds.arraySize++;
+
+        while (clipVolumes.arraySize < clips.arraySize)
+        {
+            int index = clipVolumes.arraySize;
+            clipVolumes.arraySize++;
+            clipVolumes.GetArrayElementAtIndex(index).floatValue = 1f;
+        }
+
+        bool hasGroupSound = groupLoopSound != null && groupLoopSound.objectReferenceValue != null;
+        bool hasClipSound = false;
+        for (int i = 0; i < Mathf.Min(clips.arraySize, clipSounds.arraySize); i++)
+        {
+            if (clipSounds.GetArrayElementAtIndex(i).objectReferenceValue != null)
+            {
+                hasClipSound = true;
+                break;
+            }
+        }
+        if (hasGroupSound && hasClipSound)
+            EditorGUILayout.HelpBox("Both group sound and per-clip sounds are assigned. This is allowed, but it may sound busy.", MessageType.Info);
+
+        EditorGUILayout.Space(4);
+        EditorGUILayout.LabelField(clipsLabel, EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox("Add each animation and its sound together. Sound is optional for every clip.", MessageType.None);
+
+        for (int i = 0; i < clips.arraySize; i++)
+        {
+            if (clipSounds.arraySize <= i) clipSounds.arraySize = i + 1;
+            if (clipVolumes.arraySize <= i)
+            {
+                clipVolumes.arraySize = i + 1;
+                clipVolumes.GetArrayElementAtIndex(i).floatValue = 1f;
+            }
+
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Clip " + (i + 1), EditorStyles.boldLabel);
+            if (GUILayout.Button("Remove", GUILayout.Width(80)))
+            {
+                int oldClipSize = clips.arraySize;
+                clips.DeleteArrayElementAtIndex(i);
+                if (clips.arraySize == oldClipSize && i < clips.arraySize) clips.DeleteArrayElementAtIndex(i);
+                if (i < clipSounds.arraySize)
+                {
+                    int oldSoundSize = clipSounds.arraySize;
+                    clipSounds.DeleteArrayElementAtIndex(i);
+                    if (clipSounds.arraySize == oldSoundSize && i < clipSounds.arraySize) clipSounds.DeleteArrayElementAtIndex(i);
+                }
+                if (i < clipVolumes.arraySize) clipVolumes.DeleteArrayElementAtIndex(i);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndVertical();
+                break;
+            }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.PropertyField(clips.GetArrayElementAtIndex(i), TipContent("Animation Clip"));
+            EditorGUILayout.PropertyField(clipSounds.GetArrayElementAtIndex(i), TipContent("Sound For This Clip", "Optional. Plays when this animation clip starts."));
+            EditorGUILayout.Slider(clipVolumes.GetArrayElementAtIndex(i), 0f, 2f, TipContent("Sound Volume", "0 = silent. 1 = normal. 2 = boosted."));
+            EditorGUILayout.EndVertical();
+        }
+
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button(TipContent("+ Add Clip", "Adds one animation clip slot with its own optional sound.")))
+        {
+            int index = clips.arraySize;
+            clips.arraySize++;
+            clipSounds.arraySize = Mathf.Max(clipSounds.arraySize, index + 1);
+            clipVolumes.arraySize = Mathf.Max(clipVolumes.arraySize, index + 1);
+            clips.GetArrayElementAtIndex(index).objectReferenceValue = null;
+            clipSounds.GetArrayElementAtIndex(index).objectReferenceValue = null;
+            clipVolumes.GetArrayElementAtIndex(index).floatValue = 1f;
+        }
+        if (clips.arraySize > 0 && GUILayout.Button(TipContent("- Remove Last", "Removes the last animation clip slot and its sound.")))
+        {
+            int last = clips.arraySize - 1;
+            int oldClipSize = clips.arraySize;
+            clips.DeleteArrayElementAtIndex(last);
+            if (clips.arraySize == oldClipSize && last < clips.arraySize) clips.DeleteArrayElementAtIndex(last);
+            if (clipSounds.arraySize > last)
+            {
+                int oldSoundSize = clipSounds.arraySize;
+                clipSounds.DeleteArrayElementAtIndex(last);
+                if (clipSounds.arraySize == oldSoundSize && last < clipSounds.arraySize) clipSounds.DeleteArrayElementAtIndex(last);
+            }
+            if (clipVolumes.arraySize > last) clipVolumes.DeleteArrayElementAtIndex(last);
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+
+    // Shared across all activity types where the child taps repeatedly.
+    // The animation follows progress automatically, no percentages needed.
+    // ---------------------------------------------------------------
+    private void DrawTappingAnimationSection(SerializedProperty activity)
+    {
+        SerializedProperty input = activity.FindPropertyRelative("childInput");
+        ActivityInputKind kind = (ActivityInputKind)input.enumValueIndex;
+
+        // WaitForStoryThenTapObject and ProgressGate draw this section
+        // directly inside their own fields (in section 4) so the user
+        // sees it right where they are setting up the activity.
+        // Other tap types use this outer section 5.
+        bool showForThisType =
+            kind == ActivityInputKind.TapAnywhere ||
+            kind == ActivityInputKind.TapObject ||
+            kind == ActivityInputKind.TapManyTimes ||
+            kind == ActivityInputKind.KeepTapping ||
+            kind == ActivityInputKind.HelpAction;
+
+        if (!showForThisType) return;
+
+        DrawStepBox("5. Character Animation While Tapping Optional",
+            "Should a character or object animate WHILE the child taps?\n" +
+            "This plays DURING tapping, not after.\n" +
+            "Add clips and the progress splits automatically. No percentages needed.");
+
+        DrawAnimationWhileTappingFields(activity, "character");
     }
 
     private void DrawHelpAndTimeoutSection(SerializedProperty activity)
@@ -2823,7 +3264,7 @@ public class ContentControllerEditor : Editor
         SerializedProperty input = activity.FindPropertyRelative("childInput");
         ActivityInputKind kind = (ActivityInputKind)input.enumValueIndex;
 
-        DrawStepBox("5. Timing", "All timing controls stay here. First decide the total time. Then decide what happens if the child gives no input.");
+        DrawStepBox("6. Timing", "All timing controls stay here. First decide the total time. Then decide what happens if the child gives no input.");
         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
         if (kind == ActivityInputKind.WaitForStoryThenTapObject)
@@ -2941,7 +3382,7 @@ public class ContentControllerEditor : Editor
         if (kind == ActivityInputKind.WaitOnly)
             return;
 
-        DrawStepBox("7. What Happens If Wrong?", "Wrong input means the child taps the wrong object, wrong place, wrong option, or wrong UI. Wrong input must not complete the activity.");
+        DrawStepBox("8. What Happens If Wrong?", "Wrong input means the child taps the wrong object, wrong place, wrong option, or wrong UI. Wrong input must not complete the activity.");
 
         bool objectBased = kind == ActivityInputKind.TapObject || kind == ActivityInputKind.HelpAction || kind == ActivityInputKind.ProgressGate || kind == ActivityInputKind.GroupAction || kind == ActivityInputKind.TapObjectsInOrder || kind == ActivityInputKind.WaitForStoryThenTapObject || (kind == ActivityInputKind.TapManyTimes && activity.FindPropertyRelative("targetObject").objectReferenceValue != null);
 
@@ -3001,7 +3442,7 @@ public class ContentControllerEditor : Editor
         bool hasReactions = reactions != null && reactions.arraySize > 0;
 
         EditorGUILayout.Space(6);
-        reactions.isExpanded = EditorGUILayout.Foldout(reactions.isExpanded, hasReactions ? "8. Result Actions" : "8. Result Actions Hidden", true, EditorStyles.foldoutHeader);
+        reactions.isExpanded = EditorGUILayout.Foldout(reactions.isExpanded, hasReactions ? "9. Result Actions" : "9. Result Actions Hidden", true, EditorStyles.foldoutHeader);
         if (!reactions.isExpanded)
         {
             if (hasReactions)
@@ -3009,7 +3450,7 @@ public class ContentControllerEditor : Editor
             return;
         }
 
-        DrawStepBox("8. Result Actions", "Main actions that play during or after the activity: animation, sound, voice, VFX, object on/off, move, color, or custom event.");
+        DrawStepBox("9. Result Actions", "Main actions that play during or after the activity: animation, sound, voice, VFX, object on/off, move, color, or custom event.");
 
         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
         EditorGUILayout.LabelField("Add Extra Reaction", EditorStyles.boldLabel);
@@ -3608,7 +4049,7 @@ public class ContentControllerEditor : Editor
 
     private void DrawFinishSection(SerializedProperty activity)
     {
-        DrawStepBox("9. When Is The Activity Complete?", "Choose what makes this activity finish. Timing values are kept in the Timing section above.");
+        DrawStepBox("10. When Is The Activity Complete?", "Choose what makes this activity finish. Timing values are kept in the Timing section above.");
         SerializedProperty finish = activity.FindPropertyRelative("finishWhen");
         DrawEnumPopup(finish, FinishValues, FinishLabels, TipContent("Activity Ends When"));
 
@@ -3618,7 +4059,7 @@ public class ContentControllerEditor : Editor
 
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("waitForRunningReactionsBeforeFinish"), TipContent("Wait For Result Actions Before Ending"));
 
-        DrawStepBox("10. What Happens After Activity?", "ON = automatically continue based on where this activity was placed. Wrong option never uses this path.");
+        DrawStepBox("11. What Happens After Activity?", "ON = automatically continue based on where this activity was placed. Wrong option never uses this path.");
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("continueAfterComplete"), TipContent("Automatically Continue After Activity"));
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("retryIfFailed"), TipContent("Retry If Failed"));
         EditorGUILayout.PropertyField(activity.FindPropertyRelative("successMessage"), TipContent("Success Message Optional"));
@@ -3866,6 +4307,8 @@ public class ContentControllerEditor : Editor
         activity.FindPropertyRelative("groupAutoStartStoryAfterSeconds").floatValue = 0f;
         activity.FindPropertyRelative("groupPlayActionsWhenAutoSkipped").boolValue = true;
         activity.FindPropertyRelative("groupWaitSecondsBeforeStory").floatValue = 0f;
+        activity.FindPropertyRelative("groupLoopSoundVolume").floatValue = 1f;
+        activity.FindPropertyRelative("loopGroupSoundUntilGroupFinishes").boolValue = false;
         activity.FindPropertyRelative("groupResultVoiceVolume").floatValue = 1f;
         activity.FindPropertyRelative("groupWaitForVoiceOver").boolValue = true;
         activity.FindPropertyRelative("pulseTargetObject").boolValue = true;

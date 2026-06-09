@@ -13661,7 +13661,7 @@ GameObject:
   - component: {fileID: 654754166291902936}
   - component: {fileID: 6003286276032094153}
   - component: {fileID: 5862863590896444804}
-  - component: {fileID: 4652922542126064354}
+  - component: {fileID: 5321428560189594741}
   m_Layer: 0
   m_Name: 'Story_1_page_90-91 '
   m_TagString: Untagged
@@ -13878,7 +13878,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4652922542126064354
+--- !u!114 &5321428560189594741
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -13893,13 +13893,13 @@ MonoBehaviour:
   activities:
   - enabled: 1
     activityName: servent moping
-    startWhen: 1
+    startWhen: 7
     waitBeforeStart: 0
     startKey: 
-    storyWaitObjectOrAnimator: {fileID: 0}
+    storyWaitObjectOrAnimator: {fileID: 4634621135913578217}
     storyWaitComponent: {fileID: 0}
-    storyWaitAnimator: {fileID: 0}
-    storyWaitAnimationClip: {fileID: 0}
+    storyWaitAnimator: {fileID: 7622212186317025390}
+    storyWaitAnimationClip: {fileID: 1827226128182048838, guid: f2c2872e11c76bb49b17793485617ca3, type: 3}
     storyWaitAnimationStateName: 
     storyWaitTimeoutSeconds: 0
     pauseStoryWhileActivity: 1
@@ -13970,6 +13970,11 @@ MonoBehaviour:
     progressReactionPlaybackMode: 0
     progressReactionMinimumGapSeconds: 0
     progressReactionAnimationSpeed: 1
+    progressReactionGroupLoopSound: {fileID: 0}
+    progressReactionGroupLoopSoundVolume: 1
+    loopProgressReactionGroupSoundUntilAnimationEnds: 0
+    progressReactionAnimationSounds: []
+    progressReactionAnimationSoundVolumes: []
     progressUseHelperAnimationWhileTapping: 0
     progressHelperAnimator: {fileID: 0}
     progressHelperAnimations: []
@@ -14016,6 +14021,9 @@ MonoBehaviour:
     groupAutoStartStoryAfterSeconds: 0
     groupPlayActionsWhenAutoSkipped: 0
     groupWaitSecondsBeforeStory: 0
+    groupLoopSound: {fileID: 0}
+    groupLoopSoundVolume: 1
+    loopGroupSoundUntilGroupFinishes: 0
     groupResultVoiceOver: {fileID: 0}
     groupResultVoiceVolume: 1
     groupWaitForVoiceOver: 1
@@ -14271,7 +14279,31 @@ MonoBehaviour:
     onActivityCompleted:
       m_PersistentCalls:
         m_Calls: []
-  activityTemplateSchemaVersion: 33
+    activityStartSound: {fileID: 0}
+    activityStartSoundVolume: 1
+    activityCompleteSound: {fileID: 0}
+    activityCompleteSoundVolume: 1
+    generalCorrectTapSound: {fileID: 0}
+    generalCorrectTapSoundVolume: 1
+    correctTapSoundGapMode: 2
+    correctTapCustomGapSeconds: 0.15
+    progressDropSound: {fileID: 0}
+    progressDropSoundVolume: 1
+    progressFullSound: {fileID: 0}
+    progressFullSoundVolume: 1
+    noInputHintSound: {fileID: 0}
+    noInputHintSoundVolume: 1
+    resultAnimationStartSound: {fileID: 0}
+    resultAnimationStartSoundVolume: 1
+    sharedHelperAnimationSound: {fileID: 0}
+    sharedHelperAnimationSoundVolume: 1
+    progressHelperGroupLoopSound: {fileID: 0}
+    progressHelperGroupLoopSoundVolume: 1
+    loopProgressHelperGroupSoundUntilAnimationEnds: 0
+    progressHelperAnimationSounds: []
+    progressHelperAnimationSoundVolumes: []
+    progressMilestones: []
+  activityTemplateSchemaVersion: 34
   activityPanel: {fileID: 0}
   defaultRaycastCamera: {fileID: 0}
   defaultAudioSource: {fileID: 5862863590896444804}

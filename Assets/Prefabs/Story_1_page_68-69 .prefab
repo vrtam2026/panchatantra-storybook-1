@@ -4484,14 +4484,22 @@ MonoBehaviour:
     progressReactionPlaybackMode: 0
     progressReactionMinimumGapSeconds: 0
     progressReactionAnimationSpeed: 1
-    progressUseHelperAnimationWhileTapping: 0
-    progressHelperAnimator: {fileID: 0}
-    progressHelperAnimations: []
-    progressHelperAnimationSelection: 0
+    progressReactionGroupLoopSound: {fileID: 0}
+    progressReactionGroupLoopSoundVolume: 1
+    loopProgressReactionGroupSoundUntilAnimationEnds: 0
+    progressReactionAnimationSounds: []
+    progressReactionAnimationSoundVolumes: []
+    progressUseHelperAnimationWhileTapping: 1
+    progressHelperAnimator: {fileID: 4055877599384959629}
+    progressHelperAnimations:
+    - {fileID: 1827226128182048838, guid: e363f2e571436f843ae803873e8ed534, type: 3}
+    - {fileID: 1827226128182048838, guid: c099a2671350ba3438c357593d8ad7bc, type: 3}
+    - {fileID: 1827226128182048838, guid: 9d4b866f2212e1d478e02d9ea8018d71, type: 3}
+    progressHelperAnimationSelection: 4
     progressHelperSelectedAnimationNumber: 0
     progressHelperSelectedAnimationNumbers: 1
     progressHelperAnimationSpeed: 1
-    progressHelperLoopAnimation: 0
+    progressHelperLoopAnimation: 1
     progressHelperPauseWhenNotTapping: 0
     progressHelperResetWhenProgressEmpty: 0
     progressAutoFinishAfterNoTapSeconds: 5
@@ -4530,6 +4538,9 @@ MonoBehaviour:
     groupAutoStartStoryAfterSeconds: 0
     groupPlayActionsWhenAutoSkipped: 0
     groupWaitSecondsBeforeStory: 0
+    groupLoopSound: {fileID: 0}
+    groupLoopSoundVolume: 1
+    loopGroupSoundUntilGroupFinishes: 0
     groupResultVoiceOver: {fileID: 0}
     groupResultVoiceVolume: 1
     groupWaitForVoiceOver: 1
@@ -4605,90 +4616,7 @@ MonoBehaviour:
     choiceHideUiWhileResultPlays: 1
     choiceBlockInputWhileResultPlays: 1
     choiceReturnQuestionAfterWrong: 1
-    reactions:
-    - enabled: 1
-      reactionName: Animation
-      type: 1
-      playWhen: 0
-      visualEffectPlayMode: 0
-      hideSourceObjectsUntilPlayed: 0
-      spawnAreaMode: 0
-      pageSpreadSize: {x: 0, y: 0}
-      rectangleSpawnArea: {fileID: 0}
-      rectangleSpawnAreaSize: {x: 0.01, y: 0.01, z: 0.01}
-      fadeOutSpawnedObjects: 0
-      fadeOutSeconds: 0
-      startDelaySeconds: 0
-      extraWaitSeconds: 0
-      cooldownSeconds: 0
-      maxTriggerCount: 0
-      reactionDurationSeconds: 0
-      optionalSfx: {fileID: 0}
-      sfxMode: 3
-      sfxVolume: 1
-      sfxMinimumGapSeconds: 0
-      reactionVoiceOver: {fileID: 0}
-      reactionVoiceVolume: 1
-      waitForReactionVoiceOver: 0
-      stopVoiceWhenReactionEnds: 0
-      vfxObjects: []
-      vfxSpawnOrigin: {fileID: 0}
-      particleBurstCount: 25
-      objectBurstCount: 1
-      objectLifeSeconds: 2
-      objectSpreadRadius: 0.15
-      objectLaunchForce: 0
-      randomizeObjectRotation: 1
-      keepSpawnedObjectsInWorldSpace: 0
-      make3DObjectsFall: 0
-      fallingMotion: 0
-      fallDistance: 0
-      fallDurationSeconds: 0.05
-      randomStartDelayMaxSeconds: 0
-      randomFallTimeExtraSeconds: 0
-      fallSpreadSideways: 0
-      fallSpinDegrees: 0
-      fallFlutterAmount: 0
-      randomScaleMin: 0
-      randomScaleMax: 0
-      useActivityTransform: 0
-      previewActivityTransformInEditor: 0
-      objectToMoveOrScale: {fileID: 0}
-      copyTransformFrom: {fileID: 0}
-      activityPosition: {x: 0, y: 0, z: 0}
-      activityRotationEuler: {x: 0, y: 0, z: 0}
-      activityScale: {x: 1, y: 1, z: 1}
-      restoreTransformAfterAction: 0
-      hasSavedStoryPose: 0
-      storyPosition: {x: 0, y: 0, z: 0}
-      storyRotationEuler: {x: 0, y: 0, z: 0}
-      storyScale: {x: 0, y: 0, z: 0}
-      animator: {fileID: 4055877599384959629}
-      animationClip: {fileID: 0}
-      animationClips:
-      - {fileID: 1827226128182048838, guid: e363f2e571436f843ae803873e8ed534, type: 3}
-      - {fileID: 1827226128182048838, guid: c099a2671350ba3438c357593d8ad7bc, type: 3}
-      - {fileID: 1827226128182048838, guid: 9d4b866f2212e1d478e02d9ea8018d71, type: 3}
-      animationPlayMode: 1
-      animationSpeed: 1
-      doNotRestartWhilePlaying: 1
-      blocksNextInput: 1
-      mainAudio: {fileID: 0}
-      mainAudioVolume: 1
-      objects: []
-      targetRenderer: {fileID: 0}
-      targetColor: {r: 0, g: 0, b: 0, a: 0}
-      colorChangeSeconds: 0
-      restoreColorAfterSeconds: 0
-      objectToMove: {fileID: 0}
-      moveTarget: {fileID: 0}
-      moveOffset: {x: 0, y: 0, z: 0}
-      moveDurationSeconds: 0
-      customAction:
-        m_PersistentCalls:
-          m_Calls: []
-      waitUntilFinished: 1
-      showAdvancedOptions: 0
+    reactions: []
     finishWhen: 1
     waitForRunningReactionsBeforeFinish: 1
     continueAfterComplete: 1
@@ -4703,7 +4631,51 @@ MonoBehaviour:
     onActivityCompleted:
       m_PersistentCalls:
         m_Calls: []
-  activityTemplateSchemaVersion: 33
+    activityStartSound: {fileID: 0}
+    activityStartSoundVolume: 1
+    activityCompleteSound: {fileID: 0}
+    activityCompleteSoundVolume: 1
+    generalCorrectTapSound: {fileID: 0}
+    generalCorrectTapSoundVolume: 1
+    correctTapSoundGapMode: 2
+    correctTapCustomGapSeconds: 0.15
+    progressDropSound: {fileID: 0}
+    progressDropSoundVolume: 1
+    progressFullSound: {fileID: 0}
+    progressFullSoundVolume: 1
+    noInputHintSound: {fileID: 0}
+    noInputHintSoundVolume: 1
+    resultAnimationStartSound: {fileID: 0}
+    resultAnimationStartSoundVolume: 1
+    sharedHelperAnimationSound: {fileID: 0}
+    sharedHelperAnimationSoundVolume: 1
+    progressHelperGroupLoopSound: {fileID: 0}
+    progressHelperGroupLoopSoundVolume: 1
+    loopProgressHelperGroupSoundUntilAnimationEnds: 0
+    progressHelperAnimationSounds:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    progressHelperAnimationSoundVolumes:
+    - 1
+    - 1
+    - 1
+    progressMilestones:
+    - enabled: 1
+      progressPercent: 50
+      hintText: 50
+      displayDurationSeconds: 0
+      repeatMode: 0
+      sound: {fileID: 0}
+      soundVolume: 0
+    - enabled: 1
+      progressPercent: 90
+      hintText: 90
+      displayDurationSeconds: 0
+      repeatMode: 0
+      sound: {fileID: 0}
+      soundVolume: 0
+  activityTemplateSchemaVersion: 34
   activityPanel: {fileID: 0}
   defaultRaycastCamera: {fileID: 0}
   defaultAudioSource: {fileID: 5242362219178820207}
