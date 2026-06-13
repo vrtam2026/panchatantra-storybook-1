@@ -592,9 +592,9 @@ RectTransform:
   - {fileID: 3472551816157210216}
   m_Father: {fileID: 7566549893753551274}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -28.125}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5064927387889041012
@@ -898,7 +898,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuizManagerArun
   questions:
-  - questionText: '1. In which town did Danila the merchant live? '
+  - questionText: '1)  In which town did Danila the merchant live? '
     option1: Virginia
     option2: Virata
     option3: Villivakkam
@@ -910,19 +910,19 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 8384fc54f86a38f41a4070396348f249, type: 3}
     questionVideo: {fileID: 32900000, guid: 33f50a59820ddd74cbcef4b80e969be0, type: 3}
     optionStartTime: 6
-  - questionText: '2. What was the king''s servant name? '
+  - questionText: '2)  What was the king''s servant name? '
     option1: Govardhana
     option2: Rambo
     option3: 'Goramba '
     option4: Govinda
     option1IsCorrect: 0
     option2IsCorrect: 0
-    option3IsCorrect: 0
-    option4IsCorrect: 1
+    option3IsCorrect: 1
+    option4IsCorrect: 0
     questionAudio: {fileID: 8300000, guid: c873bc6474b04a34f9826c18d9d9c86a, type: 3}
     questionVideo: {fileID: 32900000, guid: 424b49a7370501f438c1161458a527d6, type: 3}
     optionStartTime: 5
-  - questionText: '3. How did Dantila feel when Gorambha accidentally sat on the
+  - questionText: '3)  How did Dantila feel when Gorambha accidentally sat on the
       seat meant for noble people? '
     option1: Honored
     option2: Angered
@@ -935,7 +935,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 3f993c8d5de993e4ea5de5c4d80fd7cb, type: 3}
     questionVideo: {fileID: 32900000, guid: 3e7dd049e739e5c48b3755cb9fd83174, type: 3}
     optionStartTime: 10
-  - questionText: '4. When Gorambha was kicked out of the building he... '
+  - questionText: '4) When Gorambha was kicked out of the building he... '
     option1: '..bought the building and kicked Dantila out '
     option2: '...complained to the King '
     option3: '...asked Pingalka to eat Dantila. '
@@ -947,7 +947,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 676a2299ce9323746a7b7f603a8e5a56, type: 3}
     questionVideo: {fileID: 32900000, guid: b61672d4bef491643b2fe4173eb17224, type: 3}
     optionStartTime: 7
-  - questionText: '5. Gorambha told the king that he was ..... all night and had
+  - questionText: '5) Gorambha told the king that he was ..... all night and had
       no sleep at all. '
     option1: 'gambling '
     option2: 'eating ice cream '
@@ -960,7 +960,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 6987788810f917b46aaaa0f9ac45a8f5, type: 3}
     questionVideo: {fileID: 32900000, guid: e8bba63914169d14b901b83104dc11e4, type: 3}
     optionStartTime: 11
-  - questionText: '6. We should never think of anyone as insignificant or too low
+  - questionText: '6)  We should never think of anyone as insignificant or too low
       because... '
     option1: 'Mufasa would be upset about it '
     option2: 'that the advice given by Damanaka to all of us. '
@@ -973,8 +973,8 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: bdde74f4d99d4a643a1f283f061215ec, type: 3}
     questionVideo: {fileID: 32900000, guid: bee1df4bdb0b90044bd9af04754dd610, type: 3}
     optionStartTime: 9
-  - questionText: '7. Later in the story, Dantila invited Gorambha to his house with
-      the intention of... '
+  - questionText: '7)  Later in the story, Dantila invited Gorambha to his house
+      with the intention of... '
     option1: 'talking a revenge on him '
     option2: 'making friends with him  '
     option3: 'playing with him all day. '
@@ -986,7 +986,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 19c71e9fb6e9ee74ea32b66c795015eb, type: 3}
     questionVideo: {fileID: 32900000, guid: 67ceb7e4e7c674c40a6e4a3637a76cab, type: 3}
     optionStartTime: 9
-  - questionText: '8. Simple gestures go a long way in making people... '
+  - questionText: '8) Simple gestures go a long way in making people... '
     option1: bored
     option2: angry
     option3: jealous
@@ -998,7 +998,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: c4c352143fc33364db2587cc1b844087, type: 3}
     questionVideo: {fileID: 32900000, guid: 7ce65593e82878347803c213535ac7bc, type: 3}
     optionStartTime: 6
-  - questionText: '9. When Pingalaka met Sanjaka for the first time.. '
+  - questionText: '9)  When Pingalaka met Sanjaka for the first time.. '
     option1: '...he let out a mighty roar and scared him away. '
     option2: '...he pounched '
     option3: '...he welcomed him and assured his safety. '
@@ -1010,7 +1010,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 551c30c70b358a54fa066abedbc97c94, type: 3}
     questionVideo: {fileID: 32900000, guid: 42850ade8f5dd3c4a80eef562a6c5bcf, type: 3}
     optionStartTime: 7
-  - questionText: '10. By spending more time with Sanjivaka, Pingalaka became...
+  - questionText: '10) By spending more time with Sanjivaka, Pingalaka became...
       (Select all answers that are correct) '
     option1: '...less interested in royal sports and killing animals. '
     option2: '..more week and made Sanjivaka the king. '
@@ -1023,7 +1023,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: c37eaad28060ed64cbe6a99df35de853, type: 3}
     questionVideo: {fileID: 32900000, guid: 5652c4ecbc5c78b40893d94b72a603a7, type: 3}
     optionStartTime: 7
-  - questionText: '11. The jacakals were distressed because...(Select all answers
+  - questionText: '11) The jacakals were distressed because...(Select all answers
       that are correct)   '
     option1: 'Pingalaka banished all jackals from the forest. '
     option2: '...their tails were not fuffly anymore. '
@@ -1341,7 +1341,7 @@ GameObject:
   - component: {fileID: 2352234974260882641}
   - component: {fileID: 8933303990245065034}
   m_Layer: 5
-  m_Name: S5_q1
+  m_Name: Quiz Video_S5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2864,9 +2864,9 @@ RectTransform:
   - {fileID: 8770972430742112096}
   m_Father: {fileID: 7566549893753551274}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -196.875}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7219785377166306409
@@ -5187,9 +5187,9 @@ RectTransform:
   - {fileID: 2663364767511133886}
   m_Father: {fileID: 7566549893753551274}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -140.625}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1709371904882822878
@@ -6006,9 +6006,9 @@ RectTransform:
   - {fileID: 7825172475193329189}
   m_Father: {fileID: 7566549893753551274}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -84.375}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7488308584965748631
@@ -7653,7 +7653,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1161735130902834837
 RectTransform:
   m_ObjectHideFlags: 0

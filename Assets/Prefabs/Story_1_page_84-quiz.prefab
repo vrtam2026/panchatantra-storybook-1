@@ -3342,7 +3342,7 @@ GameObject:
   - component: {fileID: 3889875505279737253}
   - component: {fileID: 5035796296409809574}
   m_Layer: 5
-  m_Name: S4_Q-1(v)
+  m_Name: Quiz Video_S4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4423,7 +4423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuizManagerArun
   questions:
-  - questionText: 1,Where was the hungry jackal?
+  - questionText: 1) Where was the hungry jackal?
     option1: In a theater.
     option2: In a circus.
     option3: 'In a forest. '
@@ -4435,7 +4435,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: cf19325191d4def48af17d1924912412, type: 3}
     questionVideo: {fileID: 32900000, guid: 784a2e4b4388a444891330caeae34e3e, type: 3}
     optionStartTime: 4
-  - questionText: 2,What did the jackal hear?
+  - questionText: 2) What did the jackal hear?
     option1: A music concert.
     option2: Loud deafening sounds.
     option3: The sound of a waterfall
@@ -4447,7 +4447,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: e67ca549b418aa84ea0730345f4b9be4, type: 3}
     questionVideo: {fileID: 32900000, guid: 35767121a7f27ba439c209ab3b50b075, type: 3}
     optionStartTime: 4
-  - questionText: 3,What did the jackal find when he went to investigate?
+  - questionText: 3) What did the jackal find when he went to investigate?
     option1: A huge sculpture.
     option2: A pack of wolves.
     option3: A deserted drum.
@@ -4459,7 +4459,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 0085c3fcae5aa8e45b7f7bce18da08bd, type: 3}
     questionVideo: {fileID: 32900000, guid: 805bdd028d3eed448a85c0e4f671009b, type: 3}
     optionStartTime: 7
-  - questionText: 4,The jackal tore open the skin of the drum because
+  - questionText: 4) The jackal tore open the skin of the drum because
     option1: ...he thought something that made so much noise would be filled with
       food.
     option2: ...he thought it was a prey.
@@ -4471,8 +4471,8 @@ MonoBehaviour:
     option4IsCorrect: 0
     questionAudio: {fileID: 8300000, guid: 201d3fb844e9c7e41ac26af17188f074, type: 3}
     questionVideo: {fileID: 32900000, guid: a1f215c5cf7e00646b100f1b7184442f, type: 3}
-    optionStartTime: 0
-  - questionText: 5,Why are we often scared of the unknown?
+    optionStartTime: 7
+  - questionText: 5) Why are we often scared of the unknown?
     option1: 'Because it could end up giving us homework. '
     option2: Because we fear Rakshashasas.
     option3: Because we fear of bad outcome
@@ -4484,7 +4484,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: b9697da6431f2aa409a5019e700476bb, type: 3}
     questionVideo: {fileID: 32900000, guid: c296ea32d2ee0014290efb42a9c8e74f, type: 3}
     optionStartTime: 5
-  - questionText: 6,What is the worst thing to do when dealing with an unknown?
+  - questionText: 6) What is the worst thing to do when dealing with an unknown?
     option1: 'To be in a state of inaction. '
     option2: To investigate more about it.
     option3: To talk to friends about it.
@@ -4496,9 +4496,9 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: bbb2c39da8b169d4aa532018257e6622, type: 3}
     questionVideo: {fileID: 32900000, guid: fbd930edebac86148a29ea06c8031262, type: 3}
     optionStartTime: 7
-  - questionText: 7,What did Damanaka tell the king?
+  - questionText: 7) What did Damanaka tell the king?
     option1: 'It''s time to eat dinner. '
-    option2: "It's just a sound. But if you like, I can investigate it for you. \u2705 "
+    option2: 'It''s just a sound. But if you like, I can investigate it for you. '
     option3: 'Where are we not acting in movies these days? '
     option4: 'I can teach you to make sounds like the bull '
     option1IsCorrect: 0
@@ -4507,8 +4507,8 @@ MonoBehaviour:
     option4IsCorrect: 0
     questionAudio: {fileID: 8300000, guid: a593c966ce66a2f45bbe26af7c1bff8e, type: 3}
     questionVideo: {fileID: 32900000, guid: 1d70d69a45ec55146b256853008118ae, type: 3}
-    optionStartTime: 0
-  - questionText: '8. Why did Pingalaka think that Damanaka could have a grudge against
+    optionStartTime: 5
+  - questionText: '8) Why did Pingalaka think that Damanaka could have a grudge against
       him? '
     option1: 'For not playing games with him '
     option2: 'For being richer than him. '
@@ -4521,7 +4521,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 7164efbaad720574f95a065180580124, type: 3}
     questionVideo: {fileID: 32900000, guid: 94b45925822d9744c8e9874f6522606f, type: 3}
     optionStartTime: 7
-  - questionText: '9. What did Damanaka tell a scared Pingalaka? '
+  - questionText: '9)  What did Damanaka tell a scared Pingalaka? '
     option1: 'That he too was very scared of the creature. '
     option2: 'The creature was not present there any more. '
     option3: 'The relaxing and eating desserts would dissolve all fears '
@@ -4533,7 +4533,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 4d8fcb449727c5e47bd88862ccb5ba01, type: 3}
     questionVideo: {fileID: 32900000, guid: 47c10c9cff77de341968fc51075130bb, type: 3}
     optionStartTime: 6
-  - questionText: 10,What did the Sanjivika - the bull, tell Damanaka?
+  - questionText: 10) What did the Sanjivika - the bull, tell Damanaka?
     option1: To buy him some Samosa.
     option2: To get him a job in the kingdom.
     option3: To work out his safety with the king.
@@ -4545,9 +4545,9 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 4ee1df4188c8dfd469daa21ed5dbe281, type: 3}
     questionVideo: {fileID: 32900000, guid: 12ea025aaac20784785076d940a6ee66, type: 3}
     optionStartTime: 7
-  - questionText: 11,Damanaka described Sanjivaka as...anaka?
-    option1: ...a death eater.
-    option2: ...a deserted drum.
+  - questionText: 11) Damanaka described Sanjivaka as...anaka?
+    option1: ...a death eater
+    option2: ...a deserted drum
     option3: "...Shiva\u2019s vehicle"
     option4: ...a dinosaur
     option1IsCorrect: 0

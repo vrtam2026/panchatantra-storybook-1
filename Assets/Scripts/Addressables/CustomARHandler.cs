@@ -17,6 +17,15 @@ public class CustomARHandler : MonoBehaviour
     private ModelInteraction modelInteraction;
     private QuizManager quizManager;
 
+    // Quiz pages use the same CustomARHandler addressable flow,
+    // but once the quiz opens it should no longer depend on marker tracking.
+    private bool _isQuizContent = false;
+    private bool _pausedVuforiaForQuiz = false;
+
+    [Header("Quiz Safety")]
+    [Tooltip("ON = while quiz is open, normal story page taps, replay, reset, slider, next, and background UI cannot appear behind the quiz.")]
+    [SerializeField] private bool blockBackgroundTouchesWhileQuizOpen = true;
+
     private bool _isLoading = false;
     private bool _loadCancelled = false;
     private bool _contentCompleted = false;
@@ -141,6 +150,15 @@ public class CustomARHandler : MonoBehaviour
 
     void Update()
     {
+        // Quiz rule:
+        // Once quiz is open, the child should interact only with quiz UI.
+        // Do not allow normal story page taps to show replay/reset/slider/next UI behind the quiz.
+        if (ShouldBlockBackgroundTouchesForQuiz())
+        {
+            HidePageControlsWhileQuizIsOpen();
+            return;
+        }
+
         BindReplayButtonIfNeeded();
         RefreshReplayButtonVisibility();
 
@@ -447,6 +465,152 @@ public class CustomARHandler : MonoBehaviour
         _contentCompleted = false;
     }
 
+    private bool ShouldBlockBackgroundTouchesForQuiz()
+    {
+        return blockBackgroundTouchesWhileQuizOpen && IsRelaxedQuizOpen();
+    }
+
+    private void HidePageControlsWhileQuizIsOpen()
+    {
+        if (_fadeRoutine != null)
+        {
+            StopCoroutine(_fadeRoutine);
+            _fadeRoutine = null;
+        }
+
+        StopNextPageAnim();
+
+        replayButton?.SetActive(false);
+        resetButton?.SetActive(false);
+        nextPageImg?.SetActive(false);
+        backBtn?.SetActive(false);
+        sliderV?.SetActive(false);
+
+        SetUIAlpha(0f);
+        SetUIInteractable(false);
+
+        _uiVisible = false;
+        _autoHideTimer = 0f;
+        _touchHeldOnUI = false;
+    }
+
+
+    // ----------------------------------------------------------------------
+    // Quiz relaxed mode helpers
+    // ----------------------------------------------------------------------
+
+    private bool IsQuizPageKey()
+    {
+        return !string.IsNullOrEmpty(addressableKey) &&
+               addressableKey.ToLowerInvariant().Contains("quiz");
+    }
+
+    private bool IsRelaxedQuizOpen()
+    {
+        return _isQuizContent && instantiatedObject != null && quizManager != null;
+    }
+
+    private void PrepareQuizForRelaxedMode(GameObject quizRoot)
+    {
+        if (quizRoot == null) return;
+
+        // Detach from the image target so losing marker does not move or hide the quiz.
+        quizRoot.transform.SetParent(null, true);
+
+        // Force quiz UI to behave like normal full-screen UI.
+        Canvas[] canvases = quizRoot.GetComponentsInChildren<Canvas>(true);
+        foreach (Canvas canvas in canvases)
+        {
+            if (canvas == null) continue;
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = Mathf.Max(canvas.sortingOrder, 20);
+            canvas.enabled = true;
+
+            CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
+            if (scaler == null) scaler = canvas.gameObject.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1080f, 1920f);
+            scaler.matchWidthOrHeight = 0.5f;
+        }
+
+        quizRoot.SetActive(true);
+        OverlayManager.Instance?.HideLostTracking();
+        HidePageControlsWhileQuizIsOpen();
+    }
+
+    private void PauseARCameraForQuiz()
+    {
+        if (_pausedVuforiaForQuiz) return;
+
+        VuforiaBehaviour behaviour = VuforiaBehaviour.Instance;
+        if (behaviour != null && behaviour.enabled)
+        {
+            behaviour.enabled = false;
+            _pausedVuforiaForQuiz = true;
+            Debug.Log("[Quiz] Quiz opened. AR tracking paused so the child can relax.");
+        }
+    }
+
+    private void ResumeARCameraAfterQuiz()
+    {
+        if (!_pausedVuforiaForQuiz) return;
+
+        VuforiaBehaviour behaviour = VuforiaBehaviour.Instance;
+        if (behaviour != null)
+            behaviour.enabled = true;
+
+        _pausedVuforiaForQuiz = false;
+        Debug.Log("[Quiz] Quiz closed. AR tracking resumed.");
+    }
+
+    public bool OwnsQuizManager(QuizManager manager)
+    {
+        return manager != null && quizManager == manager;
+    }
+
+    public void ExitQuizFromQuizManager(QuizManager manager)
+    {
+        if (manager != null && quizManager != null && manager != quizManager)
+        {
+            Debug.LogWarning("[Quiz] Exit ignored because this CustomARHandler does not own that QuizManager.");
+            return;
+        }
+
+        Debug.Log("[Quiz] Exit requested. Closing quiz and returning to AR scan mode.");
+
+        if (_releaseCoroutine != null)
+        {
+            StopCoroutine(_releaseCoroutine);
+            _releaseCoroutine = null;
+        }
+
+        LoadingScreen.Hide();
+        OverlayManager.Instance?.HideAll();
+        StopNextPageAnim();
+        nextPageImg?.SetActive(false);
+
+        if (instantiatedObject != null)
+            Addressables.ReleaseInstance(instantiatedObject);
+
+        instantiatedObject = null;
+        contentControl = null;
+        quizManager = null;
+        _pageNode = null;
+        _activePageId = null;
+        _contentCompleted = false;
+        _isQuizContent = false;
+        _isLoading = false;
+        _loadCancelled = false;
+
+        _trackHook?.ClearPageNode();
+        _arMediaManager?.NotifyContentReleased();
+
+        HideAllUI();
+        ResumeARCameraAfterQuiz();
+
+        if (Current == this) Current = null;
+    }
+
     // ----------------------------------------------------------------------
     // Vuforia tracking
     // ----------------------------------------------------------------------
@@ -517,7 +681,18 @@ public class CustomARHandler : MonoBehaviour
 
                 var components = instantiatedObject.GetComponentsInChildren<QuizManager>(true);
                 if (components.Length > 0)
+                {
                     quizManager = components[0];
+                    _isQuizContent = true;
+                    quizManager.RegisterARHandler(this);
+                    PrepareQuizForRelaxedMode(instantiatedObject);
+                    PauseARCameraForQuiz();
+                }
+                else
+                {
+                    quizManager = null;
+                    _isQuizContent = false;
+                }
 
                 quizManager?.PauseQuiz(false);
 
@@ -553,12 +728,28 @@ public class CustomARHandler : MonoBehaviour
         // Init() / Resume() on the next active page will re-attach the correct listener.
         modelInteraction?.DetachSlider();
 
+        // Quiz page rule: marker is needed only once to start loading.
+        // If the child moves away while quiz is loading, keep loading in the background.
+        if (_isLoading && IsQuizPageKey())
+        {
+            Debug.Log("[Quiz] Marker lost while quiz is loading. Download continues.");
+            return;
+        }
+
         if (_isLoading)
         {
             _loadCancelled = true;
             LoadingScreen.Hide();
             OverlayManager.Instance?.HideAll();
             HideAllUI();
+            return;
+        }
+
+        // Quiz page rule: once quiz is open, losing marker must not hide, pause, or release it.
+        if (IsRelaxedQuizOpen())
+        {
+            Debug.Log("[Quiz] Marker lost, but quiz stays open until Exit is clicked.");
+            OverlayManager.Instance?.HideLostTracking();
             return;
         }
 
@@ -583,6 +774,7 @@ public class CustomARHandler : MonoBehaviour
                 instantiatedObject = null;
                 contentControl = null;
                 quizManager = null;
+                _isQuizContent = false;
                 _pageNode = null;
                 _activePageId = null;
                 _contentCompleted = false;
@@ -618,6 +810,7 @@ public class CustomARHandler : MonoBehaviour
             instantiatedObject = null;
             contentControl = null;
             quizManager = null;
+            _isQuizContent = false;
             _pageNode = null;
             _activePageId = null;
         }

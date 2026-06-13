@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 // ---------------------------------------------------------------
 // OverlayManager -- set up ONCE in the scene.
 // Handles all overlay panels for ALL pages automatically.
@@ -79,6 +83,27 @@ public class OverlayManager : MonoBehaviour
     [Min(0f)]
     [SerializeField] private float lostTrackingDelay = 1f;
 
+
+    [System.Serializable]
+    private class SimpleSound
+    {
+        [Tooltip("ON = this sound will play for this event.")]
+        public bool useSound = false;
+
+        [Tooltip("Drag the sound effect or voice clip here.")]
+        public AudioClip audioClip;
+
+        [Tooltip("0 = mute, 1 = normal, 2 = louder.")]
+        [Range(0f, 2f)] public float volume = 1f;
+
+        [Tooltip("OFF = play once. ON = keep playing until this event ends.")]
+        public bool loop = false;
+    }
+
+    [SerializeField] private SimpleSound turnPageSound = new();
+    [SerializeField] private SimpleSound markerLostSound = new();
+    [SerializeField] private SimpleSound markerFoundSound = new();
+
     // ---------------------------------------------------------------
     // PUBLIC ACCESSORS -- used by ARTrackedPageNode
     // ---------------------------------------------------------------
@@ -98,10 +123,18 @@ public class OverlayManager : MonoBehaviour
     private Coroutine _watchCoroutine;
     private Coroutine _lostTrackingCoroutine;
 
+    private AudioSource _turnPageAudioSource;
+    private AudioSource _markerLostAudioSource;
+    private AudioSource _markerFoundAudioSource;
+
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+
+        _turnPageAudioSource = CreateExtraAudioSource();
+        _markerLostAudioSource = CreateExtraAudioSource();
+        _markerFoundAudioSource = CreateExtraAudioSource();
 
         // Panel starts fully hidden
         if (overlayPanel != null)
@@ -118,6 +151,7 @@ public class OverlayManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        StopAllFeedbackSounds();
         if (Instance == this)
             Instance = null;
     }
@@ -263,10 +297,15 @@ public class OverlayManager : MonoBehaviour
         // Cancel lost tracking show if it hasn't fired yet -- tracking restored in time
         if (_lostTrackingCoroutine != null) { StopCoroutine(_lostTrackingCoroutine); _lostTrackingCoroutine = null; }
 
+        bool wasLostTrackingVisible = _currentState == OverlayState.LostTracking;
+
         // Only restore if we are still in LostTracking state
         // If HideAll was already called (page changed), stay at None
         if (_currentState == OverlayState.LostTracking)
             SetState(_stateBeforeLost);
+
+        if (wasLostTrackingVisible)
+            PlayFeedbackSound(markerFoundSound, _markerFoundAudioSource);
 
         _stateBeforeLost = OverlayState.None;
     }
@@ -286,6 +325,7 @@ public class OverlayManager : MonoBehaviour
         if (_lostTrackingCoroutine != null) { StopCoroutine(_lostTrackingCoroutine); _lostTrackingCoroutine = null; }
         _stateBeforeLost = OverlayState.None;
         SetState(OverlayState.None);
+        StopAllFeedbackSounds();
     }
 
     // Called when content is completed and tracking is lost -- hides turn page overlay
@@ -309,6 +349,8 @@ public class OverlayManager : MonoBehaviour
         if (_frameCoroutine != null) { StopCoroutine(_frameCoroutine); _frameCoroutine = null; }
         if (_fadeCoroutine != null) { StopCoroutine(_fadeCoroutine); _fadeCoroutine = null; }
 
+        StopStateSounds();
+
         switch (newState)
         {
             case OverlayState.None:
@@ -317,10 +359,12 @@ public class OverlayManager : MonoBehaviour
 
             case OverlayState.PageEnd:
                 ShowPanelWithCharacters(pageEndCharacters, fade: true, loop: loopPageEnd);
+                PlayFeedbackSound(turnPageSound, _turnPageAudioSource);
                 break;
 
             case OverlayState.LostTracking:
                 ShowPanelWithCharacters(lostTrackingCharacters, fade: false, loop: loopLostTracking);
+                PlayFeedbackSound(markerLostSound, _markerLostAudioSource);
                 break;
         }
     }
@@ -349,6 +393,50 @@ public class OverlayManager : MonoBehaviour
             _fadeCoroutine = StartCoroutine(FadePanel(0f, 1f, panelFadeInDuration));
         else
             overlayPanel.alpha = 1f;
+    }
+
+
+    // ---------------------------------------------------------------
+    // SIMPLE AUDIO HELPERS
+    // ---------------------------------------------------------------
+
+    private AudioSource CreateExtraAudioSource()
+    {
+        AudioSource source = gameObject.AddComponent<AudioSource>();
+        source.playOnAwake = false;
+        source.spatialBlend = 0f;
+        return source;
+    }
+
+    private void PlayFeedbackSound(SimpleSound sound, AudioSource source)
+    {
+        if (sound == null || !sound.useSound || sound.audioClip == null || source == null) return;
+        source.Stop();
+        source.clip = sound.audioClip;
+        source.volume = sound.volume;
+        source.loop = sound.loop;
+        if (sound.loop) source.Play();
+        else source.PlayOneShot(sound.audioClip, sound.volume);
+    }
+
+    private void StopFeedbackSound(AudioSource source)
+    {
+        if (source == null) return;
+        source.Stop();
+        source.clip = null;
+        source.loop = false;
+    }
+
+    private void StopStateSounds()
+    {
+        StopFeedbackSound(_turnPageAudioSource);
+        StopFeedbackSound(_markerLostAudioSource);
+    }
+
+    private void StopAllFeedbackSounds()
+    {
+        StopStateSounds();
+        StopFeedbackSound(_markerFoundAudioSource);
     }
 
     // ---------------------------------------------------------------
@@ -412,3 +500,42 @@ public class OverlayManager : MonoBehaviour
         overlayPanel.alpha = to;
     }
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(OverlayManager))]
+public class OverlayManagerEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("m_Script"));
+        EditorGUI.EndDisabledGroup();
+
+        DrawPropertiesExcluding(serializedObject, "m_Script", "turnPageSound", "markerLostSound", "markerFoundSound");
+
+        EditorGUILayout.Space(8);
+        EditorGUILayout.LabelField("Feedback Audio - Choose Only What You Need", EditorStyles.boldLabel);
+        DrawSimpleSound("When Turn Page Shows", serializedObject.FindProperty("turnPageSound"));
+        DrawSimpleSound("When Marker Is Lost", serializedObject.FindProperty("markerLostSound"));
+        DrawSimpleSound("When Marker Is Found Again", serializedObject.FindProperty("markerFoundSound"));
+
+        serializedObject.ApplyModifiedProperties();
+    }
+
+    private static void DrawSimpleSound(string title, SerializedProperty property)
+    {
+        SerializedProperty useSound = property.FindPropertyRelative("useSound");
+        EditorGUILayout.PropertyField(useSound, new GUIContent(title));
+        if (!useSound.boolValue) return;
+
+        EditorGUI.indentLevel++;
+        EditorGUILayout.PropertyField(property.FindPropertyRelative("audioClip"), new GUIContent("Audio Clip"));
+        EditorGUILayout.PropertyField(property.FindPropertyRelative("volume"), new GUIContent("Volume 0 to 2"));
+        EditorGUILayout.PropertyField(property.FindPropertyRelative("loop"), new GUIContent("Loop"));
+        EditorGUI.indentLevel--;
+    }
+}
+#endif
+

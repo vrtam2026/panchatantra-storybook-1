@@ -984,8 +984,11 @@ public class ARTrackedPageNode : MonoBehaviour
         if (_storyBlockedByActivity)
         {
             // Tracking found while an activity is active.
-            // Restore the page root but keep the story frozen at its current frame.
+            // Restore only the activity UI and keep story systems frozen at the current frame.
             PauseStorySystemsAtCurrentFrameForActivity();
+            ContentController controller = GetComponentInChildren<ContentController>(true);
+            if (controller != null)
+                controller.RestoreActivityUIAfterTrackingFound();
             return;
         }
 

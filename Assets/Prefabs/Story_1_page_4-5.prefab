@@ -25474,7 +25474,7 @@ MonoBehaviour:
     wrongInputSoundVolume: 1
     enableNoInputHelp: 1
     noInputHintAfterSeconds: 5
-    noInputHintText: Tap on the screen to Welcome the King
+    noInputHintText: Tapping on the screen will welcome the King
     noInputActionAfterHint: 3
     autoSkipAfterHintSeconds: 5
     useSameHintEffectsForNoInput: 1
@@ -25691,15 +25691,15 @@ MonoBehaviour:
     activityStartSoundVolume: 1
     activityCompleteSound: {fileID: 0}
     activityCompleteSoundVolume: 1
-    generalCorrectTapSound: {fileID: 0}
+    generalCorrectTapSound: {fileID: 8300000, guid: c9641df5aeb9ec44a8c334ccd34dfb4c, type: 3}
     generalCorrectTapSoundVolume: 1
-    correctTapSoundGapMode: 2
+    correctTapSoundGapMode: 1
     correctTapCustomGapSeconds: 0.15
     progressDropSound: {fileID: 0}
     progressDropSoundVolume: 1
     progressFullSound: {fileID: 0}
     progressFullSoundVolume: 1
-    noInputHintSound: {fileID: 0}
+    noInputHintSound: {fileID: 8300000, guid: 6e07b92e213ea2c4ebaa45c7297b1b2d, type: 3}
     noInputHintSoundVolume: 1
     resultAnimationStartSound: {fileID: 0}
     resultAnimationStartSoundVolume: 1

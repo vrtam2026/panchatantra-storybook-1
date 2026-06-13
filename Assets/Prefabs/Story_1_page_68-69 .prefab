@@ -4660,21 +4660,7 @@ MonoBehaviour:
     - 1
     - 1
     - 1
-    progressMilestones:
-    - enabled: 1
-      progressPercent: 50
-      hintText: 50
-      displayDurationSeconds: 0
-      repeatMode: 0
-      sound: {fileID: 0}
-      soundVolume: 0
-    - enabled: 1
-      progressPercent: 90
-      hintText: 90
-      displayDurationSeconds: 0
-      repeatMode: 0
-      sound: {fileID: 0}
-      soundVolume: 0
+    progressMilestones: []
   activityTemplateSchemaVersion: 34
   activityPanel: {fileID: 0}
   defaultRaycastCamera: {fileID: 0}

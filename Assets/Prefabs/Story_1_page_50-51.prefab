@@ -5817,10 +5817,10 @@ MonoBehaviour:
     progressCorrectReturnSeconds: 0.08
     progressUseWrongTapFeedback: 1
     progressWrongTapText: Oops! Tap on the monkey
-    progressWrongTapSound: {fileID: 0}
+    progressWrongTapSound: {fileID: 8300000, guid: 47c8c29876eaa7145a1fabac5b910b9c, type: 3}
     progressWrongTapSoundVolume: 1
     progressPulseCorrectObjectOnWrongTap: 1
-    progressShakeWrongTappedObject: 0
+    progressShakeWrongTappedObject: 1
     progressWrongShakeAmount: 0.03
     progressWrongTapFeedbackSeconds: 0.18
     progressWrongReturnSeconds: 0.08
@@ -5927,7 +5927,7 @@ MonoBehaviour:
     storyMomentWrongTapSoundVolume: 1
     showHintWhenWrongInput: 1
     wrongInputHintText: Try tapping the highlighted object
-    wrongInputSound: {fileID: 0}
+    wrongInputSound: {fileID: 8300000, guid: 7cdc97fabf388a24e8d6649081d9470d, type: 3}
     wrongInputSoundVolume: 1
     enableNoInputHelp: 1
     noInputHintAfterSeconds: 5
@@ -6009,15 +6009,8 @@ MonoBehaviour:
     - 1
     progressMilestones:
     - enabled: 1
-      progressPercent: 30
-      hintText: 
-      displayDurationSeconds: 0
-      repeatMode: 0
-      sound: {fileID: 0}
-      soundVolume: 0
-    - enabled: 1
-      progressPercent: 80
-      hintText: 
+      progressPercent: 60
+      hintText: Yes keep going!
       displayDurationSeconds: 0
       repeatMode: 0
       sound: {fileID: 0}

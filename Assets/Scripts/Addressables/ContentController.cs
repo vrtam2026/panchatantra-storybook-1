@@ -72,6 +72,12 @@ public class ContentController : MonoBehaviour, IARContent
     private bool _choiceAnswered;
     private bool _choiceCorrect;
 
+    // Active choice UI restore state. Used when tracking is lost/found while a scenario activity is waiting.
+    private ActivityStep _activeChoiceStep;
+    private IList<string> _activeChoiceLabels;
+    private bool[] _activeChoiceDisabledOptions;
+    private Action<int> _activeChoiceClickHandler;
+
     private readonly HashSet<GameObject> _uniqueTappedGroupObjects = new HashSet<GameObject>();
     private ActivityInputData _lastAcceptedInput;
 
@@ -84,6 +90,10 @@ public class ContentController : MonoBehaviour, IARContent
     private readonly List<AudioSource> _activityAudioSources = new List<AudioSource>();
     private readonly List<PlayableGraph> _activeGraphs = new List<PlayableGraph>();
     private readonly List<PlayableGraph> _activeChoiceGraphs = new List<PlayableGraph>();
+    // Template-wide activity animation safety.
+    // Any animation played by the activity uses PlayableGraph and freezes the Animator Controller
+    // so controller transitions cannot advance the story while an activity animation is playing.
+    private readonly Dictionary<Animator, float> _activityAnimatorOriginalSpeeds = new Dictionary<Animator, float>();
     private readonly List<Coroutine> _activeChoiceAnimationRoutines = new List<Coroutine>();
     // Tracks coroutines that restore scenario transforms after a delay so they can be stopped on reset.
     private readonly List<Coroutine> _scenarioTransformRestoreRoutines = new List<Coroutine>();
@@ -576,12 +586,14 @@ public class ContentController : MonoBehaviour, IARContent
         StopAllGraphs();
         StopAllChoiceScenarioRoutines();
         StopAllChoiceGraphs();
+        RestoreActivityAnimationAnimatorSpeeds();
         ClearSpawnedVfxObjects();
         StopTargetHintVisuals();
         StopProgressTapFeedbacks();
         RestoreMaterialColors();
         RestoreTargetScales();
         RestoreAllActivityActionTransforms();
+        ClearActiveChoiceRestoreState();
         SetAnyActivityRunning(false);
     }
 
@@ -647,8 +659,10 @@ public class ContentController : MonoBehaviour, IARContent
 
     public void PauseContent()
     {
-        ClearInput();
-        activityPanel?.HideButtons();
+        // Tracking lost pause. Do not ClearInput here.
+        // Clearing input/buttons destroys active scenario option handlers, so when the marker returns
+        // the question text can appear without option buttons. Keep runtime state and only hide UI.
+        activityPanel?.HideAllActivityUIForScenario();
     }
 
     public void ReplayContent()
@@ -700,6 +714,7 @@ public class ContentController : MonoBehaviour, IARContent
         StopAllGraphs();
         StopAllChoiceScenarioRoutines();
         StopAllChoiceGraphs();
+        RestoreActivityAnimationAnimatorSpeeds();
         ClearSpawnedVfxObjects();
         StopTargetHintVisuals();
         RestoreMaterialColors();
@@ -710,6 +725,7 @@ public class ContentController : MonoBehaviour, IARContent
         PrepareAllVisualEffectSources();
         StopAllConfiguredVisualEffects(clear: true);
         HideActivityUI();
+        ClearActiveChoiceRestoreState();
         SetAnyActivityRunning(false);
         // Reset milestone states so replay starts fresh
         ResetAllMilestoneStates();
@@ -948,6 +964,7 @@ public class ContentController : MonoBehaviour, IARContent
         RestoreMaterialColors();
         RestoreTargetScales();
         RestoreAllActivityActionTransforms();
+        RestoreActivityAnimationAnimatorSpeeds();
         ApplyObjectStateList(step.objectsOnWhenActivityCompletes, true);
         ApplyObjectStateList(step.objectsOffWhenActivityCompletes, false);
         UnlockInputCycle();
@@ -3350,6 +3367,10 @@ public class ContentController : MonoBehaviour, IARContent
         };
 
         bool grayDisabledInitial = step.choiceWrongOptionBehaviour == ActivityChoiceWrongOptionBehaviour.DisableAndGrayOut;
+        _activeChoiceStep = step;
+        _activeChoiceLabels = labels;
+        _activeChoiceDisabledOptions = disabledOptions;
+        _activeChoiceClickHandler = clickHandler;
         activityPanel?.ShowChoiceButtons(labels, clickHandler, disabledOptions, grayDisabledInitial);
 
         while (true)
@@ -3360,6 +3381,7 @@ public class ContentController : MonoBehaviour, IARContent
         }
 
         HideChoiceUIForScenario();
+        ClearActiveChoiceRestoreState();
 
         // Stop all choice animation graphs before story resumes.
         // The animation already finished fully above (forceWaitForScenario: true).
@@ -4074,6 +4096,7 @@ public class ContentController : MonoBehaviour, IARContent
 
         animator.enabled = true;
         animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+        FreezeAnimatorControllerForActivity(animator);
 
         graph = PlayableGraph.Create("ChoiceScenario_Isolated_" + clip.name);
         graph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
@@ -5654,9 +5677,26 @@ public class ContentController : MonoBehaviour, IARContent
         if (!animator.enabled)
             animator.enabled = true;
 
-        animator.speed = Mathf.Max(0.01f, speed);
         animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
         animator.Update(0f);
+    }
+
+    private void FreezeAnimatorControllerForActivity(Animator animator)
+    {
+        if (animator == null) return;
+        if (!_activityAnimatorOriginalSpeeds.ContainsKey(animator))
+            _activityAnimatorOriginalSpeeds[animator] = animator.speed;
+        animator.speed = 0f;
+    }
+
+    private void RestoreActivityAnimationAnimatorSpeeds()
+    {
+        foreach (KeyValuePair<Animator, float> pair in _activityAnimatorOriginalSpeeds)
+        {
+            if (pair.Key != null)
+                pair.Key.speed = pair.Value;
+        }
+        _activityAnimatorOriginalSpeeds.Clear();
     }
 
     private bool CreateActivityAnimationGraph(Animator animator, AnimationClip clip, float speed, out PlayableGraph graph, out AnimationClipPlayable playable)
@@ -5671,11 +5711,16 @@ public class ContentController : MonoBehaviour, IARContent
         if (!animator.gameObject.activeInHierarchy || !animator.enabled)
             return false;
 
-        graph = PlayableGraph.Create("StoryActivity_" + clip.name);
+        // Template-wide rule: activity animations must be isolated from Animator Controller transitions.
+        // The clip is driven by this temporary PlayableGraph. The controller is frozen while the
+        // activity owns the flow, so it cannot jump to the next story state in the background.
+        FreezeAnimatorControllerForActivity(animator);
+
+        graph = PlayableGraph.Create("StoryActivity_Isolated_" + clip.name);
         graph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
 
         playable = AnimationClipPlayable.Create(graph, clip);
-        playable.SetSpeed(speed);
+        playable.SetSpeed(Mathf.Max(0.01f, speed));
         playable.SetApplyFootIK(false);
 
         AnimationPlayableOutput output = AnimationPlayableOutput.Create(graph, "ActivityAnimation", animator);
@@ -6149,9 +6194,49 @@ public class ContentController : MonoBehaviour, IARContent
     private void ShowChoiceUIAfterWrong(ActivityStep step, IList<string> labels, Action<int> clickHandler, bool[] disabledOptions)
     {
         if (activityPanel == null) return;
+        _activeChoiceStep = step;
+        _activeChoiceLabels = labels;
+        _activeChoiceDisabledOptions = disabledOptions;
+        _activeChoiceClickHandler = clickHandler;
         activityPanel.ShowInstruction(step != null ? step.instructionText : string.Empty);
         bool grayDisabled = step != null && step.choiceWrongOptionBehaviour == ActivityChoiceWrongOptionBehaviour.DisableAndGrayOut;
         activityPanel.ShowChoiceButtons(labels, clickHandler, disabledOptions, grayDisabled);
+    }
+
+    public void RestoreActivityUIAfterTrackingFound()
+    {
+        if (activityPanel == null) return;
+
+        // If a choice/scenario activity was active before tracking was lost, rebuild the full question UI.
+        // This restores option buttons and click handlers, not only the question text.
+        if (_activeChoiceStep != null && _activeChoiceLabels != null && _activeChoiceClickHandler != null)
+        {
+            bool grayDisabled = _activeChoiceStep.choiceWrongOptionBehaviour == ActivityChoiceWrongOptionBehaviour.DisableAndGrayOut;
+            activityPanel.ShowInstruction(_activeChoiceStep.instructionText);
+            activityPanel.ShowChoiceButtons(_activeChoiceLabels, _activeChoiceClickHandler, _activeChoiceDisabledOptions, grayDisabled);
+            return;
+        }
+
+        // Non-choice activities keep their input state alive during tracking loss.
+        // Restore the visible instruction if an activity is running.
+        if (_currentIndex >= 0 && activities != null && _currentIndex < activities.Count)
+        {
+            ActivityStep step = activities[_currentIndex];
+            if (step != null && step.enabled)
+            {
+                activityPanel.ShowInstruction(step.instructionText);
+                if (StepUsesProgress(step))
+                    activityPanel.ShowProgress(_visibleProgressValue, string.Empty);
+            }
+        }
+    }
+
+    private void ClearActiveChoiceRestoreState()
+    {
+        _activeChoiceStep = null;
+        _activeChoiceLabels = null;
+        _activeChoiceDisabledOptions = null;
+        _activeChoiceClickHandler = null;
     }
 
     private void CompleteToStoryFlow()

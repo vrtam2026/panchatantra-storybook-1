@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuizManagerArun
   questions:
-  - questionText: 1, What were the workers doing?
+  - questionText: 1) What were the workers doing?
     option1: They were cutting huge logs of wood into sm....
     option2: They were partying
     option3: ' They were watching rajinikanth movie'
@@ -295,7 +295,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 390772730a8566947b7ef32ad8c8a942, type: 3}
     questionVideo: {fileID: 32900000, guid: c1efcbe342308994d943a12982b6fe91, type: 3}
     optionStartTime: 4
-  - questionText: 2, Who started playing with the wood?
+  - questionText: 2) Who started playing with the wood?
     option1: A group of jackals.
     option2: Harry Potter.
     option3: A group of actors.
@@ -307,7 +307,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: fa96dc49b141b9643bf890f77ebc688b, type: 3}
     questionVideo: {fileID: 32900000, guid: 19ff30fc2ad5cbc4397d4f0f287b32a8, type: 3}
     optionStartTime: 4
-  - questionText: 3, Why was  a wedge inserted halfway through the sawed wood?
+  - questionText: 3) Why was  a wedge inserted halfway through the sawed wood?
     option1: To ensure that the two halves did not close up.
     option2: Because a wedge was cheaper than a hammer.
     option3: For animals to play in gap.
@@ -319,7 +319,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 94604322593ee6d41b2c4575d30e27e0, type: 3}
     questionVideo: {fileID: 32900000, guid: ef3c25818ee13c54badb91102e1094a7, type: 3}
     optionStartTime: 6
-  - questionText: 4, What did the curious monkey do?
+  - questionText: 4) What did the curious monkey do?
     option1: He jumped up and down on the wedge.
     option2: He was scared and ran away.
     option3: He started pulling on the wedge with all his strength.
@@ -331,7 +331,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: d34cf688f201bb644a9b58c3ec42d612, type: 3}
     questionVideo: {fileID: 32900000, guid: 20d270bb1a151374e8ccf82c7c07f900, type: 3}
     optionStartTime: 4
-  - questionText: 5, What happened when the monkey pulled the wedge off?
+  - questionText: 5) What happened when the monkey pulled the wedge off?
     option1: A lot of birds flew under the wedge
     option2: The two halves closed and crushed the monkey to death.
     option3: The workers came rushing to the scene
@@ -343,7 +343,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 7146e5f60f81bf141adc435331441ba0, type: 3}
     questionVideo: {fileID: 32900000, guid: e61e7c31b84e08046a01d1eb89545a63, type: 3}
     optionStartTime: 6
-  - questionText: 6, What moral did Karataka tell?
+  - questionText: 6) What moral did Karataka tell?
     option1: He should always watch TV before going to bed.
     option2: Though vanilla is a nice flavor, strawberry is better.
     option3: He feasted on the emrald green blades of grass.
@@ -355,7 +355,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 877fc4625aec83642a5424f93609f529, type: 3}
     questionVideo: {fileID: 32900000, guid: 75275e2fd7b56d64b888c06b15bc0ff0, type: 3}
     optionStartTime: 4
-  - questionText: 7,Damanaka said that the king felt _____
+  - questionText: 7) Damanaka said that the king felt _____
     option1: ...joyous.
     option2: ...angry.
     option3: ...tired.
@@ -367,7 +367,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: d5feaa8b7b9727a48ac38385da661973, type: 3}
     questionVideo: {fileID: 32900000, guid: 2c24199ec0e1df94aa95cdd04a7d7259, type: 3}
     optionStartTime: 4
-  - questionText: "8, How was the lion\u2019s body language?  (Select all answers
+  - questionText: "8) How was the lion\u2019s body language?  (Select all answers
       that are correct)"
     option1: He avoided eye contact.
     option2: He was slouching.
@@ -380,7 +380,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 3b34497a709b3c045b72c331920040df, type: 3}
     questionVideo: {fileID: 32900000, guid: a69900a30e73f7f4bb3f48cacfd38a5f, type: 3}
     optionStartTime: 4
-  - questionText: 9, What did Damanaka do first after approaching Pingalaka?
+  - questionText: 9) What did Damanaka do first after approaching Pingalaka?
     option1: He sang him a song.
     option2: He prostarted.
     option3: He danced bharatanatyam.
@@ -392,7 +392,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 79872d98bf68e08408ef9c3c1311f501, type: 3}
     questionVideo: {fileID: 32900000, guid: a37eebb8e5a86444081da6012fc5fb0a, type: 3}
     optionStartTime: 7
-  - questionText: 10, Pingalaka agreed to talk to Damanaka beacause...
+  - questionText: 10) Pingalaka agreed to talk to Damanaka beacause...
     option1: Damanaka was the son of his former minister.
     option2: he was bored and needed some company to talk to.
     option3: He was curious to know what had made his king happy.
@@ -404,7 +404,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: b1f955a3db6e7e440b7be8afcb2f0d47, type: 3}
     questionVideo: {fileID: 32900000, guid: f9d0f997872192e4aaf2983257d436d8, type: 3}
     optionStartTime: 6
-  - questionText: 11, Why did Pingalaka get scared?
+  - questionText: 11)  Why did Pingalaka get scared?
     option1: Beacuse death eaters were approching
     option2: Beacuse there was an earthquake
     option3: Beacause he heard a loud roar.
@@ -416,7 +416,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: c5a4a46929985eb468ec88d1dfd40cad, type: 3}
     questionVideo: {fileID: 32900000, guid: d15b105d72860cc418e8bb881a3a4ca2, type: 3}
     optionStartTime: 5
-  - questionText: 12, What moral did Damanaka tell Pingalaka?
+  - questionText: 12) What moral did Damanaka tell Pingalaka?
     option1: What moral did Damanaka tell Pingalaka?
     option2: he was bored and needed some company to talk to.
     option3: Sounds could be misleading.
@@ -451,16 +451,14 @@ MonoBehaviour:
   - audio: {fileID: 8300000, guid: 527324f507caf6148add115ddba0a222, type: 3}
     video: {fileID: 32900000, guid: 73e560c1318f8834fa131558cc1a14dd, type: 3}
   wrongPairs:
-  - audio: {fileID: 8300000, guid: 2dac0b6a82ad2ff49a7c269059c7981f, type: 3}
-    video: {fileID: 32900000, guid: b9116d7ade8274d49af3a4759bfaede2, type: 3}
-  - audio: {fileID: 8300000, guid: 027b6da8a5cc97e4489bacfe2676bc52, type: 3}
-    video: {fileID: 32900000, guid: 3bf71501887dd7f488509454ed2cbc7d, type: 3}
-  - audio: {fileID: 8300000, guid: e33be67198c844f4d8a6e74e2b57b16a, type: 3}
-    video: {fileID: 32900000, guid: 5c2eddf3fa431e44ca84598125590b0a, type: 3}
-  - audio: {fileID: 8300000, guid: b3cd8d6b50fd2de47b8897b8bd258db8, type: 3}
-    video: {fileID: 32900000, guid: a7852a91715e31a4e9b411df2188e402, type: 3}
-  - audio: {fileID: 8300000, guid: f35b1ec1bb8f7af49a029573d0441dc7, type: 3}
-    video: {fileID: 32900000, guid: 434e078a3e010d148b322c6f57f9cb8e, type: 3}
+  - audio: {fileID: 8300000, guid: c05481dd5fb48a74ab0289d3843c71c7, type: 3}
+    video: {fileID: 32900000, guid: 8554a4830a50fc840a99b86e53a3b0f2, type: 3}
+  - audio: {fileID: 8300000, guid: 2307928425e267845a5d2572dda5b337, type: 3}
+    video: {fileID: 32900000, guid: 295a493efa1a42a4db22027ad4683ee9, type: 3}
+  - audio: {fileID: 8300000, guid: 0f0b8d0b30308ec46aebf8da404816cc, type: 3}
+    video: {fileID: 32900000, guid: 005880d971cc77446aab4730c936b7df, type: 3}
+  - audio: {fileID: 8300000, guid: 7c21ec33a2edcbc4e9386ed087a6b317, type: 3}
+    video: {fileID: 32900000, guid: ee8e76af9c56e5944a97dff980cc166c, type: 3}
   questionAudioSource: {fileID: 3097142505141160837}
   reactionAudioSource: {fileID: 745591442165781082}
   sageVideoPlayer: {fileID: 2500582366109647035}
@@ -2204,9 +2202,9 @@ RectTransform:
   - {fileID: 953264056598542362}
   m_Father: {fileID: 4595165298274258238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -196.875}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7050805565747647447
@@ -2352,9 +2350,9 @@ RectTransform:
   - {fileID: 4922916029041777363}
   m_Father: {fileID: 4595165298274258238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -84.375}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2455732454876459387
@@ -3305,7 +3303,7 @@ GameObject:
   - component: {fileID: 6471068712090912033}
   - component: {fileID: 2500582366109647035}
   m_Layer: 5
-  m_Name: S3_Q-1(V)
+  m_Name: Quiz Video_S3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3948,9 +3946,9 @@ RectTransform:
   - {fileID: 1787598761867693804}
   m_Father: {fileID: 4595165298274258238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -28.125}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6222252846515312485
@@ -6114,9 +6112,9 @@ RectTransform:
   - {fileID: 6610025083847923550}
   m_Father: {fileID: 4595165298274258238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -140.625}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4500911743877502367

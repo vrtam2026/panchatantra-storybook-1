@@ -1,8 +1,12 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 // ─────────────────────────────────────────────────────────────────────────────
 // QuizLoadingScreen.cs
@@ -47,12 +51,35 @@ public class QuizLoadingScreen : MonoBehaviour
     [SerializeField] private TextMeshProUGUI loadingText;
 
     [Header("SFX (Optional)")]
-    public AudioClip appearSfx;
+    [HideInInspector] public AudioClip appearSfx; // Old field kept so old scenes do not break. Use the simple audio section below.
+
+    [System.Serializable]
+    private class SimpleSound
+    {
+        [Tooltip("ON = this sound will play for this event.")]
+        public bool useSound = false;
+
+        [Tooltip("Drag the sound effect or voice clip here.")]
+        public AudioClip audioClip;
+
+        [Tooltip("0 = mute, 1 = normal, 2 = louder.")]
+        [Range(0f, 2f)] public float volume = 1f;
+
+        [Tooltip("OFF = play once. ON = keep playing until this event ends.")]
+        public bool loop = false;
+    }
+
+    [SerializeField] private SimpleSound quizLoadingStartSound = new();
+    [SerializeField] private SimpleSound whileQuizLoadingSound = new();
+    [SerializeField] private SimpleSound quizLoadingCompleteSound = new();
 
     // ── Internal ──────────────────────────────────────────────────────────────
 
     private CanvasGroup _canvasGroup;
     private AudioSource _audioSource;
+    private AudioSource _quizLoadingStartAudioSource;
+    private AudioSource _whileQuizLoadingAudioSource;
+    private AudioSource _quizLoadingCompleteAudioSource;
     private Coroutine _fadeRoutine;
     private Coroutine _cycleRoutine;
     private Coroutine _minShowRoutine;
@@ -78,6 +105,11 @@ public class QuizLoadingScreen : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         if (_audioSource == null)
             _audioSource = gameObject.AddComponent<AudioSource>();
+        _audioSource.playOnAwake = false;
+
+        _quizLoadingStartAudioSource = CreateExtraAudioSource();
+        _whileQuizLoadingAudioSource = CreateExtraAudioSource();
+        _quizLoadingCompleteAudioSource = CreateExtraAudioSource();
 
         // Always stays active -- visibility via CanvasGroup only
         _canvasGroup.alpha = 0f;
@@ -131,8 +163,13 @@ public class QuizLoadingScreen : MonoBehaviour
         if (loadingText != null)
             loadingText.text = "Quiz is loading...";
 
+        StopFeedbackSound(_quizLoadingCompleteAudioSource);
+
         if (appearSfx != null && _audioSource != null)
             _audioSource.PlayOneShot(appearSfx);
+
+        PlayFeedbackSound(quizLoadingStartSound, _quizLoadingStartAudioSource);
+        PlayFeedbackSound(whileQuizLoadingSound, _whileQuizLoadingAudioSource);
 
         _fadeRoutine = StartCoroutine(FadeIn());
         _cycleRoutine = StartCoroutine(CycleFrames());
@@ -177,6 +214,36 @@ public class QuizLoadingScreen : MonoBehaviour
         if (_cycleRoutine != null) { StopCoroutine(_cycleRoutine); _cycleRoutine = null; }
     }
 
+
+    // ── Simple audio helpers ─────────────────────────────────────────────────
+
+    private AudioSource CreateExtraAudioSource()
+    {
+        AudioSource source = gameObject.AddComponent<AudioSource>();
+        source.playOnAwake = false;
+        source.spatialBlend = 0f;
+        return source;
+    }
+
+    private void PlayFeedbackSound(SimpleSound sound, AudioSource source)
+    {
+        if (sound == null || !sound.useSound || sound.audioClip == null || source == null) return;
+        source.Stop();
+        source.clip = sound.audioClip;
+        source.volume = sound.volume;
+        source.loop = sound.loop;
+        if (sound.loop) source.Play();
+        else source.PlayOneShot(sound.audioClip, sound.volume);
+    }
+
+    private void StopFeedbackSound(AudioSource source)
+    {
+        if (source == null) return;
+        source.Stop();
+        source.clip = null;
+        source.loop = false;
+    }
+
     // ── Fade coroutines ───────────────────────────────────────────────────────
 
     private IEnumerator FadeIn()
@@ -195,6 +262,10 @@ public class QuizLoadingScreen : MonoBehaviour
 
     private IEnumerator FadeOutAndHide()
     {
+        StopFeedbackSound(_quizLoadingStartAudioSource);
+        StopFeedbackSound(_whileQuizLoadingAudioSource);
+        PlayFeedbackSound(quizLoadingCompleteSound, _quizLoadingCompleteAudioSource);
+
         float startAlpha = _canvasGroup.alpha;
         float elapsed = 0f;
         while (elapsed < fadeOutDuration)
@@ -237,3 +308,42 @@ public class QuizLoadingScreen : MonoBehaviour
         }
     }
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(QuizLoadingScreen))]
+public class QuizLoadingScreenEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("m_Script"));
+        EditorGUI.EndDisabledGroup();
+
+        DrawPropertiesExcluding(serializedObject, "m_Script", "appearSfx", "quizLoadingStartSound", "whileQuizLoadingSound", "quizLoadingCompleteSound");
+
+        EditorGUILayout.Space(8);
+        EditorGUILayout.LabelField("Quiz Loading Audio - Choose Only What You Need", EditorStyles.boldLabel);
+        DrawSimpleSound("When Quiz Loading Starts", serializedObject.FindProperty("quizLoadingStartSound"));
+        DrawSimpleSound("While Quiz Is Loading", serializedObject.FindProperty("whileQuizLoadingSound"));
+        DrawSimpleSound("When Quiz Is Ready", serializedObject.FindProperty("quizLoadingCompleteSound"));
+
+        serializedObject.ApplyModifiedProperties();
+    }
+
+    private static void DrawSimpleSound(string title, SerializedProperty property)
+    {
+        SerializedProperty useSound = property.FindPropertyRelative("useSound");
+        EditorGUILayout.PropertyField(useSound, new GUIContent(title));
+        if (!useSound.boolValue) return;
+
+        EditorGUI.indentLevel++;
+        EditorGUILayout.PropertyField(property.FindPropertyRelative("audioClip"), new GUIContent("Audio Clip"));
+        EditorGUILayout.PropertyField(property.FindPropertyRelative("volume"), new GUIContent("Volume 0 to 2"));
+        EditorGUILayout.PropertyField(property.FindPropertyRelative("loop"), new GUIContent("Loop"));
+        EditorGUI.indentLevel--;
+    }
+}
+#endif
+

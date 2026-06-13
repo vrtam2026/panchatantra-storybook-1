@@ -1166,7 +1166,7 @@ MonoBehaviour:
     storyWaitAnimationStateName: 
     storyWaitTimeoutSeconds: 0
     pauseStoryWhileActivity: 0
-    instructionText: Tap the drum to scare the King, Keep tapping to scare him more!
+    instructionText: Tap on the drum to scare the King!
     activityVoiceOver: {fileID: 0}
     waitForActivityVoiceOver: 0
     activityDurationAudio: {fileID: 0}
@@ -1218,8 +1218,8 @@ MonoBehaviour:
     progressCorrectTapFeedbackSeconds: 0.104
     progressCorrectReturnSeconds: 0.053
     progressUseWrongTapFeedback: 1
-    progressWrongTapText: tap the drum
-    progressWrongTapSound: {fileID: 0}
+    progressWrongTapText: Not that! Tap the drum to see what happens!
+    progressWrongTapSound: {fileID: 8300000, guid: 47c8c29876eaa7145a1fabac5b910b9c, type: 3}
     progressWrongTapSoundVolume: 0
     progressPulseCorrectObjectOnWrongTap: 1
     progressShakeWrongTappedObject: 1
@@ -1345,7 +1345,7 @@ MonoBehaviour:
     wrongInputSoundVolume: 1
     enableNoInputHelp: 1
     noInputHintAfterSeconds: 5
-    noInputHintText: 'Tap the drum to see what happens! '
+    noInputHintText: Tapping on the drum will scare the King even more.
     noInputActionAfterHint: 3
     autoSkipAfterHintSeconds: 5
     useSameHintEffectsForNoInput: 1
@@ -1417,36 +1417,8 @@ MonoBehaviour:
     progressHelperAnimationSoundVolumes: []
     progressMilestones:
     - enabled: 1
-      progressPercent: 20
-      hintText: 20
-      displayDurationSeconds: 0
-      repeatMode: 0
-      sound: {fileID: 0}
-      soundVolume: 0
-    - enabled: 1
-      progressPercent: 40
-      hintText: 40
-      displayDurationSeconds: 0
-      repeatMode: 0
-      sound: {fileID: 0}
-      soundVolume: 0
-    - enabled: 1
       progressPercent: 60
-      hintText: 60
-      displayDurationSeconds: 0
-      repeatMode: 0
-      sound: {fileID: 0}
-      soundVolume: 0
-    - enabled: 1
-      progressPercent: 80
-      hintText: 60
-      displayDurationSeconds: 0
-      repeatMode: 0
-      sound: {fileID: 0}
-      soundVolume: 0
-    - enabled: 1
-      progressPercent: 100
-      hintText: 60
+      hintText: Scare the King even more
       displayDurationSeconds: 0
       repeatMode: 0
       sound: {fileID: 0}

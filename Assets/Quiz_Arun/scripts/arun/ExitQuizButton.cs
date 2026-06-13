@@ -1,21 +1,26 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ExitQuizButton.cs
 // Attach to: the Exit Button inside the quiz Addressable prefab.
 // Wire Button.onClick -> ExitQuizButton.OnClick() in the prefab Inspector.
+//
+// The button exits through QuizManager, because the quiz is loaded by
+// CustomARHandler in this project.
 // ─────────────────────────────────────────────────────────────────────────────
 
 public class ExitQuizButton : MonoBehaviour
 {
-    // Called by the Exit button's onClick event
     public void OnClick()
     {
-        if (CustomARHandler.Current == null)
+        QuizManager manager = GetComponentInParent<QuizManager>(true);
+
+        if (manager == null)
         {
-            Debug.LogWarning("[ExitQuizButton] CustomARHandler.Current is null.");
+            Debug.LogWarning("[ExitQuizButton] No QuizManager found in parent. Cannot exit quiz.");
             return;
         }
-       // CustomARHandler.Current.ExitQuiz();
+
+        manager.ExitQuiz();
     }
 }

@@ -13903,7 +13903,7 @@ MonoBehaviour:
     storyWaitAnimationStateName: 
     storyWaitTimeoutSeconds: 0
     pauseStoryWhileActivity: 1
-    instructionText: Tap to continue
+    instructionText: Let's take revenge..
     activityVoiceOver: {fileID: 0}
     waitForActivityVoiceOver: 0
     activityDurationAudio: {fileID: 0}
@@ -14067,7 +14067,7 @@ MonoBehaviour:
     wrongInputSoundVolume: 1
     enableNoInputHelp: 1
     noInputHintAfterSeconds: 5
-    noInputHintText: What did Servent did!
+    noInputHintText: 'Help Gorambha to get his revenge!  '
     noInputActionAfterHint: 3
     autoSkipAfterHintSeconds: 5
     useSameHintEffectsForNoInput: 1
@@ -14092,7 +14092,7 @@ MonoBehaviour:
     resultPlayTiming: 1
     showTimerProgress: 0
     choiceOptions:
-    - buttonText: make sound
+    - buttonText: Mop the floor intensely!
       isCorrect: 0
       playResultForThisOption: 1
       scenarioPlayMode: 0
@@ -14147,7 +14147,7 @@ MonoBehaviour:
       onSelected:
         m_PersistentCalls:
           m_Calls: []
-    - buttonText: servant hitting floor
+    - buttonText: Make the mop squeak loudly!
       isCorrect: 0
       playResultForThisOption: 1
       scenarioPlayMode: 0
@@ -14202,7 +14202,7 @@ MonoBehaviour:
       onSelected:
         m_PersistentCalls:
           m_Calls: []
-    - buttonText: Whisper near the king
+    - buttonText: Whisper near the King!
       isCorrect: 1
       playResultForThisOption: 0
       scenarioPlayMode: 0

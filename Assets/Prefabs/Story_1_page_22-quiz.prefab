@@ -557,7 +557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuizManagerArun
   questions:
-  - questionText: The Panchatantra (sanskrit) is _________________
+  - questionText: 1) The Panchatantra (sanskrit) is _________________
     option1: ...one of two great ithihasas from India.
     option2: ...the story of Rama.
     option3: ...the story of the Pandavas and the Khauravas
@@ -569,7 +569,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 1abcde4096de73e4aa461f44624709d2, type: 3}
     questionVideo: {fileID: 32900000, guid: 0ee7967fe06234e45a95f759c6fba335, type: 3}
     optionStartTime: 5
-  - questionText: 2. How many Tantras does the Panchatrantra have?
+  - questionText: 2) How many Tantras does the Panchatrantra have?
     option1: Twenty-five
     option2: Two
     option3: Five
@@ -581,7 +581,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: f6e2ac40909ed1c429d55036f49fa2b1, type: 3}
     questionVideo: {fileID: 32900000, guid: 2b8d48f9bf9637944b2d3ea0e84b1b9f, type: 3}
     optionStartTime: 6
-  - questionText: 3. Who is the author of th Panchatantra?
+  - questionText: 3) Who is the author of th Panchatantra?
     option1: Rohit Sharma
     option2: Vishnu Sharma
     option3: Vyasa
@@ -593,7 +593,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: e1c06e9a33d6d7a4cab5d18251cd56d5, type: 3}
     questionVideo: {fileID: 32900000, guid: 54c743791a4a12242815d31f9b01c627, type: 3}
     optionStartTime: 6
-  - questionText: 4. What does the Panchatantra teach us ?
+  - questionText: 4) What does the Panchatantra teach us ?
     option1: 'Niti Shastra  '
     option2: 'Mathematics  '
     option3: 'How to fight wars  '
@@ -605,7 +605,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 45b05ae90abbefe4ba58e02e774ae12a, type: 3}
     questionVideo: {fileID: 32900000, guid: b28f4ad6748edc846b99ce1cafe8fd13, type: 3}
     optionStartTime: 6
-  - questionText: 5. What is a rough translation of the word Niti ?
+  - questionText: 5) What is a rough translation of the word Niti ?
     option1: Being Neat
     option2: 'Truth '
     option3: common sense
@@ -617,7 +617,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 76f408c98572ab544a9f718ca8c27510, type: 3}
     questionVideo: {fileID: 32900000, guid: cd5d4a4f938796d4dbc02103c663331a, type: 3}
     optionStartTime: 8
-  - questionText: 6. Which principles does Niti Shastra incorporate? (Select all
+  - questionText: 6) Which principles does Niti Shastra incorporate? (Select all
       answers that are correct)
     option1: I need security,money and good friends
     option2: I need ice cream
@@ -630,7 +630,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 39d025a52b87c7147bdb79c7ee74fc4e, type: 3}
     questionVideo: {fileID: 32900000, guid: 727e1bbc3ec96594594637f18ddb4a15, type: 3}
     optionStartTime: 7
-  - questionText: 7. Who was the King of Mahilaropya?
+  - questionText: 7) Who was the King of Mahilaropya?
     option1: Duryodhan
     option2: Shiv Shakthi
     option3: Rajinikanth
@@ -642,7 +642,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 46f9a6b2ef1d30d4586da43d65dec174, type: 3}
     questionVideo: {fileID: 32900000, guid: 125ab8e1236193e4e97c09774b151f33, type: 3}
     optionStartTime: 6
-  - questionText: 8. Why was the king sad?
+  - questionText: 8) Why was the king sad?
     option1: His three sons did not like ice cream
     option2: His three sons were gullible
     option3: His three sons were smarter than him
@@ -654,7 +654,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 8cdbb9f1c12dd114f8b95b4e0b9ee681, type: 3}
     questionVideo: {fileID: 32900000, guid: 8327c55c5f50e3144879a1289fc047c5, type: 3}
     optionStartTime: 5.5
-  - questionText: 9. What were the names of the King's sons? (Select all answers
+  - questionText: 9) What were the names of the King's sons? (Select all answers
       that are correct)
     option1: Anantha Shakthi
     option2: Bahu Shakthi
@@ -667,7 +667,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: a1c00edfef39eff458768e4bc6fb47f4, type: 3}
     questionVideo: {fileID: 32900000, guid: f4e4ae1a234dc54438399f7a52870762, type: 3}
     optionStartTime: 0
-  - questionText: 10. Who was summoned to teach the children and why?
+  - questionText: 10) Who was summoned to teach the children and why?
     option1: Dubledore, because he was an expert in maya tactics
     option2: Vishnu Sharma, because he was an expert in maya tactics.
     option3: Rajinikanth, because he was an expert in niti shastra
@@ -679,7 +679,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 6d2be2c9556f6e44b840d2b4d8a41964, type: 3}
     questionVideo: {fileID: 32900000, guid: 7d62471dd3ef6e14183883358204fbeb, type: 3}
     optionStartTime: 7.5
-  - questionText: 11. Which of these are names of Tantras (volumes) of the Panchatantra?
+  - questionText: 11) Which of these are names of Tantras (volumes) of the Panchatantra?
       (Select all answers that are correct)
     option1: Mitra Bheda
     option2: Mitra Samprapti
@@ -692,7 +692,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 5dfd1d00e38b8294f80524c5c1abb6c8, type: 3}
     questionVideo: {fileID: 32900000, guid: 0cde665989000994a929419fac2639ec, type: 3}
     optionStartTime: 9
-  - questionText: 12. Who is the first teacher in all our lives?
+  - questionText: 12) Who is the first teacher in all our lives?
     option1: 'Grandfather  '
     option2: 'Uncle  '
     option3: 'Grandson  '
@@ -2555,9 +2555,9 @@ RectTransform:
   - {fileID: 7819853566553696091}
   m_Father: {fileID: 4595165298274258238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -196.875}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7050805565747647447
@@ -2703,9 +2703,9 @@ RectTransform:
   - {fileID: 6652064585659110919}
   m_Father: {fileID: 4595165298274258238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -84.375}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2455732454876459387
@@ -3937,7 +3937,7 @@ GameObject:
   - component: {fileID: 6471068712090912033}
   - component: {fileID: 2500582366109647035}
   m_Layer: 5
-  m_Name: RawImage_sage_video
+  m_Name: Quiz Video_S1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4306,9 +4306,9 @@ RectTransform:
   - {fileID: 6143970815637900733}
   m_Father: {fileID: 4595165298274258238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -28.125}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6222252846515312485
@@ -6388,9 +6388,9 @@ RectTransform:
   - {fileID: 2040605030700722432}
   m_Father: {fileID: 4595165298274258238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -140.625}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4500911743877502367

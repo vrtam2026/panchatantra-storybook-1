@@ -420,7 +420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuizManagerArun
   questions:
-  - questionText: 1, Vishnu Sharma narrated the story of two friends. They were ____
+  - questionText: 1) Vishnu Sharma narrated the story of two friends. They were ____
     option1: ..a king and his son.
     option2: ...two jackals.
     option3: ...Harry Potter and Hermoine.
@@ -432,7 +432,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 724f33fd6c025824a8d5ef6288403723, type: 3}
     questionVideo: {fileID: 32900000, guid: 6dc1b93872e7268499ba54acfcbfdc9d, type: 3}
     optionStartTime: 8
-  - questionText: 2,Why did Vardhamanaka want to go to Mathura?
+  - questionText: 2) Why did Vardhamanaka want to go to Mathura?
     option1: To get a job
     option2: To sell his merchandise
     option3: To meet Krishna
@@ -444,7 +444,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: bc9014e71ca39e94080eec7eb6c65e15, type: 3}
     questionVideo: {fileID: 32900000, guid: dc149c0141806354eaf9a6132404c8d3, type: 3}
     optionStartTime: 6
-  - questionText: "3, Who were the two bulls who pulled the cart? \L(Select TWO answers
+  - questionText: "3) Who were the two bulls who pulled the cart? \L(Select TWO answers
       that are correct)"
     option1: Vardhamanaka
     option2: Sanjivaka
@@ -457,7 +457,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: c24be19b5c2b76447a37c109e85761cf, type: 3}
     questionVideo: {fileID: 32900000, guid: 45edf0bd6276ea940b7d5ffa86e31573, type: 3}
     optionStartTime: 6
-  - questionText: 4, What happened to Sanjivaka?
+  - questionText: 4) What happened to Sanjivaka?
     option1: He married  a cow and had  baby calves.
     option2: He stepped on wet soil and got this feet dirty.
     option3: He danced a song with the other bull.
@@ -469,7 +469,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 442644b571554b84ea2e3c1f5c737a98, type: 3}
     questionVideo: {fileID: 32900000, guid: cbf27a885c957454b8df13538ec17208, type: 3}
     optionStartTime: 6
-  - questionText: 5, Why did Vradhamanaka leave the forest?
+  - questionText: 5) Why did Vradhamanaka leave the forest?
     option1: He was carrying costly merchandise.
     option2: He was scared of tigers.
     option3: He was carrying cheap merchandise.
@@ -481,7 +481,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: fe8c8ee96fa45df47bd83a09b16b5556, type: 3}
     questionVideo: {fileID: 32900000, guid: aef3806e97dc24648b86d7d8c5bec194, type: 3}
     optionStartTime: 6
-  - questionText: 6, How did Sanjivaka grow healthy ? (Select TWO answers that are
+  - questionText: 6) How did Sanjivaka grow healthy ? (Select TWO answers that are
       correct)
     option1: He did 100 push-ups every day.
     option2: He stared following and Ayurvedic diet.
@@ -494,7 +494,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 8f6fe13c4c0eb16418086876f60930ac, type: 3}
     questionVideo: {fileID: 32900000, guid: 2c500ec9deb8a0d49a33d4468c33f327, type: 3}
     optionStartTime: 6
-  - questionText: 7, What was the name of the the lion who lived in that forest?
+  - questionText: 7) What was the name of the the lion who lived in that forest?
     option1: Mr. Incredible
     option2: 'Ponniyin Selvan '
     option3: Damanaka
@@ -506,7 +506,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: dfeaa7bc0e7337b458b48912c5e09228, type: 3}
     questionVideo: {fileID: 32900000, guid: f3d85443487e1c64ca7fc4f227211e44, type: 3}
     optionStartTime: 6
-  - questionText: "8, When Pingalaka heard Sanjivaka\u2019s roar, why did the lion
+  - questionText: "8) When Pingalaka heard Sanjivaka\u2019s roar, why did the lion
       panic?"
     option1: Lions are scared of bulls
     option2: He had never heard any animal roar before.
@@ -519,7 +519,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 6d16e7659c34ce84abb404d824b87f6a, type: 3}
     questionVideo: {fileID: 32900000, guid: ec14c6ddcf6cf5847b38e69d135842e1, type: 3}
     optionStartTime: 6
-  - questionText: "9, Who were the two jackals watching all this?\L(Select TWO answers
+  - questionText: "9) Who were the two jackals watching all this?\L(Select TWO answers
       that are correct)"
     option1: Karataka
     option2: Damanaka
@@ -532,7 +532,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 0f5a68c7fdb32e84eba11b6adfdb31ce, type: 3}
     questionVideo: {fileID: 32900000, guid: 98782dda383eedf4ead00bc3f95034ea, type: 3}
     optionStartTime: 6
-  - questionText: 10, What was Damanaka curious about?
+  - questionText: 10) What was Damanaka curious about?
     option1: He was curious to know what flavor of ice-cream his king liked.
     option2: He was curious to know if his mom would allow him to go to a party.
     option3: He was curious to know what had made his king happy.
@@ -4113,7 +4113,7 @@ GameObject:
   - component: {fileID: 6471068712090912033}
   - component: {fileID: 2500582366109647035}
   m_Layer: 5
-  m_Name: S2_Q-1(V)
+  m_Name: Quiz Video_S2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4236,7 +4236,7 @@ RectTransform:
   m_LocalRotation: {x: 0.6813599, y: 0, z: 0, w: 0.7319486}
   m_LocalPosition: {x: 0, y: 0, z: -21.97495}
   m_LocalScale: {x: 0, y: 0, z: 0}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7980478258937313115}
   - {fileID: 7214545805595391640}
@@ -7288,7 +7288,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &873082413955757128
 RectTransform:
   m_ObjectHideFlags: 0

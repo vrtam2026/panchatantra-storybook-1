@@ -61,6 +61,7 @@ public class QuizManager : MonoBehaviour
 
     private QuizQuestion currentQuestion;
     private bool isPaused = false;
+    private CustomARHandler ownerARHandler;
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
@@ -134,6 +135,53 @@ public class QuizManager : MonoBehaviour
             if (reactionAudioSource != null) reactionAudioSource.UnPause();
             if (sageVideoPlayer != null) sageVideoPlayer.Play();
         }
+    }
+
+    // ── Quiz exit flow ──────────────────────────────────────────────────────
+
+    public void RegisterARHandler(CustomARHandler handler)
+    {
+        ownerARHandler = handler;
+    }
+
+    public void ExitQuiz()
+    {
+        ExitQuizToScanMode();
+
+        if (ownerARHandler != null)
+        {
+            ownerARHandler.ExitQuizFromQuizManager(this);
+            return;
+        }
+
+        CustomARHandler parentHandler = GetComponentInParent<CustomARHandler>(true);
+        if (parentHandler != null)
+        {
+            parentHandler.ExitQuizFromQuizManager(this);
+            return;
+        }
+
+        Debug.LogWarning("[QuizManager] No CustomARHandler found. Quiz UI was cleaned, but AR handler could not be reset.");
+    }
+
+    public void ExitQuizToScanMode()
+    {
+        isPaused = false;
+        currentQuestion = null;
+        currentQuestionIndex = 0;
+        currentAttempt = 0;
+
+        StopEverything();
+        DisableAllButtons();
+        ResetButtonColors();
+
+        if (finishPanel != null) finishPanel.SetActive(false);
+        if (startPanel != null) startPanel.SetActive(true);
+
+        if (EventSystem.current != null)
+            EventSystem.current.SetSelectedGameObject(null);
+
+        Debug.Log("[QuizManager] Quiz cleaned before exit.");
     }
 
     // ── Load Question ─────────────────────────────────────────────────────────

@@ -3701,7 +3701,7 @@ MonoBehaviour:
     mustTapInOrder: 0
     requiredInputCount: 1
     waitOnlySeconds: 0
-    activeTimeSeconds: 18
+    activeTimeSeconds: 15
     maxTimeToFirstInput: 0
     helpProgressGainPerTap: 20
     helpProgressLossPerSecond: 25
@@ -3843,11 +3843,11 @@ MonoBehaviour:
     storyMomentWrongTapSoundVolume: 1
     showHintWhenWrongInput: 1
     wrongInputHintText: Tap on the Bull to make him MOO
-    wrongInputSound: {fileID: 0}
+    wrongInputSound: {fileID: 8300000, guid: 47c8c29876eaa7145a1fabac5b910b9c, type: 3}
     wrongInputSoundVolume: 1
     enableNoInputHelp: 1
     noInputHintAfterSeconds: 5
-    noInputHintText: Tap on the Bull to make him MOO
+    noInputHintText: Tapping on the Bull will make him "MOOO!"
     noInputActionAfterHint: 3
     autoSkipAfterHintSeconds: 5
     useSameHintEffectsForNoInput: 1
@@ -3964,8 +3964,8 @@ MonoBehaviour:
     waitForRunningReactionsBeforeFinish: 1
     continueAfterComplete: 1
     retryIfFailed: 0
-    successMessage: Welldone
-    tryAgainMessage: Try again
+    successMessage: 
+    tryAgainMessage: 
     successMessageSeconds: 2
     maxReactionWaitSeconds: 20
     onActivityStarted:
