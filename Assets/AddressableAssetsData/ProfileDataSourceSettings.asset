@@ -117,6 +117,24 @@ MonoBehaviour:
       m_Value: https://81832d9d-22cf-4818-ba8e-445b28f38838.client-api.unity3dusercontent.com/client_api/v1/environments/production/buckets/3b924e7b-0425-4558-9d56-3955f9ab536e/release_by_badge/latest/entry_by_path/content/?path=
     - m_Suffix: PromoteOnly
       m_Value: False
+  - m_GroupTypePrefix: CCD.81832d9d-22cf-4818-ba8e-445b28f38838.b38594b0-8b90-46bf-8621-11b7f4be470c.eff25ced-f160-4b86-826f-b58aad47afc8.latest
+    m_Variables:
+    - m_Suffix: BuildPath
+      m_Value: CCDBuildData/b38594b0-8b90-46bf-8621-11b7f4be470c/eff25ced-f160-4b86-826f-b58aad47afc8/latest
+    - m_Suffix: CcdBadgeName
+      m_Value: latest
+    - m_Suffix: CcdBucketId
+      m_Value: eff25ced-f160-4b86-826f-b58aad47afc8
+    - m_Suffix: CcdBucketName
+      m_Value: Tenali-Raman
+    - m_Suffix: Environmentid
+      m_Value: b38594b0-8b90-46bf-8621-11b7f4be470c
+    - m_Suffix: Environmentname
+      m_Value: production
+    - m_Suffix: LoadPath
+      m_Value: https://81832d9d-22cf-4818-ba8e-445b28f38838.client-api.unity3dusercontent.com/client_api/v1/environments/production/buckets/eff25ced-f160-4b86-826f-b58aad47afc8/release_by_badge/latest/entry_by_path/content/?path=
+    - m_Suffix: PromoteOnly
+      m_Value: False
   environments:
   - id: b38594b0-8b90-46bf-8621-11b7f4be470c
     projectId: 81832d9d-22cf-4818-ba8e-445b28f38838
