@@ -4,6 +4,9 @@
 #
 .utmp/
 /[Ll]ibrary/
+
+# Vuforia editor-generated preview thumbnails (auto-regenerated from StreamingAssets/Vuforia/*.xml)
+Assets/Editor/Vuforia/ImageTargetTextures/
 /[Tt]emp/
 /[Oo]bj/
 /[Bb]uild/
