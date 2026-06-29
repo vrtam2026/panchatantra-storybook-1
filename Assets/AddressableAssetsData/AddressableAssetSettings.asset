@@ -65,6 +65,8 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: 66655fb6d6d167145811d620754890e5, type: 2}
   - {fileID: 11400000, guid: 39513e8214e0da642a88b48863c3ea3f, type: 2}
+  - {fileID: 11400000, guid: b3bd83f3e30a17c4e9b85eef3f7ffe29, type: 2}
+  - {fileID: 11400000, guid: 2410ba2c20a81954fb38b9457595fc49, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
@@ -134,6 +136,22 @@ MonoBehaviour:
         m_Value: <undefined>
       - m_Id: baa4f018bcdfff14d932e7056fd803f7
         m_Value: https://81832d9d-22cf-4818-ba8e-445b28f38838.client-api.unity3dusercontent.com/client_api/v1/environments/production/buckets/3b924e7b-0425-4558-9d56-3955f9ab536e/release_by_badge/Testing-V1/entry_by_path/content/?path=
+    - m_InheritedParent: 
+      m_Id: a918f6f67837c454c8f8056e7535911b
+      m_ProfileName: Audio_testing
+      m_Values:
+      - m_Id: 013107062703ba04d849671547fd751c
+        m_Value: production
+      - m_Id: 2df8877bdc6cf194e97f9170b216e21d
+        m_Value: CCDBuildData/b38594b0-8b90-46bf-8621-11b7f4be470c/046751d5-c73b-491d-910e-cc7a0cbbf920/latest
+      - m_Id: 4b1424bd6d3a1a241978d8247c8f63be
+        m_Value: 'ServerData/[BuildTarget]'
+      - m_Id: 61f768959030ee5428aef26d8f61f53e
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: b50589af2df3a8943a47e70f1159e816
+        m_Value: <undefined>
+      - m_Id: baa4f018bcdfff14d932e7056fd803f7
+        m_Value: https://81832d9d-22cf-4818-ba8e-445b28f38838.client-api.unity3dusercontent.com/client_api/v1/environments/production/buckets/046751d5-c73b-491d-910e-cc7a0cbbf920/release_by_badge/latest/entry_by_path/content/?path=
     m_ProfileEntryNames:
     - m_Id: 013107062703ba04d849671547fd751c
       m_Name: EnvironmentName
@@ -170,7 +188,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3396c545d7df64644ae6b26aa6dc48f7, type: 2}
   - {fileID: 11400000, guid: 3bbf2c62fe8bd3747b1a6b307547341b, type: 2}
   - {fileID: 11400000, guid: ee85c62c5e61c7044aa594c9800e9bbb, type: 2}
-  m_ActiveProfileId: 8aa69d8e23d06914ea005093caffed51
+  m_ActiveProfileId: a918f6f67837c454c8f8056e7535911b
   m_CcdManagedData:
     EnvironmentId: 
     EnvironmentName: 

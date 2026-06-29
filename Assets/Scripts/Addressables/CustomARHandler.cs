@@ -634,6 +634,9 @@ public class CustomARHandler : MonoBehaviour
 
         if (string.IsNullOrEmpty(addressableKey)) return;
 
+        // Notify window manager so it can release out-of-window pages and preload neighbours
+        ARWindowManager.Instance?.OnPageDetected(addressableKey);
+
         if (_releaseCoroutine != null)
         {
             StopCoroutine(_releaseCoroutine);
@@ -701,6 +704,15 @@ public class CustomARHandler : MonoBehaviour
                 _trackHook?.SetPageNode(_pageNode);
                 RefreshReplayButtonVisibility();
 
+                // Warm the audio cache in parallel — so audio is ready by the time the page
+                // finishes its intro reveal and ARMediaManager calls PlayPageAudioFromBeginning.
+                if (_pageNode != null && ARAddressableAudioService.Instance != null)
+                {
+                    string lang = ARGlobalLanguage.GetCurrentLanguage();
+                    ARAddressableAudioService.Instance.PreloadAudioPack(lang, _pageNode.PageId);
+                    Debug.Log($"[AR-AUDIO] Preloading audio: audio/{lang}/{_pageNode.PageId}");
+                }
+
                 //contentControl?.PlayContent();
             };
         }
@@ -714,7 +726,7 @@ public class CustomARHandler : MonoBehaviour
             quizManager?.PauseQuiz(false);
             _trackHook?.SetPageNode(_pageNode);
             RefreshReplayButtonVisibility();
-            //contentControl?.PlayContent();
+            contentControl?.PlayContent();
         }
     }
 
@@ -973,5 +985,72 @@ public class CustomARHandler : MonoBehaviour
             if (visible) p.Play();
             else p.Stop();
         }*/
+    }
+
+    // -------------------------------------------------------------------------
+    // Window-based release — called by ARWindowManager
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Silently releases prefab content when this page falls outside the active window.
+    /// No overlay is shown — the user has already moved away from this page.
+    /// </summary>
+    public void ForceRelease()
+    {
+        if (_releaseCoroutine != null)
+        {
+            StopCoroutine(_releaseCoroutine);
+            _releaseCoroutine = null;
+        }
+
+        if (instantiatedObject != null)
+        {
+            _trackHook?.ClearPageNode();
+            Addressables.ReleaseInstance(instantiatedObject);
+            instantiatedObject  = null;
+            contentControl      = null;
+            quizManager         = null;
+            _isQuizContent      = false;
+            _pageNode           = null;
+            _activePageId       = null;
+            _contentCompleted   = false;
+            _isLoading          = false;
+            _loadCancelled      = false;
+        }
+
+        _arMediaManager?.NotifyContentReleased();
+        HideAllUI();
+        Debug.Log($"[AR-WINDOW] ForceRelease: {addressableKey}");
+    }
+
+    // -------------------------------------------------------------------------
+    // Diagnostics — used by ARDiagnosticOverlay
+    // -------------------------------------------------------------------------
+
+    public struct DiagnosticInfo
+    {
+        public string pageId;         // active page ID (empty if none)
+        public string addressableKey; // the Addressable address for this handler
+        public string prefabStatus;   // "None" | "Downloading" | "Loaded" | "Released"
+    }
+
+    public DiagnosticInfo GetDiagnosticInfo()
+    {
+        string status;
+        if (instantiatedObject != null)
+            status = "Loaded";
+        else if (!string.IsNullOrEmpty(_activePageId))
+            status = "Released";
+        else if (!string.IsNullOrEmpty(addressableKey))
+            status = "Downloading";
+        else
+            status = "None";
+
+        return new DiagnosticInfo
+        {
+            pageId         = _activePageId ?? "",
+            addressableKey = addressableKey ?? "",
+            prefabStatus   = status
+        };
     }
 }

@@ -1,19 +1,8 @@
 using UnityEngine;
 
+// PageTarget is unused in the main AR flow (CustomARHandler handles tracking).
+// Kept for reference only. ARWindowManager no longer exposes GetLoadedAsset.
 public class PageTarget : MonoBehaviour
 {
-    public int pageIndex;  // set in Inspector: 0 for page1, 1 for page2...
-    ARWindowManager _manager;
-
-    void Start() => _manager = FindFirstObjectByType<ARWindowManager>();
-
-    public void OnTargetFound()
-    {
-        _manager.OnPageDetected(pageIndex);
-
-        var model = _manager.GetLoadedAsset(pageIndex);
-        if (model != null)
-            Instantiate(model, transform);
-        // if null, it's still downloading — handle with a loading spinner
-    }
+    public int pageIndex;
 }

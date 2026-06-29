@@ -10,7 +10,7 @@ public class ARMediaManager : MonoBehaviour
     // Lost Tracking panel is handled by OverlayManager -- no drag needed here
 
     [Header("Audio")]
-    [SerializeField] private ARAudioLocalizationDatabase audioDatabase;
+    [SerializeField] private ARAddressableAudioService audioService;
 
     [Tooltip("Real amplification multiplier. 1 = original, 5 = 5x louder.")]
     [Range(1f, 10f)]
@@ -41,11 +41,13 @@ public class ARMediaManager : MonoBehaviour
     private ARTrackedPageNode _activeNode;
 
     private Coroutine _voiceRoutine;
+    private Coroutine _bgmDelayRoutine;
     private bool _paused;
     private int _voiceIndex;
     private float _delayTimer;
     private float _lastLostTime = -999f;
     private int _startRequestId = 0;
+    private int _langSwitchId = 0;
     private int _lastReplayFrame = -1;
 
     private enum VoiceStage { None, DelayBefore, Playing, DelayAfter }
@@ -322,22 +324,56 @@ public class ARMediaManager : MonoBehaviour
             if (!requestedNode.gameObject.activeInHierarchy) return;
             if (requestedNode.IsStoryBlockedByActivity) return;
 
+            // Pass the SAME requestId so NotifyContentReleased firing during
+            // the audio download correctly suppresses the stale callback.
             PlayPageAudioFromBeginning(
                 requestedNode.PageId,
                 requestedNode.LoopBgmUntilVoiceEnds,
-                requestedNode.StopBgmWhenVoiceEnds
+                requestedNode.StopBgmWhenVoiceEnds,
+                requestId
             );
         });
     }
 
     private void OnLanguageChanged(string newLanguage)
     {
-        if (_activeNode == null) return;
-        if (!_activeNode.IsTracked) return;
-        if (!_activeNode.gameObject.activeInHierarchy) return;
+        Debug.Log($"[AR-LANG] Language changed → {newLanguage}");
+
+        if (_activeNode == null || !_activeNode.IsTracked || !_activeNode.gameObject.activeInHierarchy)
+        {
+            Debug.Log("[AR-LANG] No active tracked node — language saved, will apply on next scan.");
+            return;
+        }
+
         HideReplay();
         StopAllAudio();
-        PlayPageAudioFromBeginning(_activeNode.PageId, _activeNode.LoopBgmUntilVoiceEnds, _activeNode.StopBgmWhenVoiceEnds);
+
+        string pageId = _activeNode.PageId;
+
+        if (audioService != null)
+        {
+            // Load new language audio pack first, THEN restart the full page.
+            // This avoids visuals playing in silence while audio downloads.
+            int switchId = ++_langSwitchId;
+            Debug.Log($"[AR-AUDIO] Loading audio pack: audio/{newLanguage}/{pageId}");
+
+            audioService.LoadAudioPack(newLanguage, pageId, switchId, () => _langSwitchId, (pack, success) =>
+            {
+                if (switchId != _langSwitchId) return;
+                if (_activeNode == null || !_activeNode.IsTracked) return;
+
+                Debug.Log($"[AR-LANG] Audio ready — restarting page from zero: {newLanguage}/{pageId}");
+
+                ARTrackedPageNode node = _activeNode;
+                StopAllAudio();
+                OnPageRestarted?.Invoke(node.PageId);
+                StartNodeFromBeginningThenAudio(node);
+            });
+        }
+        else
+        {
+            Debug.LogError("[AR-LANG] ARAddressableAudioService not assigned — language switch has no audio effect.");
+        }
     }
 
     // ----------------------------------------------------------------------
@@ -393,6 +429,7 @@ public class ARMediaManager : MonoBehaviour
         _paused = false;
 
         if (_voiceRoutine != null) { StopCoroutine(_voiceRoutine); _voiceRoutine = null; }
+        if (_bgmDelayRoutine != null) { StopCoroutine(_bgmDelayRoutine); _bgmDelayRoutine = null; }
 
         _stage = VoiceStage.None;
         _voiceIndex = 0;
@@ -408,57 +445,34 @@ public class ARMediaManager : MonoBehaviour
     // Audio playback
     // ----------------------------------------------------------------------
 
-    private void PlayPageAudioFromBeginning(string pageId, bool loopBgmRequested, bool stopBgmWhenVoiceEnds)
+    // reqId must be the SAME id already incremented by StartNodeFromBeginningThenAudio.
+    // Passing it here ensures NotifyContentReleased() correctly invalidates a download
+    // that started AFTER visuals began but before audio arrived from CCD.
+    private void PlayPageAudioFromBeginning(string pageId, bool loopBgmRequested, bool stopBgmWhenVoiceEnds, int reqId)
     {
-        // CRITICAL: reset paused state before starting new audio
-        // Without this, _paused=true from previous tracking lost causes audio to never play
         _paused = false;
 
-        Debug.Log($"[AR] PlayPageAudio — pageId: '{pageId}', lang: '{ARGlobalLanguage.GetCurrentLanguage()}'");
-
-        if (audioDatabase == null)
+        if (audioService == null)
         {
-            Debug.LogError("[AR] audioDatabase is NULL — assign it in Inspector");
+            Debug.LogError("[AR-AUDIO] ARAddressableAudioService not assigned in Inspector — no audio will play.");
             return;
         }
 
         string lang = ARGlobalLanguage.GetCurrentLanguage();
+        Debug.Log($"[AR-AUDIO] Loading pack: {lang}/{pageId} (reqId={reqId})");
 
-        if (!audioDatabase.TryGetPageAudio(lang, pageId, out var pageAudio) || pageAudio == null)
+        bool handled = audioService.LoadAudioPack(lang, pageId, reqId, () => _startRequestId, (pack, success) =>
         {
-            Debug.LogError($"[AR] No audio found for lang:'{lang}' pageId:'{pageId}'");
-            return;
-        }
+            if (pack != null)
+            {
+                PlayPageAudioFromPack(pack, loopBgmRequested, stopBgmWhenVoiceEnds);
+            }
+            else
+                Debug.LogWarning($"[AR-AUDIO] No audio pack for {lang}/{pageId} — page plays in silence.");
+        });
 
-        Debug.Log($"[AR] Found pageAudio — voiceClips:{pageAudio.voiceClips.Count}, bgmClips:{pageAudio.bgmClips.Count}");
-
-        StartBgm(pageAudio, loopBgmRequested);
-
-        _voiceIndex = 0;
-        _stage = VoiceStage.DelayBefore;
-        _delayTimer = 0f;
-
-        if (_voiceRoutine != null) StopCoroutine(_voiceRoutine);
-        if (!isActiveAndEnabled || !gameObject.activeInHierarchy) return;
-        _voiceRoutine = StartCoroutine(VoiceSequenceRoutine(pageAudio, stopBgmWhenVoiceEnds));
-    }
-
-    private void StartBgm(ARAudioLocalizationDatabase.PageAudio pageAudio, bool loopBgmRequested)
-    {
-        if (_bgmSource == null) return;
-        if (pageAudio == null || pageAudio.bgmClips == null || pageAudio.bgmClips.Count == 0) return;
-
-        var seg = pageAudio.bgmClips[0];
-        if (seg == null || seg.clip == null) return;
-
-        _bgmSource.clip = seg.clip;
-        _bgmSource.loop = loopBgmRequested || seg.loop;
-        _bgmSource.volume = 1f;
-
-        if (seg.delayBefore > 0f)
-            StartCoroutine(DelayedPlay(_bgmSource, seg.delayBefore));
-        else
-            _bgmSource.Play();
+        if (!handled)
+            Debug.LogWarning($"[AR-AUDIO] No catalog entry for {lang}/{pageId} — page plays in silence.");
     }
 
     private IEnumerator DelayedPlay(AudioSource src, float delay)
@@ -470,19 +484,51 @@ public class ARMediaManager : MonoBehaviour
     }
 
     // ----------------------------------------------------------------------
-    // Voice sequence
+    // Addressable audio pack playback
     // ----------------------------------------------------------------------
 
-    private IEnumerator VoiceSequenceRoutine(ARAudioLocalizationDatabase.PageAudio pageAudio, bool stopBgmWhenVoiceEnds)
+    private void PlayPageAudioFromPack(ARPageAudioPack pack, bool loopBgmRequested, bool stopBgmWhenVoiceEnds)
     {
-        if (_voiceSource == null) yield break;
-        if (pageAudio == null || pageAudio.voiceClips == null) yield break;
+        if (pack == null) return;
+        _paused = false;
+
+        StartBgmFromPack(pack, loopBgmRequested);
+
+        _voiceIndex = 0;
+        _stage = VoiceStage.DelayBefore;
+        _delayTimer = 0f;
+
+        if (_voiceRoutine != null) StopCoroutine(_voiceRoutine);
+        if (!isActiveAndEnabled || !gameObject.activeInHierarchy) return;
+        _voiceRoutine = StartCoroutine(VoiceSequenceRoutineFromPack(pack, stopBgmWhenVoiceEnds));
+    }
+
+    private void StartBgmFromPack(ARPageAudioPack pack, bool loopBgmRequested)
+    {
+        if (_bgmSource == null || pack == null || pack.bgmClips == null || pack.bgmClips.Count == 0) return;
+
+        var seg = pack.bgmClips[0];
+        if (seg == null || seg.clip == null) return;
+
+        _bgmSource.clip = seg.clip;
+        _bgmSource.loop = loopBgmRequested || seg.loop;
+        _bgmSource.volume = Mathf.Clamp01(seg.volume);
+
+        if (seg.delayBefore > 0f)
+            _bgmDelayRoutine = StartCoroutine(DelayedPlay(_bgmSource, seg.delayBefore));
+        else
+            _bgmSource.Play();
+    }
+
+    private IEnumerator VoiceSequenceRoutineFromPack(ARPageAudioPack pack, bool stopBgmWhenVoiceEnds)
+    {
+        if (_voiceSource == null || pack == null || pack.voiceClips == null) yield break;
 
         bool anyClipPlayed = false;
 
-        while (_voiceIndex < pageAudio.voiceClips.Count)
+        while (_voiceIndex < pack.voiceClips.Count)
         {
-            var seg = pageAudio.voiceClips[_voiceIndex];
+            var seg = pack.voiceClips[_voiceIndex];
 
             Debug.Log($"[AR] Voice Clip Index {_voiceIndex} → {seg?.clip}");
 
@@ -495,18 +541,13 @@ public class ARMediaManager : MonoBehaviour
 
             _stage = VoiceStage.DelayBefore;
             _delayTimer = seg.delayBefore;
-            while (_delayTimer > 0f)
-            {
-                if (!_paused) _delayTimer -= Time.deltaTime;
-                yield return null;
-            }
+            while (_delayTimer > 0f) { if (!_paused) _delayTimer -= Time.deltaTime; yield return null; }
 
             _stage = VoiceStage.Playing;
             _voiceSource.clip = seg.clip;
             _voiceSource.loop = seg.loop;
-            _voiceSource.volume = 1f;
+            _voiceSource.volume = Mathf.Clamp01(seg.volume);
             _voiceSource.Play();
-
             anyClipPlayed = true;
 
             while (_voiceSource != null && _voiceSource.clip != null)
@@ -518,11 +559,7 @@ public class ARMediaManager : MonoBehaviour
 
             _stage = VoiceStage.DelayAfter;
             _delayTimer = seg.delayAfter;
-            while (_delayTimer > 0f)
-            {
-                if (!_paused) _delayTimer -= Time.deltaTime;
-                yield return null;
-            }
+            while (_delayTimer > 0f) { if (!_paused) _delayTimer -= Time.deltaTime; yield return null; }
 
             _voiceIndex++;
         }
@@ -540,7 +577,7 @@ public class ARMediaManager : MonoBehaviour
 
         if (anyClipPlayed && _activeNode != null)
         {
-            Debug.Log($"[AR] Voice completed for page: '{_activeNode.PageId}'");
+            Debug.Log($"[AR] Voice completed (pack) for page: '{_activeNode.PageId}'");
             OnVoiceCompleted?.Invoke(_activeNode.PageId);
         }
     }

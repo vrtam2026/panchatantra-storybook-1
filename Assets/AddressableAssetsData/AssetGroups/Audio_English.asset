@@ -1,0 +1,266 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Audio_English
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Audio_English
+  m_GUID: d8a47c46544745348936ae357bf69cd9
+  m_SerializeEntries:
+  - m_GUID: 019a8a8ce876ccf49b875819fab59181
+    m_Address: audio/English/S5_P96-97
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 049307ba2bc987c459a1a421cba49217
+    m_Address: audio/English/S2_P28-29
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a5059880aa3b6f468ce870a799ab874
+    m_Address: audio/English/S2_P38-39
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0bef98da7d1382749be27f867ce86638
+    m_Address: audio/English/S3_P48-49
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1012dc63b72bd0443a41d3106fc5f4b6
+    m_Address: audio/English/S1_P-16-17
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1603b377904d3964b8efb58eb8892f9e
+    m_Address: audio/English/S5_P104-105
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1dc8481d746de3442bf7e29f0a88c11f
+    m_Address: audio/English/S1_P-18-19
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2858f12b4839a094383c491624c51f86
+    m_Address: audio/English/S5_P88-89
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2fa707d47223fc843bf2eb9743bb3f57
+    m_Address: audio/English/S2_P36-37
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 32ddd3a7ba6751c4f8ca6299ade9d9c1
+    m_Address: audio/English/S5_P94-95
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3fd82248723e97e4fa6fb788e6881859
+    m_Address: audio/English/S2_P30-31
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 432a6607cc5d43a4eb5978e031031711
+    m_Address: audio/English/S2_P42-43
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 487ab0aecad49604f81d8de0f5996cb3
+    m_Address: audio/English/S3_P62-63
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4debc07ccea21fa4bb7425a4d2d2e003
+    m_Address: audio/English/S2_P40-41
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f50de04e08c3f0469cef629376161bc
+    m_Address: audio/English/S5_P106-107
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50a3fd3e024c9ec46baab771a7ded9ec
+    m_Address: audio/English/S1_P-8-9
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 555fc6115d2f8024d9a88864ae5f9482
+    m_Address: audio/English/S1_P-14-15
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ce2fb0e8064527498a406536e713406
+    m_Address: audio/English/S2_P44-45
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d20c920c8b4d4045a3a795a9d954750
+    m_Address: audio/English/S3_P54-55
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d3897114b403e7478a13b6349002183
+    m_Address: audio/English/S5_P92-93
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60d2e359ea8db6645845d36ad3b330e2
+    m_Address: audio/English/S3_P56-57
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 63e92b2689a84df45965553eea80efc3
+    m_Address: audio/English/S1_P-20-21
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b54a7488c243a9498bb179576896af8
+    m_Address: audio/English/S4_P82-83
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7533afae6ccec0f4189203bae40200ed
+    m_Address: audio/English/S2_P34-35
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76a91240fbfb0ce47ad232fcce85dd50
+    m_Address: audio/English/S3_P50-51
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7851d114d2ad9fb43b74df4f533ae204
+    m_Address: audio/English/S5_P102-103
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87e4fff5714f36445808b0d235694dbf
+    m_Address: audio/English/S2_P32-33
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94c929ce03e9f484daaefebcbfafa7a4
+    m_Address: audio/English/S3_P58-59
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 982274d0055522f42b029500513b26dd
+    m_Address: audio/English/S1_P-10-11
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 995e48979913b814ab4b4475adcc5141
+    m_Address: audio/English/S1_P-12-13
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99742706d0dd36d499d575eba498f42c
+    m_Address: audio/English/S2_P26-27
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9cea3833d5544b1489c72f4af1fcd9fd
+    m_Address: audio/English/S4_P66-67
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
+    m_Address: audio/English/S1_P-4-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b0d47838f803b0143a1dafa1b28f67d1
+    m_Address: audio/English/S3_P52-53
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b38209d190bb4c144bb6b43fe02983f6
+    m_Address: audio/English/S5_P86-87
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8abbf74b68a5c842b39e122e1c48d5b
+    m_Address: audio/English/S1_P-intro
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba54371be2196bc49a0245074511b9f3
+    m_Address: audio/English/S4_P74-75
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c22d88528bb0ace4fa9e82a79444035c
+    m_Address: audio/English/S1_P-6-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca3ee6e43551fd6449c9a4036d287b26
+    m_Address: audio/English/S5_P90-91
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cda02e35f0b853f4581eaed4a1e085cf
+    m_Address: audio/English/S4_P78-79
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce7827873a698354db844bf5b466a217
+    m_Address: audio/English/S4_P72-73
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d5d4c2b43ec15fb42af58556a268ded2
+    m_Address: audio/English/S2_P24-25
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd900888b8702e142815bbc616b0fd0e
+    m_Address: audio/English/S4_P68-69
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0922954da3265441a83748e4532d0dd
+    m_Address: audio/English/S3_P60-61
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8893b66b0d0e8a42a784a8f553b031a
+    m_Address: audio/English/S4_P80-81
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ea9e9dc0b37cb9a4a9986c5149010af6
+    m_Address: audio/English/S5_P98-99
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ecef88e93c7f8f84983dc22e9c2cc366
+    m_Address: audio/English/S5_P100-101
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: edd069df681e93a47bd38ce57fcf3657
+    m_Address: audio/English/S4_P76-77
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: aab12f73e7ef20e4eae0263e790f21ae, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 843a368f81114f24e9bce4b3caf46ae3, type: 2}
+    - {fileID: 11400000, guid: f636019a20f900047bf9184dc7ad851b, type: 2}
