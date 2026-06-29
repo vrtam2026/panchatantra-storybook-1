@@ -1,5 +1,6 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.UI;
@@ -79,10 +80,23 @@ public class ARTrackedPageNode : MonoBehaviour
     private bool _isTracked;
     private float _lastLostTime = -999f;
 
+    private System.Action _onStorySystemsStarted;
+    private bool _waitingForPopupReveal;
+
+    // True while an interaction step must run before the normal story starts.
+    // This prevents ARVFXPopupController from accidentally allowing story animators
+    // or spline movement to continue after reveal while the user is still expected to tap.
+    private bool _storyBlockedByActivity;
+    private bool _mediaAudioPausedForActivity;
+
     public string PageId => pageId;
     public bool IsTracked => _isTracked;
     public bool LoopBgmUntilVoiceEnds => loopBgmUntilVoiceEnds;
     public bool StopBgmWhenVoiceEnds => stopBgmWhenVoiceEnds;
+
+    // Read-only flag used by ARMediaManager so story audio does not start while
+    // an opt-in activity is blocking the story. Normal pages keep this false.
+    public bool IsStoryBlockedByActivity => _storyBlockedByActivity;
 
     private readonly Dictionary<VideoPlayer, VideoFreezeRuntime> _videoRuntime = new();
 
@@ -104,11 +118,7 @@ public class ARTrackedPageNode : MonoBehaviour
                 splinePathMovers.Add(m);
         }
 
-        if (splineMovers.Count == 0)
-        {
-            var mover = GetComponentInChildren<ARTrackableSplineMover>(true);
-            if (mover != null) splineMovers.Add(mover);
-        }
+        RebuildSplineMoverLists();
 
         if (animators.Count == 0)
         {
@@ -124,11 +134,33 @@ public class ARTrackedPageNode : MonoBehaviour
         SetupReveal();
     }
 
+    private void RebuildSplineMoverLists()
+    {
+        if (splineMovers == null) splineMovers = new List<ARTrackableSplineMover>();
+        if (splinePathMovers == null) splinePathMovers = new List<SplinePathMover>();
+
+        splineMovers.RemoveAll(m => m == null);
+        splinePathMovers.RemoveAll(m => m == null);
+
+        ARTrackableSplineMover[] foundTrackable = GetComponentsInChildren<ARTrackableSplineMover>(true);
+        for (int i = 0; i < foundTrackable.Length; i++)
+        {
+            if (foundTrackable[i] != null && !splineMovers.Contains(foundTrackable[i]))
+                splineMovers.Add(foundTrackable[i]);
+        }
+
+        SplinePathMover[] foundPath = GetComponentsInChildren<SplinePathMover>(true);
+        for (int i = 0; i < foundPath.Length; i++)
+        {
+            if (foundPath[i] != null && !splinePathMovers.Contains(foundPath[i]))
+                splinePathMovers.Add(foundPath[i]);
+        }
+    }
+
     private void OnDestroy()
     {
-        foreach (var kv in _videoRuntime)
-            kv.Value.Dispose();
-        _videoRuntime.Clear();
+        ARVFXPopupController.OnRevealComplete -= HandlePopupRevealComplete;
+        DisposeVideoRuntimeCache();
     }
 
     private void OnEnable()
@@ -139,6 +171,12 @@ public class ARTrackedPageNode : MonoBehaviour
     private void OnDisable()
     {
         if (mediaManager != null) mediaManager.UnregisterNode(this);
+
+        ARVFXPopupController.OnRevealComplete -= HandlePopupRevealComplete;
+        _waitingForPopupReveal = false;
+        _storyBlockedByActivity = false;
+        _mediaAudioPausedForActivity = false;
+        _onStorySystemsStarted = null;
     }
 
     // ---------------------------------------------------------------
@@ -379,9 +417,17 @@ public class ARTrackedPageNode : MonoBehaviour
 
     private void RebuildVideoRuntimeCache()
     {
-        _videoRuntime.Clear();
+        DisposeVideoRuntimeCache();
         AddToRuntime(mainVideos);
         AddToRuntime(backgroundLoopVideos);
+    }
+
+    private void DisposeVideoRuntimeCache()
+    {
+        foreach (var kv in _videoRuntime)
+            kv.Value.Dispose();
+
+        _videoRuntime.Clear();
     }
 
     private void AddToRuntime(List<VideoPlayer> list)
@@ -427,45 +473,456 @@ public class ARTrackedPageNode : MonoBehaviour
         PauseVisuals();
     }
 
-    public void StartFromBeginning()
+    public void StartFromBeginning(System.Action onStorySystemsStarted = null)
     {
-        // RESET REVEAL
+        ARVFXPopupController.OnRevealComplete -= HandlePopupRevealComplete;
+
+        _waitingForPopupReveal = false;
+        _storyBlockedByActivity = false;
+        _onStorySystemsStarted = onStorySystemsStarted;
+
+        // Reset page-end reveal / overlay state.
         ResetReveal();
+
+        RebuildVideoRuntimeCache();
+
+        // Reset visual systems but keep them paused until popup finishes.
+        ResetStorySystemsToStartPaused();
+
+        ARVFXPopupController popup = GetComponentInChildren<ARVFXPopupController>(true);
+
+        if (popup != null && popup.isActiveAndEnabled)
+        {
+            _waitingForPopupReveal = true;
+            ARVFXPopupController.OnRevealComplete += HandlePopupRevealComplete;
+
+            // First scan and replay both use this same path.
+            popup.TriggerReplay();
+            return;
+        }
+
+        // Pages without VFX/popup start immediately. Also wake activity watchers that wait for a selected story animation.
+        NotifyContentControllerRevealComplete();
+        BeginStorySystemsNow();
+    }
+
+
+    private void NotifyContentControllerRevealComplete()
+    {
+        ContentController[] controllers = GetComponentsInChildren<ContentController>(true);
+        for (int i = 0; i < controllers.Length; i++)
+        {
+            if (controllers[i] != null)
+                controllers[i].NotifyRevealComplete();
+        }
+    }
+
+    public bool HasBlockingAfterRevealActivity()
+    {
+        ContentController[] controllers = GetComponentsInChildren<ContentController>(true);
+        for (int i = 0; i < controllers.Length; i++)
+        {
+            if (controllers[i] != null && controllers[i].ShouldRunBeforeStoryAfterReveal())
+                return true;
+        }
+        return false;
+    }
+
+    // Called by ActivityEventRelay from an animation event, timeline signal, or button.
+    // It forwards the signal to ContentController without restarting the story.
+    public void TriggerStoryPointActivity()
+    {
+        TriggerStoryPointActivity(string.Empty);
+    }
+
+    public void TriggerStoryPointActivity(string key)
+    {
+        ContentController[] controllers = GetComponentsInChildren<ContentController>(true);
+        if (controllers == null || controllers.Length == 0) return;
+
+        string triggerKey = string.IsNullOrWhiteSpace(key) ? "StoryPoint" : key;
+        for (int i = 0; i < controllers.Length; i++)
+        {
+            if (controllers[i] != null)
+                controllers[i].TriggerActivity(triggerKey);
+        }
+    }
+
+    // Extra overloads keep Unity Animation Events safe if the event sends a number.
+    public void TriggerStoryPointActivity(int key)
+    {
+        TriggerStoryPointActivity(key.ToString());
+    }
+
+    public void TriggerStoryPointActivity(float key)
+    {
+        TriggerStoryPointActivity(key.ToString());
+    }
+
+    private void HandlePopupRevealComplete(ARVFXPopupController controller)
+    {
+        if (!_waitingForPopupReveal) return;
+        if (controller == null) return;
+
+        bool belongsToThisPage =
+            controller.transform == transform ||
+            controller.transform.IsChildOf(transform);
+
+        if (!belongsToThisPage) return;
+
+        // Important activity gate:
+        // Some pages must run a child activity immediately after VFX reveal, before story animation,
+        // spline movement, and voice over start. If ContentController has a pending After Reveal
+        // activity, let it run first. When it completes, BeginStorySystemsNow continues the normal story.
+        if (HasBlockingAfterRevealActivity())
+        {
+            ARVFXPopupController.OnRevealComplete -= HandlePopupRevealComplete;
+            _waitingForPopupReveal = false;
+            _storyBlockedByActivity = true;
+
+            // ARVFXPopupController may re-enable child animators and movement scripts
+            // just before firing OnRevealComplete. For an activity that must happen
+            // before the story, pause them again immediately. Otherwise the activity
+            // text appears while the story animation/spline starts underneath it.
+            PauseStorySystemsForActivityGate();
+
+            RunBeforeStoryActivitiesSequentially(() =>
+            {
+                _storyBlockedByActivity = false;
+                BeginStorySystemsNow();
+            });
+            return;
+        }
+
+        // Wake activities that are waiting for a selected story animation or movement.
+        // This is required for middle-story activities. Otherwise they only start when the full story ends.
+        NotifyContentControllerRevealComplete();
+        BeginStorySystemsNow();
+    }
+
+    private void RunBeforeStoryActivitiesSequentially(System.Action onComplete)
+    {
+        ContentController[] controllers = GetComponentsInChildren<ContentController>(true);
+        List<ContentController> blocking = new List<ContentController>();
+        for (int i = 0; i < controllers.Length; i++)
+        {
+            if (controllers[i] != null && controllers[i].ShouldRunBeforeStoryAfterReveal())
+                blocking.Add(controllers[i]);
+        }
+
+        if (blocking.Count == 0)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+
+        int index = 0;
+        System.Action runNext = null;
+        runNext = () =>
+        {
+            if (!gameObject.activeInHierarchy || !_isTracked)
+                return;
+
+            if (index >= blocking.Count)
+            {
+                onComplete?.Invoke();
+                return;
+            }
+
+            ContentController controller = blocking[index++];
+            if (controller == null)
+            {
+                runNext?.Invoke();
+                return;
+            }
+
+            controller.RunBeforeStoryAfterReveal(runNext);
+        };
+
+        runNext.Invoke();
+    }
+
+    private void PauseStorySystemsForActivityGate()
+    {
+        PauseVideos(mainVideos);
+        PauseVideos(backgroundLoopVideos);
+
+        // Pre-story gate only: keep story at first frame until a before-story activity completes.
+        ResetAnimatorsToFrameZeroPaused();
+
+        // Stop movement. It will be reset and started by BeginStorySystemsNow()
+        // after the activity is completed.
+        StopSplinesForIntro();
+    }
+
+    private void PauseStorySystemsAtCurrentFrameForActivity()
+    {
+        PauseVideos(mainVideos);
+        PauseVideos(backgroundLoopVideos);
+
+        for (int i = 0; i < animators.Count; i++)
+        {
+            Animator a = animators[i];
+            if (a == null) continue;
+            a.speed = 0f;
+        }
+
+        for (int i = 0; i < splineMovers.Count; i++)
+        {
+            ARTrackableSplineMover m = splineMovers[i];
+            if (m == null) continue;
+            m.Pause();
+        }
+
+        for (int i = 0; i < splinePathMovers.Count; i++)
+        {
+            SplinePathMover m = splinePathMovers[i];
+            if (m == null) continue;
+            m.Pause();
+        }
+
+        ARVFXPopupController popup = GetComponentInChildren<ARVFXPopupController>(true);
+        if (popup != null)
+            popup.PauseReveal();
+    }
+
+    private void ResetStorySystemsToStartPaused()
+    {
+        RebuildSplineMoverLists();
+        ResetVideosToStartPaused(mainVideos);
+        ResetVideosToStartPaused(backgroundLoopVideos);
+
+        ResetAnimatorsToFrameZeroPaused();
+
+        // Do not move the model to spline start during popup.
+        // Only stop movement here; ResetToStart happens after popup completion.
+        StopSplinesForIntro();
+    }
+
+    private void ResetVideosToStartPaused(List<VideoPlayer> list)
+    {
+        if (list == null) return;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            VideoPlayer vp = list[i];
+            if (vp == null) continue;
+            if (!vp.gameObject.activeInHierarchy) continue;
+            if (!vp.enabled) continue;
+
+            vp.Stop();
+            vp.time = 0;
+        }
+    }
+
+    private void ResetAnimatorsToFrameZeroPaused()
+    {
+        for (int i = 0; i < animators.Count; i++)
+        {
+            Animator a = animators[i];
+            if (a == null) continue;
+
+            a.enabled = true;
+            a.speed = 0f;
+
+            if (a.gameObject.activeInHierarchy)
+            {
+                a.Rebind();
+                a.Update(0f);
+            }
+        }
+    }
+
+    private void StopSplinesForIntro()
+    {
+        for (int i = 0; i < splineMovers.Count; i++)
+        {
+            ARTrackableSplineMover m = splineMovers[i];
+            if (m == null) continue;
+
+            m.Stop();
+        }
+
+        for (int i = 0; i < splinePathMovers.Count; i++)
+        {
+            SplinePathMover m = splinePathMovers[i];
+            if (m == null) continue;
+
+            m.Stop();
+        }
+    }
+
+    private void BeginStorySystemsNow()
+    {
+        if (!gameObject.activeInHierarchy) return;
+
+        // If tracking was lost while the popup was running, do not start
+        // animator/spline/audio. ResumeVisuals will continue the paused reveal on re-track.
+        if (!_isTracked)
+        {
+            _onStorySystemsStarted = null;
+            return;
+        }
+
+        ARVFXPopupController.OnRevealComplete -= HandlePopupRevealComplete;
+        _waitingForPopupReveal = false;
+
+        _storyBlockedByActivity = false;
 
         RebuildVideoRuntimeCache();
 
         RestartVideosWithFreeze(mainVideos, freezeMode, freezeFirstSeconds, freezeLastSeconds);
         RestartVideosNoFreeze(backgroundLoopVideos);
 
+        // Always start the story from a clean first frame. This is important after
+        // pre-story activities because the activity may have played temporary
+        // animation clips on the same animators.
+        ResetAnimatorsToFrameZeroPaused();
+        StartAnimatorsAfterIntro();
+        StartSplinesAfterIntro();
+
+        // Start watching for video end to trigger reveal only after real playback starts.
+        StartWatchingVideo();
+
+        System.Action callback = _onStorySystemsStarted;
+        _onStorySystemsStarted = null;
+        callback?.Invoke();
+    }
+
+    private void StartAnimatorsAfterIntro()
+    {
         for (int i = 0; i < animators.Count; i++)
         {
-            var a = animators[i];
+            Animator a = animators[i];
             if (a == null) continue;
+
+            a.enabled = true;
             a.speed = 1f;
-            a.Rebind();
-            a.Update(0f);
         }
+    }
+
+    private void EnsureSplineMoverCanStart(Component mover)
+    {
+        if (mover == null) return;
+
+        // Some story pages keep the spline mover object disabled until the story begins.
+        // After a blocking activity finishes, story/spline must start normally, so activate
+        // the mover object itself. If a parent page is inactive because tracking is lost,
+        // BeginStorySystemsNow already exits before this method is reached.
+        if (!mover.gameObject.activeSelf)
+            mover.gameObject.SetActive(true);
+
+        MonoBehaviour behaviour = mover as MonoBehaviour;
+        if (behaviour != null && !behaviour.enabled)
+            behaviour.enabled = true;
+    }
+
+    private void StartSplinesAfterIntro()
+    {
+        RebuildSplineMoverLists();
+        Debug.Log($"[AR] Starting spline movers for page '{pageId}'. Trackable:{splineMovers.Count} Path:{splinePathMovers.Count}", this);
 
         for (int i = 0; i < splineMovers.Count; i++)
         {
-            var m = splineMovers[i];
+            ARTrackableSplineMover m = splineMovers[i];
             if (m == null) continue;
-            m.Stop();
-            m.ResetToStart();
-            m.PlayOnce();
+
+            EnsureSplineMoverCanStart(m);
+
+            if (!m.gameObject.activeInHierarchy)
+            {
+                Debug.LogWarning($"[AR] Spline mover '{m.name}' is inactive. It cannot start until its GameObject is active.", m);
+                continue;
+            }
+
+            try
+            {
+                string reason;
+                if (m.ForceRestartFromBeginning(out reason))
+                    Debug.Log($"[AR] Started ARTrackableSplineMover '{m.name}' for page '{pageId}'.", m);
+                else
+                    Debug.LogWarning($"[AR] ARTrackableSplineMover '{m.name}' did not start: {reason}", m);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogWarning($"[AR] Failed to start ARTrackableSplineMover '{m.name}': {ex.Message}", m);
+            }
         }
 
         for (int i = 0; i < splinePathMovers.Count; i++)
         {
-            var m = splinePathMovers[i];
+            SplinePathMover m = splinePathMovers[i];
             if (m == null) continue;
-            m.Stop();
-            m.ResetToStart();
-            m.PlayOnce();
-        }
 
-        // Start watching for video end to trigger reveal
-        StartWatchingVideo();
+            EnsureSplineMoverCanStart(m);
+
+            if (!m.gameObject.activeInHierarchy)
+            {
+                Debug.LogWarning($"[AR] Spline path mover '{m.name}' is inactive. It cannot start until its GameObject is active.", m);
+                continue;
+            }
+
+            try
+            {
+                string reason;
+                if (m.ForceRestartFromBeginning(out reason))
+                    Debug.Log($"[AR] Started SplinePathMover '{m.name}' for page '{pageId}'.", m);
+                else
+                    Debug.LogWarning($"[AR] SplinePathMover '{m.name}' did not start: {reason}", m);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogWarning($"[AR] Failed to start SplinePathMover '{m.name}': {ex.Message}", m);
+            }
+        }
+    }
+
+    public void PauseStoryForActivity()
+    {
+        // Middle-story activity lock.
+        // Freeze the story exactly where it is. Do not reset story animators to frame zero.
+        _storyBlockedByActivity = true;
+        PauseStorySystemsAtCurrentFrameForActivity();
+        PauseMediaAudioForActivity();
+    }
+
+    public void ResumeStoryFromActivity()
+    {
+        // Only the activity completion path may release this lock.
+        _storyBlockedByActivity = false;
+        ResumeVisuals();
+        ResumeMediaAudioFromActivity();
+    }
+
+    private void PauseMediaAudioForActivity()
+    {
+        if (mediaManager == null || _mediaAudioPausedForActivity) return;
+        InvokeMediaManagerPrivateMethod("PauseAll");
+        _mediaAudioPausedForActivity = true;
+    }
+
+    private void ResumeMediaAudioFromActivity()
+    {
+        if (mediaManager == null || !_mediaAudioPausedForActivity) return;
+        InvokeMediaManagerPrivateMethod("ResumeAll");
+        _mediaAudioPausedForActivity = false;
+    }
+
+    private void InvokeMediaManagerPrivateMethod(string methodName)
+    {
+        if (mediaManager == null || string.IsNullOrWhiteSpace(methodName)) return;
+
+        MethodInfo method = mediaManager.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+        if (method == null) return;
+
+        try
+        {
+            method.Invoke(mediaManager, null);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogWarning($"[AR] Could not call ARMediaManager.{methodName}: {ex.Message}");
+        }
     }
 
     public void PauseVisuals()
@@ -493,6 +950,10 @@ public class ARTrackedPageNode : MonoBehaviour
             if (m == null) continue;
             m.Pause();
         }
+
+        ARVFXPopupController popup = GetComponentInChildren<ARVFXPopupController>(true);
+        if (popup != null)
+            popup.PauseReveal();
     }
 
     public void ResumeVisuals()
@@ -511,6 +972,25 @@ public class ARTrackedPageNode : MonoBehaviour
         var root = GetContentRoot();
         if (root != null && !root.activeSelf)
             root.SetActive(true);
+
+        ARVFXPopupController popup = GetComponentInChildren<ARVFXPopupController>(true);
+
+        if (_waitingForPopupReveal && popup != null && !popup.IsRevealComplete)
+        {
+            popup.ResumeReveal();
+            return;
+        }
+
+        if (_storyBlockedByActivity)
+        {
+            // Tracking found while an activity is active.
+            // Restore only the activity UI and keep story systems frozen at the current frame.
+            PauseStorySystemsAtCurrentFrameForActivity();
+            ContentController controller = GetComponentInChildren<ContentController>(true);
+            if (controller != null)
+                controller.RestoreActivityUIAfterTrackingFound();
+            return;
+        }
 
         ResumeVideos(mainVideos);
         ResumeVideos(backgroundLoopVideos);
@@ -535,6 +1015,9 @@ public class ARTrackedPageNode : MonoBehaviour
             if (m == null) continue;
             m.Resume();
         }
+
+        if (popup != null)
+            popup.ResumeReveal();
     }
 
     private void RestartVideosWithFreeze(

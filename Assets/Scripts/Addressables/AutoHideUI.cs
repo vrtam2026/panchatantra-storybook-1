@@ -1,10 +1,22 @@
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+#endif
 
+/// <summary>
+/// Simple auto-hide helper for non-activity UI such as menu/replay controls.
+/// It pauses while a story activity is running so activity taps do not toggle or hide UI unexpectedly.
+/// </summary>
 public class AutoHideUI : MonoBehaviour
 {
+    [Tooltip("How many seconds the normal menu UI stays visible after the screen is touched.")]
     public float hideDelay = 3f;
+    [Tooltip("The normal menu UI to show and auto-hide. Do not use the ActivityPanel here.")]
     public GameObject uiRoot;
+
+    [Header("Activity Safety")]
+    [Tooltip("Recommended ON. While an activity is active, this script will not toggle or hide UI from screen taps.")]
+    public bool pauseWhileActivityIsRunning = true;
 
     float _timer;
     bool _isVisible = true;
@@ -16,8 +28,21 @@ public class AutoHideUI : MonoBehaviour
 
     void Update()
     {
-        bool touched = Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed
-                    || Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
+        if (pauseWhileActivityIsRunning && ContentController.AnyActivityRunning)
+        {
+            if (_isVisible)
+                _timer = hideDelay;
+            return;
+        }
+
+        bool touched = false;
+
+#if ENABLE_INPUT_SYSTEM
+        touched = (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+               || (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame);
+#else
+        touched = Input.GetMouseButtonDown(0) || Input.touchCount > 0;
+#endif
 
         if (touched)
         {
@@ -33,6 +58,7 @@ public class AutoHideUI : MonoBehaviour
 
     void ShowUI()
     {
+        if (uiRoot == null) return;
         uiRoot.SetActive(true);
         _isVisible = true;
         _timer = hideDelay;
@@ -40,6 +66,7 @@ public class AutoHideUI : MonoBehaviour
 
     void HideUI()
     {
+        if (uiRoot == null) return;
         uiRoot.SetActive(false);
         _isVisible = false;
     }

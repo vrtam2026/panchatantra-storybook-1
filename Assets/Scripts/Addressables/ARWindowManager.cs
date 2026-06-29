@@ -1,76 +1,128 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
+/// <summary>
+/// Sliding window memory manager.
+/// Keeps current page ± windowSize pages loaded. Everything outside is released.
+/// List is auto-populated by ARWindowManagerEditor when you click ARWindowManager in Inspector.
+/// </summary>
 public class ARWindowManager : MonoBehaviour
 {
-    [Header("Settings")]
-    public int totalPages = 10;
-    public int windowSize = 2;         // just set this in Inspector, never changes
-    public List<string> pageAddresses; // drag or type addresses in Inspector
+    public static ARWindowManager Instance { get; private set; }
 
-    private Dictionary<int, AsyncOperationHandle> _loadedHandles = new();
-    private int _currentPage = -1;
-
-    void Start()
+    [Serializable]
+    public class PageEntry
     {
-        for (int i = 0; i < Mathf.Min(windowSize + 1, totalPages); i++)
-            LoadPage(i);
+        [Tooltip("Addressable key of the page prefab. Must match addressableKey on CustomARHandler.")]
+        public string addressableKey;
+        [Tooltip("Audio catalog page ID. Empty for quiz pages which have no audio.")]
+        public string pageId;
     }
 
-    public void OnPageDetected(int pageIndex)
+    [Header("Window Settings")]
+    [Tooltip("How many pages before and after the current page to keep in memory.\n" +
+             "windowSize=2 → keeps current page ±2 = 5 pages total.")]
+    public int windowSize = 2;
+
+    [Tooltip("ON  = pages outside window have their prefab AND audio silently released.\n" +
+             "OFF = pages manage their own lifecycle naturally (no forced release).")]
+    public bool releaseContentOutsideWindow = true;
+
+    [Header("All Pages  (auto-populated — do not edit manually)")]
+    public List<PageEntry> pages = new List<PageEntry>();
+
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private static readonly string[] Languages = { "English", "Hindi" };
+
+    void Awake()
     {
-        if (pageIndex == _currentPage) return;
-        _currentPage = pageIndex;
-        UpdateWindow(pageIndex);
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
     }
 
-    void UpdateWindow(int center)
+    void OnDestroy()
     {
-        int from = Mathf.Max(0, center - windowSize);
-        int to = Mathf.Min(totalPages - 1, center + windowSize);
-
-        List<int> toRelease = new();
-        foreach (int page in _loadedHandles.Keys)
-            if (page < from || page > to)
-                toRelease.Add(page);
-
-        foreach (int page in toRelease)
-            ReleasePage(page);
-
-        for (int i = from; i <= to; i++)
-            if (!_loadedHandles.ContainsKey(i))
-                LoadPage(i);
+        if (Instance == this) Instance = null;
     }
 
-    async void LoadPage(int pageIndex)
+    // ─────────────────────────────────────────────────────────────────────────
+    // Called by CustomARHandler.OnTrackingFound
+    // ─────────────────────────────────────────────────────────────────────────
+
+    public void OnPageDetected(string addressableKey)
     {
-        if (_loadedHandles.ContainsKey(pageIndex)) return;
+        if (!releaseContentOutsideWindow) return;
+        if (pages == null || pages.Count == 0) return;
 
-        var handle = Addressables.LoadAssetAsync<GameObject>(pageAddresses[pageIndex]);
-        _loadedHandles[pageIndex] = handle;
-        await handle.Task;
-
-        if (handle.Status != AsyncOperationStatus.Succeeded)
+        int index = FindIndex(addressableKey);
+        if (index < 0)
         {
-            Debug.LogError($"Failed to load page {pageIndex + 1}");
-            _loadedHandles.Remove(pageIndex);
+            Debug.LogWarning($"[AR-WINDOW] Page not found in list: '{addressableKey}'. " +
+                             "Re-run ARWindowManager setup from Inspector.");
+            return;
         }
+
+        int from = index - windowSize;
+        int to   = index + windowSize;
+
+        var audioService = ARAddressableAudioService.Instance;
+
+        // Cache handlers once per call (avoid repeated FindObjectsByType)
+        var allHandlers = FindObjectsByType<CustomARHandler>(FindObjectsSortMode.None);
+
+        for (int i = 0; i < pages.Count; i++)
+        {
+            var entry = pages[i];
+            if (entry == null || string.IsNullOrEmpty(entry.addressableKey)) continue;
+
+            bool inWindow = i >= from && i <= to;
+
+            if (inWindow)
+            {
+                // Pre-download audio for neighbours so it is ready before they are scanned
+                if (audioService != null && !string.IsNullOrEmpty(entry.pageId))
+                    foreach (var lang in Languages)
+                        audioService.PreloadAudioPack(lang, entry.pageId);
+            }
+            else
+            {
+                // Silently release prefab via its CustomARHandler
+                foreach (var handler in allHandlers)
+                {
+                    if (string.Equals(handler.addressableKey.Trim(),
+                                      entry.addressableKey.Trim(),
+                                      StringComparison.OrdinalIgnoreCase))
+                    {
+                        handler.ForceRelease();
+                        break;
+                    }
+                }
+
+                // Release audio for all languages
+                if (audioService != null && !string.IsNullOrEmpty(entry.pageId))
+                    foreach (var lang in Languages)
+                        audioService.ReleaseAudioPack(lang, entry.pageId);
+            }
+        }
+
+        Debug.Log($"[AR-WINDOW] Detected '{addressableKey}' (index {index}). " +
+                  $"Window: {Mathf.Max(0, from)}–{Mathf.Min(pages.Count - 1, to)}");
     }
 
-    void ReleasePage(int pageIndex)
-    {
-        if (!_loadedHandles.TryGetValue(pageIndex, out var handle)) return;
-        Addressables.Release(handle);
-        _loadedHandles.Remove(pageIndex);
-    }
+    // ─────────────────────────────────────────────────────────────────────────
 
-    public GameObject GetLoadedAsset(int pageIndex)
+    int FindIndex(string addressableKey)
     {
-        if (_loadedHandles.TryGetValue(pageIndex, out var handle)
-            && handle.Status == AsyncOperationStatus.Succeeded)
-            return handle.Result as GameObject;
-        return null;
+        string key = (addressableKey ?? "").Trim();
+        for (int i = 0; i < pages.Count; i++)
+        {
+            if (pages[i] == null) continue;
+            if (string.Equals(pages[i].addressableKey.Trim(), key,
+                              StringComparison.OrdinalIgnoreCase))
+                return i;
+        }
+        return -1;
     }
 }

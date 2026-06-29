@@ -398,8 +398,13 @@ MonoBehaviour:
         loop: 1
     - pageId: S4_P68-69
       voiceClips:
-      - clip: {fileID: 8300000, guid: e0c7c44a9258ed241afc25d7863ccc5a, type: 3}
-        delayBefore: 0
+      - clip: {fileID: 8300000, guid: 4c894d2654c98724789465c4ae8d3a79, type: 3}
+        delayBefore: 4
+        delayAfter: 0
+        volume: 2
+        loop: 0
+      - clip: {fileID: 8300000, guid: de0db4166a5cf9541a76620f59dcb60b, type: 3}
+        delayBefore: 2
         delayAfter: 0
         volume: 2
         loop: 0

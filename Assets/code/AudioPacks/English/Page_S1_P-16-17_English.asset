@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c8316f37bb6635429cc90f09ac2c4c1, type: 3}
+  m_Name: Page_S1_P-16-17_English
+  m_EditorClassIdentifier: Assembly-CSharp::ARPageAudioPack
+  languageName: English
+  pageId: S1_P-16-17
+  voiceClips:
+  - clip: {fileID: 8300000, guid: 2f2fdeb36e2ea2d45a71b5ef39849130, type: 3}
+    delayBefore: 0
+    delayAfter: 0
+    volume: 2
+    loop: 0
+  bgmClips:
+  - clip: {fileID: 8300000, guid: 2f2fdeb36e2ea2d45a71b5ef39849130, type: 3}
+    delayBefore: 0
+    delayAfter: 0
+    volume: 0.3
+    loop: 1

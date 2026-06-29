@@ -65,7 +65,8 @@ public class ModelInteraction : MonoBehaviour
     bool _isPinching = false;
     float _lastPinchDistance = 0f;
 
-    public System.Action OnTapped;
+    public System.Action<InteractionData> OnInteraction;
+    
     public static ModelInteraction Current;
 
     // ------------------------------------------------------------------
@@ -274,12 +275,18 @@ public class ModelInteraction : MonoBehaviour
     }
 
     // ------------------------------------------------------------------
-    // Tap callback
+    // Interaction callback
     // ------------------------------------------------------------------
 
-    public void EnableTapCallback(System.Action callback)
+    public void EnableInteractionCallback(System.Action<InteractionData> callback)
     {
-        OnTapped = callback;
+        Debug.Log("EnableInteractionCallback");
+        OnInteraction = callback;
+    }
+
+    public void ClearInteraction()
+    {
+        OnInteraction = null;
     }
 
     // ------------------------------------------------------------------
@@ -335,4 +342,20 @@ public class ModelInteraction : MonoBehaviour
         if (Current == this) Current = null;
         _model = null;
     }
+}
+
+public struct InteractionData
+{
+    public enum InteractionType
+    {
+        ScreenTap,
+        ModelTap,
+        UI,
+        Hold,
+        ContinuousTap
+    }
+
+    public InteractionType type;
+    public GameObject hitObject;
+    public Vector2 screenPosition;
 }

@@ -44,7 +44,7 @@ public class ARTrackableSplineMover : MonoBehaviour
     private Spline _spline;
     private bool _playRequested;
 
-    // Position applied via LateUpdate — works in both URP and Built-in RP
+    // Position applied via LateUpdate Â— works in both URP and Built-in RP
     private bool _hasPending;
     private Vector3 _pendingWorldPos;
     private Quaternion _pendingWorldRot;
@@ -59,7 +59,7 @@ public class ARTrackableSplineMover : MonoBehaviour
         CacheSpline();
     }
 
-    // LateUpdate runs after Animator, after physics — reliable in both URP and Built-in
+    // LateUpdate runs after Animator, after physics Â— reliable in both URP and Built-in
     private void LateUpdate()
     {
         if (!_hasPending) return;
@@ -73,6 +73,68 @@ public class ARTrackableSplineMover : MonoBehaviour
         if (splineContainer == null) return;
         if (splineIndex < 0 || splineIndex >= splineContainer.Splines.Count) return;
         _spline = splineContainer.Splines[splineIndex];
+    }
+
+    public bool ForceRestartFromBeginning(out string reason)
+    {
+        reason = string.Empty;
+
+        Stop();
+        _playRequested = false;
+        IsFinished = false;
+        IsPaused = false;
+        IsPlaying = false;
+        _hasPending = false;
+
+        if (!ValidateSetup(out reason))
+            return false;
+
+        SetAtT(segments[0].startT);
+        LateUpdate();
+
+        _playRequested = true;
+        _planRoutine = StartCoroutine(PlayPlanRoutine());
+        reason = "Started";
+        return true;
+    }
+
+    private bool ValidateSetup(out string reason)
+    {
+        reason = string.Empty;
+        CacheSpline();
+
+        if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
+        {
+            reason = "Mover component or GameObject is inactive";
+            return false;
+        }
+        if (splineContainer == null)
+        {
+            reason = "Spline Container is missing";
+            return false;
+        }
+        if (splineIndex < 0 || splineIndex >= splineContainer.Splines.Count)
+        {
+            reason = $"Spline index {splineIndex} is out of range. Container has {splineContainer.Splines.Count} spline(s)";
+            return false;
+        }
+        if (_spline == null)
+        {
+            reason = "Spline could not be cached";
+            return false;
+        }
+        if (objectToMove == null)
+        {
+            reason = "Object To Move is missing";
+            return false;
+        }
+        if (segments == null || segments.Count == 0)
+        {
+            reason = "No movement segments assigned";
+            return false;
+        }
+
+        return true;
     }
 
     public void PlayOnce()
@@ -119,9 +181,14 @@ public class ARTrackableSplineMover : MonoBehaviour
     private IEnumerator PlayPlanRoutine()
     {
         CacheSpline();
-        if (!_playRequested || _spline == null || splineContainer == null
-            || objectToMove == null || segments.Count == 0)
+        if (!_playRequested)
         {
+            _planRoutine = null;
+            yield break;
+        }
+        if (!ValidateSetup(out string reason))
+        {
+            Debug.LogWarning($"[ARTrackableSplineMover] Cannot play '{name}': {reason}", this);
             _planRoutine = null;
             yield break;
         }

@@ -557,7 +557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuizManagerArun
   questions:
-  - questionText: The Panchatantra (sanskrit) is _________________
+  - questionText: 1) The Panchatantra (sanskrit) is _________________
     option1: ...one of two great ithihasas from India.
     option2: ...the story of Rama.
     option3: ...the story of the Pandavas and the Khauravas
@@ -569,7 +569,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 1abcde4096de73e4aa461f44624709d2, type: 3}
     questionVideo: {fileID: 32900000, guid: 0ee7967fe06234e45a95f759c6fba335, type: 3}
     optionStartTime: 5
-  - questionText: 2. How many Tantras does the Panchatrantra have?
+  - questionText: 2) How many Tantras does the Panchatrantra have?
     option1: Twenty-five
     option2: Two
     option3: Five
@@ -581,7 +581,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: f6e2ac40909ed1c429d55036f49fa2b1, type: 3}
     questionVideo: {fileID: 32900000, guid: 2b8d48f9bf9637944b2d3ea0e84b1b9f, type: 3}
     optionStartTime: 6
-  - questionText: 3. Who is the author of th Panchatantra?
+  - questionText: 3) Who is the author of th Panchatantra?
     option1: Rohit Sharma
     option2: Vishnu Sharma
     option3: Vyasa
@@ -593,7 +593,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: e1c06e9a33d6d7a4cab5d18251cd56d5, type: 3}
     questionVideo: {fileID: 32900000, guid: 54c743791a4a12242815d31f9b01c627, type: 3}
     optionStartTime: 6
-  - questionText: 4. What does the Panchatantra teach us ?
+  - questionText: 4) What does the Panchatantra teach us ?
     option1: 'Niti Shastra  '
     option2: 'Mathematics  '
     option3: 'How to fight wars  '
@@ -605,7 +605,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 45b05ae90abbefe4ba58e02e774ae12a, type: 3}
     questionVideo: {fileID: 32900000, guid: b28f4ad6748edc846b99ce1cafe8fd13, type: 3}
     optionStartTime: 6
-  - questionText: 5. What is a rough translation of the word Niti ?
+  - questionText: 5) What is a rough translation of the word Niti ?
     option1: Being Neat
     option2: 'Truth '
     option3: common sense
@@ -617,7 +617,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 76f408c98572ab544a9f718ca8c27510, type: 3}
     questionVideo: {fileID: 32900000, guid: cd5d4a4f938796d4dbc02103c663331a, type: 3}
     optionStartTime: 8
-  - questionText: 6. Which principles does Niti Shastra incorporate? (Select all
+  - questionText: 6) Which principles does Niti Shastra incorporate? (Select all
       answers that are correct)
     option1: I need security,money and good friends
     option2: I need ice cream
@@ -630,7 +630,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 39d025a52b87c7147bdb79c7ee74fc4e, type: 3}
     questionVideo: {fileID: 32900000, guid: 727e1bbc3ec96594594637f18ddb4a15, type: 3}
     optionStartTime: 7
-  - questionText: 7. Who was the King of Mahilaropya?
+  - questionText: 7) Who was the King of Mahilaropya?
     option1: Duryodhan
     option2: Shiv Shakthi
     option3: Rajinikanth
@@ -642,7 +642,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 46f9a6b2ef1d30d4586da43d65dec174, type: 3}
     questionVideo: {fileID: 32900000, guid: 125ab8e1236193e4e97c09774b151f33, type: 3}
     optionStartTime: 6
-  - questionText: 8. Why was the king sad?
+  - questionText: 8) Why was the king sad?
     option1: His three sons did not like ice cream
     option2: His three sons were gullible
     option3: His three sons were smarter than him
@@ -654,7 +654,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 8cdbb9f1c12dd114f8b95b4e0b9ee681, type: 3}
     questionVideo: {fileID: 32900000, guid: 8327c55c5f50e3144879a1289fc047c5, type: 3}
     optionStartTime: 5.5
-  - questionText: 9. What were the names of the King's sons? (Select all answers
+  - questionText: 9) What were the names of the King's sons? (Select all answers
       that are correct)
     option1: Anantha Shakthi
     option2: Bahu Shakthi
@@ -667,7 +667,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: a1c00edfef39eff458768e4bc6fb47f4, type: 3}
     questionVideo: {fileID: 32900000, guid: f4e4ae1a234dc54438399f7a52870762, type: 3}
     optionStartTime: 0
-  - questionText: 10. Who was summoned to teach the children and why?
+  - questionText: 10) Who was summoned to teach the children and why?
     option1: Dubledore, because he was an expert in maya tactics
     option2: Vishnu Sharma, because he was an expert in maya tactics.
     option3: Rajinikanth, because he was an expert in niti shastra
@@ -679,7 +679,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 6d2be2c9556f6e44b840d2b4d8a41964, type: 3}
     questionVideo: {fileID: 32900000, guid: 7d62471dd3ef6e14183883358204fbeb, type: 3}
     optionStartTime: 7.5
-  - questionText: 11. Which of these are names of Tantras (volumes) of the Panchatantra?
+  - questionText: 11) Which of these are names of Tantras (volumes) of the Panchatantra?
       (Select all answers that are correct)
     option1: Mitra Bheda
     option2: Mitra Samprapti
@@ -692,7 +692,7 @@ MonoBehaviour:
     questionAudio: {fileID: 8300000, guid: 5dfd1d00e38b8294f80524c5c1abb6c8, type: 3}
     questionVideo: {fileID: 32900000, guid: 0cde665989000994a929419fac2639ec, type: 3}
     optionStartTime: 9
-  - questionText: 12. Who is the first teacher in all our lives?
+  - questionText: 12) Who is the first teacher in all our lives?
     option1: 'Grandfather  '
     option2: 'Uncle  '
     option3: 'Grandson  '
@@ -1320,6 +1320,145 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1256029512959460042
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1009073527098403480}
+  - component: {fileID: 3278537247264718454}
+  - component: {fileID: 1119414372452198835}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1009073527098403480
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256029512959460042}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 657678944592256012}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3278537247264718454
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256029512959460042}
+  m_CullTransparentMesh: 1
+--- !u!114 &1119414372452198835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256029512959460042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 'Exit
+
+'
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 20
+  m_fontSizeBase: 20
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
   m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
@@ -2038,6 +2177,7 @@ RectTransform:
   - {fileID: 1856210532412308349}
   - {fileID: 4595165298274258238}
   - {fileID: 8997859661137060196}
+  - {fileID: 657678944592256012}
   - {fileID: 2034591252119301277}
   - {fileID: 3721625886703758645}
   - {fileID: 7802669925348960123}
@@ -2415,9 +2555,9 @@ RectTransform:
   - {fileID: 7819853566553696091}
   m_Father: {fileID: 4595165298274258238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -196.875}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7050805565747647447
@@ -2563,9 +2703,9 @@ RectTransform:
   - {fileID: 6652064585659110919}
   m_Father: {fileID: 4595165298274258238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -84.375}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2455732454876459387
@@ -3451,6 +3591,152 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &3209850110593132386
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 657678944592256012}
+  - component: {fileID: 989614098181864421}
+  - component: {fileID: 9198842683613652459}
+  - component: {fileID: 3931902421368700751}
+  - component: {fileID: 3776613459579110389}
+  m_Layer: 5
+  m_Name: ExitButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &657678944592256012
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3209850110593132386}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
+  m_LocalScale: {x: 2.2592, y: 2.2592, z: 2.2592}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 1009073527098403480}
+  m_Father: {fileID: 3357141679601243746}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -30, y: 792}
+  m_SizeDelta: {x: 80, y: 40}
+  m_Pivot: {x: 1, y: 0}
+--- !u!222 &989614098181864421
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3209850110593132386}
+  m_CullTransparentMesh: 1
+--- !u!114 &9198842683613652459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3209850110593132386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 4c8e4be6d40d68c4a9d85c92339dada0, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3931902421368700751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3209850110593132386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 9198842683613652459}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3776613459579110389}
+        m_TargetAssemblyTypeName: ExitQuizButton, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3776613459579110389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3209850110593132386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04b00a49b5c1f8547a59ba3c8737bb5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExitQuizButton
 --- !u!1 &3562963782564310827
 GameObject:
   m_ObjectHideFlags: 0
@@ -3651,7 +3937,7 @@ GameObject:
   - component: {fileID: 6471068712090912033}
   - component: {fileID: 2500582366109647035}
   m_Layer: 5
-  m_Name: RawImage_sage_video
+  m_Name: Quiz Video_S1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3773,7 +4059,7 @@ RectTransform:
   m_GameObject: {fileID: 4342115397391909274}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -0.01}
-  m_LocalScale: {x: 0.0009752999, y: 0.0009752999, z: 0.0009752999}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7980478258937313115}
@@ -3794,7 +4080,7 @@ Canvas:
   m_GameObject: {fileID: 4342115397391909274}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 2
+  m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -3830,7 +4116,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &7914918355901038690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4020,9 +4306,9 @@ RectTransform:
   - {fileID: 6143970815637900733}
   m_Father: {fileID: 4595165298274258238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -28.125}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6222252846515312485
@@ -6102,9 +6388,9 @@ RectTransform:
   - {fileID: 2040605030700722432}
   m_Father: {fileID: 4595165298274258238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -140.625}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4500911743877502367

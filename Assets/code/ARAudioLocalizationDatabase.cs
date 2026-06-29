@@ -35,6 +35,9 @@ public class ARAudioLocalizationDatabase : ScriptableObject
 
     public string DefaultLanguage => string.IsNullOrWhiteSpace(defaultLanguage) ? "English" : defaultLanguage;
 
+    // Editor-only accessor for migration tools
+    public List<LanguagePack> GetAllLanguagePacks() => languagePacks;
+
     public bool TryGetPageAudio(string languageName, string pageId, out PageAudio pageAudio)
     {
         pageAudio = null;

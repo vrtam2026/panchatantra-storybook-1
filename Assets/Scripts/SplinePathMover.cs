@@ -61,6 +61,58 @@ public class SplinePathMover : MonoBehaviour
         _spline = splineContainer.Splines[splineIndex];
     }
 
+    public bool ForceRestartFromBeginning(out string reason)
+    {
+        reason = string.Empty;
+
+        Stop();
+        IsFinished = false;
+        IsPaused = false;
+        IsPlaying = false;
+
+        if (!ValidateSetup(out reason))
+            return false;
+
+        ApplyT(segments[0].startT);
+        _planRoutine = StartCoroutine(PlayPlanRoutine());
+        reason = "Started";
+        return true;
+    }
+
+    private bool ValidateSetup(out string reason)
+    {
+        reason = string.Empty;
+        CacheSpline();
+
+        if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
+        {
+            reason = "Mover component or GameObject is inactive";
+            return false;
+        }
+        if (splineContainer == null)
+        {
+            reason = "Spline Container is missing";
+            return false;
+        }
+        if (splineIndex < 0 || splineIndex >= splineContainer.Splines.Count)
+        {
+            reason = $"Spline index {splineIndex} is out of range. Container has {splineContainer.Splines.Count} spline(s)";
+            return false;
+        }
+        if (_spline == null)
+        {
+            reason = "Spline could not be cached";
+            return false;
+        }
+        if (segments == null || segments.Count == 0)
+        {
+            reason = "No movement segments assigned";
+            return false;
+        }
+
+        return true;
+    }
+
     // Called by ARTrackedPageNode
     public void PlayOnce()
     {
@@ -112,9 +164,9 @@ public class SplinePathMover : MonoBehaviour
     {
         CacheSpline();
 
-        if (_spline == null || splineContainer == null || segments == null || segments.Count == 0)
+        if (!ValidateSetup(out string reason))
         {
-            Debug.LogWarning("[SplinePathMover] Cannot play -- spline or segments not set.", this);
+            Debug.LogWarning($"[SplinePathMover] Cannot play '{name}': {reason}", this);
             _planRoutine = null;
             yield break;
         }
@@ -178,7 +230,7 @@ public class SplinePathMover : MonoBehaviour
         }
     }
 
-    // Moves THIS GameObject (All_GameObject) — no Animator on this object, zero conflict
+    // Moves THIS GameObject (All_GameObject) Â— no Animator on this object, zero conflict
     private void ApplyT(float t)
     {
         if (_spline == null || splineContainer == null) return;

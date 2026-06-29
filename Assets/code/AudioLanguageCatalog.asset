@@ -1,0 +1,303 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d19a97012c8987429c732cf98097c02, type: 3}
+  m_Name: AudioLanguageCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::ARAddressableAudioCatalog
+  entries:
+  - languageName: English
+    pageId: S1_P-4-5
+    address: audio/English/S1_P-4-5
+  - languageName: Hindi
+    pageId: S1_P-4-5
+    address: audio/Hindi/S1_P-4-5
+  - languageName: English
+    pageId: S1_P-intro
+    address: audio/English/S1_P-intro
+  - languageName: Hindi
+    pageId: S1_P-intro
+    address: audio/Hindi/S1_P-intro
+  - languageName: English
+    pageId: S1_P-6-7
+    address: audio/English/S1_P-6-7
+  - languageName: Hindi
+    pageId: S1_P-6-7
+    address: audio/Hindi/S1_P-6-7
+  - languageName: English
+    pageId: S1_P-8-9
+    address: audio/English/S1_P-8-9
+  - languageName: Hindi
+    pageId: S1_P-8-9
+    address: audio/Hindi/S1_P-8-9
+  - languageName: English
+    pageId: S1_P-10-11
+    address: audio/English/S1_P-10-11
+  - languageName: Hindi
+    pageId: S1_P-10-11
+    address: audio/Hindi/S1_P-10-11
+  - languageName: English
+    pageId: S1_P-12-13
+    address: audio/English/S1_P-12-13
+  - languageName: Hindi
+    pageId: S1_P-12-13
+    address: audio/Hindi/S1_P-12-13
+  - languageName: English
+    pageId: S1_P-14-15
+    address: audio/English/S1_P-14-15
+  - languageName: Hindi
+    pageId: S1_P-14-15
+    address: audio/Hindi/S1_P-14-15
+  - languageName: English
+    pageId: S1_P-16-17
+    address: audio/English/S1_P-16-17
+  - languageName: Hindi
+    pageId: S1_P-16-17
+    address: audio/Hindi/S1_P-16-17
+  - languageName: English
+    pageId: S1_P-18-19
+    address: audio/English/S1_P-18-19
+  - languageName: Hindi
+    pageId: S1_P-18-19
+    address: audio/Hindi/S1_P-18-19
+  - languageName: English
+    pageId: S1_P-20-21
+    address: audio/English/S1_P-20-21
+  - languageName: Hindi
+    pageId: S1_P-20-21
+    address: audio/Hindi/S1_P-20-21
+  - languageName: English
+    pageId: S2_P24-25
+    address: audio/English/S2_P24-25
+  - languageName: Hindi
+    pageId: S2_P24-25
+    address: audio/Hindi/S2_P24-25
+  - languageName: English
+    pageId: S2_P26-27
+    address: audio/English/S2_P26-27
+  - languageName: Hindi
+    pageId: S2_P26-27
+    address: audio/Hindi/S2_P26-27
+  - languageName: English
+    pageId: S2_P28-29
+    address: audio/English/S2_P28-29
+  - languageName: Hindi
+    pageId: S2_P28-29
+    address: audio/Hindi/S2_P28-29
+  - languageName: English
+    pageId: S2_P30-31
+    address: audio/English/S2_P30-31
+  - languageName: Hindi
+    pageId: S2_P30-31
+    address: audio/Hindi/S2_P30-31
+  - languageName: English
+    pageId: S2_P32-33
+    address: audio/English/S2_P32-33
+  - languageName: Hindi
+    pageId: S2_P32-33
+    address: audio/Hindi/S2_P32-33
+  - languageName: English
+    pageId: S2_P34-35
+    address: audio/English/S2_P34-35
+  - languageName: Hindi
+    pageId: S2_P34-35
+    address: audio/Hindi/S2_P34-35
+  - languageName: English
+    pageId: S2_P36-37
+    address: audio/English/S2_P36-37
+  - languageName: Hindi
+    pageId: S2_P36-37
+    address: audio/Hindi/S2_P36-37
+  - languageName: English
+    pageId: S2_P38-39
+    address: audio/English/S2_P38-39
+  - languageName: Hindi
+    pageId: S2_P38-39
+    address: audio/Hindi/S2_P38-39
+  - languageName: English
+    pageId: S2_P40-41
+    address: audio/English/S2_P40-41
+  - languageName: Hindi
+    pageId: S2_P40-41
+    address: audio/Hindi/S2_P40-41
+  - languageName: English
+    pageId: S2_P42-43
+    address: audio/English/S2_P42-43
+  - languageName: Hindi
+    pageId: S2_P42-43
+    address: audio/Hindi/S2_P42-43
+  - languageName: English
+    pageId: S2_P44-45
+    address: audio/English/S2_P44-45
+  - languageName: Hindi
+    pageId: S2_P44-45
+    address: audio/Hindi/S2_P44-45
+  - languageName: English
+    pageId: S3_P48-49
+    address: audio/English/S3_P48-49
+  - languageName: Hindi
+    pageId: S3_P48-49
+    address: audio/Hindi/S3_P48-49
+  - languageName: English
+    pageId: S3_P50-51
+    address: audio/English/S3_P50-51
+  - languageName: Hindi
+    pageId: S3_P50-51
+    address: audio/Hindi/S3_P50-51
+  - languageName: English
+    pageId: S3_P52-53
+    address: audio/English/S3_P52-53
+  - languageName: Hindi
+    pageId: S3_P52-53
+    address: audio/Hindi/S3_P52-53
+  - languageName: English
+    pageId: S3_P54-55
+    address: audio/English/S3_P54-55
+  - languageName: Hindi
+    pageId: S3_P54-55
+    address: audio/Hindi/S3_P54-55
+  - languageName: English
+    pageId: S3_P56-57
+    address: audio/English/S3_P56-57
+  - languageName: Hindi
+    pageId: S3_P56-57
+    address: audio/Hindi/S3_P56-57
+  - languageName: English
+    pageId: S3_P58-59
+    address: audio/English/S3_P58-59
+  - languageName: Hindi
+    pageId: S3_P58-59
+    address: audio/Hindi/S3_P58-59
+  - languageName: English
+    pageId: S3_P60-61
+    address: audio/English/S3_P60-61
+  - languageName: Hindi
+    pageId: S3_P60-61
+    address: audio/Hindi/S3_P60-61
+  - languageName: English
+    pageId: S3_P62-63
+    address: audio/English/S3_P62-63
+  - languageName: Hindi
+    pageId: S3_P62-63
+    address: audio/Hindi/S3_P62-63
+  - languageName: English
+    pageId: S4_P66-67
+    address: audio/English/S4_P66-67
+  - languageName: Hindi
+    pageId: S4_P66-67
+    address: audio/Hindi/S4_P66-67
+  - languageName: English
+    pageId: S4_P68-69
+    address: audio/English/S4_P68-69
+  - languageName: Hindi
+    pageId: S4_P68-69
+    address: audio/Hindi/S4_P68-69
+  - languageName: English
+    pageId: S4_P72-73
+    address: audio/English/S4_P72-73
+  - languageName: Hindi
+    pageId: S4_P72-73
+    address: audio/Hindi/S4_P72-73
+  - languageName: English
+    pageId: S4_P74-75
+    address: audio/English/S4_P74-75
+  - languageName: Hindi
+    pageId: S4_P74-75
+    address: audio/Hindi/S4_P74-75
+  - languageName: English
+    pageId: S4_P76-77
+    address: audio/English/S4_P76-77
+  - languageName: Hindi
+    pageId: S4_P76-77
+    address: audio/Hindi/S4_P76-77
+  - languageName: English
+    pageId: S4_P78-79
+    address: audio/English/S4_P78-79
+  - languageName: Hindi
+    pageId: S4_P78-79
+    address: audio/Hindi/S4_P78-79
+  - languageName: English
+    pageId: S4_P80-81
+    address: audio/English/S4_P80-81
+  - languageName: Hindi
+    pageId: S4_P80-81
+    address: audio/Hindi/S4_P80-81
+  - languageName: English
+    pageId: S4_P82-83
+    address: audio/English/S4_P82-83
+  - languageName: Hindi
+    pageId: S4_P82-83
+    address: audio/Hindi/S4_P82-83
+  - languageName: English
+    pageId: S5_P86-87
+    address: audio/English/S5_P86-87
+  - languageName: Hindi
+    pageId: S5_P86-87
+    address: audio/Hindi/S5_P86-87
+  - languageName: English
+    pageId: S5_P88-89
+    address: audio/English/S5_P88-89
+  - languageName: Hindi
+    pageId: S5_P88-89
+    address: audio/Hindi/S5_P88-89
+  - languageName: English
+    pageId: S5_P90-91
+    address: audio/English/S5_P90-91
+  - languageName: Hindi
+    pageId: S5_P90-91
+    address: audio/Hindi/S5_P90-91
+  - languageName: English
+    pageId: S5_P92-93
+    address: audio/English/S5_P92-93
+  - languageName: Hindi
+    pageId: S5_P92-93
+    address: audio/Hindi/S5_P92-93
+  - languageName: English
+    pageId: S5_P94-95
+    address: audio/English/S5_P94-95
+  - languageName: Hindi
+    pageId: S5_P94-95
+    address: audio/Hindi/S5_P94-95
+  - languageName: English
+    pageId: S5_P96-97
+    address: audio/English/S5_P96-97
+  - languageName: Hindi
+    pageId: S5_P96-97
+    address: audio/Hindi/S5_P96-97
+  - languageName: English
+    pageId: S5_P98-99
+    address: audio/English/S5_P98-99
+  - languageName: Hindi
+    pageId: S5_P98-99
+    address: audio/Hindi/S5_P98-99
+  - languageName: English
+    pageId: S5_P100-101
+    address: audio/English/S5_P100-101
+  - languageName: Hindi
+    pageId: S5_P100-101
+    address: audio/Hindi/S5_P100-101
+  - languageName: English
+    pageId: S5_P102-103
+    address: audio/English/S5_P102-103
+  - languageName: Hindi
+    pageId: S5_P102-103
+    address: audio/Hindi/S5_P102-103
+  - languageName: English
+    pageId: S5_P104-105
+    address: audio/English/S5_P104-105
+  - languageName: Hindi
+    pageId: S5_P104-105
+    address: audio/Hindi/S5_P104-105
+  - languageName: English
+    pageId: S5_P106-107
+    address: audio/English/S5_P106-107
+  - languageName: Hindi
+    pageId: S5_P106-107
+    address: audio/Hindi/S5_P106-107

@@ -13,10 +13,10 @@ public class ARModelInteraction : MonoBehaviour
 
     public void PlayInteraction()
     {
-        if (animator != null)
+        /*if (animator != null)
         {
             animator.Play("Bull_moo");
-        }
+        }*/
 
         if (audioSource != null && !audioSource.isPlaying)
         {
