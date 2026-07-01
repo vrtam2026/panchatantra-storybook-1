@@ -20324,6 +20324,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ARTrackedPageNode
   pageId: S1_P-14-15
   mediaManager: {fileID: 0}
+  pageType: 1
   mainVideos: []
   backgroundLoopVideos: []
   animators:
@@ -20379,6 +20380,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &7429163259295510070
 MonoBehaviour:
   m_ObjectHideFlags: 0

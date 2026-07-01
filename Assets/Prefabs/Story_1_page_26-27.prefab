@@ -589,6 +589,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ARTrackedPageNode
   pageId: S2_P26-27
   mediaManager: {fileID: 0}
+  pageType: 1
   mainVideos: []
   backgroundLoopVideos: []
   animators:

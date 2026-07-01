@@ -36,10 +36,17 @@ public class ARWindowManager : MonoBehaviour
 
     private static readonly string[] Languages = { "English", "Hindi" };
 
+    private CustomARHandler[] _cachedHandlers;
+
     void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+    }
+
+    void Start()
+    {
+        _cachedHandlers = FindObjectsByType<CustomARHandler>(FindObjectsSortMode.None);
     }
 
     void OnDestroy()
@@ -69,8 +76,7 @@ public class ARWindowManager : MonoBehaviour
 
         var audioService = ARAddressableAudioService.Instance;
 
-        // Cache handlers once per call (avoid repeated FindObjectsByType)
-        var allHandlers = FindObjectsByType<CustomARHandler>(FindObjectsSortMode.None);
+        var allHandlers = _cachedHandlers;
 
         for (int i = 0; i < pages.Count; i++)
         {

@@ -3494,6 +3494,71 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6981055168809452906, guid: a2c7304e82d0653459caddc8bd40338b, type: 3}
   m_PrefabInstance: {fileID: 975121736}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &716324885
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2304066411317249926}
+    m_Modifications:
+    - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.01212
+      objectReference: {fileID: 0}
+    - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.8365
+      objectReference: {fileID: 0}
+    - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4893173108276894066, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: cameraTransform
+      value: 
+      objectReference: {fileID: 478822589}
+    - target: {fileID: 5026599860508214084, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: m_Name
+      value: Story_1_page_6-7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5277747768198839800, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: mediaManager
+      value: 
+      objectReference: {fileID: 1224344540}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
 --- !u!1 &726849114
 GameObject:
   m_ObjectHideFlags: 0
@@ -4086,6 +4151,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 844965045}
   m_CullTransparentMesh: 1
+--- !u!4 &856376746 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+  m_PrefabInstance: {fileID: 716324885}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &860225389
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4385,7 +4455,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2304066411317249926}
+    m_TransformParent: {fileID: 7218255470469947100}
     m_Modifications:
     - target: {fileID: 817290972077293314, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
       propertyPath: mainVideos.Array.size
@@ -4395,6 +4465,26 @@ PrefabInstance:
       propertyPath: 'mainVideos.Array.data[1]'
       value: 
       objectReference: {fileID: 936882403}
+    - target: {fileID: 817290972077293314, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: mainVideoSettings.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 817290972077293314, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: mainVideoSettings.Array.data[0].speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 817290972077293314, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: mainVideoSettings.Array.data[1].speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 817290972077293314, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: mainVideoSettings.Array.data[0].waitForPageEnd
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 817290972077293314, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
+      propertyPath: mainVideoSettings.Array.data[1].waitForPageEnd
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -4413,15 +4503,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2895999685817753207, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4441,7 +4531,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5026599860508214084, guid: f07d681206806af4795d6e6b8dc38d99, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6371,7 +6461,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ARMediaManager
   replayButton: {fileID: 471114970352053958}
-  audioDatabase: {fileID: 11400000, guid: e221b73632ccb244894afc1c6b13fd02, type: 2}
   audioService: {fileID: 1224344542}
   amplifyMultiplier: 3
   postVoiceBgm: {fileID: 8300000, guid: 39f72793262b1fc4c82c46564d5f3365, type: 3}
@@ -7059,63 +7148,115 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b2e94146f12cb14188b094d66544b66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ARWindowManager
-  totalPages: 50
   windowSize: 2
-  pageAddresses:
-  - Story_1_page_intro
-  - Story_1_page_4-5
-  - Story_1_page_6-7
-  - Story_1_page_8-9
-  - Story_1_page_10-11
-  - Story_1_page_12-13
-  - Story_1_page_14-15
-  - Story_1_page_16-17
-  - Story_1_page_18-19
-  - Story_1_page_20-21
-  - Story_1_page_22-quiz
-  - Story_1_page_24-25
-  - Story_1_page_26-27
-  - Story_1_page_28-29
-  - Story_1_page_30-31
-  - Story_1_page_32-33
-  - Story_1_page_34-35
-  - Story_1_page_36-37
-  - Story_1_page_38-39
-  - Story_1_page_40-41
-  - Story_1_page_42-43
-  - Story_1_page_44-45
-  - Story_1_page_46-quiz
-  - Story_1_page_48-49
-  - Story_1_page_50-51
-  - Story_1_page_52-53
-  - Story_1_page_54-55
-  - Story_1_page_56-57
-  - Story_1_page_58-59
-  - Story_1_page_60-61
-  - Story_1_page_62-63
-  - Story_1_page_64-quiz
-  - Story_1_page_66-67
-  - Story_1_page_68-69
-  - Story_1_page_70-71
-  - Story_1_page_72-73
-  - Story_1_page_74-75
-  - Story_1_page_76-77
-  - Story_1_page_78-79
-  - Story_1_page_80-81
-  - Story_1_page_82-83
-  - Story_1_page_84-quiz
-  - Story_1_page_86-87
-  - Story_1_page_88-89
-  - Story_1_page_90-91
-  - Story_1_page_92-93
-  - Story_1_page_94-95
-  - Story_1_page_96-97
-  - Story_1_page_98-99
-  - Story_1_page_100-101
-  - Story_1_page_102-103
-  - Story_1_page_104-105
-  - Story_1_page_106-107
-  - Story_1_page_108-quiz
+  releaseContentOutsideWindow: 1
+  pages:
+  - addressableKey: Story_1_page_intro
+    pageId: S1_P-intro
+  - addressableKey: Story_1_page_4-5
+    pageId: S1_P-4-5
+  - addressableKey: Story_1_page_6-7
+    pageId: S1_P-6-7
+  - addressableKey: Story_1_page_8-9
+    pageId: S1_P-8-9
+  - addressableKey: Story_1_page_10-11
+    pageId: S1_P-10-11
+  - addressableKey: Story_1_page_12-13
+    pageId: S1_P-12-13
+  - addressableKey: Story_1_page_14-15
+    pageId: S1_P-14-15
+  - addressableKey: Story_1_page_16-17
+    pageId: S1_P-16-17
+  - addressableKey: Story_1_page_18-19
+    pageId: S1_P-18-19
+  - addressableKey: Story_1_page_20-21
+    pageId: S1_P-20-21
+  - addressableKey: Story_1_page_22-quiz
+    pageId: 
+  - addressableKey: Story_1_page_24-25
+    pageId: S2_P24-25
+  - addressableKey: Story_1_page_26-27
+    pageId: S2_P26-27
+  - addressableKey: Story_1_page_28-29
+    pageId: S2_P28-29
+  - addressableKey: Story_1_page_30-31
+    pageId: S2_P30-31
+  - addressableKey: Story_1_page_32-33
+    pageId: S2_P32-33
+  - addressableKey: Story_1_page_34-35
+    pageId: S2_P34-35
+  - addressableKey: Story_1_page_36-37
+    pageId: S2_P36-37
+  - addressableKey: Story_1_page_38-39
+    pageId: S2_P38-39
+  - addressableKey: Story_1_page_40-41
+    pageId: S2_P40-41
+  - addressableKey: Story_1_page_42-43
+    pageId: S2_P42-43
+  - addressableKey: Story_1_page_44-45
+    pageId: S2_P44-45
+  - addressableKey: Story_1_page_46-quiz
+    pageId: 
+  - addressableKey: Story_1_page_48-49
+    pageId: S3_P48-49
+  - addressableKey: Story_1_page_50-51
+    pageId: S3_P50-51
+  - addressableKey: Story_1_page_52-53
+    pageId: S3_P52-53
+  - addressableKey: Story_1_page_54-55
+    pageId: S3_P54-55
+  - addressableKey: Story_1_page_56-57
+    pageId: S3_P56-57
+  - addressableKey: Story_1_page_58-59
+    pageId: S3_P58-59
+  - addressableKey: Story_1_page_60-61
+    pageId: S3_P60-61
+  - addressableKey: Story_1_page_62-63
+    pageId: S3_P62-63
+  - addressableKey: Story_1_page_64-quiz
+    pageId: 
+  - addressableKey: Story_1_page_66-67
+    pageId: S4_P66-67
+  - addressableKey: Story_1_page_68-69
+    pageId: S4_P68-69
+  - addressableKey: Story_1_page_72-73
+    pageId: S4_P72-73
+  - addressableKey: Story_1_page_74-75
+    pageId: S4_P74-75
+  - addressableKey: Story_1_page_76-77
+    pageId: S4_P76-77
+  - addressableKey: Story_1_page_78-79
+    pageId: S4_P78-79
+  - addressableKey: Story_1_page_80-81
+    pageId: S4_P80-81
+  - addressableKey: Story_1_page_82-83
+    pageId: S4_P82-83
+  - addressableKey: Story_1_page_84-quiz
+    pageId: 
+  - addressableKey: Story_1_page_86-87
+    pageId: S5_P86-87
+  - addressableKey: Story_1_page_88-89
+    pageId: S5_P88-89
+  - addressableKey: Story_1_page_90-91
+    pageId: S5_P90-91
+  - addressableKey: Story_1_page_92-93
+    pageId: S5_P92-93
+  - addressableKey: Story_1_page_94-95
+    pageId: S5_P94-95
+  - addressableKey: Story_1_page_96-97
+    pageId: S5_P96-97
+  - addressableKey: Story_1_page_98-99
+    pageId: S5_P98-99
+  - addressableKey: Story_1_page_100-101
+    pageId: S5_P100-101
+  - addressableKey: Story_1_page_102-103
+    pageId: S5_P102-103
+  - addressableKey: Story_1_page_104-105
+    pageId: S5_P104-105
+  - addressableKey: Story_1_page_106-107
+    pageId: S5_P106-107
+  - addressableKey: Story_1_page_108-quiz
+    pageId: 
 --- !u!4 &1294535598
 Transform:
   m_ObjectHideFlags: 0
@@ -13050,7 +13191,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 936882402}
+  - {fileID: 856376746}
   m_Father: {fileID: 6503364128857239450}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2334989117738767277
@@ -17255,6 +17396,7 @@ Transform:
   - {fileID: 8283029603489983303}
   - {fileID: 9139417178408644003}
   - {fileID: 8764808736107754615}
+  - {fileID: 936882402}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7258352967476913364
@@ -19831,6 +19973,50 @@ PrefabInstance:
     - target: {fileID: 1974636644454394274, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3509884291402142521, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
+      propertyPath: pageType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3509884291402142521, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
+      propertyPath: mainVideos.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3509884291402142521, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
+      propertyPath: enableAdvancedVideoControl
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3509884291402142521, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
+      propertyPath: splinePathMovers.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3509884291402142521, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
+      propertyPath: mainVideoSettings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3509884291402142521, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
+      propertyPath: backgroundLoopVideos.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3509884291402142521, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
+      propertyPath: advancedVideoSettings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3509884291402142521, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
+      propertyPath: backgroundVideoSettings.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3509884291402142521, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
+      propertyPath: mainVideoSettings.Array.data[0].speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3509884291402142521, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
+      propertyPath: backgroundVideoSettings.Array.data[0].speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3509884291402142521, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
+      propertyPath: mainVideoSettings.Array.data[0].waitForPageEnd
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4146699820173989136, guid: 78a568fefc99df84aa5a83dce379aec0, type: 3}
       propertyPath: m_Name

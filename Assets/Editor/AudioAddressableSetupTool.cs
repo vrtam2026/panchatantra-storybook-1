@@ -13,7 +13,7 @@ using UnityEngine;
 /// HOW TO USE:
 ///   1. Drop VO files into Assets/Audio/{Language}/   named: {pageId}_VO.mp3
 ///   2. Drop BGM files into Assets/Audio/{Language}/  named: {pageId}_BGM.mp3
-///   3. Tools → Panchatantra → Setup Audio Addressables
+///   3. Tools → AR Storybook → Setup Audio Addressables
 ///   4. Done — all packs created, groups configured, catalog filled.
 /// </summary>
 public static class AudioAddressableSetupTool
@@ -23,7 +23,7 @@ public static class AudioAddressableSetupTool
     private const string CatalogAssetPath = "Assets/code/AudioLanguageCatalog.asset";
     private const float  DefaultBgmVolume = 0.5f;
 
-    [MenuItem("Tools/Panchatantra/Setup Audio Addressables")]
+    [MenuItem("Tools/AR Storybook/Setup Audio Addressables")]
     public static void SetupAll()
     {
         AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;

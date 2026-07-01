@@ -661,6 +661,13 @@ public class CustomARHandler : MonoBehaviour
                 LoadingScreen.Hide();
                 OverlayManager.Instance?.HideAll();
 
+                if (handle.Status != AsyncOperationStatus.Succeeded)
+                {
+                    Debug.LogError($"[AR] Download failed for '{addressableKey}': {handle.OperationException?.Message}");
+                    OverlayManager.Instance?.ShowLostTracking();
+                    return;
+                }
+
                 if (_loadCancelled)
                 {
                     Debug.Log($"[AR] Load cancelled for '{addressableKey}' -- releasing.");
@@ -1003,6 +1010,9 @@ public class CustomARHandler : MonoBehaviour
             _releaseCoroutine = null;
         }
 
+        if (_isLoading)
+            _loadCancelled = true;
+
         if (instantiatedObject != null)
         {
             _trackHook?.ClearPageNode();
@@ -1019,6 +1029,7 @@ public class CustomARHandler : MonoBehaviour
         }
 
         _arMediaManager?.NotifyContentReleased();
+
         HideAllUI();
         Debug.Log($"[AR-WINDOW] ForceRelease: {addressableKey}");
     }

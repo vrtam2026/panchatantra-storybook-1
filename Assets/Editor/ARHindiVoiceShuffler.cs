@@ -14,14 +14,14 @@ using UnityEngine;
 /// Packs that already have REAL Hindi audio (non-null AND not from a previous
 /// placeholder run) are skipped — you won't lose real recordings.
 ///
-/// Menu: Tools → Panchatantra → Assign Shuffled English Voices to Hindi (Test)
+/// Menu: Tools → AR Storybook → Assign Shuffled English Voices to Hindi (Test)
 /// </summary>
 public static class ARHindiVoiceShuffler
 {
     private const string EnglishDir = "Assets/code/AudioPacks/English";
     private const string HindiDir   = "Assets/code/AudioPacks/Hindi";
 
-    [MenuItem("Tools/Panchatantra/Assign Shuffled English Voices to Hindi (Test)")]
+    [MenuItem("Tools/AR Storybook/Assign Shuffled English Voices to Hindi (Test)")]
     public static void Run()
     {
         // ── Load all English packs ────────────────────────────────────────────

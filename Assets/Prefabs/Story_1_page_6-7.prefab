@@ -1008,7 +1008,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7810213592776381267
 Transform:
   m_ObjectHideFlags: 0
@@ -1652,8 +1652,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2895999685817753207}
-  - component: {fileID: 817290972077293314}
-  - component: {fileID: 3036940938068016920}
+  - component: {fileID: 5277747768198839800}
   m_Layer: 0
   m_Name: Story_1_page_6-7
   m_TagString: Untagged
@@ -1679,7 +1678,7 @@ Transform:
   - {fileID: 9215586417840834488}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &817290972077293314
+--- !u!114 &5277747768198839800
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1693,51 +1692,94 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ARTrackedPageNode
   pageId: S1_P-6-7
   mediaManager: {fileID: 0}
-  mainVideos:
-  - {fileID: 2513071324995508755}
+  pageType: 0
+  layerRoot2D: {fileID: 3160722692361267380}
+  commonBackgroundImage: {fileID: 0}
+  persistentLayers2D: []
+  storyParts:
+  - partName: 
+    timing: 0
+    manualDuration: 0
+    backgroundImage: {fileID: 0}
+    restartBackgroundOnSlotStart: 0
+    mainVideos:
+    - video: {fileID: 2513071324995508755}
+      playbackSpeed: 1
+      startDelay: 0
+      freezeMode: 0
+      freezeFirstSeconds: 0
+      freezeLastSeconds: 0
+      delayAfterFinish: 0
+      loop: 0
+      waitForPartEnd: 0
+      stopAtPartEnd: 0
+      hideAtPartEnd: 0
+    visualLayers: []
+    backgroundVideos:
+    - video: {fileID: 0}
+      playbackSpeed: 1
+      startDelay: 0
+      loop: 1
+      freezeFirstSeconds: 0
+      freezeLastSeconds: 0
+      stopAtPartEnd: 1
+      hideAtPartEnd: 0
+      fadeIn: 0
+      fadeInDuration: 0
+      fadeOut: 0
+      fadeOutDuration: 0
+    timedChanges: []
+  - partName: 
+    timing: 0
+    manualDuration: 0
+    backgroundImage: {fileID: 0}
+    restartBackgroundOnSlotStart: 0
+    mainVideos:
+    - video: {fileID: 2513071324995508755}
+      playbackSpeed: 1
+      startDelay: 0
+      freezeMode: 0
+      freezeFirstSeconds: 0
+      freezeLastSeconds: 0
+      delayAfterFinish: 0
+      loop: 0
+      waitForPartEnd: 0
+      stopAtPartEnd: 0
+      hideAtPartEnd: 0
+    visualLayers: []
+    backgroundVideos:
+    - video: {fileID: 0}
+      playbackSpeed: 0
+      startDelay: 0
+      loop: 1
+      freezeFirstSeconds: 0
+      freezeLastSeconds: 0
+      stopAtPartEnd: 1
+      hideAtPartEnd: 0
+      fadeIn: 0
+      fadeInDuration: 0
+      fadeOut: 0
+      fadeOutDuration: 0
+    timedChanges: []
+  mainVideos: []
   backgroundLoopVideos: []
+  mainVideoSettings: []
+  backgroundVideoSettings: []
   animators: []
   splineMovers: []
   splinePathMovers: []
-  freezeMode: 1
-  freezeFirstSeconds: 3
+  pageEndTrigger3D: 0
+  freezeMode: 0
+  freezeFirstSeconds: 0
   freezeLastSeconds: 0
   loopBgmUntilVoiceEnds: 1
   stopBgmWhenVoiceEnds: 1
-  blackOverlay: {fileID: 3181417750789157834}
-  contentRoot: {fileID: 6397505380765872163}
+  blackOverlay: {fileID: 0}
+  contentRoot: {fileID: 0}
   delayBeforeFade: 0.5
   fadeDuration: 1.5
   postFadeDelay: 0.5
   pageTurnSound: {fileID: 0}
---- !u!114 &3036940938068016920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5026599860508214084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58f88054253ad3c4facfa36ca1ca3dea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ContentController
-  activities: []
-  activityTemplateSchemaVersion: 34
-  activityPanel: {fileID: 0}
-  defaultRaycastCamera: {fileID: 0}
-  defaultAudioSource: {fileID: 0}
-  completeImmediatelyWhenNoActivities: 1
-  restartImmediatelyOnReplay: 0
-  onActivitiesStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  onActivitiesCompleted:
-    m_PersistentCalls:
-      m_Calls: []
-  onActivitiesReset:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &5284792681755209860
 GameObject:
   m_ObjectHideFlags: 0

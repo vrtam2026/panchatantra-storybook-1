@@ -165,6 +165,7 @@ public class ARAddressableAudioService : MonoBehaviour
 
         handle.Completed += op =>
         {
+            if (!op.IsValid()) return;
             if (op.Status != AsyncOperationStatus.Succeeded)
             {
                 Debug.LogWarning($"[AR-AUDIO] Preload failed: {address}");

@@ -13703,13 +13703,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ARTrackedPageNode
   pageId: S5_P90-91
   mediaManager: {fileID: 0}
+  pageType: 1
+  layerRoot2D: {fileID: 0}
+  commonBackgroundImage: {fileID: 0}
+  persistentLayers2D: []
+  storyParts: []
   mainVideos: []
   backgroundLoopVideos: []
+  mainVideoSettings: []
+  backgroundVideoSettings: []
   animators:
   - {fileID: 7622212186317025390}
   - {fileID: 2708125747904083927}
   splineMovers: []
   splinePathMovers: []
+  pageEndTrigger3D: 0
   freezeMode: 0
   freezeFirstSeconds: 0
   freezeLastSeconds: 0

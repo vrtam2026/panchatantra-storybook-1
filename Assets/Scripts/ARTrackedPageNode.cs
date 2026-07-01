@@ -5,6 +5,290 @@ using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.UI;
 
+public enum PageType { TwoD, ThreeD }
+
+// Per-clip settings for a single Main Video. Index-matched to the mainVideos list.
+// LEGACY — kept for existing prefab assignments. Do not rename or remove.
+[System.Serializable]
+public class MainVideoSettings
+{
+    public VuforiaVideoFrameFreezeController.FreezeMode freezeMode =
+        VuforiaVideoFrameFreezeController.FreezeMode.None;
+    [Min(0f)] public float freezeFirstSeconds = 0f;
+    [Min(0f)] public float freezeLastSeconds = 0f;
+    [Range(0.25f, 3f)] public float playbackSpeed = 1f;
+    [Min(0f)] public float startDelay = 0f;
+    public bool waitForPageEnd = false;
+}
+
+// Per-clip settings for a single Background Loop Video. Index-matched to backgroundLoopVideos.
+// LEGACY — kept for existing prefab assignments. Do not rename or remove.
+[System.Serializable]
+public class BackgroundVideoSettings
+{
+    [Range(0.25f, 3f)] public float playbackSpeed = 1f;
+    [Min(0f)] public float startDelay = 0f;
+}
+
+// ── 2D Story Parts — enums ──────────────────────────────────────────────────
+
+public enum PartTiming2D
+{
+    AutoFromMainVideo,
+    ManualDuration,
+    WaitForPageAudioEnd,
+    WaitForTap
+}
+
+public enum SmallMotionType
+{
+    None,
+    DriftX,
+    DriftY,
+    PingPongX,
+    PingPongY
+}
+
+public enum TimedAction2D
+{
+    Show,
+    Hide,
+    FadeIn,
+    FadeOut,
+    PlayVideo,
+    StopVideo,
+    PauseVideo,
+    ResumeVideo,
+    SetVideoSpeed
+}
+
+public enum PageEndTrigger3D
+{
+    VoiceEnd,       // Default — OverlayManager listens to ARMediaManager.OnVoiceCompleted (old behavior unchanged)
+    AnimationEvent, // Call TriggerPageEnd() from an Animation Event on this prefab
+    Manual          // Call StartPageEndFade() from a custom script or button
+}
+
+// ── 2D Story Parts — data classes ──────────────────────────────────────────
+
+/// <summary>
+/// One main video entry inside a Story Part.
+/// VideoPlayer and all its settings are together in one Inspector block — no separate settings list.
+/// </summary>
+[System.Serializable]
+public class StoryPartVideo2D
+{
+    [Tooltip("The VideoPlayer to play for this main video slot.")]
+    public VideoPlayer video;
+
+    [Tooltip("Playback speed multiplier. 1 = normal speed.")]
+    [Range(0.1f, 3f)] public float playbackSpeed = 1f;
+
+    [Tooltip("Seconds to wait before this video starts playing after the part begins.")]
+    [Min(0f)] public float startDelay = 0f;
+
+    [Tooltip("Freeze mode for the first or last frame of this video.")]
+    public VuforiaVideoFrameFreezeController.FreezeMode freezeMode =
+        VuforiaVideoFrameFreezeController.FreezeMode.None;
+
+    [Tooltip("Hold the first frame for this many seconds before playing (freeze first frame).")]
+    [Min(0f)] public float freezeFirstSeconds = 0f;
+
+    [Tooltip("Hold the last frame for this many seconds after the video content ends.")]
+    [Min(0f)] public float freezeLastSeconds = 0f;
+
+    [Tooltip("Extra delay after this video ends before the part advances (only applies when this video gates part end).")]
+    [Min(0f)] public float delayAfterFinish = 0f;
+
+    [Tooltip("If ON, this video loops and will never naturally end.")]
+    public bool loop = false;
+
+    [Tooltip("If ON, the part waits for THIS video to finish before moving to the next part (Auto From Main Video timing).\n\nWARNING: Do not check this on a looping video — the part may never advance.")]
+    public bool waitForPartEnd = false;
+
+    [Tooltip("Stop this video when the part ends.")]
+    public bool stopAtPartEnd = true;
+
+    [Tooltip("Hide (deactivate) this video's GameObject when the part ends.")]
+    public bool hideAtPartEnd = false;
+}
+
+/// <summary>
+/// One background video entry inside a Story Part.
+/// Background videos do not gate part ending unless explicitly set.
+/// </summary>
+[System.Serializable]
+public class StoryPartBgVideo2D
+{
+    [Tooltip("The background VideoPlayer for this part.")]
+    public VideoPlayer video;
+
+    [Tooltip("Playback speed multiplier.")]
+    [Range(0.1f, 3f)] public float playbackSpeed = 1f;
+
+    [Tooltip("Seconds to wait before this background video starts.")]
+    [Min(0f)] public float startDelay = 0f;
+
+    [Tooltip("Loop this background video.")]
+    public bool loop = true;
+
+    [Tooltip("Hold the first frame for this many seconds before the background video starts playing.")]
+    [Min(0f)] public float freezeFirstSeconds = 0f;
+
+    [Tooltip("Hold the last frame for this many seconds after the background video content ends.")]
+    [Min(0f)] public float freezeLastSeconds = 0f;
+
+    [Tooltip("Stop this background video when the part ends.")]
+    public bool stopAtPartEnd = true;
+
+    [Tooltip("Hide (deactivate) this video's GameObject when the part ends.")]
+    public bool hideAtPartEnd = false;
+
+    [Tooltip("Fade this video layer in when the part starts.")]
+    public bool fadeIn = false;
+    [Min(0f)] public float fadeInDuration = 0.3f;
+
+    [Tooltip("Fade this video layer out when the part ends.")]
+    public bool fadeOut = false;
+    [Min(0f)] public float fadeOutDuration = 0.3f;
+}
+
+/// <summary>
+/// One visual layer (background image, PNG, effect, extra image) inside a Story Part.
+/// Use this for any image or sprite layer — background, foreground, effect, or fix layer.
+/// Small motion moves only the motionTarget CHILD, never the parallax parent.
+/// </summary>
+[System.Serializable]
+public class VisualLayer2D
+{
+    [Tooltip("The layer GameObject or Transform (background, PNG, sprite, effect). Drag any object here.")]
+    public Transform layer;
+
+    [Tooltip("Show this layer when the part starts.")]
+    public bool showAtPartStart = true;
+
+    [Tooltip("Seconds to wait after the part starts before showing this layer.")]
+    [Min(0f)] public float startDelay = 0f;
+
+    [Tooltip("Fade this layer in when it appears.")]
+    public bool fadeIn = true;
+    [Min(0f)] public float fadeInDuration = 0.4f;
+
+    [Tooltip("Hide this layer when the part ends.")]
+    public bool hideAtPartEnd = true;
+
+    [Tooltip("Fade this layer out when the part ends (only if Hide At Part End is ON).")]
+    public bool fadeOut = true;
+    [Min(0f)] public float fadeOutDuration = 0.3f;
+
+    [Tooltip("Keep this layer visible when the next part starts. Overrides Hide At Part End.")]
+    public bool keepVisibleIntoNextPart = false;
+
+    [Tooltip("Optional: hide this layer after this many seconds from when it appeared. 0 = stay until part ends.")]
+    [Min(0f)] public float visibleDuration = 0f;
+
+    [Tooltip("Enable slow looping motion on the Motion Target child. Safe — does not move the parallax parent.")]
+    public bool enableSmallMotion = false;
+
+    [Tooltip("CHILD object to move for small motion. Must be a child of 'layer'. Do NOT assign the same object Parallex_With_Animation controls.")]
+    public Transform motionTarget;
+
+    public SmallMotionType motionType = SmallMotionType.DriftX;
+    [Range(0.05f, 5f)] public float motionSpeed = 0.5f;
+    [Range(0f, 0.3f)] public float motionAmplitude = 0.02f;
+}
+
+/// <summary>
+/// A persistent layer visible for the entire page — sky, frame, shared background, static scenery.
+/// Shown at page start, never hidden between Story Parts.
+/// </summary>
+[System.Serializable]
+public class PersistentLayerSetup
+{
+    [Tooltip("The layer that should be visible for the full page (sky, frame, shared background).")]
+    public Transform layer;
+
+    [Tooltip("Show and activate this layer when the page starts.")]
+    public bool showOnPageStart = true;
+
+    [Tooltip("Fade this layer in when the page starts.")]
+    public bool fadeIn = true;
+    [Min(0f)] public float fadeInDuration = 0.4f;
+
+    [Tooltip("Fade this layer out at the end of the last Story Part (before page-end black fade).")]
+    public bool fadeOutAtPageEnd = false;
+    [Min(0f)] public float fadeOutDuration = 0.3f;
+
+    [Tooltip("Enable slow looping motion on a child visual object (motionTarget). Does not move the parallax parent.")]
+    public bool enableSmallMotion = false;
+
+    [Tooltip("CHILD object to move. Must be a child of 'layer'. Do NOT assign the parallax parent.")]
+    public Transform motionTarget;
+
+    public SmallMotionType motionType = SmallMotionType.DriftX;
+    [Range(0.05f, 5f)] public float motionSpeed = 0.5f;
+    [Range(0f, 0.3f)] public float motionAmplitude = 0.02f;
+}
+
+/// <summary>
+/// A timed change fires at a specific second into the current Story Part.
+/// Timing is pausable — freezes when tracking is lost, resumes from the same point.
+/// </summary>
+[System.Serializable]
+public class TimedChange2D
+{
+    [Tooltip("Seconds into this Story Part when this action fires. Pausable — freezes when tracking is lost.")]
+    [Min(0f)] public float atSeconds = 2f;
+
+    public TimedAction2D action = TimedAction2D.Show;
+
+    [Tooltip("The target GameObject. For video actions (Play/Stop/Pause/Resume/SetSpeed), this object must have a VideoPlayer component.")]
+    public GameObject target;
+
+    [Tooltip("Fade duration for FadeIn / FadeOut actions.")]
+    [Min(0f)] public float fadeDuration = 0.4f;
+
+    [Tooltip("Target speed for SetVideoSpeed action.")]
+    [Range(0.1f, 3f)] public float videoSpeed = 1f;
+}
+
+/// <summary>
+/// One sequential visual section of a 2D page.
+/// Part 1 → Part 2 → ... → last part → page end fade.
+/// </summary>
+[System.Serializable]
+public class StoryPart2D
+{
+    [Tooltip("Label for this part in the Inspector. Does not affect runtime.")]
+    public string partName = "Part";
+
+    [Tooltip("How the part decides when to move to the next part.\n• Auto From Main Video: advances when the main video(s) finish.\n• Manual Duration: advances after a fixed number of seconds.\n• Wait For Page Audio End: waits for voice audio to finish (uses ARMediaManager.OnVoiceCompleted).\n• Wait For Tap: waits for a screen tap.")]
+    public PartTiming2D timing = PartTiming2D.AutoFromMainVideo;
+
+    [Tooltip("Seconds before advancing to the next part. Used when timing is Manual Duration, or as fallback when no non-looping main video is assigned.")]
+    [Min(0.1f)] public float manualDuration = 3f;
+
+    [Tooltip("Background image shown behind the main video for this slot. Hides automatically when the slot ends.")]
+    public Transform backgroundImage;
+
+    [Tooltip("If true, the background video restarts from the beginning each time this slot starts. If false, it continues from where it was (useful when the same background video is reused across slots).")]
+    public bool restartBackgroundOnSlotStart = true;
+
+    [Tooltip("Main story videos for this part. Each entry includes the VideoPlayer and all its settings.\n\nPart advances when the checked 'Wait For Part End' videos finish. If none are checked, waits for all non-looping videos.")]
+    public List<StoryPartVideo2D> mainVideos = new List<StoryPartVideo2D>();
+
+    [Tooltip("Background images, PNGs, sprites, or effect layers for this part. Each entry has its own show/hide/fade/motion settings.")]
+    public List<VisualLayer2D> visualLayers = new List<VisualLayer2D>();
+
+    [Tooltip("Background loop videos for this part. Background videos do not gate part ending unless Stop At Part End is used.")]
+    public List<StoryPartBgVideo2D> backgroundVideos = new List<StoryPartBgVideo2D>();
+
+    [Tooltip("Optional timed actions that fire at specific seconds during this part. Timing pauses when tracking is lost.")]
+    public List<TimedChange2D> timedChanges = new List<TimedChange2D>();
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+
 public class ARTrackedPageNode : MonoBehaviour
 {
     [Header("IDs")]
@@ -13,9 +297,44 @@ public class ARTrackedPageNode : MonoBehaviour
     [Header("References")]
     [SerializeField] private ARMediaManager mediaManager;
 
-    [Header("Videos")]
+    [Header("Page Type")]
+    [Tooltip("TwoD: shows the 2D Story Parts setup. ThreeD: shows the 3D setup with Animators and Splines.\nThe Inspector panel switches based on this selection.")]
+    [SerializeField] private PageType pageType = PageType.TwoD;
+
+    // ---------------------------------------------------------------
+    // 2D PAGE SETUP
+    // Shown in Inspector when Page Type = Two D.
+    // Active at runtime only when storyParts has entries.
+    // If storyParts is empty, the Legacy / Simple Video setup runs unchanged.
+    // ---------------------------------------------------------------
+
+    [Tooltip("The parent object that contains all 2D layers (sky, city, background, video, effects). Usually All_GameObject. Assign here so setup is clear.")]
+    [SerializeField] private Transform layerRoot2D;
+
+    [Tooltip("Background image visible for the FULL PAGE. Shown at page start, kept visible across ALL Story Parts, never hidden between parts. Use this for a shared scene background that never changes.")]
+    [SerializeField] private Transform commonBackgroundImage;
+
+    [Tooltip("Layers visible for the ENTIRE page — sky, frame, shared background, static scenery.\nShown at page start, never hidden between Story Parts.")]
+    [SerializeField] private List<PersistentLayerSetup> persistentLayers2D = new List<PersistentLayerSetup>();
+
+    [Tooltip("Sequential Story Parts for this 2D page. Each part plays its videos and shows its layers, then advances to the next.\n\nLEAVE EMPTY → old Legacy / Simple Video flow runs unchanged.")]
+    [SerializeField] private List<StoryPart2D> storyParts = new List<StoryPart2D>();
+
+    // ---------------------------------------------------------------
+    // LEGACY / SIMPLE VIDEO SETUP
+    // Used for old pages or when Story Parts is empty.
+    // On 3D pages, Animators and Spline Movers handle the story.
+    // These fields have existing prefab assignments — do not rename or remove.
+    // ---------------------------------------------------------------
+
     [SerializeField] private List<VideoPlayer> mainVideos = new();
     [SerializeField] private List<VideoPlayer> backgroundLoopVideos = new();
+
+    // Per-video settings, index-matched to the lists above.
+    // ADDITIVE ONLY — never reorder/rename mainVideos or backgroundLoopVideos (that is where the
+    // assigned VideoPlayer references live). These parallel lists only add per-clip control.
+    [SerializeField] private List<MainVideoSettings> mainVideoSettings = new();
+    [SerializeField] private List<BackgroundVideoSettings> backgroundVideoSettings = new();
 
     [Header("Animators (optional)")]
     [SerializeField] private List<Animator> animators = new();
@@ -25,6 +344,10 @@ public class ARTrackedPageNode : MonoBehaviour
 
     [Header("Spline Path Movers (optional)")]
     [SerializeField] private List<SplinePathMover> splinePathMovers = new();
+
+    [Tooltip("How page end is triggered on 3D pages. VoiceEnd (default) matches old behavior exactly.")]
+    [SerializeField] private PageEndTrigger3D pageEndTrigger3D = PageEndTrigger3D.VoiceEnd;
+    public PageEndTrigger3D PageEndTrigger => pageEndTrigger3D;
 
     [Header("Video Freeze (per page)")]
     [SerializeField]
@@ -71,6 +394,25 @@ public class ARTrackedPageNode : MonoBehaviour
     private Coroutine _revealCoroutine;
     private AudioSource _revealAudioSource;
 
+    // 2D Story Parts runtime — only these coroutines are stopped on replay/reset
+    private Coroutine _storyPartsRoutine;
+    private Coroutine _timedChangesRoutine;
+    private readonly List<Coroutine> _layerRoutines2D = new List<Coroutine>();
+    private readonly List<Coroutine> _smallMotionRoutines = new List<Coroutine>();
+
+    // 2D safety state
+    // These lists keep runtime truth aligned with the Inspector: every active 2D video,
+    // including timed-change videos, can be paused/resumed on tracking lost/found.
+    private readonly List<VideoPlayer> _active2DVideos = new List<VideoPlayer>();
+    private readonly Dictionary<VideoPlayer, VideoFreezeRuntime> _active2DVideoRuntime = new Dictionary<VideoPlayer, VideoFreezeRuntime>();
+    private readonly Dictionary<Transform, Coroutine> _smallMotionByTarget2D = new Dictionary<Transform, Coroutine>();
+    private readonly Dictionary<Transform, Vector3> _smallMotionBasePosition2D = new Dictionary<Transform, Vector3>();
+    private System.Action<string> _audioEndHandler2D;
+    private bool _audioEndReceived2D;
+
+    private bool _2dPaused;
+    private int _currentPartIndex2D = -1;
+
     // Names kept visible after fade (frame stays, black screen removed separately)
     private static readonly string[] _keepVisible = {
         "frame_new_bendender", "frame", "Black Screen", "BlackOverlay", "black page"
@@ -84,18 +426,15 @@ public class ARTrackedPageNode : MonoBehaviour
     private bool _waitingForPopupReveal;
 
     // True while an interaction step must run before the normal story starts.
-    // This prevents ARVFXPopupController from accidentally allowing story animators
-    // or spline movement to continue after reveal while the user is still expected to tap.
     private bool _storyBlockedByActivity;
     private bool _mediaAudioPausedForActivity;
 
     public string PageId => pageId;
+    public PageType Type => pageType;
     public bool IsTracked => _isTracked;
     public bool LoopBgmUntilVoiceEnds => loopBgmUntilVoiceEnds;
     public bool StopBgmWhenVoiceEnds => stopBgmWhenVoiceEnds;
 
-    // Read-only flag used by ARMediaManager so story audio does not start while
-    // an opt-in activity is blocking the story. Normal pages keep this false.
     public bool IsStoryBlockedByActivity => _storyBlockedByActivity;
 
     private readonly Dictionary<VideoPlayer, VideoFreezeRuntime> _videoRuntime = new();
@@ -122,7 +461,6 @@ public class ARTrackedPageNode : MonoBehaviour
 
         if (animators.Count == 0)
         {
-            // Auto-find ALL animators in children -- not just the first one
             var found = GetComponentsInChildren<Animator>(true);
             foreach (var anim in found)
                 if (anim != null) animators.Add(anim);
@@ -130,7 +468,6 @@ public class ARTrackedPageNode : MonoBehaviour
 
         RebuildVideoRuntimeCache();
 
-        // REVEAL SETUP
         SetupReveal();
     }
 
@@ -177,6 +514,9 @@ public class ARTrackedPageNode : MonoBehaviour
         _storyBlockedByActivity = false;
         _mediaAudioPausedForActivity = false;
         _onStorySystemsStarted = null;
+
+        Stop2DCoroutines();
+        Unsubscribe2DAudioEndEvent();
     }
 
     // ---------------------------------------------------------------
@@ -185,7 +525,6 @@ public class ARTrackedPageNode : MonoBehaviour
 
     private void SetupReveal()
     {
-        // Auto-find black overlay by name
         if (blackOverlay == null)
         {
             foreach (var r in GetComponentsInChildren<Renderer>(true))
@@ -197,7 +536,6 @@ public class ARTrackedPageNode : MonoBehaviour
             }
         }
 
-        // Setup audio source for page turn sound
         if (pageTurnSound != null)
         {
             _revealAudioSource = gameObject.AddComponent<AudioSource>();
@@ -206,7 +544,6 @@ public class ARTrackedPageNode : MonoBehaviour
             _revealAudioSource.loop = false;
         }
 
-        // Black plane: force render queue above video, start invisible
         if (blackOverlay != null)
         {
             blackOverlay.material.renderQueue = 3500;
@@ -217,12 +554,10 @@ public class ARTrackedPageNode : MonoBehaviour
         }
     }
 
-    // Lazy-find All_GameObjects -- runs after Addressables clone is ready
     private GameObject GetContentRoot()
     {
         if (contentRoot != null) return contentRoot;
 
-        // Search direct children for All_GameObjects (2D page)
         foreach (Transform child in transform)
         {
             if (child.name == "All_GameObjects" || child.name == "All_GameObject")
@@ -232,17 +567,15 @@ public class ARTrackedPageNode : MonoBehaviour
             }
         }
 
-        // Search one level deeper
         foreach (Transform child in transform)
         {
             var deep = child.Find("All_GameObjects") ?? child.Find("All_GameObject");
             if (deep != null) { contentRoot = deep.gameObject; return contentRoot; }
         }
 
-        return null; // 3D page -- use HideAllChildren instead
+        return null;
     }
 
-    // For 3D pages -- hide all direct children except frame and black screen
     private void HideAllChildren(bool hide)
     {
         foreach (Transform child in transform)
@@ -254,7 +587,6 @@ public class ARTrackedPageNode : MonoBehaviour
         }
     }
 
-    // Called from StartFromBeginning -- auto detects content type and watches accordingly
     private void StartWatchingVideo()
     {
         if (!gameObject.activeInHierarchy) return;
@@ -263,26 +595,72 @@ public class ARTrackedPageNode : MonoBehaviour
         if (_revealCoroutine != null) { StopCoroutine(_revealCoroutine); _revealCoroutine = null; }
 
         bool hasVideo = mainVideos != null && mainVideos.Count > 0 && mainVideos[0] != null;
-        bool hasAnimators = animators != null && animators.Count > 0;
-        bool hasSplines = (splineMovers != null && splineMovers.Count > 0) ||
-                          (splinePathMovers != null && splinePathMovers.Count > 0);
 
         if (hasVideo)
         {
-            // 2D page -- watch the main video
-            _revealCoroutine = StartCoroutine(WatchVideoThenFade(mainVideos[0]));
+            List<VideoPlayer> watchList = GetPageEndWatchVideos();
+            if (watchList.Count > 0)
+                _revealCoroutine = StartCoroutine(WatchVideosThenFade(watchList));
+            else
+                _revealCoroutine = StartCoroutine(WatchVideoThenFade(mainVideos[0]));
         }
-        // 3D pages are handled automatically via ARMediaManager.OnVoiceCompleted
-        // OverlayManager listens to that event and shows turn page after audio ends
-        // If neither -- nothing to watch, no page end triggered
     }
 
-    // ---------------------------------------------------------------
-    // 2D PAGE WATCHER -- polls video until it truly ends
-    // ---------------------------------------------------------------
+    private List<VideoPlayer> GetPageEndWatchVideos()
+    {
+        var result = new List<VideoPlayer>();
+        if (mainVideos == null || mainVideoSettings == null) return result;
+        for (int i = 0; i < mainVideos.Count; i++)
+        {
+            if (mainVideos[i] == null) continue;
+            if (i < mainVideoSettings.Count &&
+                mainVideoSettings[i] != null &&
+                mainVideoSettings[i].waitForPageEnd)
+                result.Add(mainVideos[i]);
+        }
+        return result;
+    }
+
+    private IEnumerator WatchVideosThenFade(List<VideoPlayer> videos)
+    {
+        int n = videos.Count;
+        bool[] started = new bool[n];
+        bool[] ended = new bool[n];
+
+        float overallTimeout = Time.time + 600f;
+        while (Time.time < overallTimeout)
+        {
+            if (!_isTracked) { yield return new WaitUntil(() => _isTracked); }
+
+            bool allEnded = true;
+            for (int i = 0; i < n; i++)
+            {
+                var vp = videos[i];
+                if (vp == null) { ended[i] = true; continue; }
+                if (ended[i]) continue;
+
+                if (!started[i])
+                {
+                    if (vp.isPlaying && vp.time > 0.1) started[i] = true;
+                    allEnded = false;
+                }
+                else
+                {
+                    if (!vp.isPlaying) ended[i] = true;
+                    else allEnded = false;
+                }
+            }
+            if (allEnded) break;
+            yield return null;
+        }
+
+        Debug.Log("[AR] Reveal: all 'Wait For Page End' videos ended. Starting fade.");
+        _revealCoroutine = null;
+        _revealCoroutine = StartCoroutine(FadeAndReveal());
+    }
+
     private IEnumerator WatchVideoThenFade(VideoPlayer vp)
     {
-        // PHASE 1: Wait for video to start playing
         float startTimeout = Time.time + 10f;
         while (!vp.isPlaying && Time.time < startTimeout)
             yield return null;
@@ -293,7 +671,6 @@ public class ARTrackedPageNode : MonoBehaviour
             yield break;
         }
 
-        // PHASE 2: Wait past freeze first frame (time stays near 0 during freeze)
         float phaseTimeout = Time.time + 15f;
         while (Time.time < phaseTimeout)
         {
@@ -304,7 +681,6 @@ public class ARTrackedPageNode : MonoBehaviour
 
         Debug.Log($"[AR] Reveal: past freeze. time={vp.time:F2}");
 
-        // PHASE 3: Wait for video to stop (true end)
         while (true)
         {
             if (!_isTracked) { yield return new WaitUntil(() => _isTracked); }
@@ -320,21 +696,24 @@ public class ARTrackedPageNode : MonoBehaviour
         _revealCoroutine = StartCoroutine(FadeAndReveal());
     }
 
-    // Called from animation event on 3D pages if manual trigger is preferred
     public void TriggerPageEnd()
     {
-        // Manual trigger from animation event -- OverlayManager handles BGM via OnVoiceCompleted
         if (OverlayManager.Instance != null)
             OverlayManager.Instance.ShowPageEnd();
     }
 
+    public void StartPageEndFade()
+    {
+        if (!gameObject.activeInHierarchy) return;
+        if (_revealCoroutine != null) { StopCoroutine(_revealCoroutine); _revealCoroutine = null; }
+        _revealCoroutine = StartCoroutine(FadeAndReveal());
+    }
+
     private IEnumerator FadeAndReveal()
     {
-        // Step 1: delay after audio ends
         if (delayBeforeFade > 0f)
             yield return new WaitForSeconds(delayBeforeFade);
 
-        // Step 2: ensure Black Screen is active and fade it in
         if (blackOverlay != null)
         {
             blackOverlay.gameObject.SetActive(true);
@@ -354,47 +733,37 @@ public class ARTrackedPageNode : MonoBehaviour
             blackOverlay.material.SetColor("_BaseColor", c);
         }
 
-        // Step 3: once fully black -- hide all content
         var root = GetContentRoot();
         if (root != null)
-            root.SetActive(false);   // 2D: turn off All_GameObjects
+            root.SetActive(false);
         else
-            HideAllChildren(true);   // 3D: turn off all children except frame
+            HideAllChildren(true);
 
-        // Step 4: turn off Black Screen -- clean frame visible
         if (blackOverlay != null)
             blackOverlay.gameObject.SetActive(false);
 
-        // Step 5: hold for postFadeDelay before showing overlay
         if (postFadeDelay > 0f)
             yield return new WaitForSeconds(postFadeDelay);
 
-        // Step 6: show turn page overlay
         if (OverlayManager.Instance != null)
             OverlayManager.Instance.ShowPageEnd();
 
-        // Step 6: play page turn sound
         if (_revealAudioSource != null && pageTurnSound != null)
             _revealAudioSource.Play();
 
         _revealCoroutine = null;
     }
 
-
-
-
     private void ResetReveal()
     {
         if (_revealCoroutine != null) { StopCoroutine(_revealCoroutine); _revealCoroutine = null; }
 
-        // Restore content visibility for next scan
         var root = GetContentRoot();
         if (root != null)
             root.SetActive(true);
         else
             HideAllChildren(false);
 
-        // Restore Black Screen -- active but fully transparent
         if (blackOverlay != null)
         {
             blackOverlay.gameObject.SetActive(true);
@@ -410,15 +779,13 @@ public class ARTrackedPageNode : MonoBehaviour
         }
     }
 
-
-
-
     // ---------------------------------------------------------------
 
     private void RebuildVideoRuntimeCache()
     {
         DisposeVideoRuntimeCache();
-        AddToRuntime(mainVideos);
+        if (!Is2DStoryMode())
+            AddToRuntime(mainVideos);
         AddToRuntime(backgroundLoopVideos);
     }
 
@@ -445,7 +812,7 @@ public class ARTrackedPageNode : MonoBehaviour
     public void NotifyFound()
     {
         _isTracked = true;
-        Debug.Log($"[AR] NotifyFound � pageId: '{pageId}'");
+        Debug.Log($"[AR] NotifyFound — pageId: '{pageId}'");
         if (mediaManager != null)
             mediaManager.NotifyTrackingFound(this);
         else
@@ -481,12 +848,18 @@ public class ARTrackedPageNode : MonoBehaviour
         _storyBlockedByActivity = false;
         _onStorySystemsStarted = onStorySystemsStarted;
 
-        // Reset page-end reveal / overlay state.
+        if (Is2DStoryMode())
+        {
+            Stop2DCoroutines();
+            _2dPaused = false;
+            _currentPartIndex2D = -1;
+            Reset2DStoryPartsVideos();
+        }
+
         ResetReveal();
 
         RebuildVideoRuntimeCache();
 
-        // Reset visual systems but keep them paused until popup finishes.
         ResetStorySystemsToStartPaused();
 
         ARVFXPopupController popup = GetComponentInChildren<ARVFXPopupController>(true);
@@ -496,16 +869,13 @@ public class ARTrackedPageNode : MonoBehaviour
             _waitingForPopupReveal = true;
             ARVFXPopupController.OnRevealComplete += HandlePopupRevealComplete;
 
-            // First scan and replay both use this same path.
             popup.TriggerReplay();
             return;
         }
 
-        // Pages without VFX/popup start immediately. Also wake activity watchers that wait for a selected story animation.
         NotifyContentControllerRevealComplete();
         BeginStorySystemsNow();
     }
-
 
     private void NotifyContentControllerRevealComplete()
     {
@@ -528,8 +898,6 @@ public class ARTrackedPageNode : MonoBehaviour
         return false;
     }
 
-    // Called by ActivityEventRelay from an animation event, timeline signal, or button.
-    // It forwards the signal to ContentController without restarting the story.
     public void TriggerStoryPointActivity()
     {
         TriggerStoryPointActivity(string.Empty);
@@ -548,7 +916,6 @@ public class ARTrackedPageNode : MonoBehaviour
         }
     }
 
-    // Extra overloads keep Unity Animation Events safe if the event sends a number.
     public void TriggerStoryPointActivity(int key)
     {
         TriggerStoryPointActivity(key.ToString());
@@ -570,20 +937,12 @@ public class ARTrackedPageNode : MonoBehaviour
 
         if (!belongsToThisPage) return;
 
-        // Important activity gate:
-        // Some pages must run a child activity immediately after VFX reveal, before story animation,
-        // spline movement, and voice over start. If ContentController has a pending After Reveal
-        // activity, let it run first. When it completes, BeginStorySystemsNow continues the normal story.
         if (HasBlockingAfterRevealActivity())
         {
             ARVFXPopupController.OnRevealComplete -= HandlePopupRevealComplete;
             _waitingForPopupReveal = false;
             _storyBlockedByActivity = true;
 
-            // ARVFXPopupController may re-enable child animators and movement scripts
-            // just before firing OnRevealComplete. For an activity that must happen
-            // before the story, pause them again immediately. Otherwise the activity
-            // text appears while the story animation/spline starts underneath it.
             PauseStorySystemsForActivityGate();
 
             RunBeforeStoryActivitiesSequentially(() =>
@@ -594,8 +953,6 @@ public class ARTrackedPageNode : MonoBehaviour
             return;
         }
 
-        // Wake activities that are waiting for a selected story animation or movement.
-        // This is required for middle-story activities. Otherwise they only start when the full story ends.
         NotifyContentControllerRevealComplete();
         BeginStorySystemsNow();
     }
@@ -646,12 +1003,7 @@ public class ARTrackedPageNode : MonoBehaviour
     {
         PauseVideos(mainVideos);
         PauseVideos(backgroundLoopVideos);
-
-        // Pre-story gate only: keep story at first frame until a before-story activity completes.
         ResetAnimatorsToFrameZeroPaused();
-
-        // Stop movement. It will be reset and started by BeginStorySystemsNow()
-        // after the activity is completed.
         StopSplinesForIntro();
     }
 
@@ -691,11 +1043,7 @@ public class ARTrackedPageNode : MonoBehaviour
         RebuildSplineMoverLists();
         ResetVideosToStartPaused(mainVideos);
         ResetVideosToStartPaused(backgroundLoopVideos);
-
         ResetAnimatorsToFrameZeroPaused();
-
-        // Do not move the model to spline start during popup.
-        // Only stop movement here; ResetToStart happens after popup completion.
         StopSplinesForIntro();
     }
 
@@ -739,7 +1087,6 @@ public class ARTrackedPageNode : MonoBehaviour
         {
             ARTrackableSplineMover m = splineMovers[i];
             if (m == null) continue;
-
             m.Stop();
         }
 
@@ -747,7 +1094,6 @@ public class ARTrackedPageNode : MonoBehaviour
         {
             SplinePathMover m = splinePathMovers[i];
             if (m == null) continue;
-
             m.Stop();
         }
     }
@@ -756,8 +1102,6 @@ public class ARTrackedPageNode : MonoBehaviour
     {
         if (!gameObject.activeInHierarchy) return;
 
-        // If tracking was lost while the popup was running, do not start
-        // animator/spline/audio. ResumeVisuals will continue the paused reveal on re-track.
         if (!_isTracked)
         {
             _onStorySystemsStarted = null;
@@ -766,22 +1110,27 @@ public class ARTrackedPageNode : MonoBehaviour
 
         ARVFXPopupController.OnRevealComplete -= HandlePopupRevealComplete;
         _waitingForPopupReveal = false;
-
         _storyBlockedByActivity = false;
 
         RebuildVideoRuntimeCache();
 
-        RestartVideosWithFreeze(mainVideos, freezeMode, freezeFirstSeconds, freezeLastSeconds);
-        RestartVideosNoFreeze(backgroundLoopVideos);
+        if (Is2DStoryMode())
+        {
+            System.Action callback2d = _onStorySystemsStarted;
+            _onStorySystemsStarted = null;
+            callback2d?.Invoke();
 
-        // Always start the story from a clean first frame. This is important after
-        // pre-story activities because the activity may have played temporary
-        // animation clips on the same animators.
+            Begin2DStoryParts();
+            return;
+        }
+
+        RestartMainVideosWithPerClipSettings();
+        RestartBackgroundVideosWithPerClipSettings();
+
         ResetAnimatorsToFrameZeroPaused();
         StartAnimatorsAfterIntro();
         StartSplinesAfterIntro();
 
-        // Start watching for video end to trigger reveal only after real playback starts.
         StartWatchingVideo();
 
         System.Action callback = _onStorySystemsStarted;
@@ -795,7 +1144,6 @@ public class ARTrackedPageNode : MonoBehaviour
         {
             Animator a = animators[i];
             if (a == null) continue;
-
             a.enabled = true;
             a.speed = 1f;
         }
@@ -804,11 +1152,6 @@ public class ARTrackedPageNode : MonoBehaviour
     private void EnsureSplineMoverCanStart(Component mover)
     {
         if (mover == null) return;
-
-        // Some story pages keep the spline mover object disabled until the story begins.
-        // After a blocking activity finishes, story/spline must start normally, so activate
-        // the mover object itself. If a parent page is inactive because tracking is lost,
-        // BeginStorySystemsNow already exits before this method is reached.
         if (!mover.gameObject.activeSelf)
             mover.gameObject.SetActive(true);
 
@@ -879,8 +1222,6 @@ public class ARTrackedPageNode : MonoBehaviour
 
     public void PauseStoryForActivity()
     {
-        // Middle-story activity lock.
-        // Freeze the story exactly where it is. Do not reset story animators to frame zero.
         _storyBlockedByActivity = true;
         PauseStorySystemsAtCurrentFrameForActivity();
         PauseMediaAudioForActivity();
@@ -888,7 +1229,6 @@ public class ARTrackedPageNode : MonoBehaviour
 
     public void ResumeStoryFromActivity()
     {
-        // Only the activity completion path may release this lock.
         _storyBlockedByActivity = false;
         ResumeVisuals();
         ResumeMediaAudioFromActivity();
@@ -927,6 +1267,12 @@ public class ARTrackedPageNode : MonoBehaviour
 
     public void PauseVisuals()
     {
+        if (Is2DStoryMode())
+        {
+            _2dPaused = true;
+            Pause2DCurrentPartVideos();
+        }
+
         PauseVideos(mainVideos);
         PauseVideos(backgroundLoopVideos);
 
@@ -958,8 +1304,6 @@ public class ARTrackedPageNode : MonoBehaviour
 
     public void ResumeVisuals()
     {
-        // Reset black overlay to transparent -- critical for grace time resume
-        // Without this, black plane stays opaque if fade was in progress when lost
         if (blackOverlay != null)
         {
             blackOverlay.gameObject.SetActive(true);
@@ -968,7 +1312,6 @@ public class ARTrackedPageNode : MonoBehaviour
             blackOverlay.material.SetColor("_BaseColor", c);
         }
 
-        // Restore content root if it was hidden
         var root = GetContentRoot();
         if (root != null && !root.activeSelf)
             root.SetActive(true);
@@ -983,13 +1326,17 @@ public class ARTrackedPageNode : MonoBehaviour
 
         if (_storyBlockedByActivity)
         {
-            // Tracking found while an activity is active.
-            // Restore only the activity UI and keep story systems frozen at the current frame.
             PauseStorySystemsAtCurrentFrameForActivity();
             ContentController controller = GetComponentInChildren<ContentController>(true);
             if (controller != null)
                 controller.RestoreActivityUIAfterTrackingFound();
             return;
+        }
+
+        if (Is2DStoryMode())
+        {
+            _2dPaused = false;
+            Resume2DCurrentPartVideos();
         }
 
         ResumeVideos(mainVideos);
@@ -1020,33 +1367,48 @@ public class ARTrackedPageNode : MonoBehaviour
             popup.ResumeReveal();
     }
 
-    private void RestartVideosWithFreeze(
-        List<VideoPlayer> list,
-        VuforiaVideoFrameFreezeController.FreezeMode mode,
-        float firstSeconds, float lastSeconds)
+    private void RestartMainVideosWithPerClipSettings()
     {
-        if (list == null) return;
-        for (int i = 0; i < list.Count; i++)
+        if (mainVideos == null) return;
+        for (int i = 0; i < mainVideos.Count; i++)
         {
-            var vp = list[i];
+            var vp = mainVideos[i];
             if (vp == null) continue;
             if (!vp.gameObject.activeInHierarchy) continue;
+
+            MainVideoSettings s =
+                (mainVideoSettings != null && i < mainVideoSettings.Count) ? mainVideoSettings[i] : null;
+
+            var mode  = s != null ? s.freezeMode         : freezeMode;
+            var first = s != null ? s.freezeFirstSeconds : freezeFirstSeconds;
+            var last  = s != null ? s.freezeLastSeconds  : freezeLastSeconds;
+            var speed = s != null ? s.playbackSpeed      : 1f;
+            var delay = s != null ? s.startDelay         : 0f;
+
             if (_videoRuntime.TryGetValue(vp, out var rt))
-                rt.RestartWithFreeze(mode, firstSeconds, lastSeconds);
-            else { vp.time = 0; vp.Play(); }
+                rt.RestartWithFreeze(mode, first, last, speed, delay);
+            else { vp.time = 0; vp.playbackSpeed = Mathf.Max(0.01f, speed); vp.Play(); }
         }
     }
 
-    private static void RestartVideosNoFreeze(List<VideoPlayer> list)
+    private void RestartBackgroundVideosWithPerClipSettings()
     {
-        if (list == null) return;
-        for (int i = 0; i < list.Count; i++)
+        if (backgroundLoopVideos == null) return;
+        for (int i = 0; i < backgroundLoopVideos.Count; i++)
         {
-            var vp = list[i];
+            var vp = backgroundLoopVideos[i];
             if (vp == null) continue;
             if (!vp.gameObject.activeInHierarchy) continue;
-            vp.time = 0;
-            vp.Play();
+
+            BackgroundVideoSettings s =
+                (backgroundVideoSettings != null && i < backgroundVideoSettings.Count) ? backgroundVideoSettings[i] : null;
+
+            var speed = s != null ? s.playbackSpeed : 1f;
+            var delay = s != null ? s.startDelay    : 0f;
+
+            if (_videoRuntime.TryGetValue(vp, out var rt))
+                rt.RestartWithFreeze(VuforiaVideoFrameFreezeController.FreezeMode.None, 0f, 0f, speed, delay);
+            else { vp.time = 0; vp.playbackSpeed = Mathf.Max(0.01f, speed); vp.Play(); }
         }
     }
 
@@ -1056,9 +1418,9 @@ public class ARTrackedPageNode : MonoBehaviour
         for (int i = 0; i < list.Count; i++)
         {
             var vp = list[i];
-            if (vp == null) return;
+            if (vp == null) continue;
             if (!vp.gameObject.activeInHierarchy) continue;
-            if (!vp.enabled) continue;  // disabled VideoPlayer cannot be paused
+            if (!vp.enabled) continue;
             if (_videoRuntime.TryGetValue(vp, out var rt)) rt.Pause();
             else if (vp.isPlaying) vp.Pause();
         }
@@ -1077,125 +1439,842 @@ public class ARTrackedPageNode : MonoBehaviour
         }
     }
 
-    private sealed class VideoFreezeRuntime
+    // ── 2D Story Parts ──────────────────────────────────────────────────────────
+
+    private bool Is2DStoryMode()
     {
-        private readonly MonoBehaviour _host;
-        private readonly VideoPlayer _vp;
-        private VuforiaVideoFrameFreezeController.FreezeMode _mode;
-        private float _firstSeconds;
-        private float _lastSeconds;
-        private Coroutine _firstRoutine;
-        private Coroutine _lastRoutine;
-        private bool _frameHooked;
-        private bool _pausedOnFirstFrame;
-
-        public VideoFreezeRuntime(MonoBehaviour host, VideoPlayer vp)
-        {
-            _host = host;
-            _vp = vp;
-            _vp.loopPointReached += OnLoopPointReached;
-            _vp.waitForFirstFrame = true;
-        }
-
-        public void Dispose()
-        {
-            StopRoutinesInternal();
-            if (_vp != null) _vp.loopPointReached -= OnLoopPointReached;
-        }
-
-        public void RestartWithFreeze(
-            VuforiaVideoFrameFreezeController.FreezeMode mode,
-            float firstSeconds, float lastSeconds)
-        {
-            _mode = mode;
-            _firstSeconds = Mathf.Max(0f, firstSeconds);
-            _lastSeconds = Mathf.Max(0f, lastSeconds);
-            StopRoutinesInternal();
-            if (_vp == null) return;
-            if (!_vp.gameObject.activeInHierarchy) return;
-            _vp.Stop();
-            _vp.time = 0;
-            if (ModeHasFirst(_mode))
-                _firstRoutine = _host.StartCoroutine(FreezeFirstRoutine());
-            else
-                _vp.Play();
-        }
-
-        public void Pause()
-        {
-            StopRoutinesInternal();
-            if (_vp == null) return;
-            if (!_vp.enabled) return;  // disabled VideoPlayer cannot be paused
-            _vp.Pause();
-        }
-
-        public void Resume()
-        {
-            if (_vp == null) return;
-            _vp.Play();
-        }
-
-        private void OnLoopPointReached(VideoPlayer source)
-        {
-            if (_vp == null) return;
-            if (!ModeHasLast(_mode)) return;
-            if (_lastRoutine != null) return;
-            _lastRoutine = _host.StartCoroutine(FreezeLastRoutine());
-        }
-
-        private IEnumerator FreezeFirstRoutine()
-        {
-            _pausedOnFirstFrame = false;
-            _vp.waitForFirstFrame = true;
-            _vp.sendFrameReadyEvents = true;
-            if (!_frameHooked) { _vp.frameReady += OnFrameReady; _frameHooked = true; }
-            _vp.Prepare();
-            float timeout = Time.realtimeSinceStartup + 5f;
-            while (!_vp.isPrepared && Time.realtimeSinceStartup < timeout) yield return null;
-            _vp.time = 0;
-            _vp.Play();
-            float waitTimeout = Time.realtimeSinceStartup + 0.75f;
-            while (!_pausedOnFirstFrame && Time.realtimeSinceStartup < waitTimeout) yield return null;
-            if (!_pausedOnFirstFrame) _vp.Pause();
-            CleanupFrameReadyHook();
-            if (_firstSeconds > 0f) { yield return new WaitForSeconds(_firstSeconds); _vp.Play(); }
-            _firstRoutine = null;
-        }
-
-        private void OnFrameReady(VideoPlayer source, long frameIdx)
-        {
-            if (_pausedOnFirstFrame) return;
-            if (frameIdx <= 0) { _pausedOnFirstFrame = true; source.Pause(); }
-        }
-
-        private IEnumerator FreezeLastRoutine()
-        {
-            if (_vp.frameCount > 0) _vp.frame = (long)_vp.frameCount - 1;
-            else if (_vp.length > 0.0001)
-            { double t = _vp.length - 0.033; if (t < 0) t = 0; _vp.time = t; }
-            _vp.Pause();
-            if (_lastSeconds > 0f) yield return new WaitForSeconds(_lastSeconds);
-            _lastRoutine = null;
-        }
-
-        private void StopRoutinesInternal()
-        {
-            if (_firstRoutine != null) { _host.StopCoroutine(_firstRoutine); _firstRoutine = null; }
-            if (_lastRoutine != null) { _host.StopCoroutine(_lastRoutine); _lastRoutine = null; }
-            CleanupFrameReadyHook();
-        }
-
-        private void CleanupFrameReadyHook()
-        {
-            if (_vp == null) return;
-            _vp.sendFrameReadyEvents = false;
-            if (_frameHooked) { _vp.frameReady -= OnFrameReady; _frameHooked = false; }
-        }
-
-        private static bool ModeHasFirst(VuforiaVideoFrameFreezeController.FreezeMode mode)
-            => mode.ToString().Contains("First");
-
-        private static bool ModeHasLast(VuforiaVideoFrameFreezeController.FreezeMode mode)
-            => mode.ToString().Contains("Last");
+        return pageType == PageType.TwoD && storyParts != null && storyParts.Count > 0;
     }
+
+    private void Begin2DStoryParts()
+    {
+        Stop2DCoroutines();
+        _2dPaused = false;
+        _currentPartIndex2D = -1;
+        _storyPartsRoutine = StartCoroutine(Run2DStoryParts());
+    }
+
+    private void Stop2DCoroutines()
+    {
+        if (_storyPartsRoutine != null) { StopCoroutine(_storyPartsRoutine); _storyPartsRoutine = null; }
+        if (_timedChangesRoutine != null) { StopCoroutine(_timedChangesRoutine); _timedChangesRoutine = null; }
+
+        foreach (var c in _layerRoutines2D) if (c != null) StopCoroutine(c);
+        _layerRoutines2D.Clear();
+
+        StopAllSmallMotions2D();
+        DisposeActive2DVideoRuntime();
+        _active2DVideos.Clear();
+        Unsubscribe2DAudioEndEvent();
+    }
+
+    private void Reset2DStoryPartsVideos()
+    {
+        if (storyParts == null) return;
+        foreach (var part in storyParts)
+        {
+            if (part == null) continue;
+            if (part.mainVideos != null)
+                foreach (var entry in part.mainVideos)
+                {
+                    if (entry?.video == null) continue;
+                    entry.video.Stop();
+                    entry.video.time = 0;
+                    if (entry.hideAtPartEnd) entry.video.gameObject.SetActive(false);
+                }
+            if (part.backgroundVideos != null)
+                foreach (var entry in part.backgroundVideos)
+                {
+                    if (entry?.video == null) continue;
+                    entry.video.Stop();
+                    if (entry.hideAtPartEnd) entry.video.gameObject.SetActive(false);
+                }
+            HidePartLayersInstant2D(part);
+        }
+    }
+
+    private void Pause2DCurrentPartVideos()
+    {
+        for (int i = 0; i < _active2DVideos.Count; i++)
+        {
+            VideoPlayer vp = _active2DVideos[i];
+            if (vp == null || !vp.gameObject.activeInHierarchy || !vp.enabled) continue;
+            if (_active2DVideoRuntime.TryGetValue(vp, out var rt)) rt.Pause();
+            else if (vp.isPlaying) vp.Pause();
+        }
+    }
+
+    private void Resume2DCurrentPartVideos()
+    {
+        for (int i = 0; i < _active2DVideos.Count; i++)
+        {
+            VideoPlayer vp = _active2DVideos[i];
+            if (vp == null || !vp.gameObject.activeInHierarchy || !vp.enabled) continue;
+            if (_active2DVideoRuntime.TryGetValue(vp, out var rt)) rt.Resume();
+            else if (!vp.isPlaying) vp.Play();
+        }
+    }
+
+    // ── Core sequence ───────────────────────────────────────────────────────────
+
+    private IEnumerator Run2DStoryParts()
+    {
+        if (persistentLayers2D != null)
+        {
+            foreach (var pl in persistentLayers2D)
+            {
+                if (pl?.layer == null) continue;
+                if (!pl.showOnPageStart) continue;
+                pl.layer.gameObject.SetActive(true);
+                if (pl.fadeIn && pl.fadeInDuration > 0f)
+                    _layerRoutines2D.Add(StartCoroutine(FadeLayer2D(pl.layer, 0f, 1f, pl.fadeInDuration)));
+                else
+                    ApplyAlpha2D(pl.layer, 1f);
+                if (pl.enableSmallMotion && pl.motionTarget != null)
+                    StartSmallMotion2D(pl.motionTarget, pl.motionType, pl.motionSpeed, pl.motionAmplitude);
+            }
+        }
+
+        if (commonBackgroundImage != null)
+        {
+            commonBackgroundImage.gameObject.SetActive(true);
+            ApplyAlpha2D(commonBackgroundImage, 1f);
+        }
+
+        foreach (var part in storyParts)
+        {
+            if (part == null) continue;
+            HidePartLayersInstant2D(part);
+        }
+
+        for (int p = 0; p < storyParts.Count; p++)
+        {
+            _currentPartIndex2D = p;
+            var part = storyParts[p];
+            if (part == null) continue;
+
+            ShowPartBackgroundImage2D(part);
+            ShowPartLayers2D(part);
+            StartPartBackgroundVideos2D(part);
+            StartPartMainVideos2D(part);
+
+            if (part.timedChanges != null && part.timedChanges.Count > 0)
+                _timedChangesRoutine = StartCoroutine(RunTimedChanges2D(part));
+
+            yield return WaitForPartEnd2D(part);
+
+            if (_timedChangesRoutine != null) { StopCoroutine(_timedChangesRoutine); _timedChangesRoutine = null; }
+
+            HidePartLayers2D(part);
+            HidePartBackgroundImage2D(part);
+            StopPartMainVideos2D(part);
+            StopPartBackgroundVideos2D(part);
+        }
+
+        if (persistentLayers2D != null)
+        {
+            foreach (var pl in persistentLayers2D)
+            {
+                if (pl?.layer == null || !pl.fadeOutAtPageEnd) continue;
+                yield return FadeLayer2D(pl.layer, 1f, 0f, pl.fadeOutDuration > 0f ? pl.fadeOutDuration : 0.3f);
+            }
+        }
+
+        StopAllSmallMotions2D();
+        _storyPartsRoutine = null;
+        _currentPartIndex2D = -1;
+
+        StartPageEndFade();
+    }
+
+    // ── Part timing ─────────────────────────────────────────────────────────────
+
+    private IEnumerator WaitForPartEnd2D(StoryPart2D part)
+    {
+        switch (part.timing)
+        {
+            case PartTiming2D.AutoFromMainVideo:
+                yield return WaitForPartVideosEnd2D(part);
+                break;
+
+            case PartTiming2D.ManualDuration:
+                yield return WaitPausable2D(Mathf.Max(0.1f, part.manualDuration));
+                break;
+
+            case PartTiming2D.WaitForPageAudioEnd:
+                yield return WaitForPageAudioEnd2D();
+                break;
+
+            case PartTiming2D.WaitForTap:
+                yield return new WaitUntil(() =>
+                    !_2dPaused && (Input.touchCount > 0 || Input.GetMouseButtonDown(0)));
+                break;
+        }
+    }
+
+    private IEnumerator WaitForPartVideosEnd2D(StoryPart2D part)
+    {
+        if (part?.mainVideos == null || part.mainVideos.Count == 0)
+        {
+            yield return WaitPausable2D(Mathf.Max(0.1f, part.manualDuration));
+            yield break;
+        }
+
+        var markedVideos = new List<StoryPartVideo2D>();
+        var nonLoopVideos = new List<StoryPartVideo2D>();
+        bool allLooping = true;
+
+        foreach (var entry in part.mainVideos)
+        {
+            if (entry?.video == null) continue;
+
+            if (entry.waitForPartEnd) markedVideos.Add(entry);
+            if (!entry.loop) { nonLoopVideos.Add(entry); allLooping = false; }
+
+            if (entry.waitForPartEnd && entry.loop)
+                Debug.LogWarning($"[AR] StoryPart '{part.partName}': video '{entry.video.name}' is looping and also marked Wait For Part End. This part may never advance. Use Manual Duration if this is intentional.", entry.video);
+        }
+
+        List<StoryPartVideo2D> watchList = markedVideos.Count > 0 ? markedVideos : nonLoopVideos;
+
+        if (watchList.Count == 0)
+        {
+            if (allLooping)
+                Debug.LogWarning($"[AR] StoryPart '{part.partName}': all main videos are looping in Auto From Main Video mode. Falling back to Manual Duration ({part.manualDuration}s).", this);
+            yield return WaitPausable2D(Mathf.Max(0.1f, part.manualDuration));
+            yield break;
+        }
+
+        int n = watchList.Count;
+        bool[] started = new bool[n];
+        bool[] ended = new bool[n];
+
+        float elapsedTimeout = 0f;
+        const float timeoutSeconds = 600f;
+
+        while (elapsedTimeout < timeoutSeconds)
+        {
+            if (_2dPaused) { yield return null; continue; }
+            elapsedTimeout += Time.deltaTime;
+
+            bool allEnded = true;
+            for (int i = 0; i < n; i++)
+            {
+                StoryPartVideo2D entry = watchList[i];
+                VideoPlayer vp = entry.video;
+
+                if (vp == null) { ended[i] = true; continue; }
+                if (ended[i]) continue;
+
+                if (!started[i])
+                {
+                    if (vp.isPlaying && vp.time > 0.1) started[i] = true;
+                    allEnded = false;
+                }
+                else
+                {
+                    if (!vp.isPlaying)
+                    {
+                        if (entry.delayAfterFinish > 0f)
+                            yield return WaitPausable2D(entry.delayAfterFinish);
+                        ended[i] = true;
+                    }
+                    else
+                    {
+                        allEnded = false;
+                    }
+                }
+            }
+
+            if (allEnded) yield break;
+            yield return null;
+        }
+
+        Debug.LogWarning($"[AR] StoryPart '{part.partName}' Auto From Main Video reached safety timeout. Advancing to next part to prevent a stuck page.", this);
+    }
+
+    private IEnumerator WaitForPageAudioEnd2D()
+    {
+        Unsubscribe2DAudioEndEvent();
+        _audioEndReceived2D = false;
+        _audioEndHandler2D = (id) =>
+        {
+            if (id == pageId) _audioEndReceived2D = true;
+        };
+
+        ARMediaManager.OnVoiceCompleted += _audioEndHandler2D;
+
+        float elapsedTimeout = 0f;
+        const float timeoutSeconds = 600f;
+        while (!_audioEndReceived2D && elapsedTimeout < timeoutSeconds)
+        {
+            if (!_2dPaused) elapsedTimeout += Time.deltaTime;
+            yield return null;
+        }
+
+        if (!_audioEndReceived2D)
+            Debug.LogWarning($"[AR] Page '{pageId}' waited for page audio end but no matching OnVoiceCompleted event arrived. Advancing safely.", this);
+
+        Unsubscribe2DAudioEndEvent();
+    }
+
+    private void Unsubscribe2DAudioEndEvent()
+    {
+        if (_audioEndHandler2D == null) return;
+        ARMediaManager.OnVoiceCompleted -= _audioEndHandler2D;
+        _audioEndHandler2D = null;
+        _audioEndReceived2D = false;
+    }
+
+    private IEnumerator WaitPausable2D(float seconds)
+    {
+        float remaining = seconds;
+        while (remaining > 0f)
+        {
+            if (!_2dPaused) remaining -= Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    // ── Timed changes ────────────────────────────────────────────────────────────
+
+    private IEnumerator RunTimedChanges2D(StoryPart2D part)
+    {
+        float elapsed = 0f;
+        var changes = part.timedChanges;
+        bool[] fired = new bool[changes.Count];
+
+        while (true)
+        {
+            if (!_2dPaused) elapsed += Time.deltaTime;
+
+            bool allDone = true;
+            for (int i = 0; i < changes.Count; i++)
+            {
+                if (fired[i]) continue;
+                allDone = false;
+                var tc = changes[i];
+                if (tc == null || tc.target == null) { fired[i] = true; continue; }
+                if (elapsed >= tc.atSeconds)
+                {
+                    fired[i] = true;
+                    ApplyTimedAction2D(tc);
+                }
+            }
+            if (allDone) yield break;
+            yield return null;
+        }
+    }
+
+    private void ApplyTimedAction2D(TimedChange2D tc)
+    {
+        if (tc.target == null) return;
+
+        switch (tc.action)
+        {
+            case TimedAction2D.Show:
+                tc.target.SetActive(true);
+                break;
+
+            case TimedAction2D.Hide:
+                tc.target.SetActive(false);
+                break;
+
+            case TimedAction2D.FadeIn:
+                tc.target.SetActive(true);
+                _layerRoutines2D.Add(StartCoroutine(FadeLayer2D(tc.target.transform, 0f, 1f, tc.fadeDuration > 0f ? tc.fadeDuration : 0.4f)));
+                break;
+
+            case TimedAction2D.FadeOut:
+                _layerRoutines2D.Add(StartCoroutine(FadeLayer2D(tc.target.transform, 1f, 0f, tc.fadeDuration > 0f ? tc.fadeDuration : 0.4f)));
+                break;
+
+            case TimedAction2D.PlayVideo:
+            {
+                VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
+                if (vp != null && vp.gameObject.activeInHierarchy && vp.enabled)
+                {
+                    TrackActive2DVideo(vp);
+                    vp.time = 0;
+                    vp.Play();
+                }
+                break;
+            }
+
+            case TimedAction2D.StopVideo:
+            {
+                VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
+                if (vp != null)
+                {
+                    vp.Stop();
+                    vp.time = 0;
+                    UntrackActive2DVideo(vp);
+                }
+                break;
+            }
+
+            case TimedAction2D.PauseVideo:
+            {
+                VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
+                if (vp != null && vp.isPlaying) vp.Pause();
+                break;
+            }
+
+            case TimedAction2D.ResumeVideo:
+            {
+                VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
+                if (vp != null && vp.gameObject.activeInHierarchy && vp.enabled)
+                {
+                    TrackActive2DVideo(vp);
+                    if (!vp.isPlaying) vp.Play();
+                }
+                break;
+            }
+
+            case TimedAction2D.SetVideoSpeed:
+            {
+                VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
+                if (vp != null) vp.playbackSpeed = Mathf.Max(0.1f, tc.videoSpeed);
+                break;
+            }
+        }
+    }
+
+    // ── Layer show / hide ────────────────────────────────────────────────────────
+
+    private void ShowPartLayers2D(StoryPart2D part)
+    {
+        if (part?.visualLayers == null) return;
+        foreach (var vl in part.visualLayers)
+        {
+            if (vl?.layer == null) continue;
+            if (!vl.showAtPartStart) continue;
+            _layerRoutines2D.Add(StartCoroutine(ShowVisualLayer2DRoutine(vl)));
+            if (vl.enableSmallMotion && vl.motionTarget != null)
+                StartSmallMotion2D(vl.motionTarget, vl.motionType, vl.motionSpeed, vl.motionAmplitude);
+        }
+    }
+
+    private IEnumerator ShowVisualLayer2DRoutine(VisualLayer2D vl)
+    {
+        if (vl.startDelay > 0f) yield return WaitPausable2D(vl.startDelay);
+        vl.layer.gameObject.SetActive(true);
+        if (vl.fadeIn && vl.fadeInDuration > 0f)
+            yield return FadeLayer2D(vl.layer, 0f, 1f, vl.fadeInDuration);
+        else
+            ApplyAlpha2D(vl.layer, 1f);
+
+        if (vl.visibleDuration > 0f)
+        {
+            yield return WaitPausable2D(vl.visibleDuration);
+            if (vl.layer != null)
+            {
+                if (vl.fadeOut && vl.fadeOutDuration > 0f)
+                    yield return FadeLayer2D(vl.layer, 1f, 0f, vl.fadeOutDuration);
+                ApplyAlpha2D(vl.layer, 0f);
+                vl.layer.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void HidePartLayers2D(StoryPart2D part)
+    {
+        if (part?.visualLayers == null) return;
+        foreach (var vl in part.visualLayers)
+        {
+            if (vl?.layer == null) continue;
+            if (vl.keepVisibleIntoNextPart) continue;
+            if (!vl.hideAtPartEnd) continue;
+            _layerRoutines2D.Add(StartCoroutine(HideVisualLayer2DRoutine(vl)));
+        }
+    }
+
+    private IEnumerator HideVisualLayer2DRoutine(VisualLayer2D vl)
+    {
+        if (vl.fadeOut && vl.fadeOutDuration > 0f)
+            yield return FadeLayer2D(vl.layer, 1f, 0f, vl.fadeOutDuration);
+        if (vl.layer != null)
+        {
+            StopSmallMotion2D(vl.motionTarget);
+            ApplyAlpha2D(vl.layer, 0f);
+            vl.layer.gameObject.SetActive(false);
+        }
+    }
+
+    private void HidePartLayersInstant2D(StoryPart2D part)
+    {
+        if (part == null) return;
+        if (part.visualLayers != null)
+        {
+            foreach (var vl in part.visualLayers)
+            {
+                if (vl?.layer == null) continue;
+                StopSmallMotion2D(vl.motionTarget);
+                ApplyAlpha2D(vl.layer, 0f);
+                vl.layer.gameObject.SetActive(false);
+            }
+        }
+        if (part.backgroundImage != null)
+        {
+            ApplyAlpha2D(part.backgroundImage, 0f);
+            part.backgroundImage.gameObject.SetActive(false);
+        }
+    }
+
+    private void ShowPartBackgroundImage2D(StoryPart2D part)
+    {
+        if (part?.backgroundImage == null) return;
+        part.backgroundImage.gameObject.SetActive(true);
+        ApplyAlpha2D(part.backgroundImage, 1f);
+    }
+
+    private void HidePartBackgroundImage2D(StoryPart2D part)
+    {
+        if (part?.backgroundImage == null) return;
+        ApplyAlpha2D(part.backgroundImage, 0f);
+        part.backgroundImage.gameObject.SetActive(false);
+    }
+
+    // ── Videos ──────────────────────────────────────────────────────────────────
+
+    private void StartPartMainVideos2D(StoryPart2D part)
+    {
+        if (part?.mainVideos == null) return;
+
+        foreach (var entry in part.mainVideos)
+        {
+            if (entry?.video == null) continue;
+            VideoPlayer vp = entry.video;
+
+            if (!vp.gameObject.activeSelf) vp.gameObject.SetActive(true);
+            if (!vp.gameObject.activeInHierarchy || !vp.enabled) continue;
+
+            vp.Stop();
+            vp.time = 0;
+            vp.isLooping = entry.loop;
+            vp.playbackSpeed = Mathf.Max(0.01f, entry.playbackSpeed);
+
+            TrackActive2DVideo(vp);
+
+            VideoFreezeRuntime runtime = GetOrCreate2DVideoRuntime(vp);
+            runtime.RestartWithFreeze(entry.freezeMode, entry.freezeFirstSeconds, entry.freezeLastSeconds, entry.playbackSpeed, entry.startDelay);
+        }
+    }
+
+    private IEnumerator DelayedPlayVideo2D(VideoPlayer vp, float delay)
+    {
+        yield return WaitPausable2D(delay);
+        if (vp != null && vp.gameObject.activeInHierarchy && vp.enabled && !vp.isPlaying)
+        {
+            TrackActive2DVideo(vp);
+            vp.Play();
+        }
+    }
+
+    private void StopPartMainVideos2D(StoryPart2D part)
+    {
+        if (part?.mainVideos == null) return;
+
+        foreach (var entry in part.mainVideos)
+        {
+            if (entry?.video == null) continue;
+            if (!entry.stopAtPartEnd) continue;
+
+            VideoPlayer vp = entry.video;
+            if (vp.enabled && vp.gameObject.activeInHierarchy)
+            {
+                vp.Stop();
+                vp.time = 0;
+            }
+
+            UntrackActive2DVideo(vp);
+
+            if (entry.hideAtPartEnd)
+                vp.gameObject.SetActive(false);
+        }
+    }
+
+    private void StartPartBackgroundVideos2D(StoryPart2D part)
+    {
+        if (part?.backgroundVideos == null) return;
+
+        foreach (var entry in part.backgroundVideos)
+        {
+            if (entry?.video == null) continue;
+            VideoPlayer vp = entry.video;
+
+            if (!vp.gameObject.activeSelf) vp.gameObject.SetActive(true);
+            if (!vp.gameObject.activeInHierarchy || !vp.enabled) continue;
+
+            vp.Stop();
+            if (part.restartBackgroundOnSlotStart) vp.time = 0;
+            vp.isLooping = entry.loop;
+
+            TrackActive2DVideo(vp);
+
+            if (entry.fadeIn && entry.fadeInDuration > 0f)
+                _layerRoutines2D.Add(StartCoroutine(FadeLayer2D(vp.transform, 0f, 1f, entry.fadeInDuration)));
+            else
+                ApplyAlpha2D(vp.transform, 1f);
+
+            bool hasFreezeEffect = entry.freezeFirstSeconds > 0f || entry.freezeLastSeconds > 0f;
+            if (hasFreezeEffect)
+            {
+                // FreezeFirstFrame or FreezeLastFrameThenStop — pick first if both set
+                var fMode = entry.freezeFirstSeconds > 0f
+                    ? VuforiaVideoFrameFreezeController.FreezeMode.FreezeFirstFrame
+                    : VuforiaVideoFrameFreezeController.FreezeMode.FreezeLastFrameThenStop;
+
+                VideoFreezeRuntime rt = GetOrCreate2DVideoRuntime(vp);
+                rt.RestartWithFreeze(fMode, entry.freezeFirstSeconds, entry.freezeLastSeconds, entry.playbackSpeed, entry.startDelay);
+            }
+            else if (entry.startDelay > 0f)
+            {
+                vp.playbackSpeed = Mathf.Max(0.01f, entry.playbackSpeed);
+                _layerRoutines2D.Add(StartCoroutine(DelayedPlayVideo2D(vp, entry.startDelay)));
+            }
+            else
+            {
+                vp.playbackSpeed = Mathf.Max(0.01f, entry.playbackSpeed);
+                vp.Play();
+            }
+        }
+    }
+
+    private void StopPartBackgroundVideos2D(StoryPart2D part)
+    {
+        if (part?.backgroundVideos == null) return;
+
+        foreach (var entry in part.backgroundVideos)
+        {
+            if (entry?.video == null) continue;
+            // Videos with stopAtPartEnd=false carry on into the next slot intentionally.
+            // They remain tracked so pause/resume on tracking-lost still works.
+            if (!entry.stopAtPartEnd) continue;
+            UntrackActive2DVideo(entry.video);
+            _layerRoutines2D.Add(StartCoroutine(StopBackgroundVideoAfterFade2D(entry)));
+        }
+    }
+
+    private IEnumerator StopBackgroundVideoAfterFade2D(StoryPartBgVideo2D entry)
+    {
+        VideoPlayer vp = entry?.video;
+        if (vp == null) yield break;
+
+        if (entry.fadeOut && entry.fadeOutDuration > 0f)
+            yield return FadeLayer2D(vp.transform, 1f, 0f, entry.fadeOutDuration);
+
+        if (vp.enabled && vp.gameObject.activeInHierarchy)
+        {
+            vp.Stop();
+            vp.time = 0;
+        }
+
+        UntrackActive2DVideo(vp);
+
+        if (entry.hideAtPartEnd)
+            vp.gameObject.SetActive(false);
+    }
+
+    private void TrackActive2DVideo(VideoPlayer vp)
+    {
+        if (vp == null) return;
+        if (!_active2DVideos.Contains(vp)) _active2DVideos.Add(vp);
+    }
+
+    private void UntrackActive2DVideo(VideoPlayer vp)
+    {
+        if (vp == null) return;
+        _active2DVideos.Remove(vp);
+        if (_active2DVideoRuntime.TryGetValue(vp, out var rt))
+        {
+            rt.Dispose();
+            _active2DVideoRuntime.Remove(vp);
+        }
+    }
+
+    private VideoFreezeRuntime GetOrCreate2DVideoRuntime(VideoPlayer vp)
+    {
+        if (vp == null) return null;
+        if (!_active2DVideoRuntime.TryGetValue(vp, out var rt) || rt == null)
+        {
+            rt = new VideoFreezeRuntime(this, vp);
+            _active2DVideoRuntime[vp] = rt;
+        }
+        return rt;
+    }
+
+    private void DisposeActive2DVideoRuntime()
+    {
+        foreach (var kv in _active2DVideoRuntime)
+            kv.Value?.Dispose();
+        _active2DVideoRuntime.Clear();
+    }
+
+    // ── Small motion ─────────────────────────────────────────────────────────────
+
+    private void StartSmallMotion2D(Transform motionTarget, SmallMotionType motionType, float motionSpeed, float motionAmplitude)
+    {
+        if (motionTarget == null) return;
+
+        StopSmallMotion2D(motionTarget);
+
+        if (!_smallMotionBasePosition2D.ContainsKey(motionTarget))
+            _smallMotionBasePosition2D[motionTarget] = motionTarget.localPosition;
+
+        Coroutine c = StartCoroutine(SmallMotionRoutine2D(motionTarget, motionType, motionSpeed, motionAmplitude));
+        _smallMotionByTarget2D[motionTarget] = c;
+        _smallMotionRoutines.Add(c);
+    }
+
+    private void StopSmallMotion2D(Transform motionTarget)
+    {
+        if (motionTarget == null) return;
+
+        if (_smallMotionByTarget2D.TryGetValue(motionTarget, out var c) && c != null)
+        {
+            StopCoroutine(c);
+            _smallMotionRoutines.Remove(c);
+        }
+
+        _smallMotionByTarget2D.Remove(motionTarget);
+
+        if (_smallMotionBasePosition2D.TryGetValue(motionTarget, out var basePos))
+        {
+            motionTarget.localPosition = basePos;
+            _smallMotionBasePosition2D.Remove(motionTarget);
+        }
+    }
+
+    private void StopAllSmallMotions2D()
+    {
+        foreach (var kv in _smallMotionByTarget2D)
+        {
+            if (kv.Value != null) StopCoroutine(kv.Value);
+            if (kv.Key != null && _smallMotionBasePosition2D.TryGetValue(kv.Key, out var basePos))
+                kv.Key.localPosition = basePos;
+        }
+
+        foreach (var c in _smallMotionRoutines)
+            if (c != null) StopCoroutine(c);
+
+        _smallMotionByTarget2D.Clear();
+        _smallMotionBasePosition2D.Clear();
+        _smallMotionRoutines.Clear();
+    }
+
+    private IEnumerator SmallMotionRoutine2D(Transform motionTarget, SmallMotionType motionType, float motionSpeed, float motionAmplitude)
+    {
+        if (motionTarget == null) yield break;
+
+        Vector3 baseLocalPos = _smallMotionBasePosition2D.TryGetValue(motionTarget, out var stored)
+            ? stored
+            : motionTarget.localPosition;
+
+        float elapsed = 0f;
+
+        while (true)
+        {
+            if (!_2dPaused) elapsed += Time.deltaTime;
+
+            Vector3 pos = baseLocalPos;
+            switch (motionType)
+            {
+                case SmallMotionType.DriftX:
+                    pos.x = baseLocalPos.x + Mathf.Sin(elapsed * motionSpeed) * motionAmplitude;
+                    break;
+                case SmallMotionType.DriftY:
+                    pos.y = baseLocalPos.y + Mathf.Sin(elapsed * motionSpeed) * motionAmplitude;
+                    break;
+                case SmallMotionType.PingPongX:
+                    pos.x = baseLocalPos.x + Mathf.PingPong(elapsed * motionSpeed, motionAmplitude * 2f) - motionAmplitude;
+                    break;
+                case SmallMotionType.PingPongY:
+                    pos.y = baseLocalPos.y + Mathf.PingPong(elapsed * motionSpeed, motionAmplitude * 2f) - motionAmplitude;
+                    break;
+            }
+
+            motionTarget.localPosition = pos;
+            yield return null;
+        }
+    }
+
+    // ── Alpha / Fade helpers ─────────────────────────────────────────────────────
+
+    private IEnumerator FadeLayer2D(Transform layer, float from, float to, float duration)
+    {
+        if (layer == null) yield break;
+
+        ApplyAlpha2D(layer, from);
+
+        if (duration <= 0f)
+        {
+            ApplyAlpha2D(layer, to);
+            yield break;
+        }
+
+        float t = 0f;
+        while (t < duration)
+        {
+            if (_2dPaused) { yield return null; continue; }
+            t += Time.deltaTime;
+            ApplyAlpha2D(layer, Mathf.Lerp(from, to, Mathf.Clamp01(t / duration)));
+            yield return null;
+        }
+
+        ApplyAlpha2D(layer, to);
+    }
+
+    private static void ApplyAlpha2D(Transform layer, float a)
+    {
+        if (layer == null) return;
+
+        CanvasGroup cg = layer.GetComponent<CanvasGroup>();
+        if (cg != null)
+        {
+            cg.alpha = a;
+            return;
+        }
+
+        foreach (SpriteRenderer sr in layer.GetComponentsInChildren<SpriteRenderer>(true))
+        {
+            if (sr == null) continue;
+            Color c = sr.color;
+            c.a = a;
+            sr.color = c;
+        }
+
+        foreach (Graphic g in layer.GetComponentsInChildren<Graphic>(true))
+        {
+            if (g == null) continue;
+            Color c = g.color;
+            c.a = a;
+            g.color = c;
+        }
+
+        foreach (Renderer r in layer.GetComponentsInChildren<Renderer>(true))
+        {
+            if (r == null || r is SpriteRenderer) continue;
+            Material[] mats = r.materials;
+            for (int i = 0; i < mats.Length; i++)
+            {
+                Material m = mats[i];
+                if (m == null) continue;
+
+                if (m.HasProperty("_BaseColor"))
+                {
+                    Color c = m.GetColor("_BaseColor");
+                    c.a = a;
+                    m.SetColor("_BaseColor", c);
+                }
+                else if (m.HasProperty("_Color"))
+                {
+                    Color c = m.GetColor("_Color");
+                    c.a = a;
+                    m.SetColor("_Color", c);
+                }
+            }
+        }
+    }
+
 }

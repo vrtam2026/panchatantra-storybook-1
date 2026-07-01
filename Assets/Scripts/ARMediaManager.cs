@@ -574,6 +574,7 @@ public class ARMediaManager : MonoBehaviour
         }
 
         ShowReplayIfActiveAndTracked();
+        StartPostVoiceBgm();
 
         if (anyClipPlayed && _activeNode != null)
         {

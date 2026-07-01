@@ -1961,12 +1961,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ARTrackedPageNode
   pageId: S1_P-intro
   mediaManager: {fileID: 0}
+  pageType: 0
+  layerRoot2D: {fileID: 0}
+  commonBackgroundImage: {fileID: 0}
+  persistentLayers2D: []
+  storyParts: []
   mainVideos:
   - {fileID: 5547159912523042725}
   backgroundLoopVideos: []
+  mainVideoSettings: []
+  backgroundVideoSettings: []
   animators: []
   splineMovers: []
   splinePathMovers: []
+  pageEndTrigger3D: 0
   freezeMode: 0
   freezeFirstSeconds: 0
   freezeLastSeconds: 0

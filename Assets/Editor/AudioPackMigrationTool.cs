@@ -14,7 +14,7 @@ using UnityEngine;
 /// Registers all assets as Addressable in Audio_English / Audio_Hindi groups.
 /// Fills AudioLanguageCatalog with all entries.
 ///
-/// Menu: Tools → Panchatantra → Migrate Audio Packs from Database
+/// Menu: Tools → AR Storybook → Migrate Audio Packs from Database
 /// </summary>
 public static class AudioPackMigrationTool
 {
@@ -25,7 +25,7 @@ public static class AudioPackMigrationTool
     private const string EnglishGroup    = "Audio_English";
     private const string HindiGroup      = "Audio_Hindi";
 
-    [MenuItem("Tools/Panchatantra/Migrate Audio Packs from Database")]
+    [MenuItem("Tools/AR Storybook/Migrate Audio Packs from Database")]
     public static void Run()
     {
         // ── Load dependencies ──────────────────────────────────────────────

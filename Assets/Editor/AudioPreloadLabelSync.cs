@@ -10,7 +10,7 @@ using UnityEngine;
 ///
 /// HOW TO USE:
 ///   1. Mark any prefab as Preload in Addressables Groups window as usual.
-///   2. Go to Tools → Panchatantra → Sync Audio Preload Labels  (one click).
+///   2. Go to Tools → AR Storybook → Sync Audio Preload Labels  (one click).
 ///   3. Done — matching audio entries in Audio_English and Audio_Hindi get Preload too.
 ///
 /// Also auto-triggers every time Addressables settings are saved.
@@ -22,7 +22,7 @@ public static class AudioPreloadLabelSync
 
     // ─── Manual menu trigger ─────────────────────────────────────────────────
 
-    [MenuItem("Tools/Panchatantra/Sync Audio Preload Labels")]
+    [MenuItem("Tools/AR Storybook/Sync Audio Preload Labels")]
     public static void SyncNowMenu()
     {
         SyncNow();
@@ -164,6 +164,7 @@ class AudioPreloadAutoSync : AssetPostprocessor
         string[] importedAssets, string[] deletedAssets,
         string[] movedAssets,    string[] movedFromAssetPaths)
     {
+        if (Application.isPlaying) return;
         foreach (var path in importedAssets)
         {
             if (path.Contains("AddressableAssetSettings") && path.EndsWith(".asset"))

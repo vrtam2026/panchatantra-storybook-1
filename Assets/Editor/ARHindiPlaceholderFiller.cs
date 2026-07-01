@@ -6,13 +6,13 @@ using UnityEngine;
 /// Fills all Hindi ARPageAudioPack assets with a chosen placeholder AudioClip
 /// so you can test language switching across all pages before real Hindi audio arrives.
 ///
-/// Menu: Tools → Panchatantra → Fill Hindi Packs with Placeholder Audio
+/// Menu: Tools → AR Storybook → Fill Hindi Packs with Placeholder Audio
 /// </summary>
 public static class ARHindiPlaceholderFiller
 {
     private const string HindiPackDir = "Assets/code/AudioPacks/Hindi";
 
-    [MenuItem("Tools/Panchatantra/Fill Hindi Packs with Placeholder Audio")]
+    [MenuItem("Tools/AR Storybook/Fill Hindi Packs with Placeholder Audio")]
     public static void Run()
     {
         // Step 1: pick a placeholder clip from the project
