@@ -13717,6 +13717,7 @@ MonoBehaviour:
   - {fileID: 2708125747904083927}
   splineMovers: []
   splinePathMovers: []
+  modelSlots: []
   pageEndTrigger3D: 0
   freezeMode: 0
   freezeFirstSeconds: 0

@@ -58,7 +58,7 @@ public class CustomARHandler : MonoBehaviour
     private bool _uiVisible = false;
     private float _autoHideTimer = 0f;
     private float _uiShownAt = 0f;
-    private const float MinUiToggleOffDelay = 0.8f;
+    private const float MinUiToggleOffDelay = 0.3f;
 
     // Tracks whether the current touch/drag started on a UI element.
     // While touch is held on UI, auto-hide timer is frozen.
