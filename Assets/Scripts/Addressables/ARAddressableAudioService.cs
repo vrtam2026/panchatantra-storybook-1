@@ -69,7 +69,7 @@ public class ARAddressableAudioService : MonoBehaviour
             return false;
         }
 
-        if (!catalog.TryGetAddress(language, pageId, out string address))
+        if (!catalog.TryGetAudioPack(language, pageId, out var audioPackRef))
         {
             Debug.LogWarning($"[AR-AUDIO] No catalog entry for lang:'{language}' page:'{pageId}'");
             return false;
@@ -83,7 +83,7 @@ public class ARAddressableAudioService : MonoBehaviour
             cached.IsDone &&
             cached.Status == AsyncOperationStatus.Succeeded)
         {
-            Debug.Log($"[AR-AUDIO] Cache hit: {address}");
+            Debug.Log($"[AR-AUDIO] Cache hit: {language} {pageId}");
             if (requestId == getLatestRequestId())
                 onLoaded?.Invoke(cached.Result, true);
             return true;
@@ -94,7 +94,7 @@ public class ARAddressableAudioService : MonoBehaviour
         // a released handle, silently dropping audio.
         if (_cache.TryGetValue(cacheKey, out var inFlight) && inFlight.IsValid() && !inFlight.IsDone)
         {
-            Debug.Log($"[AR-AUDIO] Attaching to in-flight download: {address}");
+            Debug.Log($"[AR-AUDIO] Attaching to in-flight download: {language} {pageId}");
             inFlight.Completed += op =>
             {
                 if (!op.IsValid()) return;
@@ -119,9 +119,9 @@ public class ARAddressableAudioService : MonoBehaviour
             _cache.Remove(cacheKey);
         }
 
-        Debug.Log($"[AR-AUDIO] Downloading audio pack: {address}");
+        Debug.Log($"[AR-AUDIO] Downloading audio pack: {language} {pageId}");
 
-        var handle = Addressables.LoadAssetAsync<ARPageAudioPack>(address);
+        var handle = audioPackRef.LoadAssetAsync<ARPageAudioPack>();
         _cache[cacheKey] = handle;
 
         handle.Completed += op =>
@@ -136,7 +136,7 @@ public class ARAddressableAudioService : MonoBehaviour
             }
             else
             {
-                Debug.LogError($"[AR-AUDIO] Failed to load audio pack: {address} — {op.OperationException?.Message}");
+                Debug.LogError($"[AR-AUDIO] Failed to load audio pack: {language} {pageId} — {op.OperationException?.Message}");
                 _cache.Remove(cacheKey);
                 if (requestId == getLatestRequestId())
                     onLoaded?.Invoke(null, false);
@@ -153,14 +153,14 @@ public class ARAddressableAudioService : MonoBehaviour
     public void PreloadAudioPack(string language, string pageId)
     {
         if (catalog == null) return;
-        if (!catalog.TryGetAddress(language, pageId, out string address)) return;
+        if (!catalog.TryGetAudioPack(language, pageId, out var audioPackRef)) return;
 
         string cacheKey = MakeKey(language, pageId);
         if (_cache.ContainsKey(cacheKey)) return; // already loading or cached
 
-        Debug.Log($"[AR-AUDIO] Preloading audio pack: {address}");
+        Debug.Log($"[AR-AUDIO] Preloading audio pack: {language} {pageId}");
 
-        var handle = Addressables.LoadAssetAsync<ARPageAudioPack>(address);
+        var handle = audioPackRef.LoadAssetAsync<ARPageAudioPack>();
         _cache[cacheKey] = handle;
 
         handle.Completed += op =>
@@ -168,14 +168,42 @@ public class ARAddressableAudioService : MonoBehaviour
             if (!op.IsValid()) return;
             if (op.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogWarning($"[AR-AUDIO] Preload failed: {address}");
+                Debug.LogWarning($"[AR-AUDIO] Preload failed: {language} {pageId}");
                 _cache.Remove(cacheKey);
             }
             else
             {
-                Debug.Log($"[AR-AUDIO] Preload complete: {address}");
+                Debug.Log($"[AR-AUDIO] Preload complete: {language} {pageId}");
             }
         };
+    }
+
+    /// <summary>
+    /// Every distinct language name currently present in the catalog. Always up to
+    /// date -- add a language's audio via the Editor tool (which adds catalog
+    /// entries) and it shows up here automatically on the next run, no code change.
+    /// </summary>
+    public List<string> GetAllLanguages()
+    {
+        var languages = new List<string>();
+        if (catalog == null) return languages;
+
+        foreach (var entry in catalog.GetAllEntries())
+        {
+            if (entry == null || string.IsNullOrWhiteSpace(entry.languageName)) continue;
+
+            bool alreadyListed = false;
+            foreach (var l in languages)
+            {
+                if (string.Equals(l, entry.languageName, StringComparison.OrdinalIgnoreCase))
+                {
+                    alreadyListed = true;
+                    break;
+                }
+            }
+            if (!alreadyListed) languages.Add(entry.languageName);
+        }
+        return languages;
     }
 
     public bool HasCachedPack(string language, string pageId)
@@ -247,7 +275,7 @@ public class ARAddressableAudioService : MonoBehaviour
             {
                 Language = entry.languageName,
                 PageId   = entry.pageId,
-                Address  = entry.address,
+                Address  = entry.audioPack != null ? entry.audioPack.AssetGUID : "",
                 State    = PackState.NotLoaded,
                 Progress = 0f
             };

@@ -31,6 +31,7 @@ public class ModelInteraction : MonoBehaviour
     public float maxScale = 3f;
 
     Transform _model;
+    Renderer[] _modelRenderers;
     Vector3 _originalLocalPosition;
     Quaternion _originalLocalRotation;
     Vector3 _originalLocalScale;
@@ -104,6 +105,7 @@ public class ModelInteraction : MonoBehaviour
 
         Current = this;
         _model = spawnedModel.transform;
+        _modelRenderers = _model.GetComponentsInChildren<Renderer>();
 
         _originalLocalPosition = _model.localPosition;
         _originalLocalRotation = _model.localRotation;
@@ -264,12 +266,14 @@ public class ModelInteraction : MonoBehaviour
 
     private Vector3 GetRendererWorldCenter()
     {
-        var renderers = _model.GetComponentsInChildren<Renderer>();
-        if (renderers.Length == 0) return _model.position;
+        // Cached once in Init() -- the model's renderer hierarchy doesn't change during
+        // a pinch gesture, so there's no need to re-walk the hierarchy every call (this
+        // runs twice per frame while pinching).
+        if (_modelRenderers == null || _modelRenderers.Length == 0) return _model.position;
 
-        Bounds combined = renderers[0].bounds;
-        for (int i = 1; i < renderers.Length; i++)
-            combined.Encapsulate(renderers[i].bounds);
+        Bounds combined = _modelRenderers[0].bounds;
+        for (int i = 1; i < _modelRenderers.Length; i++)
+            combined.Encapsulate(_modelRenderers[i].bounds);
 
         return combined.center;
     }
@@ -341,6 +345,7 @@ public class ModelInteraction : MonoBehaviour
 
         if (Current == this) Current = null;
         _model = null;
+        _modelRenderers = null;
     }
 }
 

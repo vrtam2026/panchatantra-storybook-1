@@ -34,8 +34,6 @@ public class ARWindowManager : MonoBehaviour
 
     // ─────────────────────────────────────────────────────────────────────────
 
-    private static readonly string[] Languages = { "English", "Hindi" };
-
     private CustomARHandler[] _cachedHandlers;
 
     void Awake()
@@ -75,6 +73,7 @@ public class ARWindowManager : MonoBehaviour
         int to   = index + windowSize;
 
         var audioService = ARAddressableAudioService.Instance;
+        var languages = audioService != null ? audioService.GetAllLanguages() : new List<string>();
 
         var allHandlers = _cachedHandlers;
 
@@ -89,7 +88,7 @@ public class ARWindowManager : MonoBehaviour
             {
                 // Pre-download audio for neighbours so it is ready before they are scanned
                 if (audioService != null && !string.IsNullOrEmpty(entry.pageId))
-                    foreach (var lang in Languages)
+                    foreach (var lang in languages)
                         audioService.PreloadAudioPack(lang, entry.pageId);
             }
             else
@@ -108,7 +107,7 @@ public class ARWindowManager : MonoBehaviour
 
                 // Release audio for all languages
                 if (audioService != null && !string.IsNullOrEmpty(entry.pageId))
-                    foreach (var lang in Languages)
+                    foreach (var lang in languages)
                         audioService.ReleaseAudioPack(lang, entry.pageId);
             }
         }

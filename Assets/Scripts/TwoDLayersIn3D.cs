@@ -66,6 +66,13 @@ public class TwoDLayersIn3D : MonoBehaviour
         [System.NonSerialized] public bool motionTypeReady;
         [System.NonSerialized] public float currentAlpha;
         [System.NonSerialized] public Coroutine fadeCoroutine;
+
+        // Resolved once on first SafeSetAlpha call instead of walking the hierarchy
+        // every frame during a fade -- layer hierarchies are static art, so this
+        // never needs to be re-resolved after the first lookup.
+        [System.NonSerialized] public SpriteRenderer cachedSpriteRenderer;
+        [System.NonSerialized] public MeshRenderer cachedMeshRenderer;
+        [System.NonSerialized] public bool rendererResolved;
     }
 
     // ── Inspector ─────────────────────────────────────────────────
@@ -349,30 +356,36 @@ public class TwoDLayersIn3D : MonoBehaviour
 
         e.currentAlpha = alpha;
 
-        // SpriteRenderer -- direct color alpha
-        var sr = e.layerTransform.GetComponentInChildren<SpriteRenderer>(true);
-        if (sr != null)
+        if (!e.rendererResolved)
         {
-            var c = sr.color; c.a = alpha;
-            sr.color = c;
+            e.cachedSpriteRenderer = e.layerTransform.GetComponentInChildren<SpriteRenderer>(true);
+            if (e.cachedSpriteRenderer == null)
+                e.cachedMeshRenderer = e.layerTransform.GetComponentInChildren<MeshRenderer>(true);
+            e.rendererResolved = true;
+        }
+
+        // SpriteRenderer -- direct color alpha
+        if (e.cachedSpriteRenderer != null)
+        {
+            var c = e.cachedSpriteRenderer.color; c.a = alpha;
+            e.cachedSpriteRenderer.color = c;
             return;
         }
 
         // MeshRenderer -- URP material _BaseColor or legacy _Color
-        var mr = e.layerTransform.GetComponentInChildren<MeshRenderer>(true);
-        if (mr != null && mr.material != null)
+        if (e.cachedMeshRenderer != null && e.cachedMeshRenderer.material != null)
         {
-            if (mr.material.HasProperty("_BaseColor"))
+            if (e.cachedMeshRenderer.material.HasProperty("_BaseColor"))
             {
-                var c = mr.material.GetColor("_BaseColor");
+                var c = e.cachedMeshRenderer.material.GetColor("_BaseColor");
                 c.a = alpha;
-                mr.material.SetColor("_BaseColor", c);
+                e.cachedMeshRenderer.material.SetColor("_BaseColor", c);
             }
-            else if (mr.material.HasProperty("_Color"))
+            else if (e.cachedMeshRenderer.material.HasProperty("_Color"))
             {
-                var c = mr.material.GetColor("_Color");
+                var c = e.cachedMeshRenderer.material.GetColor("_Color");
                 c.a = alpha;
-                mr.material.SetColor("_Color", c);
+                e.cachedMeshRenderer.material.SetColor("_Color", c);
             }
         }
     }

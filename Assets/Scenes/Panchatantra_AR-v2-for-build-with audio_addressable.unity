@@ -1817,6 +1817,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ARLanguageDropdown
   dropdown: {fileID: 0}
+  catalog: {fileID: 11400000, guid: 1dc0bb886619dac4b949c46adfe17554, type: 2}
   languages:
   - English
   - Hindi
@@ -4924,7 +4925,7 @@ MonoBehaviour:
   amplifyMultiplier: 3
   postVoiceBgm: {fileID: 8300000, guid: 39f72793262b1fc4c82c46564d5f3365, type: 3}
   postVoiceBgmVolume: 1
-  resumeGraceSeconds: 3
+  resumeGraceSeconds: 1
   defaultLanguage: English
 --- !u!4 &1224344541
 Transform:
@@ -5504,6 +5505,16 @@ MonoBehaviour:
   pages:
   - addressableKey: Story_1_page_intro
     pageId: S1_P-intro
+  - addressableKey: Story_1_page_46-quiz
+    pageId: 
+  - addressableKey: Story_1_page_64-quiz
+    pageId: 
+  - addressableKey: Story_1_page_108-quiz
+    pageId: 
+  - addressableKey: Story_1_page_22-quiz
+    pageId: 
+  - addressableKey: Story_1_page_84-quiz
+    pageId: 
   - addressableKey: Story_1_page_4-5
     pageId: S1_P-4-5
   - addressableKey: Story_1_page_6-7
@@ -5522,8 +5533,6 @@ MonoBehaviour:
     pageId: S1_P-18-19
   - addressableKey: Story_1_page_20-21
     pageId: S1_P-20-21
-  - addressableKey: Story_1_page_22-quiz
-    pageId: 
   - addressableKey: Story_1_page_24-25
     pageId: S2_P24-25
   - addressableKey: Story_1_page_26-27
@@ -5546,8 +5555,6 @@ MonoBehaviour:
     pageId: S2_P42-43
   - addressableKey: Story_1_page_44-45
     pageId: S2_P44-45
-  - addressableKey: Story_1_page_46-quiz
-    pageId: 
   - addressableKey: Story_1_page_48-49
     pageId: S3_P48-49
   - addressableKey: Story_1_page_50-51
@@ -5564,8 +5571,6 @@ MonoBehaviour:
     pageId: S3_P60-61
   - addressableKey: Story_1_page_62-63
     pageId: S3_P62-63
-  - addressableKey: Story_1_page_64-quiz
-    pageId: 
   - addressableKey: Story_1_page_66-67
     pageId: S4_P66-67
   - addressableKey: Story_1_page_68-69
@@ -5582,8 +5587,6 @@ MonoBehaviour:
     pageId: S4_P80-81
   - addressableKey: Story_1_page_82-83
     pageId: S4_P82-83
-  - addressableKey: Story_1_page_84-quiz
-    pageId: 
   - addressableKey: Story_1_page_86-87
     pageId: S5_P86-87
   - addressableKey: Story_1_page_88-89
@@ -5606,8 +5609,6 @@ MonoBehaviour:
     pageId: S5_P104-105
   - addressableKey: Story_1_page_106-107
     pageId: S5_P106-107
-  - addressableKey: Story_1_page_108-quiz
-    pageId: 
 --- !u!4 &1294535598
 Transform:
   m_ObjectHideFlags: 0

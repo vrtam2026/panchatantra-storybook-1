@@ -1,0 +1,266 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Audio_Tamil
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Audio_Tamil
+  m_GUID: 23f063ad8fb8c3644bafe0e04da7183d
+  m_SerializeEntries:
+  - m_GUID: 03b07929a38c7ad4d86e658fc968262d
+    m_Address: audio/Tamil/S3_P56-57
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 08858acf3a632f147a735e8867e3e765
+    m_Address: audio/Tamil/S3_P48-49
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0bd4ac8c874f7b24cb9278160dfb7878
+    m_Address: audio/Tamil/S1_P-10-11
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e1ea6c28e38492408cf70bef3067e22
+    m_Address: audio/Tamil/S5_P88-89
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f4d3adf87cd2a74283e42d8a4ef594d
+    m_Address: audio/Tamil/S1_P-6-7
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 10660c803816e5848aad76a01d2984cf
+    m_Address: audio/Tamil/S1_P-18-19
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20fe51122d8608946b16041767456836
+    m_Address: audio/Tamil/S2_P26-27
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28c4ee7964c63ed4fbc00661c064b930
+    m_Address: audio/Tamil/S5_P92-93
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2bfe8239a8b1f70428793fdb679691fb
+    m_Address: audio/Tamil/S5_P102-103
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e448e4445cca3745a1413f7c6f9160e
+    m_Address: audio/Tamil/S1_P-intro
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36564fb8d71b48c4e882398579c309f5
+    m_Address: audio/Tamil/S4_P66-67
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3bbb317ba364de14aa7308fbbc04a2a8
+    m_Address: audio/Tamil/S1_P-16-17
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3f5fc0f856f43544ab61110135aa7cf4
+    m_Address: audio/Tamil/S5_P96-97
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 473c920c1adf91d4a9976c110d79695e
+    m_Address: audio/Tamil/S4_P76-77
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 480c84c843d1dad4d8c9a8bc75d949e5
+    m_Address: audio/Tamil/S2_P28-29
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4bb4c9c26c0494742b203a2aa79840ac
+    m_Address: audio/Tamil/S4_P78-79
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 54bac9d898a481b43ac5feccc74f98f0
+    m_Address: audio/Tamil/S5_P100-101
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5593d5b73f1526d4aa513b0b745f5df9
+    m_Address: audio/Tamil/S4_P82-83
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 583a11a85fd54eb48b8e956a83868c86
+    m_Address: audio/Tamil/S1_P-12-13
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ad41641dd1e86a459b5263a80cee78c
+    m_Address: audio/Tamil/S2_P32-33
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e492ef0ab83e4d4083fa750768191df
+    m_Address: audio/Tamil/S1_P-4-5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60e6228c43357c04287c87263001cf50
+    m_Address: audio/Tamil/S3_P60-61
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 623227dd1568ae141a19aee5ffb9588f
+    m_Address: audio/Tamil/S3_P52-53
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71cda2360395aad4ba46552f050ce27c
+    m_Address: audio/Tamil/S4_P74-75
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 747199367bc1b464a9cb99caea9909b3
+    m_Address: audio/Tamil/S2_P38-39
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7acc368472595844ea45ba009029d4c6
+    m_Address: audio/Tamil/S1_P-20-21
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8344220f5697b0547af8c7477caeec5e
+    m_Address: audio/Tamil/S2_P40-41
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f938e57096f7084ba56a69834c778a7
+    m_Address: audio/Tamil/S2_P36-37
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 90d3983c29e70c840b9d617359cafab4
+    m_Address: audio/Tamil/S2_P30-31
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 93b96512dec13444296c7ab966970ecf
+    m_Address: audio/Tamil/S5_P106-107
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 95d896931894e0f4ba6a32765f8fda00
+    m_Address: audio/Tamil/S2_P44-45
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 962e02ebcf9520843839f7ca989ca91f
+    m_Address: audio/Tamil/S2_P34-35
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 96e32bc8f752e1b408e8746f3858497c
+    m_Address: audio/Tamil/S3_P54-55
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9faf8df4f56cec44cba688de21e98605
+    m_Address: audio/Tamil/S3_P58-59
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a5711b7f336794d48b25e9ecc519752f
+    m_Address: audio/Tamil/S5_P90-91
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a6f3348be32e1de4f8dd75f5e9a3ca0e
+    m_Address: audio/Tamil/S3_P62-63
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a88ff11452a18bf469cfcd7ce3ca84de
+    m_Address: audio/Tamil/S2_P24-25
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b008c576f33882f469fd78e2af725e32
+    m_Address: audio/Tamil/S2_P42-43
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b2555f40f55d55647a1778625d9ee4f5
+    m_Address: audio/Tamil/S5_P86-87
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5615b7a83348504192a8048af36576a
+    m_Address: audio/Tamil/S5_P94-95
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8953244e86b59d47bed3433679d6aa7
+    m_Address: audio/Tamil/S4_P68-69
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd57d7d4560e37541844658ffbdae34f
+    m_Address: audio/Tamil/S1_P-14-15
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7879a7bd5d41aa4fa01cd9d9fadb9a1
+    m_Address: audio/Tamil/S5_P98-99
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd9496fea166f3c47b303666301ad1fd
+    m_Address: audio/Tamil/S4_P80-81
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d132bda8835647e4c830ab882a7119cd
+    m_Address: audio/Tamil/S4_P72-73
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d569ddf4e25005d4b8ad7fe7955a373b
+    m_Address: audio/Tamil/S1_P-8-9
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9fba7912789e914ca97e4d1b2d49e9a
+    m_Address: audio/Tamil/S3_P50-51
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee458a5fc90b02349b4d4b614a49a515
+    m_Address: audio/Tamil/S5_P104-105
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: aab12f73e7ef20e4eae0263e790f21ae, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 72e645b849b86e741ae89476c7adbcd9, type: 2}
+    - {fileID: 11400000, guid: 9598dd831fdb93841a0580f0bf8071ab, type: 2}

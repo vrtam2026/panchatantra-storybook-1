@@ -343,14 +343,26 @@ public class CustomARHandler : MonoBehaviour
         return keepReplayButtonAlwaysVisible && instantiatedObject != null;
     }
 
+    // Runs every frame from Update(), so only actually touch SetActive/CanvasGroup when
+    // the visible/not-visible state genuinely changes -- these calls dirty the object
+    // and Canvas even when the values written are identical to what's already there.
+    private bool _replayVisibilityApplied = false;
+
     private void RefreshReplayButtonVisibility()
     {
-        if (!ShouldKeepReplayVisible() || replayButton == null || _replayCG == null) return;
+        if (!ShouldKeepReplayVisible() || replayButton == null || _replayCG == null)
+        {
+            _replayVisibilityApplied = false;
+            return;
+        }
+
+        if (_replayVisibilityApplied) return;
 
         replayButton.SetActive(true);
         _replayCG.alpha = 1f;
         _replayCG.interactable = true;
         _replayCG.blocksRaycasts = true;
+        _replayVisibilityApplied = true;
     }
 
     // ----------------------------------------------------------------------
@@ -620,8 +632,15 @@ public class CustomARHandler : MonoBehaviour
         // Guard: Vuforia may fire after GameObject is destroyed
         if (this == null || !gameObject) return;
 
+        // Only Status.TRACKED means the camera is genuinely seeing the printed image right
+        // now. EXTENDED_TRACKED means Vuforia has stopped seeing the image and is instead
+        // guessing its position from the phone's own motion (device tracking) -- this is
+        // exactly what made content appear to "follow your hand": once the marker is
+        // covered, the content kept moving with the phone/camera instead of pausing.
+        // LIMITED means low-confidence but still real image tracking, so it still counts
+        // as found. Treating EXTENDED_TRACKED as lost sends it through the normal grace
+        // period (pause in place, then release) instead of drifting with device motion.
         if (status.Status == Status.TRACKED ||
-            status.Status == Status.EXTENDED_TRACKED ||
             status.Status == Status.LIMITED)
             OnTrackingFound();
         else
@@ -811,7 +830,7 @@ public class CustomARHandler : MonoBehaviour
 
             if (_releaseCoroutine != null) { StopCoroutine(_releaseCoroutine); _releaseCoroutine = null; }
 
-            float grace = _arMediaManager != null ? _arMediaManager.ResumeGraceSeconds : 4f;
+            float grace = _arMediaManager != null ? _arMediaManager.ResumeGraceSeconds : 1f;
             _releaseCoroutine = StartCoroutine(ReleaseAfterGrace(grace));
         }
     }

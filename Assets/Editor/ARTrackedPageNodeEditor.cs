@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class ARTrackedPageNodeEditor : Editor
 {
     private bool _advBgm;
     private bool _advPageEnd;
+    private readonly List<bool> _modelSlotFoldouts = new List<bool>();
     private bool _adv3DVideo;
 
     private SerializedProperty _pageId;
@@ -21,6 +23,7 @@ public class ARTrackedPageNodeEditor : Editor
     private SerializedProperty _animators;
     private SerializedProperty _splineMovers;
     private SerializedProperty _splinePathMovers;
+    private SerializedProperty _modelSlots;
     private SerializedProperty _pageEndTrigger3D;
     private SerializedProperty _loopBgmUntilVoiceEnds;
     private SerializedProperty _stopBgmWhenVoiceEnds;
@@ -46,6 +49,7 @@ public class ARTrackedPageNodeEditor : Editor
         _animators               = serializedObject.FindProperty("animators");
         _splineMovers            = serializedObject.FindProperty("splineMovers");
         _splinePathMovers        = serializedObject.FindProperty("splinePathMovers");
+        _modelSlots              = serializedObject.FindProperty("modelSlots");
         _pageEndTrigger3D        = serializedObject.FindProperty("pageEndTrigger3D");
         _loopBgmUntilVoiceEnds   = serializedObject.FindProperty("loopBgmUntilVoiceEnds");
         _stopBgmWhenVoiceEnds    = serializedObject.FindProperty("stopBgmWhenVoiceEnds");
@@ -267,6 +271,9 @@ public class ARTrackedPageNodeEditor : Editor
         DrawSimpleList(_splineMovers,     "Spline Movers");
         DrawSimpleList(_splinePathMovers, "Spline Path Movers");
 
+        EditorGUILayout.Space(4);
+        DrawModelSlots();
+
         EditorGUILayout.Space(6);
         EditorGUILayout.PropertyField(_pageEndTrigger3D, new GUIContent("Page End Trigger"));
         PageEndTrigger3D trig = (PageEndTrigger3D)_pageEndTrigger3D.enumValueIndex;
@@ -368,6 +375,68 @@ public class ARTrackedPageNodeEditor : Editor
         }
         if (GUILayout.Button($"+ Add {title}"))
             list.InsertArrayElementAtIndex(list.arraySize);
+    }
+
+    // Model Slots — plain fields, no card/color styling, just clearer labels than
+    // Unity's default "Element 0" so each slot is easy to tell apart at a glance.
+    private void DrawModelSlots()
+    {
+        EditorGUILayout.LabelField("Model Slots (optional) — shows one 3D model at a time, in order", EditorStyles.boldLabel);
+
+        while (_modelSlotFoldouts.Count < _modelSlots.arraySize) _modelSlotFoldouts.Add(false);
+        while (_modelSlotFoldouts.Count > _modelSlots.arraySize) _modelSlotFoldouts.RemoveAt(_modelSlotFoldouts.Count - 1);
+
+        for (int i = 0; i < _modelSlots.arraySize; i++)
+        {
+            SerializedProperty slot  = _modelSlots.GetArrayElementAtIndex(i);
+            SerializedProperty model = slot.FindPropertyRelative("model");
+            string modelName = model.objectReferenceValue != null ? model.objectReferenceValue.name : "no model assigned";
+
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+            {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    _modelSlotFoldouts[i] = EditorGUILayout.Foldout(
+                        _modelSlotFoldouts[i], $"Slot {i + 1} — {modelName}", true, EditorStyles.foldoutHeader);
+
+                    if (GUILayout.Button("X", GUILayout.Width(24)))
+                    {
+                        _modelSlots.DeleteArrayElementAtIndex(i);
+                        _modelSlotFoldouts.RemoveAt(i);
+                        break;
+                    }
+                }
+
+                if (!_modelSlotFoldouts[i]) continue;
+
+                EditorGUILayout.PropertyField(model, new GUIContent("Model"));
+                EditorGUILayout.PropertyField(slot.FindPropertyRelative("position"), new GUIContent("Position"));
+
+                SerializedProperty matchAnim = slot.FindPropertyRelative("matchAnimationLength");
+                EditorGUILayout.PropertyField(matchAnim, new GUIContent("Match Animation Length"));
+                using (new EditorGUI.DisabledScope(matchAnim.boolValue))
+                    EditorGUILayout.PropertyField(slot.FindPropertyRelative("showDuration"), new GUIContent("Show Duration"));
+
+                EditorGUILayout.PropertyField(slot.FindPropertyRelative("gapBeforeNext"), new GUIContent("Gap Before Next"));
+
+                SerializedProperty scaleInOut = slot.FindPropertyRelative("scaleInOut");
+                EditorGUILayout.PropertyField(scaleInOut, new GUIContent("Scale In/Out"));
+                using (new EditorGUI.DisabledScope(!scaleInOut.boolValue))
+                    EditorGUILayout.PropertyField(slot.FindPropertyRelative("scaleDuration"), new GUIContent("Scale Duration"));
+
+                SerializedProperty sfxClip = slot.FindPropertyRelative("sfxClip");
+                EditorGUILayout.PropertyField(sfxClip, new GUIContent("SFX Clip"));
+                using (new EditorGUI.DisabledScope(sfxClip.objectReferenceValue == null))
+                    EditorGUILayout.PropertyField(slot.FindPropertyRelative("sfxVolume"), new GUIContent("SFX Volume"));
+            }
+            EditorGUILayout.Space(3);
+        }
+
+        if (GUILayout.Button("+ Add Model Slot"))
+        {
+            _modelSlots.InsertArrayElementAtIndex(_modelSlots.arraySize);
+            _modelSlotFoldouts.Add(true); // new slot starts expanded so you can fill it in right away
+        }
     }
 
     private static void DrawBar(string title)

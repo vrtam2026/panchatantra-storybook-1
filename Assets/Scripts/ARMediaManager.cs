@@ -25,7 +25,7 @@ public class ARMediaManager : MonoBehaviour
     [SerializeField] private float postVoiceBgmVolume = 0.5f;
 
     [Header("Behavior")]
-    [SerializeField, Min(0f)] private float resumeGraceSeconds = 2f;
+    [SerializeField, Min(0f)] private float resumeGraceSeconds = 1f;
     [SerializeField] private string defaultLanguage = "English";
 
     // Audio sources
@@ -235,6 +235,7 @@ public class ARMediaManager : MonoBehaviour
         // It should only restore the page root and keep story visuals/audio frozen until the activity finishes.
         if (node.IsStoryBlockedByActivity)
         {
+            Debug.Log($"[AR-AUDIO-SKIP] pageId:'{node.PageId}' — blocked by an activity/quiz gate, audio not (re)started.");
             _lastLostTime = -999f;
             HideReplay();
             node.ResumeVisuals();
@@ -318,11 +319,31 @@ public class ARMediaManager : MonoBehaviour
 
         requestedNode.StartFromBeginning(() =>
         {
-            if (requestId != _startRequestId) return;
-            if (_activeNode != requestedNode) return;
-            if (!requestedNode.IsTracked) return;
-            if (!requestedNode.gameObject.activeInHierarchy) return;
-            if (requestedNode.IsStoryBlockedByActivity) return;
+            if (requestId != _startRequestId)
+            {
+                Debug.Log($"[AR-AUDIO-SKIP] pageId:'{requestedNode.PageId}' — a newer request superseded this one, audio not started.");
+                return;
+            }
+            if (_activeNode != requestedNode)
+            {
+                Debug.Log($"[AR-AUDIO-SKIP] pageId:'{requestedNode.PageId}' — a different page became active first, audio not started.");
+                return;
+            }
+            if (!requestedNode.IsTracked)
+            {
+                Debug.Log($"[AR-AUDIO-SKIP] pageId:'{requestedNode.PageId}' — tracking was lost before audio could start.");
+                return;
+            }
+            if (!requestedNode.gameObject.activeInHierarchy)
+            {
+                Debug.Log($"[AR-AUDIO-SKIP] pageId:'{requestedNode.PageId}' — page object is inactive, audio not started.");
+                return;
+            }
+            if (requestedNode.IsStoryBlockedByActivity)
+            {
+                Debug.Log($"[AR-AUDIO-SKIP] pageId:'{requestedNode.PageId}' — blocked by an activity/quiz gate, audio not started.");
+                return;
+            }
 
             // Pass the SAME requestId so NotifyContentReleased firing during
             // the audio download correctly suppresses the stale callback.
@@ -543,9 +564,18 @@ public class ARMediaManager : MonoBehaviour
             _delayTimer = seg.delayBefore;
             while (_delayTimer > 0f) { if (!_paused) _delayTimer -= Time.deltaTime; yield return null; }
 
+            // A looping clip anywhere but the LAST slot would play forever and never
+            // advance to the next clip in the sequence -- silently breaking multi-clip
+            // pages (e.g. "57-1" then "57-2"). Only the final segment is allowed to loop.
+            bool isLastSegment = _voiceIndex == pack.voiceClips.Count - 1;
+            bool effectiveLoop = seg.loop && isLastSegment;
+            if (seg.loop && !isLastSegment)
+                Debug.LogWarning($"[AR] Voice clip at index {_voiceIndex} has Loop enabled but isn't the last " +
+                                  "clip in this page's sequence -- ignoring loop here so the next clip can still play.");
+
             _stage = VoiceStage.Playing;
             _voiceSource.clip = seg.clip;
-            _voiceSource.loop = seg.loop;
+            _voiceSource.loop = effectiveLoop;
             _voiceSource.volume = Mathf.Clamp01(seg.volume);
             _voiceSource.Play();
             anyClipPlayed = true;
@@ -553,7 +583,7 @@ public class ARMediaManager : MonoBehaviour
             while (_voiceSource != null && _voiceSource.clip != null)
             {
                 if (_paused) { yield return null; continue; }
-                if (!seg.loop && !_voiceSource.isPlaying) break;
+                if (!effectiveLoop && !_voiceSource.isPlaying) break;
                 yield return null;
             }
 

@@ -1,0 +1,256 @@
+=====================================================================
+ AR STORYBOOK TOOLKIT — COMPLETE GUIDE
+ What was built, how it works, and how to set it up anywhere
+=====================================================================
+Last updated: 8 July 2026
+
+
+---------------------------------------------------------------------
+ PART 1 — THE ONE-LINE SUMMARY
+---------------------------------------------------------------------
+
+Everything is now ONE window:
+
+    Tools  →  AR Storybook  →  Dashboard
+
+Open it, and fix anything marked ✘ using the button or drag-slot right
+next to it. That is the entire workflow. Nothing else to memorize.
+
+
+---------------------------------------------------------------------
+ PART 2 — WHAT THE DASHBOARD SHOWS (top to bottom)
+---------------------------------------------------------------------
+
+1. PROJECT SETUP CHECK
+   If the project is missing anything (download settings, audio catalog,
+   audio folder), it lists exactly what is missing in plain words, and
+   ONE green button creates it all. In a project that is already set up,
+   this section is invisible — you go straight to Languages and Pages.
+
+2. LANGUAGES
+   Every language the storybook can speak, each with a live count:
+   "28 of 34 pages have Hindi audio".
+
+   + Add  — type a name (e.g. Telugu), click Add. It creates the folder
+            and download group for that language. No code, no settings
+            windows, nothing else.
+   Remove — takes a language out of the storybook. It NEVER deletes
+            recording files — they stay on disk, so adding the language
+            back later restores everything (add it again, then click
+            "Find & Connect").
+
+3. PAGES CHECKLIST
+   Every page marker in the open scene, as one row each, with three
+   kinds of checks:
+
+   ✔/✘ Downloadable  — can the app actually load this page?
+        Fix: drag the page's content prefab (the artwork file) into
+        the slot. The tool writes the download name itself, exactly
+        matching the marker — typos are impossible.
+
+   ✔/✘ Page Id       — does the page know its own name?
+        Fix: the row tells you exactly where to type it and shows the
+        format (e.g. S1_P4-5).
+
+   ✔/✘ Audio per language — one line per language.
+        Fix (single page): drag the recording onto that line's slot.
+        Fix (many pages at once): click the big green button
+        "Find & Connect All Audio Automatically" — it matches every
+        recording in the project to its page by the page numbers in
+        the file name (e.g. "45-46.mp3") or by page order
+        (e.g. "page3.mp3" = 3rd page of that story).
+
+   Quiz pages simply say "Quiz page — no narration audio needed" —
+   they are never flagged as broken.
+
+4. MORE TOOLS (folded shut — everyday work never needs these)
+   - Detailed audio status window (full ✔/✘ list + Fix All button)
+   - "Load Early" label sync (also runs automatically on its own)
+   - Two Hindi TESTING helpers (placeholder sound / shuffled English
+     voices) — both warn you that Hindi rows will show ✔ with test
+     audio in them
+   - A one-time repair for catalogs from older project versions
+     (harmless if clicked on a new project — it finds nothing to fix)
+
+EVERY button shows a confirmation FIRST: "This will do X and Y.
+Nothing else changes." Nothing ever runs silently.
+
+
+---------------------------------------------------------------------
+ PART 3 — EVERYDAY RECIPES
+---------------------------------------------------------------------
+
+ADD A NEW PAGE (the full flow)
+  1. Build the page in the scene like always (marker + content prefab,
+     type the Page Id on the ARTrackedPageNode).
+  2. Put the recording file(s) anywhere in the project.
+  3. Open the Dashboard. The new page appears automatically.
+  4. Fix any ✘ on its row (usually one drag + one click).
+  5. Click "Update Page List" once at the end.
+  Done.
+
+ADD A WHOLE NEW STORY (e.g. 10 pages at once)
+  1. Build all 10 pages.
+  2. Copy all recordings into the project (name them by page numbers,
+     e.g. 45-46.mp3, or in order: page1.mp3, page2.mp3 ...).
+  3. Dashboard → "Find & Connect All Audio Automatically" (one click
+     connects all 10).
+  4. "Update Page List". Done.
+
+ADD A NEW LANGUAGE
+  1. Dashboard → Languages → type the name → + Add.
+  2. Copy that language's recordings into the project, in a folder
+     whose path contains the language name (e.g. .../Telugu/Audio/).
+  3. "Find & Connect All Audio Automatically".
+  That's all — the rest of the app picks the language up by itself.
+  (Only exception: the dropdown players see in the AR scene has its
+  own list on the ARLanguageDropdown component — add the name there
+  when you want players to actually see it. This is intentional, so
+  you can test a language before making it public.)
+
+REMOVE A LANGUAGE
+  Dashboard → Languages → Remove → read the confirmation → confirm.
+  Files are never deleted; it is fully reversible.
+
+CHECK "IS EVERYTHING OK?"
+  Just open the Dashboard and look for red ✘ marks. No ✘ = all good.
+
+
+---------------------------------------------------------------------
+ PART 4 — USING THIS KIT IN A BRAND-NEW PROJECT
+---------------------------------------------------------------------
+
+The kit is general-purpose. Nothing in it is tied to one story, one
+scene, or one project. To use it in any new Unity project:
+
+  1. The new project needs two packages installed once (Package
+     Manager): Addressables, and Vuforia. (The Dashboard cannot
+     install packages — Unity rule.)
+  2. Copy the kit script files (list in Part 6) into the same folder
+     layout.
+  3. Open Tools → AR Storybook → Dashboard.
+  4. It will say the project is not set up — click "Set Up Project".
+     It creates the catalog, folders, and settings by itself.
+  5. Add your first language, build pages, connect audio. Same flow
+     as Part 3.
+
+What the kit adapts to automatically in any project:
+  - ANY languages (nothing is hardcoded to English/Hindi except two
+    clearly-labeled Hindi TESTING buttons)
+  - ANY number of stories and pages
+  - ANY audio file naming (page ranges, positional names, or plain
+    drag-and-drop when names match nothing)
+  - Missing folders/files — it creates or skips gracefully, never
+    crashes, and logs a plain-words reason whenever it skips something
+
+
+---------------------------------------------------------------------
+ PART 5 — EVERYTHING THAT WAS CHANGED (the honest changelog)
+---------------------------------------------------------------------
+
+NEW FILE
+  StorybookDashboard.cs — the one window. All-new, editor-only.
+
+MENU CHANGES
+  The six old menu items were REMOVED (Setup Page Audio, Check Audio
+  Status, Sync Preload Labels, the two Hindi testing tools, the
+  catalog fix). Their code still exists and still runs — but only
+  from inside the Dashboard, each with a plain description. One menu
+  item remains: Dashboard.
+
+CHANGED FILES (editor-only — cannot affect the built app)
+  AudioAddressableSetupTool.cs — menu item removed; 4 helper methods
+    opened up for the Dashboard to reuse; audio-folder scanning made
+    smarter (recognizes any folder with "audio" in its name, detects
+    the language from the folder path, explains in the log whenever
+    it skips something); page-number matching made strict so "1-2"
+    can never wrongly match inside "21-22".
+  PageIdentityUtility.cs — same strict matching; page sorting fixed
+    to use the page number at the END of a name instead of the story
+    number at the front (the old way could scramble page order).
+  AudioPackStatusWindow.cs, AudioPreloadLabelSync.cs,
+  ARHindiPlaceholderFiller.cs, ARHindiVoiceShuffler.cs,
+  AudioCatalogPackReferenceMigrationTool.cs — menu items removed,
+    doc comments updated. No logic changes.
+  ARWindowManagerEditor.cs — unchanged this round (already auto-
+    computes the page list live from the scene).
+
+CHANGED FILE (the ONE runtime file touched)
+  ARAddressableAudioCatalog.cs — three careful, additive improvements:
+    1. Looking up audio now SKIPS a broken/empty old entry instead of
+       stopping at it (a leftover broken entry can no longer block a
+       good one added later).
+    2. Adding audio for a page that already has a broken entry now
+       REPAIRS that entry instead of stacking a duplicate.
+    3. New RemoveEntriesForLanguage method (used by the Dashboard's
+       Remove button).
+    Everything that worked before behaves exactly the same — these
+    only change what happens in previously-broken situations.
+
+NOT TOUCHED (deliberately)
+  - The entire quiz system (Assets/Quiz_Arun and everything quiz-
+    related) — untouched, as required.
+  - All prefabs, scenes, page content, audio files.
+  - ContentController / the Activity Builder.
+  - All runtime page/tracking/media scripts.
+
+HOW IT WAS TESTED
+  Three independent review passes were run before delivery:
+    1. A "complete Unity beginner" walkthrough of every screen text —
+       15 confusing wordings found and rewritten.
+    2. A senior engineering review — 5 real bugs found and fixed
+       (including: Remove Language silently undoing itself, broken
+       catalog entries blocking new audio forever, page-list changes
+       being lost on scene save).
+    3. A portability + cross-project audit — found and fixed a
+       duplicate-file mistake in the second project, plus 3 matching
+       edge cases that could misconnect audio in future projects.
+
+
+---------------------------------------------------------------------
+ PART 6 — THE KIT FILE LIST (what to copy to a new project)
+---------------------------------------------------------------------
+
+Into Assets/Editor/   (must be a folder literally named "Editor"):
+  StorybookDashboard.cs          <- the window
+  PageIdentityUtility.cs         <- required by the window
+  AudioAddressableSetupTool.cs   <- required by the window
+  AudioPackStatusWindow.cs       <- required by the window
+  AudioPreloadLabelSync.cs       <- required by the window
+  ARHindiPlaceholderFiller.cs    <- required by the window (testing)
+  ARHindiVoiceShuffler.cs        <- required by the window (testing)
+  AudioCatalogPackReferenceMigrationTool.cs  <- required (one-time fix)
+  ARWindowManagerEditor.cs
+  ARTrackedPageNodeEditor.cs
+
+Into Assets/Scripts/  (or anywhere under Assets except an Editor folder):
+  ARTrackedPageNode.cs, ARMediaManager.cs
+
+Into Assets/Scripts/Addressables/:
+  CustomARHandler.cs, ARWindowManager.cs,
+  ARAddressableAudioService.cs, ARPreloader.cs
+
+Into Assets/code/:
+  ARPageAudioPack.cs
+  ARAddressableAudioCatalog.cs
+    *** IMPORTANT: if your project ALREADY has a file named
+    AudioLanguageCatalog.cs containing the class
+    ARAddressableAudioCatalog (some projects use that older file
+    name), paste this file's CONTENTS into that existing file instead
+    of adding a second file — two files declaring the same class will
+    not compile. Keep exactly ONE of them. ***
+
+All of these must be copied together — the Dashboard needs every
+Editor file above to compile, and the tools need the runtime types.
+
+
+---------------------------------------------------------------------
+ PART 7 — THE SENTENCE TO TELL A NEW TEAM MEMBER
+---------------------------------------------------------------------
+
+"Open Tools → AR Storybook → Dashboard, and fix everything marked ✘ —
+each ✘ has its fix button right next to it, and every button explains
+itself before doing anything."
+
+That is the entire onboarding.
+=====================================================================

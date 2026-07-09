@@ -8,7 +8,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 /// Runs at app start and downloads all assets tagged "Preload" from CCD.
 /// This includes:
 ///   1. Page prefab dependencies (visuals)
-///   2. Audio packs for the same pages in ALL languages (English + Hindi)
+///   2. Audio packs for the same pages in every language the catalog knows about
 ///
 /// Audio preload is automatic — no manual setup needed.
 /// Simply mark a prefab as Preload in Addressables → its audio is preloaded too.
@@ -18,8 +18,6 @@ public class ARPreloader : MonoBehaviour
 {
     [Tooltip("The Addressables label used to tag assets that should download at app start.")]
     public string labelToPreload = "Preload";
-
-    private static readonly string[] Languages = { "English", "Hindi" };
 
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -80,6 +78,8 @@ public class ARPreloader : MonoBehaviour
             yield break;
         }
 
+        var languages = audioService.GetAllLanguages();
+
         // Build addressableKey → pageId lookup from ARWindowManager's page list
         var pageMap = new Dictionary<string, string>(System.StringComparer.OrdinalIgnoreCase);
         foreach (var page in windowManager.pages)
@@ -96,7 +96,7 @@ public class ARPreloader : MonoBehaviour
             if (!pageMap.TryGetValue(addressableKey, out string pageId)) continue;
             if (string.IsNullOrEmpty(pageId)) continue; // quiz page — no audio
 
-            foreach (var lang in Languages)
+            foreach (var lang in languages)
             {
                 audioService.PreloadAudioPack(lang, pageId);
                 audioQueued++;
@@ -110,6 +110,6 @@ public class ARPreloader : MonoBehaviour
             Debug.Log("[AR-PRELOAD] No audio packs to preload (no Preload pages have audio).");
         else
             Debug.Log($"[AR-PRELOAD] Audio preload queued for {audioQueued} packs " +
-                      $"({audioQueued / Languages.Length} pages × {Languages.Length} languages).");
+                      $"({audioQueued / Mathf.Max(1, languages.Count)} pages × {languages.Count} languages).");
     }
 }

@@ -6,14 +6,13 @@ using UnityEngine;
 
 /// <summary>
 /// Automatically syncs the Preload label from page prefab entries to their
-/// matching Audio_English and Audio_Hindi audio pack entries.
+/// matching audio pack entries, in every language's Audio_&lt;Language&gt; group
+/// (however many languages the project has — nothing hardcoded).
 ///
 /// HOW TO USE:
-///   1. Mark any prefab as Preload in Addressables Groups window as usual.
-///   2. Go to Tools → AR Storybook → Sync Audio Preload Labels  (one click).
-///   3. Done — matching audio entries in Audio_English and Audio_Hindi get Preload too.
-///
-/// Also auto-triggers every time Addressables settings are saved.
+///   Runs automatically every time Addressables settings are saved — normally you never
+///   need to do anything. To run it by hand: Tools → AR Storybook →
+///   Sync Preload Labels For Audio.
 /// </summary>
 public static class AudioPreloadLabelSync
 {
@@ -22,7 +21,7 @@ public static class AudioPreloadLabelSync
 
     // ─── Manual menu trigger ─────────────────────────────────────────────────
 
-    [MenuItem("Tools/AR Storybook/Sync Audio Preload Labels")]
+    [MenuItem("Tools/AR Storybook/Sync Preload Labels For Audio", false, 15)]
     public static void SyncNowMenu()
     {
         SyncNow();
@@ -52,8 +51,9 @@ public static class AudioPreloadLabelSync
             foreach (var group in s.groups)
             {
                 if (group == null || group.ReadOnly) continue;
-                // Skip audio groups — we only read FROM prefab groups here
-                if (group.Name == "Audio_English" || group.Name == "Audio_Hindi") continue;
+                // Skip audio groups — we only read FROM prefab groups here. Any group named
+                // "Audio_<Language>" is an audio group, however many languages exist.
+                if (IsAudioGroup(group.Name)) continue;
 
                 foreach (var entry in group.entries)
                 {
@@ -73,7 +73,7 @@ public static class AudioPreloadLabelSync
             foreach (var group in s.groups)
             {
                 if (group == null) continue;
-                if (group.Name != "Audio_English" && group.Name != "Audio_Hindi") continue;
+                if (!IsAudioGroup(group.Name)) continue;
 
                 foreach (var entry in group.entries)
                 {
@@ -138,6 +138,15 @@ public static class AudioPreloadLabelSync
         }
         return map;
     }
+
+    /// <summary>
+    /// True for any Addressables group created for audio, e.g. "Audio_English",
+    /// "Audio_Hindi", "Audio_Telugu" — whatever languages the project has, this
+    /// matches all of them automatically since AudioAddressableSetupTool always
+    /// names audio groups "Audio_&lt;Language&gt;".
+    /// </summary>
+    static bool IsAudioGroup(string groupName) =>
+        !string.IsNullOrEmpty(groupName) && groupName.StartsWith("Audio_");
 
     /// <summary>
     /// Extracts pageId from an audio entry address.

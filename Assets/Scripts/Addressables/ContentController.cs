@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Playables;
@@ -1193,27 +1194,38 @@ public class ContentController : MonoBehaviour, IARContent
         return null;
     }
 
+    // Resolving GetProperty/GetField by name is the expensive part of reflection --
+    // this loop runs every frame for the duration of a story wait, so caching the
+    // resolved member per (type, name) means only the first frame ever pays that
+    // cost; every later frame (and every later wait, for any component of the same
+    // type) just reuses it.
+    private static readonly Dictionary<(Type, string), MemberInfo> _boolMemberCache = new();
+
     private static bool TryReadBoolMember(MonoBehaviour component, string memberName, out bool value)
     {
         value = false;
         if (component == null) return false;
 
         Type type = component.GetType();
-        var property = type.GetProperty(memberName);
-        if (property != null && property.PropertyType == typeof(bool))
+        var key = (type, memberName);
+
+        if (!_boolMemberCache.TryGetValue(key, out MemberInfo member))
         {
-            value = (bool)property.GetValue(component, null);
-            return true;
+            member = (MemberInfo)type.GetProperty(memberName) ?? type.GetField(memberName);
+            _boolMemberCache[key] = member;
         }
 
-        var field = type.GetField(memberName);
-        if (field != null && field.FieldType == typeof(bool))
+        switch (member)
         {
-            value = (bool)field.GetValue(component);
-            return true;
+            case PropertyInfo property when property.PropertyType == typeof(bool):
+                value = (bool)property.GetValue(component, null);
+                return true;
+            case FieldInfo field when field.FieldType == typeof(bool):
+                value = (bool)field.GetValue(component);
+                return true;
+            default:
+                return false;
         }
-
-        return false;
     }
 
     private void PauseStoryForActivityIfNeeded(ActivityStep step)
