@@ -63,7 +63,7 @@ Transform:
   m_GameObject: {fileID: 857777246330948505}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.05, z: 0}
+  m_LocalPosition: {x: -0.522, y: 0.065, z: 0}
   m_LocalScale: {x: 0.2, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -446,12 +446,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ARTrackedPageNode
   pageId: S5_P86-87
   mediaManager: {fileID: 0}
+  pageType: 0
+  layerRoot2D: {fileID: 0}
+  commonBackgroundImage: {fileID: 0}
+  persistentLayers2D: []
+  storyParts: []
   mainVideos:
   - {fileID: 8314914121035795323}
   backgroundLoopVideos: []
+  mainVideoSettings: []
+  backgroundVideoSettings: []
   animators: []
   splineMovers: []
   splinePathMovers: []
+  modelSlots: []
+  pageEndTrigger3D: 0
   freezeMode: 1
   freezeFirstSeconds: 3
   freezeLastSeconds: 0
@@ -461,6 +470,7 @@ MonoBehaviour:
   contentRoot: {fileID: 4817051095461732223}
   delayBeforeFade: 0.5
   fadeDuration: 1.5
+  postFadeDelay: 0.5
   pageTurnSound: {fileID: 0}
 --- !u!114 &1205682639655375311
 MonoBehaviour:
@@ -474,6 +484,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f88054253ad3c4facfa36ca1ca3dea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ContentController
+  activities: []
+  activityTemplateSchemaVersion: 34
+  activityPanel: {fileID: 0}
+  defaultRaycastCamera: {fileID: 0}
+  defaultAudioSource: {fileID: 0}
+  completeImmediatelyWhenNoActivities: 1
+  restartImmediatelyOnReplay: 0
+  onActivitiesStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onActivitiesCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  onActivitiesReset:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1935490104104434625
 GameObject:
   m_ObjectHideFlags: 0
@@ -1204,7 +1230,7 @@ Transform:
   m_GameObject: {fileID: 4545915160415072384}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.2, z: 0}
+  m_LocalPosition: {x: -0.522, y: 0.215, z: 0}
   m_LocalScale: {x: 0.2, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1419,7 +1445,7 @@ Transform:
   m_GameObject: {fileID: 4817051095461732223}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.522, y: 0.015, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2244,7 +2270,7 @@ Transform:
   m_GameObject: {fileID: 7444074345952743976}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.15, z: 0}
+  m_LocalPosition: {x: -0.522, y: 0.165, z: 0}
   m_LocalScale: {x: 0.2, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2334,7 +2360,7 @@ Transform:
   m_GameObject: {fileID: 7664567774535141836}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalPosition: {x: -0.522, y: 0.115, z: 0}
   m_LocalScale: {x: 0.2, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2694,7 +2720,7 @@ Transform:
   m_GameObject: {fileID: 8626241437451266861}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.522, y: 0.015, z: 0}
   m_LocalScale: {x: 0.2, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []

@@ -113,12 +113,14 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 0
-  m_TargetAudioSources: []
-  m_DirectAudioVolumes: []
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
   m_Url: 
-  m_EnabledAudioTracks: 
-  m_DirectAudioMutes: 
-  m_ControlledAudioTrackCount: 0
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -1400,6 +1402,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f88054253ad3c4facfa36ca1ca3dea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ContentController
+  activities: []
+  activityTemplateSchemaVersion: 34
+  activityPanel: {fileID: 0}
+  defaultRaycastCamera: {fileID: 0}
+  defaultAudioSource: {fileID: 0}
+  completeImmediatelyWhenNoActivities: 1
+  restartImmediatelyOnReplay: 0
+  onActivitiesStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onActivitiesCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  onActivitiesReset:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &8156542764928723165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1414,12 +1432,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ARTrackedPageNode
   pageId: S1_P-10-11
   mediaManager: {fileID: 0}
+  pageType: 0
+  layerRoot2D: {fileID: 0}
+  commonBackgroundImage: {fileID: 0}
+  persistentLayers2D: []
+  storyParts: []
   mainVideos:
   - {fileID: 509363134848930999}
   backgroundLoopVideos: []
+  mainVideoSettings: []
+  backgroundVideoSettings: []
   animators: []
   splineMovers: []
   splinePathMovers: []
+  modelSlots: []
+  pageEndTrigger3D: 0
   freezeMode: 1
   freezeFirstSeconds: 5
   freezeLastSeconds: 0
@@ -1429,6 +1456,7 @@ MonoBehaviour:
   contentRoot: {fileID: 1342432277311258046}
   delayBeforeFade: 0.5
   fadeDuration: 1.5
+  postFadeDelay: 0.5
   pageTurnSound: {fileID: 0}
 --- !u!1 &5908378239871410629
 GameObject:

@@ -89,9 +89,9 @@ Material:
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
-    - _ChromaKeyBrightnessRange: 0.76
+    - _ChromaKeyBrightnessRange: 0.78
     - _ChromaKeyHueRange: 0.15
-    - _ChromaKeySaturationRange: 0.58
+    - _ChromaKeySaturationRange: 0.56
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2

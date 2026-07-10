@@ -565,12 +565,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ARTrackedPageNode
   pageId: S2_P32-33
   mediaManager: {fileID: 0}
+  pageType: 0
+  layerRoot2D: {fileID: 0}
+  commonBackgroundImage: {fileID: 0}
+  persistentLayers2D: []
+  storyParts: []
   mainVideos:
   - {fileID: 4080651913470918586}
   backgroundLoopVideos: []
+  mainVideoSettings: []
+  backgroundVideoSettings: []
   animators: []
   splineMovers: []
   splinePathMovers: []
+  modelSlots: []
+  pageEndTrigger3D: 0
   freezeMode: 0
   freezeFirstSeconds: 0
   freezeLastSeconds: 0
@@ -580,6 +589,7 @@ MonoBehaviour:
   contentRoot: {fileID: 0}
   delayBeforeFade: 0.5
   fadeDuration: 1.5
+  postFadeDelay: 0.5
   pageTurnSound: {fileID: 0}
 --- !u!114 &5175549272029758298
 MonoBehaviour:
@@ -593,6 +603,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f88054253ad3c4facfa36ca1ca3dea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ContentController
+  activities: []
+  activityTemplateSchemaVersion: 34
+  activityPanel: {fileID: 0}
+  defaultRaycastCamera: {fileID: 0}
+  defaultAudioSource: {fileID: 0}
+  completeImmediatelyWhenNoActivities: 1
+  restartImmediatelyOnReplay: 0
+  onActivitiesStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onActivitiesCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  onActivitiesReset:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &7581326977805599909
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -299,6 +299,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Story_1_page_102-103
       objectReference: {fileID: 0}
+    - target: {fileID: 6432650981783121373, guid: 4131efc49cf33ff4aa4670e01f386d75, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -575,6 +579,10 @@ PrefabInstance:
     - target: {fileID: 1224253107956376765, guid: 5f8ba2ebdcc87ea44a57e03a17bb82f5, type: 3}
       propertyPath: m_Name
       value: Story_1_page_78-79
+      objectReference: {fileID: 0}
+    - target: {fileID: 1224253107956376765, guid: 5f8ba2ebdcc87ea44a57e03a17bb82f5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6606588918157828426, guid: 5f8ba2ebdcc87ea44a57e03a17bb82f5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -882,6 +890,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Story_1_page_94-95
       objectReference: {fileID: 0}
+    - target: {fileID: 3331237781080125118, guid: 84fe064fad0ddce41bc99bb2d34cb69b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -903,6 +915,10 @@ PrefabInstance:
     - target: {fileID: 2932609733357260754, guid: 70d740d5c738ea845bbaa3e3cd373dbc, type: 3}
       propertyPath: m_Name
       value: 'Story_1_page_100-101 '
+      objectReference: {fileID: 0}
+    - target: {fileID: 2932609733357260754, guid: 70d740d5c738ea845bbaa3e3cd373dbc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7105669698931466957, guid: 70d740d5c738ea845bbaa3e3cd373dbc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -965,6 +981,10 @@ PrefabInstance:
     - target: {fileID: 5840077725067871282, guid: 4c65b1c209c1f68479e7f2716f1f1b15, type: 3}
       propertyPath: m_Name
       value: Story_1_page_88-89
+      objectReference: {fileID: 0}
+    - target: {fileID: 5840077725067871282, guid: 4c65b1c209c1f68479e7f2716f1f1b15, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6178518582674258115, guid: 4c65b1c209c1f68479e7f2716f1f1b15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1222,6 +1242,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Story_1_page_96-97
       objectReference: {fileID: 0}
+    - target: {fileID: 1433145249177371919, guid: 1aa0ae815cabaaf4ab03c93433a6d970, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6788688772061595052, guid: 1aa0ae815cabaaf4ab03c93433a6d970, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1318,6 +1342,21 @@ MonoBehaviour:
   panelFadeInDuration: 1
   pageEndDelay: 2
   lostTrackingDelay: 2
+  turnPageSound:
+    useSound: 0
+    audioClip: {fileID: 0}
+    volume: 1
+    loop: 0
+  markerLostSound:
+    useSound: 0
+    audioClip: {fileID: 0}
+    volume: 1
+    loop: 0
+  markerFoundSound:
+    useSound: 0
+    audioClip: {fileID: 0}
+    volume: 1
+    loop: 0
 --- !u!4 &296841653
 Transform:
   m_ObjectHideFlags: 0
@@ -1410,6 +1449,10 @@ PrefabInstance:
     - target: {fileID: 1724412175687550220, guid: b2b8b5683335e764f88d7a6a057b8bd5, type: 3}
       propertyPath: m_Name
       value: Story_1_page_86-87
+      objectReference: {fileID: 0}
+    - target: {fileID: 1724412175687550220, guid: b2b8b5683335e764f88d7a6a057b8bd5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5331427921908718307, guid: b2b8b5683335e764f88d7a6a057b8bd5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1575,6 +1618,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Story_1_page_74-75
       objectReference: {fileID: 0}
+    - target: {fileID: 4852821372741086049, guid: 91db578dbc5ebeb40b531cd6a6372f91, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1596,6 +1643,10 @@ PrefabInstance:
     - target: {fileID: 3557199106223629586, guid: 3a0d9da2ed8b8a54aaf77b0e0ff4495a, type: 3}
       propertyPath: m_Name
       value: Story_1_page_80-81
+      objectReference: {fileID: 0}
+    - target: {fileID: 3557199106223629586, guid: 3a0d9da2ed8b8a54aaf77b0e0ff4495a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3991222188105119999, guid: 3a0d9da2ed8b8a54aaf77b0e0ff4495a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1764,6 +1815,10 @@ PrefabInstance:
     - target: {fileID: 8453047069605575807, guid: f97b1f598e5303c47b4fce6e974496af, type: 3}
       propertyPath: m_Name
       value: Story_1_page_104-105
+      objectReference: {fileID: 0}
+    - target: {fileID: 8453047069605575807, guid: f97b1f598e5303c47b4fce6e974496af, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2100,7 +2155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &553878522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2127,6 +2182,21 @@ MonoBehaviour:
   fadeOutDuration: 0.4
   showThresholdSeconds: 0.5
   appearSfx: {fileID: 0}
+  loadingStartSound:
+    useSound: 0
+    audioClip: {fileID: 0}
+    volume: 1
+    loop: 0
+  whileLoadingSound:
+    useSound: 0
+    audioClip: {fileID: 0}
+    volume: 1
+    loop: 0
+  loadingCompleteSound:
+    useSound: 0
+    audioClip: {fileID: 0}
+    volume: 1
+    loop: 0
 --- !u!224 &553878523
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2514,6 +2584,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Story_1_page_72-73
       objectReference: {fileID: 0}
+    - target: {fileID: 8051084068438690609, guid: 4d1cdeedb50c8db49ba097b6841facd0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2788,6 +2862,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'Story_1_page_106-107 '
       objectReference: {fileID: 0}
+    - target: {fileID: 619197071906298090, guid: 1ec8e7afd839a914a8268812053e68cb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2965,7 +3043,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ARMediaManager
   replayButton: {fileID: 471114970352053958}
-  audioDatabase: {fileID: 11400000, guid: e221b73632ccb244894afc1c6b13fd02, type: 2}
+  audioService: {fileID: 0}
   amplifyMultiplier: 3
   postVoiceBgm: {fileID: 8300000, guid: 39f72793262b1fc4c82c46564d5f3365, type: 3}
   postVoiceBgmVolume: 1
@@ -2997,6 +3075,10 @@ PrefabInstance:
     - target: {fileID: 1818261466569464485, guid: 67132600bc5b87c4ca0a878165c931ad, type: 3}
       propertyPath: m_Name
       value: Story_1_page_66-67
+      objectReference: {fileID: 0}
+    - target: {fileID: 1818261466569464485, guid: 67132600bc5b87c4ca0a878165c931ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4765250842229223871, guid: 67132600bc5b87c4ca0a878165c931ad, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3077,59 +3159,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b2e94146f12cb14188b094d66544b66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ARWindowManager
-  totalPages: 39
   windowSize: 2
-  pageAddresses:
-  - Story_1_page_intro
-  - Story_1_page_4-5
-  - Story_1_page_6-7
-  - Story_1_page_8-9
-  - Story_1_page_10-11
-  - Story_1_page_12-13
-  - Story_1_page_14-15
-  - Story_1_page_16-17
-  - Story_1_page_18-19
-  - Story_1_page_20-21
-  - Story_1_page_22-quiz
-  - Story_1_page_24-25
-  - Story_1_page_26-27
-  - Story_1_page_28-29
-  - Story_1_page_30-31
-  - Story_1_page_32-33
-  - Story_1_page_34-35
-  - Story_1_page_36-37
-  - Story_1_page_38-39
-  - Story_1_page_40-41
-  - Story_1_page_42-43
-  - Story_1_page_44-45
-  - Story_1_page_48-49
-  - Story_1_page_50-51
-  - Story_1_page_52-53
-  - Story_1_page_54-55
-  - Story_1_page_56-57
-  - Story_1_page_58-59
-  - Story_1_page_60-61
-  - Story_1_page_62-63
-  - Story_1_page_66-67
-  - Story_1_page_68-69
-  - Story_1_page_70-71
-  - Story_1_page_72-73
-  - Story_1_page_74-75
-  - Story_1_page_76-77
-  - Story_1_page_78-79
-  - Story_1_page_80-81
-  - Story_1_page_82-83
-  - Story_1_page_86-87
-  - Story_1_page_88-89
-  - Story_1_page_90-91
-  - Story_1_page_92-93
-  - Story_1_page_94-95
-  - Story_1_page_96-97
-  - Story_1_page_98-99
-  - Story_1_page_100-101
-  - Story_1_page_102-103
-  - Story_1_page_104-105
-  - Story_1_page_106-107
+  releaseContentOutsideWindow: 1
+  pages: []
 --- !u!4 &1294535598
 Transform:
   m_ObjectHideFlags: 0
@@ -3218,6 +3250,10 @@ PrefabInstance:
     - target: {fileID: 4002363650972605135, guid: 384270ce7fbce9e44b65c8806b1154f4, type: 3}
       propertyPath: m_Name
       value: Story_1_page_82-83
+      objectReference: {fileID: 0}
+    - target: {fileID: 4002363650972605135, guid: 384270ce7fbce9e44b65c8806b1154f4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8113998804014388858, guid: 384270ce7fbce9e44b65c8806b1154f4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3320,6 +3356,10 @@ PrefabInstance:
     - target: {fileID: 4444276884628259052, guid: adb1dc540ac2473439cfa91a7efaf13f, type: 3}
       propertyPath: m_Name
       value: 'Story_1_page_68-69 '
+      objectReference: {fileID: 0}
+    - target: {fileID: 4444276884628259052, guid: adb1dc540ac2473439cfa91a7efaf13f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3680,6 +3720,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Story_1_page_98-99
       objectReference: {fileID: 0}
+    - target: {fileID: 3104298072510122424, guid: 4265b466883ec7a4e81b75dc80025b0d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4425123375962273251, guid: 4265b466883ec7a4e81b75dc80025b0d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3843,6 +3887,10 @@ PrefabInstance:
     - target: {fileID: 7025230220736878283, guid: b3af24e5cef375b439eb17627b503dae, type: 3}
       propertyPath: m_Name
       value: Story_1_page_76-77
+      objectReference: {fileID: 0}
+    - target: {fileID: 7025230220736878283, guid: b3af24e5cef375b439eb17627b503dae, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4109,6 +4157,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'Story_1_page_90-91 '
       objectReference: {fileID: 0}
+    - target: {fileID: 9040277737404478599, guid: b39da93fec577024cb58a410821e8d46, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4229,13 +4281,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 981428323603195010, guid: d98e06b9fdc8b3046b5ec7f64a5d80ed, type: 3}
-      propertyPath: contentRoot
-      value: 
-      objectReference: {fileID: 1930849692}
     - target: {fileID: 2619830563717379544, guid: d98e06b9fdc8b3046b5ec7f64a5d80ed, type: 3}
       propertyPath: m_Name
       value: Story_1_page_92-93
+      objectReference: {fileID: 0}
+    - target: {fileID: 2619830563717379544, guid: d98e06b9fdc8b3046b5ec7f64a5d80ed, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4245,11 +4297,6 @@ PrefabInstance:
 --- !u!4 &1930849691 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 207663564808084703, guid: d98e06b9fdc8b3046b5ec7f64a5d80ed, type: 3}
-  m_PrefabInstance: {fileID: 1930849690}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1930849692 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2541737722449228835, guid: d98e06b9fdc8b3046b5ec7f64a5d80ed, type: 3}
   m_PrefabInstance: {fileID: 1930849690}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1942476086
@@ -4801,6 +4848,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &78067461117669952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4834,6 +4883,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_28-29
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -4841,6 +4891,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &117334640399089507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4873,6 +4924,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &129619450552217862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4938,6 +4991,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &285983179755594835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5226,6 +5281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &643143329316042393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5310,6 +5367,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!4 &754226769539528382
 Transform:
   m_ObjectHideFlags: 0
@@ -5394,6 +5453,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &812956063784460030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5419,6 +5480,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &819180517874318120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5431,6 +5494,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &839278980586631205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5493,6 +5558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_54-55
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -5500,6 +5566,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!4 &887344349489908023
 Transform:
   m_ObjectHideFlags: 0
@@ -5556,6 +5623,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_50-51
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -5563,6 +5631,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &895770956194292417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5599,13 +5668,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_88-89
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!222 &927890268935031871
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5762,6 +5833,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1121340222702165545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5775,13 +5848,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_102-103
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1140591824539802050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5837,6 +5912,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1267063744279429417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5889,6 +5966,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!1 &1317280052370988384
 GameObject:
   m_ObjectHideFlags: 0
@@ -5962,7 +6041,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1396463894970080120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5995,6 +6074,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1465449711790193976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6008,6 +6089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_62-63
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -6015,6 +6097,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &1489257088906323005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6064,6 +6147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_30-31
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -6071,6 +6155,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!1 &1540069911403395653
 GameObject:
   m_ObjectHideFlags: 0
@@ -6105,6 +6190,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &1628820106143691066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6290,6 +6377,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!1 &1790458370488719093
 GameObject:
   m_ObjectHideFlags: 0
@@ -6418,6 +6507,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!4 &1885565632044300417
 Transform:
   m_ObjectHideFlags: 0
@@ -6496,13 +6587,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_80-81
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!1 &2112988483954708298
 GameObject:
   m_ObjectHideFlags: 0
@@ -6569,6 +6662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_44-45
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -6576,6 +6670,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!4 &2194679880551864084
 Transform:
   m_ObjectHideFlags: 0
@@ -6638,6 +6733,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!4 &2226989568620072053
 Transform:
   m_ObjectHideFlags: 0
@@ -6666,6 +6763,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &2255556960986290714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6697,7 +6796,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &2257066471728517810
 GameObject:
   m_ObjectHideFlags: 0
@@ -6783,6 +6882,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_38-39
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -6790,6 +6890,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!1 &2344647468064356849
 GameObject:
   m_ObjectHideFlags: 0
@@ -6824,6 +6925,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &2355024026455955883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6837,13 +6940,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_86-87
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &2358775623111242878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6856,6 +6961,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &2439081406225841266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6926,6 +7033,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!4 &2648356363988636037
 Transform:
   m_ObjectHideFlags: 0
@@ -6971,13 +7080,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_106-107
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!1 &2685592139301262426
 GameObject:
   m_ObjectHideFlags: 0
@@ -7059,13 +7170,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_100-101
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!1 &2826888045975194124
 GameObject:
   m_ObjectHideFlags: 0
@@ -7446,6 +7559,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!4 &3475104726839616898
 Transform:
   m_ObjectHideFlags: 0
@@ -7614,6 +7729,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &3630146285260422948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7627,13 +7744,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_104-105
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!224 &3659756608898525539
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7665,6 +7784,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &3727652274449649248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7744,13 +7865,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_98-99
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &3887406845559501593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7763,6 +7886,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &3890759360978190447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7789,6 +7914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_26-27
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -7796,6 +7922,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &3921016712494295437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7838,13 +7965,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_66-67
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &4003523585791038297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7857,6 +7986,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &4027529103228536015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7890,13 +8021,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_72-73
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &4110579998220826579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7929,6 +8062,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &4147025466640304721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7954,6 +8089,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &4183718414658279988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8023,6 +8160,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &4233890079261099067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8153,6 +8292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_60-61
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -8160,6 +8300,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &4427087814181948229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8186,6 +8327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_16-17
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -8193,6 +8335,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &4451379298266817571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8206,6 +8349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_22-quiz
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -8213,6 +8357,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &4480402615359583687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8391,13 +8536,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_82-83
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!224 &4662321037278370315
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8451,6 +8598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_14-15
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -8458,6 +8606,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &4756740781759608403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8470,6 +8619,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &4764498855174970566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8628,6 +8779,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &4887865916907072863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8695,13 +8848,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_96-97
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!1 &4949850171039506655
 GameObject:
   m_ObjectHideFlags: 0
@@ -8807,6 +8962,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_56-57
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -8814,6 +8970,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &4990018696943243601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8827,6 +8984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_34-35
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -8834,6 +8992,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &5006083395730791288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8933,6 +9092,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &5088728634796874154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8945,6 +9106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &5096396408647793424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8974,6 +9137,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &5156287404944170448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9042,6 +9207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_4-5
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -9049,6 +9215,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &5207248228434902636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9114,6 +9281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!1 &5265974391584759891
 GameObject:
   m_ObjectHideFlags: 0
@@ -9156,6 +9325,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!4 &5342567666861376613
 Transform:
   m_ObjectHideFlags: 0
@@ -9214,6 +9385,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!1 &5376020689011973087
 GameObject:
   m_ObjectHideFlags: 0
@@ -9271,13 +9444,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_90-91
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &5445832403944180785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9429,6 +9604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_18-19
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -9436,6 +9612,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!1 &5641377965247836751
 GameObject:
   m_ObjectHideFlags: 0
@@ -9574,6 +9751,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &5954344818012558658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9662,13 +9841,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_74-75
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &6091384507368179074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9682,6 +9863,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_52-53
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -9689,6 +9871,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &6109840842815794434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9702,6 +9885,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_intro
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -9709,6 +9893,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &6118064562058327577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9759,6 +9944,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AutoHideUI
   hideDelay: 3
   uiRoot: {fileID: 329687853074120751}
+  pauseWhileActivityIsRunning: 1
 --- !u!114 &6167256721210251431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9784,6 +9970,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &6199063175817810699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9797,6 +9985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_22-quiz
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -9804,6 +9993,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!1 &6229825861452666954
 GameObject:
   m_ObjectHideFlags: 0
@@ -9832,6 +10022,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!1 &6274724589330388179
 GameObject:
   m_ObjectHideFlags: 0
@@ -9913,6 +10105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_12-13
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -9920,6 +10113,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &6326677357944301873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9933,13 +10127,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_92-93
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!4 &6334693536038095718
 Transform:
   m_ObjectHideFlags: 0
@@ -10208,6 +10404,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &6516923084532928490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10321,6 +10519,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &6661141168799595081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10333,6 +10533,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &6661141168799595082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10364,6 +10566,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!224 &6732952133895396706
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10404,6 +10608,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &6828021459210957227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10436,6 +10642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_6-7
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -10443,6 +10650,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!4 &6847596677717768804
 Transform:
   m_ObjectHideFlags: 0
@@ -10501,6 +10709,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_58-59
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -10508,6 +10717,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!1 &6928425368764717517
 GameObject:
   m_ObjectHideFlags: 0
@@ -10600,6 +10810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_48-49
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -10607,6 +10818,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &6985260257680931882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10788,6 +11000,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_8-9
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -10795,6 +11008,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &7281754084645999673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10807,6 +11021,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!1 &7283981948933368620
 GameObject:
   m_ObjectHideFlags: 0
@@ -10929,13 +11145,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_68-69
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!4 &7335855823223901336
 Transform:
   m_ObjectHideFlags: 0
@@ -11005,6 +11223,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &7393955567977406387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11415,13 +11635,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_94-95
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &7733800387941544033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11746,6 +11968,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &7935453857452412309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11759,13 +11983,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_76-77
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &7935453857452412310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11818,6 +12044,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_10-11
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -11825,6 +12052,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!1 &7953760029046851093
 GameObject:
   m_ObjectHideFlags: 0
@@ -11859,6 +12087,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &7985119060926203956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11976,6 +12206,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &8110144189683900266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12108,6 +12340,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_24-25
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -12115,6 +12348,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &8278789482553564894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12176,6 +12410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_42-43
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -12183,6 +12418,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &8342466436587163747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12298,6 +12534,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e01f0816f56cb443acb261c2f21d518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VuforiaTrackHook
+  keepContentVisibleOnShortTrackingLoss: 1
+  lostTrackingGraceSeconds: 0.6
 --- !u!114 &8457463435790930584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12344,6 +12582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_32-33
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -12351,6 +12590,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &8574182309368663195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12451,13 +12691,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_78-79
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
   sliderV: {fileID: 7802260549687782612}
-  resetButton: {fileID: 0}
+  resetButton: {fileID: 2256686475820094898}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &8629653976556289502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12490,6 +12732,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_20-21
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -12497,6 +12740,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &8631525144622387828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12760,6 +13004,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_40-41
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -12767,6 +13012,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!4 &8764808736107754615
 Transform:
   m_ObjectHideFlags: 0
@@ -13248,6 +13494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomARHandler
   addressableKey: Story_1_page_36-37
+  blockBackgroundTouchesWhileQuizOpen: 1
   replayButton: {fileID: 7568430320982221046}
   nextPageImg: {fileID: 2139261501}
   backBtn: {fileID: 7921724763459701802}
@@ -13255,6 +13502,7 @@ MonoBehaviour:
   resetButton: {fileID: 0}
   autoHideSeconds: 5
   fadeDuration: 0.3
+  keepReplayButtonAlwaysVisible: 0
 --- !u!114 &9069944171279210161
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -178,8 +178,7 @@ MonoBehaviour:
   - m_GUID: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
     m_Address: audio/English/S1_P-4-5
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b0d47838f803b0143a1dafa1b28f67d1
     m_Address: audio/English/S3_P52-53
@@ -194,8 +193,7 @@ MonoBehaviour:
   - m_GUID: b8abbf74b68a5c842b39e122e1c48d5b
     m_Address: audio/English/S1_P-intro
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ba54371be2196bc49a0245074511b9f3
     m_Address: audio/English/S4_P74-75
@@ -205,8 +203,7 @@ MonoBehaviour:
   - m_GUID: c22d88528bb0ace4fa9e82a79444035c
     m_Address: audio/English/S1_P-6-7
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ca3ee6e43551fd6449c9a4036d287b26
     m_Address: audio/English/S5_P90-91
