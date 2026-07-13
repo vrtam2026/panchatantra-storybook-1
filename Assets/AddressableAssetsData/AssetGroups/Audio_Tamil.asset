@@ -38,7 +38,8 @@ MonoBehaviour:
   - m_GUID: 0f4d3adf87cd2a74283e42d8a4ef594d
     m_Address: audio/Tamil/S1_P-6-7
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 10660c803816e5848aad76a01d2984cf
     m_Address: audio/Tamil/S1_P-18-19
@@ -63,7 +64,8 @@ MonoBehaviour:
   - m_GUID: 2e448e4445cca3745a1413f7c6f9160e
     m_Address: audio/Tamil/S1_P-intro
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 36564fb8d71b48c4e882398579c309f5
     m_Address: audio/Tamil/S4_P66-67
@@ -118,7 +120,8 @@ MonoBehaviour:
   - m_GUID: 5e492ef0ab83e4d4083fa750768191df
     m_Address: audio/Tamil/S1_P-4-5
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 60e6228c43357c04287c87263001cf50
     m_Address: audio/Tamil/S3_P60-61

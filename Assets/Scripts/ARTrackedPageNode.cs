@@ -1696,6 +1696,9 @@ public class ARTrackedPageNode : MonoBehaviour
                     if (entry?.video == null) continue;
                     entry.video.Stop();
                     entry.video.time = 0;
+                    // A prewarmed-but-never-reached next part may have left this video's
+                    // visuals force-disabled — restore to a known-good state on reset.
+                    SetVideoVisualsEnabled2D(entry.video, true);
                     if (entry.hideAtPartEnd) entry.video.gameObject.SetActive(false);
                 }
             if (part.backgroundVideos != null)
@@ -1828,6 +1831,7 @@ public class ARTrackedPageNode : MonoBehaviour
             ShowPartLayers2D(part);
             StartPartBackgroundVideos2D(part);
             StartPartMainVideos2D(part);
+            PreWarmNextPartVideos2D(p + 1);
 
             if (part.timedChanges != null && part.timedChanges.Count > 0)
                 _timedChangesRoutine = StartCoroutine(RunTimedChanges2D(part));
@@ -2261,6 +2265,46 @@ public class ARTrackedPageNode : MonoBehaviour
         }
     }
 
+    // Prepares the NEXT part's main videos ahead of time (Prepare() only, never played)
+    // so the black decoder-startup gap doesn't show when the part actually swaps in.
+    // The video's GameObject must be active for Prepare() to make progress, so its
+    // visuals are hidden (not the GameObject) until StartPartMainVideos2D reveals it.
+    private void PreWarmNextPartVideos2D(int nextIndex)
+    {
+        if (storyParts == null || nextIndex < 0 || nextIndex >= storyParts.Count) return;
+        var nextPart = storyParts[nextIndex];
+        if (nextPart?.mainVideos == null) return;
+
+        foreach (var entry in nextPart.mainVideos)
+        {
+            if (entry?.video == null) continue;
+            VideoPlayer vp = entry.video;
+            if (!vp.enabled) continue;
+
+            if (!vp.gameObject.activeSelf) vp.gameObject.SetActive(true);
+            if (!vp.gameObject.activeInHierarchy) continue;
+
+            SetVideoVisualsEnabled2D(vp, false);
+
+            vp.Stop();
+            vp.time = 0;
+            vp.isLooping = entry.loop;
+            vp.playbackSpeed = Mathf.Max(0.01f, entry.playbackSpeed);
+            vp.Prepare();
+        }
+    }
+
+    // Toggles only the visual output (Renderer/RawImage/Image) of a VideoPlayer without
+    // touching its GameObject active state, so Prepare()/decoding can proceed while hidden.
+    private void SetVideoVisualsEnabled2D(VideoPlayer vp, bool visible)
+    {
+        foreach (var r in vp.GetComponentsInChildren<Renderer>(true)) r.enabled = visible;
+        var rawImage = vp.GetComponent<RawImage>();
+        if (rawImage != null) rawImage.enabled = visible;
+        var image = vp.GetComponent<Image>();
+        if (image != null) image.enabled = visible;
+    }
+
     private void StartPartMainVideos2D(StoryPart2D part)
     {
         if (part?.mainVideos == null) return;
@@ -2273,8 +2317,15 @@ public class ARTrackedPageNode : MonoBehaviour
             if (!vp.gameObject.activeSelf) vp.gameObject.SetActive(true);
             if (!vp.gameObject.activeInHierarchy || !vp.enabled) continue;
 
-            vp.Stop();
-            vp.time = 0;
+            SetVideoVisualsEnabled2D(vp, true);
+
+            // Skip Stop()/time reset if a prewarm step already prepared this clip at
+            // time 0 -- re-Stop()'ing mid-Prepare() can interrupt that in-flight buffer.
+            if (!vp.isPrepared)
+            {
+                vp.Stop();
+                vp.time = 0;
+            }
             vp.isLooping = entry.loop;
             vp.playbackSpeed = Mathf.Max(0.01f, entry.playbackSpeed);
 

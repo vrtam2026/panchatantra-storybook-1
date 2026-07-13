@@ -17,6 +17,25 @@ public class CustomARHandler : MonoBehaviour
     private ModelInteraction modelInteraction;
     private QuizManager quizManager;
 
+    // Stable proxy between the raw Vuforia tracker and the spawned page content.
+    // Plain pass-through by default (2D pages must track the real page exactly, with
+    // zero added smoothing/lag -- they never had a jitter problem). Only 3D pages get
+    // a VuforiaContentStabilizer added to this anchor (see below), since 3D is the only
+    // content where the same raw tracking noise is actually visible as shaking.
+    // ModelInteraction's parent-relative math stays valid either way, since the content's
+    // own parent (this anchor) never changes, whether or not it's being smoothed.
+    private Transform _stabilizedAnchor;
+
+    private Transform GetStabilizedAnchor()
+    {
+        if (_stabilizedAnchor != null) return _stabilizedAnchor;
+
+        var anchorObj = new GameObject("StabilizedAnchor");
+        anchorObj.transform.SetParent(transform, false);
+        _stabilizedAnchor = anchorObj.transform;
+        return _stabilizedAnchor;
+    }
+
     // Quiz pages use the same CustomARHandler addressable flow,
     // but once the quiz opens it should no longer depend on marker tracking.
     private bool _isQuizContent = false;
@@ -142,6 +161,12 @@ public class CustomARHandler : MonoBehaviour
         var observer = GetComponent<ObserverBehaviour>();
         if (observer != null)
             observer.OnTargetStatusChanged -= OnTargetStatusChanged;
+
+        // The stabilized anchor detaches itself from this transform (see
+        // VuforiaContentStabilizer.Start()), so it won't be cleaned up automatically
+        // if this GameObject is destroyed independently of a full scene unload.
+        if (_stabilizedAnchor != null)
+            Destroy(_stabilizedAnchor.gameObject);
     }
 
     // ----------------------------------------------------------------------
@@ -674,7 +699,7 @@ public class CustomARHandler : MonoBehaviour
             OverlayManager.Instance?.HideAll();
             LoadingScreen.Show();
 
-            Addressables.InstantiateAsync(addressableKey, transform).Completed += handle =>
+            Addressables.InstantiateAsync(addressableKey, GetStabilizedAnchor()).Completed += handle =>
             {
                 _isLoading = false;
                 LoadingScreen.Hide();
@@ -703,6 +728,26 @@ public class CustomARHandler : MonoBehaviour
                 instantiatedObject = handle.Result;
                 instantiatedObject.transform.localPosition = Vector3.zero;
                 contentControl = instantiatedObject.GetComponent<IARContent>();
+
+                // Only 3D content gets tracking smoothing. 2D pages must keep tracking the
+                // real printed page exactly, with zero added lag -- they never had a jitter
+                // problem, and the app is unusable if the content stops matching the real
+                // page precisely. 3D content shows the same raw tracking noise as visible
+                // shaking, so it gets an adaptive noise filter -- it only smooths while the
+                // page is essentially still, and gets out of the way instantly the moment
+                // real movement is detected, so it never lags behind the real page.
+                var pageNode = instantiatedObject.GetComponentInChildren<ARTrackedPageNode>();
+                if (pageNode != null && pageNode.Type == PageType.ThreeD && _stabilizedAnchor != null)
+                {
+                    var stabilizer = _stabilizedAnchor.GetComponent<VuforiaContentStabilizer>();
+                    if (stabilizer == null)
+                        stabilizer = _stabilizedAnchor.gameObject.AddComponent<VuforiaContentStabilizer>();
+
+                    // New content was just parented under the anchor -- its renderers
+                    // didn't exist yet when the stabilizer's own Awake() ran, so its
+                    // visibility-toggle cache would otherwise stay permanently empty.
+                    stabilizer.RefreshTrackedRenderers();
+                }
 
                 // modelInteraction cached in Awake -- do NOT reassign here.
                 // Only call Init to set up the model transform and slider values.

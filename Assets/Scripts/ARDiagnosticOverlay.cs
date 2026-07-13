@@ -124,8 +124,12 @@ public class ARDiagnosticOverlay : MonoBehaviour
         else
         {
             var cache = audioService.GetCacheInfo();
-            AppendPackLine(sb, lang,                                 pageId, cache);
-            AppendPackLine(sb, lang == "English" ? "Hindi" : "English", pageId, cache);
+            AppendPackLine(sb, lang, pageId, cache);
+            foreach (var otherLang in audioService.GetAllLanguages())
+            {
+                if (string.Equals(otherLang, lang, System.StringComparison.OrdinalIgnoreCase)) continue;
+                AppendPackLine(sb, otherLang, pageId, cache);
+            }
         }
         sb.AppendLine();
 

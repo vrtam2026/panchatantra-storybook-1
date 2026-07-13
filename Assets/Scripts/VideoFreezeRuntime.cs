@@ -52,8 +52,13 @@ public sealed class VideoFreezeRuntime
         StopRoutinesInternal();
         if (_vp == null) return;
         if (!_vp.gameObject.activeInHierarchy) return;
-        _vp.Stop();
-        _vp.time = 0;
+        // Skip Stop()/time reset if a prewarm step already prepared this clip at time 0 --
+        // re-Stop()'ing a player mid-Prepare() can interrupt/discard that in-flight buffer.
+        if (!_vp.isPrepared)
+        {
+            _vp.Stop();
+            _vp.time = 0;
+        }
         _vp.playbackSpeed = _playbackSpeed;
         _startRoutine = _host.StartCoroutine(StartAfterDelayRoutine());
     }
@@ -100,7 +105,9 @@ public sealed class VideoFreezeRuntime
         _vp.waitForFirstFrame = true;
         _vp.sendFrameReadyEvents = true;
         if (!_frameHooked) { _vp.frameReady += OnFrameReady; _frameHooked = true; }
-        _vp.Prepare();
+        // A prewarm step may have already prepared this clip -- don't re-Prepare() an
+        // already-prepared player, that would discard the head start it was given.
+        if (!_vp.isPrepared) _vp.Prepare();
         float timeout = Time.realtimeSinceStartup + 5f;
         while (!_vp.isPrepared && Time.realtimeSinceStartup < timeout) yield return null;
         _vp.time = 0;

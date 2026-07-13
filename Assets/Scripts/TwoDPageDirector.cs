@@ -176,6 +176,7 @@ public class TwoDPageDirector : MonoBehaviour
 
             ShowPartLayers(part);
             StartPartVideos(part);
+            PreWarmNextPartVideos(p + 1);
 
             yield return WaitForPartEnd(part);
 
@@ -265,6 +266,38 @@ public class TwoDPageDirector : MonoBehaviour
 
     // ── videos ──────────────────────────────────────────────────────────────────
 
+    // Prepares the NEXT part's main videos ahead of time (Prepare() only, never played)
+    // so the black decoder-startup gap doesn't show when the part actually swaps in.
+    private void PreWarmNextPartVideos(int nextIndex)
+    {
+        if (parts == null || nextIndex < 0 || nextIndex >= parts.Count) return;
+        StoryPart nextPart = parts[nextIndex];
+        if (nextPart?.mainVideos == null) return;
+
+        foreach (var vp in nextPart.mainVideos)
+        {
+            if (vp == null) continue;
+            if (!vp.gameObject.activeSelf) vp.gameObject.SetActive(true);
+            if (!vp.gameObject.activeInHierarchy) continue;
+
+            SetVideoVisualsEnabled(vp, false);
+            vp.Stop();
+            vp.time = 0;
+            vp.Prepare();
+        }
+    }
+
+    // Toggles only the visual output (Renderer/RawImage/Image) of a VideoPlayer without
+    // touching its GameObject active state, so Prepare()/decoding can proceed while hidden.
+    private void SetVideoVisualsEnabled(VideoPlayer vp, bool visible)
+    {
+        foreach (var r in vp.GetComponentsInChildren<Renderer>(true)) r.enabled = visible;
+        var rawImage = vp.GetComponent<RawImage>();
+        if (rawImage != null) rawImage.enabled = visible;
+        var image = vp.GetComponent<Image>();
+        if (image != null) image.enabled = visible;
+    }
+
     private void StartPartVideos(StoryPart part)
     {
         for (int i = 0; i < part.mainVideos.Count; i++)
@@ -273,6 +306,8 @@ public class TwoDPageDirector : MonoBehaviour
             if (vp == null) continue;
             if (!vp.gameObject.activeSelf) vp.gameObject.SetActive(true);
             if (!vp.gameObject.activeInHierarchy) continue;
+
+            SetVideoVisualsEnabled(vp, true);
 
             MainVideoSettings s = (part.mainVideoSettings != null && i < part.mainVideoSettings.Count)
                 ? part.mainVideoSettings[i] : null;

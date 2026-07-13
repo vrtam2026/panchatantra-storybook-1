@@ -143,7 +143,8 @@ MonoBehaviour:
   - m_GUID: 91c0b9dc53c86e7478b61a4786e6d6ea
     m_Address: audio/Hindi/S1_P-intro
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 91d6dbacab785ee4d9f4e3ffbd2a9a34
     m_Address: audio/Hindi/S3_P56-57
@@ -173,7 +174,8 @@ MonoBehaviour:
   - m_GUID: a1d9132ce55753342b3edcaea9da3816
     m_Address: audio/Hindi/S1_P-6-7
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a5c1840ad711b8745abe3ec4c4a2e1d7
     m_Address: audio/Hindi/S2_P44-45
@@ -203,7 +205,8 @@ MonoBehaviour:
   - m_GUID: b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7
     m_Address: audio/Hindi/S1_P-4-5
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b9966b6d9f2dc864b9873e5809261c10
     m_Address: audio/Hindi/S4_P66-67

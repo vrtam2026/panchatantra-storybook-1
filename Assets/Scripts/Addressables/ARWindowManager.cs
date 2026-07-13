@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 /// <summary>
 /// Sliding window memory manager.
@@ -35,6 +37,8 @@ public class ARWindowManager : MonoBehaviour
     // ─────────────────────────────────────────────────────────────────────────
 
     private CustomARHandler[] _cachedHandlers;
+    private readonly Dictionary<string, AsyncOperationHandle> _prefetchHandles = new Dictionary<string, AsyncOperationHandle>();
+    private readonly HashSet<string> _pendingPrefetchRelease = new HashSet<string>();
 
     void Awake()
     {
@@ -50,6 +54,13 @@ public class ARWindowManager : MonoBehaviour
     void OnDestroy()
     {
         if (Instance == this) Instance = null;
+
+        // Release any outstanding visual prefetch handles so they don't leak if this
+        // component is ever destroyed independently of a full scene unload.
+        foreach (var handle in _prefetchHandles.Values)
+            Addressables.Release(handle);
+        _prefetchHandles.Clear();
+        _pendingPrefetchRelease.Clear();
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -90,6 +101,36 @@ public class ARWindowManager : MonoBehaviour
                 if (audioService != null && !string.IsNullOrEmpty(entry.pageId))
                     foreach (var lang in languages)
                         audioService.PreloadAudioPack(lang, entry.pageId);
+
+                // Pre-download the visual page content in the background (no instantiate)
+                if (!_prefetchHandles.ContainsKey(entry.addressableKey))
+                {
+                    string prefetchKey = entry.addressableKey;
+                    var handle = Addressables.DownloadDependenciesAsync(prefetchKey, false);
+                    _prefetchHandles[prefetchKey] = handle;
+                    Debug.Log($"[AR-WINDOW] Visual prefetch started: '{prefetchKey}'");
+
+                    handle.Completed += op =>
+                    {
+                        if (op.Status == AsyncOperationStatus.Succeeded)
+                            Debug.Log($"[AR-WINDOW] Visual prefetch ready: '{prefetchKey}'");
+                        else
+                            Debug.LogWarning($"[AR-WINDOW] Visual prefetch FAILED: '{prefetchKey}' — " +
+                                              $"{op.OperationException?.Message}");
+
+                        // If the page fell out of the window before this finished, release it now.
+                        if (_pendingPrefetchRelease.Remove(prefetchKey))
+                        {
+                            Addressables.Release(op);
+                            _prefetchHandles.Remove(prefetchKey);
+                        }
+                    };
+                }
+                else
+                {
+                    // Page re-entered the window before its pending release fired — keep it.
+                    _pendingPrefetchRelease.Remove(entry.addressableKey);
+                }
             }
             else
             {
@@ -109,6 +150,22 @@ public class ARWindowManager : MonoBehaviour
                 if (audioService != null && !string.IsNullOrEmpty(entry.pageId))
                     foreach (var lang in languages)
                         audioService.ReleaseAudioPack(lang, entry.pageId);
+
+                // Release the pre-downloaded visual content for this page.
+                // If its download is still in flight, don't cancel it — just mark it
+                // for release once the Completed callback above fires.
+                if (_prefetchHandles.TryGetValue(entry.addressableKey, out var prefetchHandle))
+                {
+                    if (prefetchHandle.IsDone)
+                    {
+                        Addressables.Release(prefetchHandle);
+                        _prefetchHandles.Remove(entry.addressableKey);
+                    }
+                    else
+                    {
+                        _pendingPrefetchRelease.Add(entry.addressableKey);
+                    }
+                }
             }
         }
 
