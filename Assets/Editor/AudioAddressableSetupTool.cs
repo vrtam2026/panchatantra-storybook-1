@@ -333,9 +333,120 @@ public static class AudioAddressableSetupTool
             WarnAboutUnrecognizedFiles(allFilesInDir, audioFiles, audioDir);
 
             created += MatchAndConnect(audioFiles, storyPages, language, settings, catalog, ref catalogDirty);
+
+            // Background music, from a sibling folder with "BGM" in its name (e.g. a
+            // "English_BGM" folder next to "English_Audio"). Runs after the voices are
+            // connected, and only fills the pack's bgmClips -- voice setup above is
+            // never touched by this. No BGM folder? Nothing happens, exactly as before.
+            ConnectBgmForStoryFolder(audioDir, language, storyPages);
         }
 
         return created;
+    }
+
+    // -----------------------------------------------------------------------
+    // Background music
+    // -----------------------------------------------------------------------
+
+    /// <summary>
+    /// Finds the BGM folder that belongs with this voice folder and fills each page's
+    /// bgmClips from it, matching files to pages exactly the same way voices are matched.
+    ///
+    /// Background music is the same piece of music whatever language is being spoken, so
+    /// if a language has no BGM folder of its own it falls back to English's -- that way a
+    /// new language never needs its music re-supplied or a placeholder invented for it.
+    /// </summary>
+    private static void ConnectBgmForStoryFolder(
+        string voiceDir, string language, List<PageIdentityUtility.PageInfo> storyPages)
+    {
+        string bgmDir = FindBgmFolder(voiceDir, language) ?? FindBgmFolder(voiceDir, DefaultLanguageForStoryAssets);
+        if (bgmDir == null) return;
+
+        List<string> bgmFiles = Directory.GetFiles(bgmDir, "*", SearchOption.TopDirectoryOnly)
+            .Where(IsAudioFile).ToList();
+        if (bgmFiles.Count == 0) return;
+
+        int filled = 0;
+
+        foreach (PageIdentityUtility.PageInfo page in storyPages)
+        {
+            if (string.IsNullOrEmpty(page.pageId)) continue;
+
+            string packPath = $"{PackOutputFolder}/{language}/Page_{SanitizeForFileName(page.pageId)}_{language}.asset";
+            ARPageAudioPack pack = AssetDatabase.LoadAssetAtPath<ARPageAudioPack>(packPath);
+            if (pack == null) continue; // no voice pack for this page yet -- nothing to attach music to
+
+            // Never overwrite BGM that is already set (by this tool or by hand).
+            if (pack.bgmClips != null && pack.bgmClips.Exists(s => s != null && s.clip != null)) continue;
+
+            string match = FindBgmFileForPage(bgmFiles, page.pageId);
+            if (match == null) continue;
+
+            AudioClip clip = AssetDatabase.LoadAssetAtPath<AudioClip>(match);
+            if (clip == null) continue;
+
+            pack.bgmClips = new List<ARPageAudioPack.AudioSegment>
+            {
+                new ARPageAudioPack.AudioSegment { clip = clip, volume = 1f, loop = true }
+            };
+            EditorUtility.SetDirty(pack);
+            filled++;
+
+            Debug.Log($"[Audio Setup] BGM '{Path.GetFileName(match)}' -> page '{page.pageId}' ({language}).");
+        }
+
+        if (filled > 0)
+        {
+            AssetDatabase.SaveAssets();
+            Debug.Log($"[Audio Setup] Connected background music for {filled} {language} page(s) from '{bgmDir}'.");
+        }
+    }
+
+    // Looks beside the voice folder for a folder whose name has both "bgm" and the
+    // language in it (e.g. "English_BGM"), then for any "bgm" folder if the language
+    // isn't part of its name.
+    private static string FindBgmFolder(string voiceDir, string language)
+    {
+        string parent = Path.GetDirectoryName(voiceDir);
+        if (string.IsNullOrEmpty(parent) || !Directory.Exists(parent)) return null;
+
+        string[] siblings = Directory.GetDirectories(parent, "*", SearchOption.TopDirectoryOnly)
+            .Where(d => Path.GetFileName(d).IndexOf("bgm", StringComparison.OrdinalIgnoreCase) >= 0)
+            .ToArray();
+
+        if (siblings.Length == 0) return null;
+
+        string named = siblings.FirstOrDefault(d =>
+            Path.GetFileName(d).IndexOf(language, StringComparison.OrdinalIgnoreCase) >= 0);
+
+        return named ?? siblings[0];
+    }
+
+    // Matches a BGM file to a page using the same rules as voices: first by the page
+    // range in the name ("Page 5-6.mp3" -> "TR_S1_P5-6"), then by page order number.
+    private static string FindBgmFileForPage(List<string> bgmFiles, string pageId)
+    {
+        Match range = Regex.Match(pageId, @"(\d+)-(\d+)\s*$");
+        if (range.Success)
+        {
+            string wanted = $"{range.Groups[1].Value}-{range.Groups[2].Value}";
+            List<string> hits = bgmFiles
+                .Where(f => Path.GetFileNameWithoutExtension(f).Contains(wanted))
+                .ToList();
+            if (hits.Count > 0) return PickBestVariant(hits);
+        }
+
+        // Non-numbered pages such as "TR_S1_Intro" -- match the word instead.
+        Match word = Regex.Match(pageId, @"_([A-Za-z]+)\s*$");
+        if (word.Success)
+        {
+            string w = word.Groups[1].Value;
+            string hit = bgmFiles.FirstOrDefault(f =>
+                Path.GetFileNameWithoutExtension(f).IndexOf(w, StringComparison.OrdinalIgnoreCase) >= 0);
+            if (hit != null) return hit;
+        }
+
+        return null;
     }
 
     // Walks up from an audio folder looking for the nearest ancestor folder whose name

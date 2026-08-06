@@ -747,6 +747,15 @@ public class CustomARHandler : MonoBehaviour
                     // didn't exist yet when the stabilizer's own Awake() ran, so its
                     // visibility-toggle cache would otherwise stay permanently empty.
                     stabilizer.RefreshTrackedRenderers();
+
+                    // Lock the anchor onto its correct tracked position right now, in this
+                    // same frame -- do not wait for Unity's automatic Start() (which would
+                    // only run on the NEXT frame). The page content's own reveal animation
+                    // can start the instant it's created, so if the anchor is still attached
+                    // to the raw tracker and not yet in its final position when that happens,
+                    // the pop-up can misfire or the model can appear briefly in the wrong
+                    // spot -- exactly the "works on Replay but not on first scan" symptom.
+                    stabilizer.Initialize();
                 }
 
                 // modelInteraction cached in Awake -- do NOT reassign here.

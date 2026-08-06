@@ -224,8 +224,26 @@ public class ARAddressableAudioService : MonoBehaviour
         string key = MakeKey(language, pageId);
         if (_cache.TryGetValue(key, out var handle))
         {
-            if (handle.IsValid())
+            // Release through the catalog's own AssetReference rather than the generic
+            // Addressables.Release(handle). An AssetReference keeps its OWN internal
+            // "already loaded" flag, and only its ReleaseAsset() clears that flag.
+            // Releasing just the handle frees the asset but leaves the reference still
+            // believing it is loaded, so the next LoadAssetAsync() on that same
+            // reference throws "Attempting to load AssetReference that has already been
+            // loaded" -- and that page stays silent when it is scanned again.
+            if (handle.IsValid() &&
+                catalog != null &&
+                catalog.TryGetAudioPack(language, pageId, out var audioPackRef))
+            {
+                audioPackRef.ReleaseAsset();
+            }
+            else if (handle.IsValid())
+            {
+                // No catalog entry to release through (entry removed since load) --
+                // fall back so the asset is still freed rather than leaked.
                 Addressables.Release(handle);
+            }
+
             _cache.Remove(key);
             Debug.Log($"[AR-AUDIO] Released from cache: {key}");
         }

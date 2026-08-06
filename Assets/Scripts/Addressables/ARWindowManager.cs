@@ -174,6 +174,22 @@ public class ARWindowManager : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+    // Lets the on-screen diagnostic overlay show prefetch status live on-device,
+    // without needing a USB/logcat connection to see the [AR-WINDOW] log lines.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    public List<string> GetPrefetchStatusLines()
+    {
+        var lines = new List<string>();
+        foreach (var kvp in _prefetchHandles)
+        {
+            string state = kvp.Value.IsDone
+                ? (kvp.Value.Status == AsyncOperationStatus.Succeeded ? "Ready" : "FAILED")
+                : "Downloading...";
+            lines.Add($"{kvp.Key}: {state}");
+        }
+        return lines;
+    }
 
     int FindIndex(string addressableKey)
     {

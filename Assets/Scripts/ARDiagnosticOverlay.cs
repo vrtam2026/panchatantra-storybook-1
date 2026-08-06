@@ -177,6 +177,34 @@ public class ARDiagnosticOverlay : MonoBehaviour
         sb.AppendLine();
 
         // ════════════════════════════════════════════════════════════════════
+        // 3b. VISUAL PAGE PREFETCH (±window neighbours)
+        // ════════════════════════════════════════════════════════════════════
+        Line(sb, "══ VISUAL PREFETCH (±window) ════════════════", CHeader, bold: true);
+
+        var windowManager = ARWindowManager.Instance;
+        if (windowManager == null)
+        {
+            Line(sb, "  ✖  ARWindowManager not found!", CError);
+        }
+        else
+        {
+            var prefetchLines = windowManager.GetPrefetchStatusLines();
+            if (prefetchLines.Count == 0)
+            {
+                Line(sb, "  —  Nothing prefetching right now", CDim);
+            }
+            else
+            {
+                foreach (var line in prefetchLines)
+                {
+                    Color c = line.EndsWith("Ready") ? COk : line.EndsWith("FAILED") ? CError : CBusy;
+                    Line(sb, "  " + line, c);
+                }
+            }
+        }
+        sb.AppendLine();
+
+        // ════════════════════════════════════════════════════════════════════
         // 4. SUMMARY COUNTS  — big clear numbers
         // ════════════════════════════════════════════════════════════════════
         Line(sb, "══ ALL ADDRESSABLES ══════════════════════════", CHeader, bold: true);

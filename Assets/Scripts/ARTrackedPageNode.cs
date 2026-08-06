@@ -40,6 +40,13 @@ public enum PartTiming2D
     WaitForTap
 }
 
+// How multiple Main Items in one slot are timed against each other.
+public enum MainPlayOrder
+{
+    OneAfterAnother,
+    AllAtSameTime
+}
+
 public enum SmallMotionType
 {
     None,
@@ -164,6 +171,10 @@ public class VisualLayer2D
     [Tooltip("The layer GameObject or Transform (background, PNG, sprite, effect). Drag any object here.")]
     public Transform layer;
 
+    // Editor-only grouping hint so an image added under "Main Content" vs "Background"
+    // shows up in the matching Inspector section. Does not change runtime behavior.
+    public bool isBackgroundLayer = false;
+
     [Tooltip("Show this layer when the part starts.")]
     public bool showAtPartStart = true;
 
@@ -276,6 +287,9 @@ public class StoryPart2D
 
     [Tooltip("Main story videos for this part. Each entry includes the VideoPlayer and all its settings.\n\nPart advances when the checked 'Wait For Part End' videos finish. If none are checked, waits for all non-looping videos.")]
     public List<StoryPartVideo2D> mainVideos = new List<StoryPartVideo2D>();
+
+    [Tooltip("When this slot has more than one Main Item, should they play one after another, or all together?")]
+    public MainPlayOrder mainPlayOrder = MainPlayOrder.OneAfterAnother;
 
     [Tooltip("Background images, PNGs, sprites, or effect layers for this part. Each entry has its own show/hide/fade/motion settings.")]
     public List<VisualLayer2D> visualLayers = new List<VisualLayer2D>();
@@ -1595,11 +1609,11 @@ public class ARTrackedPageNode : MonoBehaviour
             MainVideoSettings s =
                 (mainVideoSettings != null && i < mainVideoSettings.Count) ? mainVideoSettings[i] : null;
 
-            var mode  = s != null ? s.freezeMode         : freezeMode;
+            var mode = s != null ? s.freezeMode : freezeMode;
             var first = s != null ? s.freezeFirstSeconds : freezeFirstSeconds;
-            var last  = s != null ? s.freezeLastSeconds  : freezeLastSeconds;
-            var speed = s != null ? s.playbackSpeed      : 1f;
-            var delay = s != null ? s.startDelay         : 0f;
+            var last = s != null ? s.freezeLastSeconds : freezeLastSeconds;
+            var speed = s != null ? s.playbackSpeed : 1f;
+            var delay = s != null ? s.startDelay : 0f;
 
             if (_videoRuntime.TryGetValue(vp, out var rt))
                 rt.RestartWithFreeze(mode, first, last, speed, delay);
@@ -1620,7 +1634,7 @@ public class ARTrackedPageNode : MonoBehaviour
                 (backgroundVideoSettings != null && i < backgroundVideoSettings.Count) ? backgroundVideoSettings[i] : null;
 
             var speed = s != null ? s.playbackSpeed : 1f;
-            var delay = s != null ? s.startDelay    : 0f;
+            var delay = s != null ? s.startDelay : 0f;
 
             if (_videoRuntime.TryGetValue(vp, out var rt))
                 rt.RestartWithFreeze(VuforiaVideoFrameFreezeController.FreezeMode.None, 0f, 0f, speed, delay);
@@ -2065,53 +2079,53 @@ public class ARTrackedPageNode : MonoBehaviour
                 break;
 
             case TimedAction2D.PlayVideo:
-            {
-                VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
-                if (vp != null && vp.gameObject.activeInHierarchy && vp.enabled)
                 {
-                    TrackActive2DVideo(vp);
-                    vp.time = 0;
-                    vp.Play();
+                    VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
+                    if (vp != null && vp.gameObject.activeInHierarchy && vp.enabled)
+                    {
+                        TrackActive2DVideo(vp);
+                        vp.time = 0;
+                        vp.Play();
+                    }
+                    break;
                 }
-                break;
-            }
 
             case TimedAction2D.StopVideo:
-            {
-                VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
-                if (vp != null)
                 {
-                    vp.Stop();
-                    vp.time = 0;
-                    UntrackActive2DVideo(vp);
+                    VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
+                    if (vp != null)
+                    {
+                        vp.Stop();
+                        vp.time = 0;
+                        UntrackActive2DVideo(vp);
+                    }
+                    break;
                 }
-                break;
-            }
 
             case TimedAction2D.PauseVideo:
-            {
-                VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
-                if (vp != null && vp.isPlaying) vp.Pause();
-                break;
-            }
+                {
+                    VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
+                    if (vp != null && vp.isPlaying) vp.Pause();
+                    break;
+                }
 
             case TimedAction2D.ResumeVideo:
-            {
-                VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
-                if (vp != null && vp.gameObject.activeInHierarchy && vp.enabled)
                 {
-                    TrackActive2DVideo(vp);
-                    if (!vp.isPlaying) vp.Play();
+                    VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
+                    if (vp != null && vp.gameObject.activeInHierarchy && vp.enabled)
+                    {
+                        TrackActive2DVideo(vp);
+                        if (!vp.isPlaying) vp.Play();
+                    }
+                    break;
                 }
-                break;
-            }
 
             case TimedAction2D.SetVideoSpeed:
-            {
-                VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
-                if (vp != null) vp.playbackSpeed = Mathf.Max(0.1f, tc.videoSpeed);
-                break;
-            }
+                {
+                    VideoPlayer vp = tc.target.GetComponent<VideoPlayer>();
+                    if (vp != null) vp.playbackSpeed = Mathf.Max(0.1f, tc.videoSpeed);
+                    break;
+                }
         }
     }
 
@@ -2236,7 +2250,15 @@ public class ARTrackedPageNode : MonoBehaviour
                 foreach (var entry in other.mainVideos)
                 {
                     if (entry?.video == null) continue;
+
+                    // UntrackActive2DVideo also disposes this video's freeze/start-delay
+                    // runtime. Without it, a timer left counting down from another slot
+                    // would still fire later and call Play() on a slot that has already
+                    // ended -- a video quietly running again in the background.
+                    UntrackActive2DVideo(entry.video);
+
                     if (entry.video.isPlaying) entry.video.Stop();
+                    entry.video.time = 0;
                     entry.video.gameObject.SetActive(false);
                 }
 
@@ -2260,7 +2282,16 @@ public class ARTrackedPageNode : MonoBehaviour
                 {
                     if (entry?.video == null) continue;
                     if (!entry.stopAtPartEnd) continue; // intentional carry-over — leave alone
+
+                    // Same as above: kill the timers, then switch the object off. Stopping
+                    // alone used to leave the GameObject active with its last decoded frame
+                    // still sitting in its render texture, so an ended slot's background
+                    // stayed on screen underneath the slot that replaced it.
+                    UntrackActive2DVideo(entry.video);
+
                     if (entry.video.isPlaying) entry.video.Stop();
+                    entry.video.time = 0;
+                    entry.video.gameObject.SetActive(false);
                 }
         }
     }
@@ -2459,8 +2490,11 @@ public class ARTrackedPageNode : MonoBehaviour
 
         UntrackActive2DVideo(vp);
 
-        if (entry.hideAtPartEnd)
-            vp.gameObject.SetActive(false);
+        // Always switch the object off once its slot is over -- not only when
+        // hideAtPartEnd is ticked. That flag defaults to OFF, so background videos
+        // were being stopped but left active, still showing their last decoded frame
+        // behind whichever slot came next. A finished slot must leave nothing behind.
+        vp.gameObject.SetActive(false);
     }
 
     private void TrackActive2DVideo(VideoPlayer vp)

@@ -16,6 +16,14 @@ Shader "ChromaKeyURP/Unlit/Transparent"
 
         [Header(Edge)]
         _EdgeFeather ("Edge Feather (softness)", Range(0.0001, 1)) = 0.15
+
+        [Header(Depth)]
+        // Pixels the chroma key has made this transparent or more are thrown away
+        // completely instead of just being drawn invisibly. This matters whenever
+        // ZWrite is on: an invisible pixel still claims depth, so a keyed-out hole
+        // would act as a solid wall and hide every layer stacked behind it.
+        // Kept low so the soft feathered edge above is preserved.
+        _DepthClip ("Discard Below Alpha", Range(0, 0.5)) = 0.01
     }
 
     SubShader
@@ -64,6 +72,7 @@ Shader "ChromaKeyURP/Unlit/Transparent"
                 float  _ChromaKeySaturationRange;
                 float  _ChromaKeyBrightnessRange;
                 float  _EdgeFeather;
+                float  _DepthClip;
             CBUFFER_END
 
             TEXTURE2D(_MainTex);
@@ -112,6 +121,12 @@ Shader "ChromaKeyURP/Unlit/Transparent"
                 half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv) * _Color;
                 float alphaFactor = ComputeAlphaFactor(col.rgb);
                 col.a *= alphaFactor;
+
+                // Discard the keyed-out pixels outright. Previously they were only made
+                // invisible, so with ZWrite on they still wrote depth -- turning every
+                // transparent hole into an invisible wall that hid the layers behind it.
+                clip(col.a - _DepthClip);
+
                 return col;
             }
             ENDHLSL

@@ -47,6 +47,7 @@ public class VuforiaContentStabilizer : MonoBehaviour
 
     Renderer[] renderers;
     Canvas[] canvases;
+    bool _initialized;
 
     void Awake()
     {
@@ -80,6 +81,28 @@ public class VuforiaContentStabilizer : MonoBehaviour
 
     void Start()
     {
+        // Fallback only -- normally CustomARHandler already called Initialize()
+        // explicitly, synchronously, right after adding this component. Unity's own
+        // Start() runs a frame later than that, which is exactly the gap that used
+        // to let a page's reveal animation start before this anchor had detached and
+        // settled into its correct tracked position (wrong pose / missed pop-up on
+        // the very first scan of a 3D page, fine again on Replay once things had
+        // caught up). Guarded so it's a no-op if Initialize() already ran.
+        Initialize();
+    }
+
+    /// <summary>
+    /// Detaches this anchor from the raw tracker and locks it onto its correct
+    /// tracked position immediately. Call this explicitly right after adding this
+    /// component -- do not rely on Unity's automatic Start() timing, which runs one
+    /// frame too late for content that reveals itself the instant it's created.
+    /// </summary>
+    public void Initialize()
+    {
+        if (_initialized) return;
+        if (!observer) return; // Awake already disabled this component if observer is missing
+        _initialized = true;
+
         // Capture offset while still parented under ImageTarget, then detach.
         if (transform.parent == observer.transform)
         {
