@@ -342,8 +342,15 @@ public class EnvLayer2D : MonoBehaviour
         if (targetStatus.Status == Status.TRACKED)
             return true;
 
-        if (targetStatus.Status == Status.EXTENDED_TRACKED)
-            return true;
+        // EXTENDED_TRACKED deliberately does NOT count as tracking here.
+        // It means Vuforia has lost sight of the printed page and is guessing the
+        // pose from device motion. CustomARHandler and VuforiaContentStabilizer both
+        // treat that as "lost" and hide the page's renderers. This script used to
+        // treat it as "found" and carry on fading its layers in -- so the two fought
+        // each other during every scan, and this script would also mark the fade as
+        // already done, so it never replayed when real tracking returned.
+        // Falling through leaves the layers exactly as they are (a hold, not a reset),
+        // which matches the pause the rest of the system applies.
 
         if (acceptLimitedTracking && targetStatus.Status == Status.LIMITED)
             return true;

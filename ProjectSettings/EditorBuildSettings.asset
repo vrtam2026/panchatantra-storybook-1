@@ -8,10 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Panchatantra_AR-v2-for-build-activities.unity
     guid: eeccac716deb82b4a83d9057985d7cd6
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Panchatantra_AR-v2-for-build-with audio_addressable.unity
     guid: 3708ce333ef51744da4d3e50c3dfdad4
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Panchatantra_AR-v2-with prefab -testing and development.unity
     guid: 11e61b71b7674f34a7e7cba8f2fa81b7
   m_configObjects:

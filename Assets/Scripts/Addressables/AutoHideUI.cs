@@ -28,6 +28,22 @@ public class AutoHideUI : MonoBehaviour
 
     void Update()
     {
+        // The menu panel (slider / back / replay / reset) only means anything while a page
+        // is actually being scanned. CustomARHandler.Current is the page currently tracked;
+        // null means nothing is tracked right now.
+        //
+        // Without this check, this script re-showed the panel on the very next screen tap
+        // even though tracking was lost -- so the slider sat on top of the "point the camera
+        // at the page" prompt and never went away. CustomARHandler hides Slider_V, but this
+        // script independently owns Slider_V's PARENT (MenuPanel), and the two had no shared
+        // notion of whether a page was being tracked.
+        if (CustomARHandler.Current == null)
+        {
+            if (_isVisible)
+                HideUI();
+            return;
+        }
+
         if (pauseWhileActivityIsRunning && ContentController.AnyActivityRunning)
         {
             if (_isVisible)

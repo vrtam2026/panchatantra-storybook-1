@@ -344,8 +344,19 @@ public class ModelInteraction : MonoBehaviour
             verticalSlider.onValueChanged.RemoveListener(OnSliderChanged);
 
         if (Current == this) Current = null;
+        OnInteraction = null;
         _model = null;
         _modelRenderers = null;
+    }
+
+    // Safety net: if this component is destroyed (e.g. its ImageTarget is torn down on
+    // UnloadDatabase, or the content is released) without Cleanup() being called first,
+    // it must NOT remain the global Current or keep a callback into freed content.
+    // Otherwise a tap handler could invoke OnInteraction on a destroyed object and
+    // crash the player with a native access violation (EXC_BAD_ACCESS).
+    void OnDestroy()
+    {
+        Cleanup();
     }
 }
 

@@ -1711,41 +1711,10 @@ MonoBehaviour:
       freezeLastSeconds: 0
       delayAfterFinish: 0
       loop: 0
-      waitForPartEnd: 0
+      waitForPartEnd: 1
       stopAtPartEnd: 0
       hideAtPartEnd: 0
-    visualLayers: []
-    backgroundVideos:
-    - video: {fileID: 0}
-      playbackSpeed: 1
-      startDelay: 0
-      loop: 1
-      freezeFirstSeconds: 0
-      freezeLastSeconds: 0
-      stopAtPartEnd: 1
-      hideAtPartEnd: 0
-      fadeIn: 0
-      fadeInDuration: 0
-      fadeOut: 0
-      fadeOutDuration: 0
-    timedChanges: []
-  - partName: 
-    timing: 0
-    manualDuration: 0
-    backgroundImage: {fileID: 0}
-    restartBackgroundOnSlotStart: 0
-    mainVideos:
-    - video: {fileID: 2513071324995508755}
-      playbackSpeed: 1
-      startDelay: 0
-      freezeMode: 0
-      freezeFirstSeconds: 0
-      freezeLastSeconds: 0
-      delayAfterFinish: 0
-      loop: 0
-      waitForPartEnd: 0
-      stopAtPartEnd: 0
-      hideAtPartEnd: 0
+    mainPlayOrder: 0
     visualLayers: []
     backgroundVideos:
     - video: {fileID: 0}
@@ -1768,6 +1737,7 @@ MonoBehaviour:
   animators: []
   splineMovers: []
   splinePathMovers: []
+  modelSlots: []
   pageEndTrigger3D: 0
   freezeMode: 0
   freezeFirstSeconds: 0

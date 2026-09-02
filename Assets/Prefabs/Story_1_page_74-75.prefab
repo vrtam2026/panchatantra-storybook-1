@@ -1409,9 +1409,28 @@ MonoBehaviour:
   layerRoot2D: {fileID: 0}
   commonBackgroundImage: {fileID: 0}
   persistentLayers2D: []
-  storyParts: []
-  mainVideos:
-  - {fileID: 418022559834402708}
+  storyParts:
+  - partName: 
+    timing: 0
+    manualDuration: 0
+    backgroundImage: {fileID: 0}
+    restartBackgroundOnSlotStart: 0
+    mainVideos:
+    - video: {fileID: 418022559834402708}
+      playbackSpeed: 1
+      startDelay: 0
+      freezeMode: 0
+      freezeFirstSeconds: 0
+      freezeLastSeconds: 0
+      delayAfterFinish: 0
+      loop: 0
+      waitForPartEnd: 1
+      stopAtPartEnd: 0
+      hideAtPartEnd: 0
+    visualLayers: []
+    backgroundVideos: []
+    timedChanges: []
+  mainVideos: []
   backgroundLoopVideos: []
   mainVideoSettings: []
   backgroundVideoSettings: []

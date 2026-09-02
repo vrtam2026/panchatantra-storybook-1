@@ -117,6 +117,42 @@ MonoBehaviour:
       m_Value: https://81832d9d-22cf-4818-ba8e-445b28f38838.client-api.unity3dusercontent.com/client_api/v1/environments/production/buckets/3b924e7b-0425-4558-9d56-3955f9ab536e/release_by_badge/latest/entry_by_path/content/?path=
     - m_Suffix: PromoteOnly
       m_Value: False
+  - m_GroupTypePrefix: CCD.81832d9d-22cf-4818-ba8e-445b28f38838.b38594b0-8b90-46bf-8621-11b7f4be470c.4acd22d3-dc7a-438d-b47c-f010fd6a3440.latest
+    m_Variables:
+    - m_Suffix: BuildPath
+      m_Value: CCDBuildData/b38594b0-8b90-46bf-8621-11b7f4be470c/4acd22d3-dc7a-438d-b47c-f010fd6a3440/latest
+    - m_Suffix: CcdBadgeName
+      m_Value: latest
+    - m_Suffix: CcdBucketId
+      m_Value: 4acd22d3-dc7a-438d-b47c-f010fd6a3440
+    - m_Suffix: CcdBucketName
+      m_Value: MacOS
+    - m_Suffix: Environmentid
+      m_Value: b38594b0-8b90-46bf-8621-11b7f4be470c
+    - m_Suffix: Environmentname
+      m_Value: production
+    - m_Suffix: LoadPath
+      m_Value: https://81832d9d-22cf-4818-ba8e-445b28f38838.client-api.unity3dusercontent.com/client_api/v1/environments/production/buckets/4acd22d3-dc7a-438d-b47c-f010fd6a3440/release_by_badge/latest/entry_by_path/content/?path=
+    - m_Suffix: PromoteOnly
+      m_Value: False
+  - m_GroupTypePrefix: CCD.81832d9d-22cf-4818-ba8e-445b28f38838.b38594b0-8b90-46bf-8621-11b7f4be470c.c2dd13de-c831-4d6c-afaf-36ffd3c05b8d.latest
+    m_Variables:
+    - m_Suffix: BuildPath
+      m_Value: CCDBuildData/b38594b0-8b90-46bf-8621-11b7f4be470c/c2dd13de-c831-4d6c-afaf-36ffd3c05b8d/latest
+    - m_Suffix: CcdBadgeName
+      m_Value: latest
+    - m_Suffix: CcdBucketId
+      m_Value: c2dd13de-c831-4d6c-afaf-36ffd3c05b8d
+    - m_Suffix: CcdBucketName
+      m_Value: Windows
+    - m_Suffix: Environmentid
+      m_Value: b38594b0-8b90-46bf-8621-11b7f4be470c
+    - m_Suffix: Environmentname
+      m_Value: production
+    - m_Suffix: LoadPath
+      m_Value: https://81832d9d-22cf-4818-ba8e-445b28f38838.client-api.unity3dusercontent.com/client_api/v1/environments/production/buckets/c2dd13de-c831-4d6c-afaf-36ffd3c05b8d/release_by_badge/latest/entry_by_path/content/?path=
+    - m_Suffix: PromoteOnly
+      m_Value: False
   environments:
   - id: b38594b0-8b90-46bf-8621-11b7f4be470c
     projectId: 81832d9d-22cf-4818-ba8e-445b28f38838

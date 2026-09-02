@@ -173,8 +173,23 @@ public class CustomARHandler : MonoBehaviour
     // Update -- tap detection and auto-hide
     // ----------------------------------------------------------------------
 
+    // Remembers whether the shared UI was on screen when tracking was lost, so that
+    // regaining tracking within the grace period puts it back exactly as the child left it
+    // -- and does NOT pop it up if it had already auto-hidden.
+    private bool _uiWasVisibleBeforeTrackingLost = false;
+
     void Update()
     {
+        // There are 53 of these handlers in the scene -- one per printed page -- and every
+        // one of them is active every frame. They all drive the SAME shared slider / back /
+        // replay / reset objects, but each keeps its own private _uiVisible, _autoHideTimer
+        // and fade coroutine. Without this guard all 53 run the UI logic simultaneously, so
+        // one handler hiding the UI was immediately undone by another and the slider never
+        // actually disappeared on tracking loss.
+        //
+        // Only the handler that currently owns loaded page content may touch the shared UI.
+        if (instantiatedObject == null) return;
+
         // Quiz rule:
         // Once quiz is open, the child should interact only with quiz UI.
         // Do not allow normal story page taps to show replay/reset/slider/next UI behind the quiz.
@@ -429,6 +444,11 @@ public class CustomARHandler : MonoBehaviour
 
         if (show)
         {
+            // The panel itself is switched off by HideAllUI(), so it must come back on
+            // before its children can draw again.
+            GameObject menuRoot = GetMenuRoot();
+            if (menuRoot != null && !menuRoot.activeSelf) menuRoot.SetActive(true);
+
             backBtn?.SetActive(true);
             // Slider visibility controlled by canSliderRotate on this page's ModelInteraction.
             // modelInteraction cached in Awake -- always valid, never nulled.
@@ -483,6 +503,25 @@ public class CustomARHandler : MonoBehaviour
     // UI helpers
     // ----------------------------------------------------------------------
 
+    // The panel holding BackBtn / Slider_V / ReplayBtn / ResetButton. Resolved from the
+    // slider's own parent so it needs no extra Inspector wiring on all 53 handlers.
+    private GameObject _menuRootCache;
+
+    private GameObject GetMenuRoot()
+    {
+        if (_menuRootCache != null) return _menuRootCache;
+        Transform t = sliderV != null ? sliderV.transform.parent
+                    : (backBtn != null ? backBtn.transform.parent : null);
+        if (t != null) _menuRootCache = t.gameObject;
+        return _menuRootCache;
+    }
+
+    private void HideMenuRoot()
+    {
+        GameObject root = GetMenuRoot();
+        if (root != null && root.activeSelf) root.SetActive(false);
+    }
+
     private void HideAllUI()
     {
         if (_fadeRoutine != null) { StopCoroutine(_fadeRoutine); _fadeRoutine = null; }
@@ -492,6 +531,24 @@ public class CustomARHandler : MonoBehaviour
         nextPageImg?.SetActive(false);
         backBtn?.SetActive(false);
         sliderV?.SetActive(false);
+
+        // The activity UI (instruction text, feedback text, progress slider, option buttons)
+        // is a SEPARATE panel owned by ActivityPanel/ARInteractionUI. ContentController hides
+        // it via PauseContent(), but that only runs while instantiatedObject still exists --
+        // so once the page content was released, the activity instruction, the "Oops!" feedback
+        // and the progress slider stayed on screen on top of the "scan the page" prompt.
+        // ResetPanel() clears all four sections at once.
+        ARInteractionUI.Instance?.ResetPanel();
+
+        // Hide the panel that CONTAINS these controls, not only the controls themselves.
+        //
+        // MenuPanel had three separate owners: the scene (children saved active),
+        // AutoHideUI (which shows/hides the PARENT on any tap), and all 53 of these
+        // handlers (which show/hide the four CHILDREN). Hiding only the children left a
+        // window where AutoHideUI could have the parent switched on while a child was
+        // re-activated by another path -- which is how the slider survived tracking loss.
+        // Switching the parent off closes that window: nothing inside it can draw.
+        HideMenuRoot();
 
         SetUIAlpha(0f);
         SetUIInteractable(false);
@@ -807,6 +864,12 @@ public class CustomARHandler : MonoBehaviour
             _trackHook?.SetPageNode(_pageNode);
             RefreshReplayButtonVisibility();
             contentControl?.PlayContent();
+
+            // Put the slider/buttons back only if they were actually on screen when
+            // tracking dropped. If they had already auto-hidden, leave them hidden.
+            if (_uiWasVisibleBeforeTrackingLost)
+                FadeUI(true);
+            _uiWasVisibleBeforeTrackingLost = false;
         }
     }
 
@@ -878,13 +941,33 @@ public class CustomARHandler : MonoBehaviour
                 return;
             }
 
-            // Content still playing -- grace period
+            // Content still playing -- grace period.
+            // Hide the shared UI in the SAME breath as the content. Previously the slider
+            // and buttons were left on screen sitting on top of the "scan the page" prompt,
+            // because HideAllUI() only ran later, inside the release step.
+            _uiWasVisibleBeforeTrackingLost = _uiVisible;
             ToggleRenderers(false);
+            HideAllUI();
             OverlayManager.Instance?.ShowLostTracking();
 
             if (_releaseCoroutine != null) { StopCoroutine(_releaseCoroutine); _releaseCoroutine = null; }
 
             float grace = _arMediaManager != null ? _arMediaManager.ResumeGraceSeconds : 1f;
+
+            // Vuforia DEACTIVATES this ImageTarget GameObject before firing the status
+            // change when an observer is torn down (app closing, database unloaded, target
+            // deactivated). A coroutine cannot be started on an inactive GameObject, so the
+            // grace timer silently never ran -- and ReleaseAfterGrace is the only thing that
+            // calls Addressables.ReleaseInstance(). The page's content therefore stayed
+            // loaded in memory for the rest of the session, and Unity logged
+            // "Coroutine couldn't be started because the game object is inactive!".
+            // There is nothing to wait for once the target is gone, so release immediately.
+            if (!gameObject.activeInHierarchy)
+            {
+                ReleaseContentNow();
+                return;
+            }
+
             _releaseCoroutine = StartCoroutine(ReleaseAfterGrace(grace));
         }
     }
@@ -892,7 +975,13 @@ public class CustomARHandler : MonoBehaviour
     private IEnumerator ReleaseAfterGrace(float grace)
     {
         yield return new WaitForSeconds(grace);
+        ReleaseContentNow();
+    }
 
+    // The actual release, shared by the grace-timer path and the immediate path above so
+    // both free exactly the same things.
+    private void ReleaseContentNow()
+    {
         if (instantiatedObject != null)
         {
             _trackHook?.ClearPageNode();
@@ -1042,21 +1131,64 @@ public class CustomARHandler : MonoBehaviour
     // Renderer toggle (grace time hide/show)
     // ----------------------------------------------------------------------
 
+    // Exactly what this handler switched off when tracking was lost, so that regaining
+    // tracking restores that and nothing else.
+    private readonly List<Renderer> _renderersHiddenByTracking = new List<Renderer>();
+    private readonly List<Canvas> _canvasesHiddenByTracking = new List<Canvas>();
+
+    // Hides / restores the page while tracking is lost.
+    //
+    // This used to blanket-write `enabled = visible` on everything, which had two bugs:
+    //
+    //  1. GetComponentsInChildren<Renderer>() without `true` skips renderers on INACTIVE
+    //     GameObjects. A layer that was inactive at the moment tracking returned never got
+    //     switched back on, and stayed invisible for the rest of the scan.
+    //
+    //  2. Renderer.enabled is also how ARVFXPopupController stages its reveal and how
+    //     ARTrackedPageNode hides a pre-warmed video. Blanket-enabling everything on resume
+    //     force-showed layers those systems had deliberately hidden, and blanket-disabling
+    //     destroyed the record of what was meant to be hidden.
+    //
+    // Now it remembers precisely which renderers IT turned off and restores only those, so
+    // every other system's intent survives a tracking blink untouched.
     private void ToggleRenderers(bool visible)
     {
         if (instantiatedObject == null) return;
 
-        var renderers = instantiatedObject.GetComponentsInChildren<Renderer>();
-        foreach (var r in renderers) r.enabled = visible;
-
-        var canvas = instantiatedObject.GetComponentsInChildren<Canvas>();
-        foreach (var c in canvas) c.enabled = visible;
-
-        var videos = instantiatedObject.GetComponentsInChildren<VideoPlayer>(true);
-        foreach (var v in videos)
+        if (!visible)
         {
-            if (v.targetMaterialRenderer != null)
-                v.targetMaterialRenderer.enabled = visible;
+            _renderersHiddenByTracking.Clear();
+            _canvasesHiddenByTracking.Clear();
+
+            foreach (var r in instantiatedObject.GetComponentsInChildren<Renderer>(true))
+            {
+                if (r == null || !r.enabled) continue; // already hidden by someone else -- leave it
+                _renderersHiddenByTracking.Add(r);
+                r.enabled = false;
+            }
+
+            foreach (var c in instantiatedObject.GetComponentsInChildren<Canvas>(true))
+            {
+                if (c == null || !c.enabled) continue;
+                _canvasesHiddenByTracking.Add(c);
+                c.enabled = false;
+            }
+
+            foreach (var v in instantiatedObject.GetComponentsInChildren<VideoPlayer>(true))
+            {
+                Renderer target = v != null ? v.targetMaterialRenderer : null;
+                if (target == null || !target.enabled) continue;
+                if (_renderersHiddenByTracking.Contains(target)) continue;
+                _renderersHiddenByTracking.Add(target);
+                target.enabled = false;
+            }
+        }
+        else
+        {
+            foreach (var r in _renderersHiddenByTracking) if (r != null) r.enabled = true;
+            foreach (var c in _canvasesHiddenByTracking) if (c != null) c.enabled = true;
+            _renderersHiddenByTracking.Clear();
+            _canvasesHiddenByTracking.Clear();
         }
 
        /* var particles = instantiatedObject.GetComponentsInChildren<ParticleSystem>(true);

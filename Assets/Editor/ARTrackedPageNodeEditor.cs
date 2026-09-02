@@ -549,7 +549,7 @@ public class ARTrackedPageNodeEditor : Editor
             EditorGUILayout.HelpBox("Call StartPageEndFade() from a script.", MessageType.Info);
 
         EditorGUILayout.Space(4);
-        _adv3DVideo = EditorGUILayout.Foldout(_adv3DVideo, "Old Video Data", true, EditorStyles.foldoutHeader);
+        _adv3DVideo = EditorGUILayout.Foldout(_adv3DVideo, "Old Video Data — NOT USED, see inside", true, EditorStyles.foldoutHeader);
         if (_adv3DVideo)
             DrawOldData();
     }
@@ -560,7 +560,21 @@ public class ARTrackedPageNodeEditor : Editor
 
     private void DrawOldData()
     {
-        EditorGUILayout.HelpBox("Old video assignments. Do not clear unless fully moved to Video Slots above.", MessageType.None);
+        EditorGUILayout.HelpBox(
+@"NOT USED - THIS IS THE OLD SYSTEM
+
+Videos now go in ""VIDEO SLOTS"" at the top of this component.
+
+Anything you put in this box is ignored when the app runs.
+It will NOT play.
+
+Why is it still here?
+Only so no old data is lost. Every page was moved to VIDEO
+SLOTS in September 2026, and these fields are now empty on
+all 48 pages.
+
+What should I do?
+Nothing. Leave it empty. Use VIDEO SLOTS above.", MessageType.Warning);
 
         for (int i = 0; i < _mainVideos.arraySize; i++)
         {

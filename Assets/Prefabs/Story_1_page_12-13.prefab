@@ -388,7 +388,7 @@ Transform:
   m_GameObject: {fileID: 1036622783618450089}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0.527, y: 0.3, z: -0.012}
+  m_LocalPosition: {x: 0.527, y: 0.206, z: -0.012}
   m_LocalScale: {x: 0.19999999, y: 0.099999994, z: 0.099999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1499,7 +1499,6 @@ MonoBehaviour:
   - {fileID: 1957938974905761907}
   - {fileID: 8119237064525657877}
   - {fileID: 365783376862278441}
-  - {fileID: 3018585404132866518}
   gapAxis: 0
   gap: 0.05
   hardLockGapAxis: 1
@@ -2638,9 +2637,28 @@ MonoBehaviour:
   layerRoot2D: {fileID: 0}
   commonBackgroundImage: {fileID: 0}
   persistentLayers2D: []
-  storyParts: []
-  mainVideos:
-  - {fileID: 3244619774404889315}
+  storyParts:
+  - partName: 
+    timing: 0
+    manualDuration: 0
+    backgroundImage: {fileID: 0}
+    restartBackgroundOnSlotStart: 0
+    mainVideos:
+    - video: {fileID: 3244619774404889315}
+      playbackSpeed: 1
+      startDelay: 0
+      freezeMode: 1
+      freezeFirstSeconds: 6
+      freezeLastSeconds: 0
+      delayAfterFinish: 0
+      loop: 0
+      waitForPartEnd: 1
+      stopAtPartEnd: 0
+      hideAtPartEnd: 0
+    visualLayers: []
+    backgroundVideos: []
+    timedChanges: []
+  mainVideos: []
   backgroundLoopVideos: []
   mainVideoSettings: []
   backgroundVideoSettings: []

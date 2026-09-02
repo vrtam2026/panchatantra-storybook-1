@@ -33,6 +33,13 @@ public sealed class VideoFreezeRuntime
         _vp.waitForFirstFrame = true;
     }
 
+    // A coroutine can only be started on a MonoBehaviour whose GameObject is active.
+    // Every StartCoroutine below is reachable from a VideoPlayer event or an external
+    // call, so the host can legitimately be switched off (page released, Vuforia
+    // stopping, scene tearing down) by the time we get here. Without this check Unity
+    // logs "Coroutine couldn't be started because the game object is inactive!".
+    private bool HostReady => _host != null && _host.isActiveAndEnabled && _host.gameObject.activeInHierarchy;
+
     public void Dispose()
     {
         StopRoutinesInternal();
@@ -52,6 +59,7 @@ public sealed class VideoFreezeRuntime
         StopRoutinesInternal();
         if (_vp == null) return;
         if (!_vp.gameObject.activeInHierarchy) return;
+        if (!HostReady) return;
         // Skip Stop()/time reset if a prewarm step already prepared this clip at time 0 --
         // re-Stop()'ing a player mid-Prepare() can interrupt/discard that in-flight buffer.
         if (!_vp.isPrepared)
@@ -70,6 +78,7 @@ public sealed class VideoFreezeRuntime
         _startRoutine = null;
         if (_vp == null) yield break;
         if (!_vp.gameObject.activeInHierarchy) yield break;
+        if (!HostReady) yield break;
         _vp.playbackSpeed = _playbackSpeed;
         if (ModeHasFirst(_mode))
             _firstRoutine = _host.StartCoroutine(FreezeFirstRoutine());
@@ -96,6 +105,7 @@ public sealed class VideoFreezeRuntime
         if (_vp == null) return;
         if (!ModeHasLast(_mode)) return;
         if (_lastRoutine != null) return;
+        if (!HostReady) return;
         _lastRoutine = _host.StartCoroutine(FreezeLastRoutine());
     }
 

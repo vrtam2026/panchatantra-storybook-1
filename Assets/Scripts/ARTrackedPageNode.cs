@@ -347,6 +347,44 @@ public class ModelSlot3D
 
 // ───────────────────────────────────────────────────────────────────────────
 
+// ---------------------------------------------------------------------------
+// ARTrackedPageNode -- runs ONE page of the storybook.
+//
+// A "page" is a real printed page in the physical book. When the camera
+// recognises it, that page's prefab is loaded and this script plays whatever
+// the page contains: a video, background layers, a 3D pop-up, animations.
+//
+//
+// THERE ARE TWO WAYS A PAGE CAN RUN -- this is the thing to understand first.
+//
+//   VIDEO SLOTS   The current system. Used by all 32 flat "video" pages.
+//                 Shown in the Inspector as "VIDEO SLOTS". Each slot holds one
+//                 video; slot 1 plays, then slot 2, and so on.
+//
+//   LEGACY        The original system, from before Video Slots existed.
+//                 Used by all 16 "pop-up" (3D) pages.
+//
+// Is2DStoryMode() decides which one a page uses. A page gets Video Slots only
+// if it is a 2D page AND has at least one slot filled in. Everything else
+// falls through to the legacy path.
+//
+//
+// WHY BOTH STILL EXIST -- read this before deleting anything.
+//
+// The project was half-way through moving from Legacy to Video Slots. In
+// September 2026 the last 32 video pages were moved across, so the legacy
+// VIDEO code is now dead -- no page uses it any more.
+//
+// But the legacy path also does a second, unrelated job: it starts the
+// animators, the spline movers and the 3D model slots. That is the ONLY place
+// in the project where those are started, and all 16 pop-up pages rely on it.
+//
+// So deleting the legacy branch will silently stop every 3D pop-up page from
+// animating -- with no error to tell you why. The video half can be removed
+// safely. The animation half cannot, unless the 3D pages are moved to Video
+// Slots first.
+// ---------------------------------------------------------------------------
+
 public class ARTrackedPageNode : MonoBehaviour
 {
     [Header("IDs")]
@@ -379,10 +417,19 @@ public class ARTrackedPageNode : MonoBehaviour
     [SerializeField] private List<StoryPart2D> storyParts = new List<StoryPart2D>();
 
     // ---------------------------------------------------------------
-    // LEGACY / SIMPLE VIDEO SETUP
-    // Used for old pages or when Story Parts is empty.
-    // On 3D pages, Animators and Spline Movers handle the story.
-    // These fields have existing prefab assignments — do not rename or remove.
+    // LEGACY VIDEO SETUP -- NOT USED ANY MORE
+    //
+    // This is the old place a page kept its video, from before the "Video
+    // Slots" system existed. Every page now stores its video in a slot
+    // instead, so nothing reads these lists at runtime -- they are empty on
+    // all 48 pages.
+    //
+    // They are kept only so no data is lost by accident. In the Inspector they
+    // appear under "Old Video Data - NOT USED".
+    //
+    // Read the note at the top of this file before removing them: the legacy
+    // code path itself must stay, because it is also what starts the animators
+    // and spline movers on the 16 pop-up pages.
     // ---------------------------------------------------------------
 
     [SerializeField] private List<VideoPlayer> mainVideos = new();
@@ -1227,6 +1274,13 @@ public class ARTrackedPageNode : MonoBehaviour
             return;
         }
 
+        // A 2D page starts its Video Slots above and returns there -- it never
+        // reaches this point.
+        //
+        // So everything below runs for 3D pop-up pages only. The two video calls
+        // do nothing now (no page has legacy videos), but the animator and
+        // spline-mover calls underneath are the reason this older branch still
+        // has to exist: nothing else in the project starts them.
         RestartMainVideosWithPerClipSettings();
         RestartBackgroundVideosWithPerClipSettings();
 
@@ -2311,6 +2365,13 @@ public class ARTrackedPageNode : MonoBehaviour
             if (entry?.video == null) continue;
             VideoPlayer vp = entry.video;
             if (!vp.enabled) continue;
+
+            // Never prewarm a video the CURRENT part is already playing. When two
+            // consecutive parts reuse the same VideoPlayer, prewarming would Stop()
+            // and hide the clip that was started one line earlier -- the page then
+            // shows a blank video layer and never advances, because it is waiting
+            // for a video that was switched off.
+            if (_active2DVideos.Contains(vp)) continue;
 
             if (!vp.gameObject.activeSelf) vp.gameObject.SetActive(true);
             if (!vp.gameObject.activeInHierarchy) continue;

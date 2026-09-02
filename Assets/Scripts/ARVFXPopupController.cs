@@ -239,6 +239,26 @@ public class ARVFXPopupController : MonoBehaviour
     {
         _isDisabled = true;
         StopRevealAudio();
+
+        // The reveal sequence is about to be killed by StopAllCoroutines(). PrepareRevealState()
+        // had already hidden every model, so without this they stay invisible forever AND
+        // _revealComplete never becomes true -- which means ARTrackedPageNode never receives
+        // OnRevealComplete, so the page never starts its story, its animators, or its video.
+        // Put the visuals back and mark the sequence dead so ResumeReveal() knows it must
+        // start a fresh one instead of merely un-pausing a coroutine that no longer exists.
+        if (!_revealComplete)
+        {
+            for (int i = 0; i < _runtimeModels.Count; i++)
+            {
+                RuntimeModel runtime = _runtimeModels[i];
+                if (runtime == null) continue;
+                runtime.popupPlaying = false;
+                SetVisualVisible(runtime, true);
+            }
+        }
+
+        _sequenceRoutine = null;
+
         StopAllCoroutines();
         CleanupAllPopupAnchors(true);
         ReEnablePageMovementScriptsAfterReveal();
@@ -275,6 +295,15 @@ public class ARVFXPopupController : MonoBehaviour
     public void ResumeReveal()
     {
         if (_revealComplete) return;
+
+        // A disabled/re-enabled page had its reveal coroutine destroyed in OnDisable.
+        // Un-pausing cannot revive a dead coroutine, so the page would wait forever for
+        // a reveal that is no longer running. Start a clean one instead.
+        if (_sequenceRoutine == null && isActiveAndEnabled)
+        {
+            BeginReveal();
+            return;
+        }
 
         _paused = false;
 
